@@ -8,6 +8,7 @@ import { nodeTryReadPackage } from "../../core/src/nodepackage"
 import { CORE_VERSION } from "../../core/src/version"
 import { YAMLStringify } from "../../core/src/yaml"
 import { buildProject } from "./build"
+import { snakeCase } from "es-toolkit"
 const dbg = genaiscriptDebug("cli:action")
 
 export async function actionConfigure(scriptId: string) {
@@ -28,19 +29,31 @@ export async function actionConfigure(scriptId: string) {
         properties: {},
         required: [],
     }
-    const inputs = Object.fromEntries(
-        Object.entries(scriptSchema.properties).map(([key, value]) => {
-            return [
-                key,
-                {
-                    description:
-                        (value as JSONSchemaDescribed).description || "",
-                    required: scriptSchema.required?.includes(key) || false,
-                    default: (value as any).default || undefined,
-                },
-            ]
-        })
-    )
+    const inputs = {
+        ...Object.fromEntries(
+            Object.entries(scriptSchema.properties).map(([key, value]) => {
+                return [
+                    snakeCase(key),
+                    {
+                        description:
+                            (value as JSONSchemaDescribed).description || "",
+                        required: scriptSchema.required?.includes(key) || false,
+                        default: (value as any).default || undefined,
+                    },
+                ]
+            })
+        ),
+        github_token: {
+            description: "GitHub token for accessing the repository.",
+            required: false,
+            default: "${{ secrets.GITHUB_TOKEN }}",
+        },
+    }
+    const outputs = {
+        text: {
+            description: "The generated text.",
+        },
+    }
     const pkg = await nodeTryReadPackage()
     const files: Record<string, string> = {
         "action.yml": YAMLStringify(
@@ -48,7 +61,8 @@ export async function actionConfigure(scriptId: string) {
                 name: script.id,
                 author: pkg.author || undefined,
                 description: script.description || pkg.description,
-                inputs: {},
+                inputs,
+                outputs,
                 runs: {
                     using: "docker",
                     image: "Dockerfile",
@@ -84,11 +98,11 @@ set -e
 cd "$(dirname "$0")"
 
 # GenAIScript expects GITHUB_TOKEN to be set in the environment
-export GITHUB_TOKEN="${INPUT_GITHUB_TOKEN}"
+export GITHUB_TOKEN="\${INPUT_GITHUB_TOKEN}"
 
-npx genaiscript run genaisrc/summarize.genai.mts --vars issue_num=${INPUT_GITHUB_ISSUE} target_length=${INPUT_TARGET_LENGTH}`,
+npx genaiscript run genaisrc/summarize.genai.mts --vars issue_num=\${INPUT_GITHUB_ISSUE} target_length=\${INPUT_TARGET_LENGTH}`,
     }
 
-    for (const [key, value] of Object.entries(inputs)) {
+    for (const [key, value] of Object.entries(files)) {
     }
 }
