@@ -1,8 +1,8 @@
+import { genaiscriptDebug } from "./debug"
 import { runtimeHost } from "./host"
 import { TraceOptions } from "./trace"
 import { logWarn } from "./util"
-import debug from "debug"
-const dbg = debug("genaiscript:secrets")
+const dbg = genaiscriptDebug("secrets")
 
 const cachedSecretScanners: Record<string, RegExp> = {}
 
