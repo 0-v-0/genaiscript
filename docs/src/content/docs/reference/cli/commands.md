@@ -464,7 +464,7 @@ Options:
 ## `retrieval`
 
 ```
-Usage: genaiscript retrieval|retreival [options] [command]
+Usage: genaiscript retrieval [options] [command]
 
 RAG support
 
@@ -572,8 +572,9 @@ Usage: genaiscript mcp|mcps [options]
 Starts a Model Context Protocol server that exposes scripts as tools
 
 Options:
-  --groups <string...>              Filter script by groups
   --ids <string...>                 Filter script by ids
+  -g, --groups <groups...>          groups to include or exclude. Use :! prefix
+                                    to exclude
   --startup <string>                Startup script id, executed after the
                                     server is started
   --remote <string>                 Remote repository URL to serve
@@ -615,7 +616,6 @@ Options:
   -c, --cors <string>               Enable CORS and sets the allowed origin.
                                     Use '*' to allow any origin.
   --route <string>                  Route prefix, like /api
-  --groups <string...>              Filter script by groups
   --ids <string...>                 Filter script by ids
   --startup <string>                Startup script id, executed after the
                                     server is started
@@ -640,7 +640,37 @@ Options:
   -ma, --model-alias <nameid...>    model alias as name=modelid
   -re, --reasoning-effort <string>  Reasoning effort for o* models (choices:
                                     "high", "medium", "low")
+  -g, --groups <groups...>          groups to include or exclude. Use :! prefix
+                                    to exclude
   -h, --help                        display help for command
+```
+
+## `action`
+
+```
+Usage: genaiscript action [options] [command]
+
+GitHub Actions related command
+
+Options:
+  -h, --help           display help for command
+
+Commands:
+  configure [options]  Configure the current project for GitHub Actions
+  help [command]       display help for command
+```
+
+### `action configure`
+
+```
+Usage: genaiscript action configure [options]
+
+Configure the current project for GitHub Actions
+
+Options:
+  -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
+                            exclude
+  -h, --help                display help for command
 ```
 
 ## `parse`
