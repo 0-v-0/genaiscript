@@ -562,6 +562,7 @@ export async function cli() {
     const actionConfigureCmd = action
         .command("configure")
         .description("Configure the current project for GitHub Actions")
+        .argument("<script>", "Script to use for the action")
         .action(actionConfigure)
     addGroupsOptions(actionConfigureCmd)
 

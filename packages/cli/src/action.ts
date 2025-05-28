@@ -95,12 +95,7 @@ set -e
 # GitHub Actions forces the workdir to be /github/workspace, 
 # so we need to set the working directory to the location of this script
 # so that things actually work.
-cd "$(dirname "$0")"
-
-# GenAIScript expects GITHUB_TOKEN to be set in the environment
-export GITHUB_TOKEN="\${INPUT_GITHUB_TOKEN}"
-
-npx genaiscript run genaisrc/summarize.genai.mts --vars issue_num=\${INPUT_GITHUB_ISSUE} target_length=\${INPUT_TARGET_LENGTH}`,
+npx genaiscript run "$(dirname "$0")/${script.filename}"`,
     }
 
     for (const [key, value] of Object.entries(files)) {

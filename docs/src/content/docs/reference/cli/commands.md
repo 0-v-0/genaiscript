@@ -653,19 +653,23 @@ Usage: genaiscript action [options] [command]
 GitHub Actions related command
 
 Options:
-  -h, --help           display help for command
+  -h, --help                    display help for command
 
 Commands:
-  configure [options]  Configure the current project for GitHub Actions
-  help [command]       display help for command
+  configure [options] <script>  Configure the current project for GitHub
+                                Actions
+  help [command]                display help for command
 ```
 
 ### `action configure`
 
 ```
-Usage: genaiscript action configure [options]
+Usage: genaiscript action configure [options] <script>
 
 Configure the current project for GitHub Actions
+
+Arguments:
+  script                    Script to use for the action
 
 Options:
   -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
