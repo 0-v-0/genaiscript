@@ -6049,8 +6049,11 @@ interface LanguageModelInfo {
 
 interface LanguageModelProviderInfo {
     id: ModelProviderType
+    version?: string
     error?: string
     models: LanguageModelInfo[]
+    base?: string
+    token?: string // Optional token for the provider
 }
 
 interface LanguageModelHost {

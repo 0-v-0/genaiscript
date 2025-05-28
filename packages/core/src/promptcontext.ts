@@ -302,12 +302,18 @@ export async function createPromptContext(
                 hide: false,
                 token: true,
             })
-            if (provider.error) return undefined
+            if (provider.error) {
+                dbg(`Error resolving provider %s: %s`, id, provider.error)
+                return undefined
+            }
             return deleteUndefinedValues({
                 id: provider.provider,
                 error: provider.error,
                 models: provider.models || [],
-            }) satisfies LanguageModelProviderInfo
+                base: provider.base,
+                token: provider.token,
+                version: provider.version,
+            } satisfies LanguageModelProviderInfo)
         },
         cache: async (name: string) => {
             const res = createCache<any, any>(name, { type: "memory" })
