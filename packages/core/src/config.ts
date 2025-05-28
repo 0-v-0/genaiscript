@@ -254,6 +254,7 @@ export async function resolveLanguageModelConfigurations(
                             type: conn.type,
                             models: conn.models,
                             error: listError,
+                            token: conn.token,
                         })
                     )
                 }

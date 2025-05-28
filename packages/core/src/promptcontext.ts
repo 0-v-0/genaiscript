@@ -293,11 +293,11 @@ export async function createPromptContext(
                 model: configuration?.model,
             } satisfies LanguageModelReference
         },
-        resolveLanguageModelProvider: async (id) => {
+        resolveLanguageModelProvider: async (id, options) => {
             if (!id) throw new Error("provider id is required")
             const [provider] = await resolveLanguageModelConfigurations(id, {
                 ...(options || {}),
-                models: true,
+                models: !!options?.listModels,
                 error: false,
                 hide: false,
                 token: true,
@@ -309,10 +309,10 @@ export async function createPromptContext(
             return deleteUndefinedValues({
                 id: provider.provider,
                 error: provider.error,
-                models: provider.models || [],
                 base: provider.base,
-                token: provider.token,
                 version: provider.version,
+                token: options?.token ? provider.token : undefined,
+                models: options?.listModels ? provider.models || [] : undefined,
             } satisfies LanguageModelProviderInfo)
         },
         cache: async (name: string) => {

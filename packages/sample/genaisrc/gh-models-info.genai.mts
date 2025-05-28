@@ -54,9 +54,13 @@
 |Phi\-3\-medium\-128k\-instruct|32000|
 
  */
+script({ model: "echo" })
 
 const { output } = env
-const gh = await host.resolveLanguageModelProvider("github")
+const gh = await host.resolveLanguageModelProvider("github", {
+    listModels: true,
+})
+output.fence(gh, "yaml")
 const sizes: { model: string; size: number }[] = []
 const length = 64000
 const text = "😊".repeat(length)

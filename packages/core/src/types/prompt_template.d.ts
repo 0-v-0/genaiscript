@@ -6067,7 +6067,13 @@ interface LanguageModelHost {
      * Returns the status of the model provider and list of models if available
      */
     resolveLanguageModelProvider(
-        provider: ModelProviderType
+        provider: ModelProviderType,
+        options?: {
+            // If true, returns the list of models available in the provider
+            listModels?: boolean
+            // If true, return the token
+            token?: boolean
+        }
     ): Promise<LanguageModelProviderInfo>
 }
 
