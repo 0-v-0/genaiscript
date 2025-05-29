@@ -1963,9 +1963,9 @@
   integrity sha512-Y28PR25bHXUg88kCV7nivXrP2Nj2RueZ3/l/jdx6J9f8J4nsEGcgX0Qe6lt7Pa+J79+kPiJU3LguR6O/6zrLOw==
 
 "@modelcontextprotocol/sdk@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.12.0.tgz#c3ac98b7f31db068c218a4ce8c9013ac3f5713ce"
-  integrity sha512-m//7RlINx1F3sz3KqwY1WWzVgTcYX52HYk4bJ1hkBXV3zccAEth+jRvG8DBRrdaQuRsPAJOx2MH3zaHNCKL7Zg==
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.12.1.tgz#f77503f0263b33cb1e5b81a6ff0c322393cabd37"
+  integrity sha512-KG1CZhZfWg+u8pxeM/mByJDScJSrjjxLc8fwQqbsS8xCjBmQfMNEBTotYdNanKekepnfRI85GtgQlctLFpcYPw==
   dependencies:
     ajv "^6.12.6"
     content-type "^1.0.5"
@@ -8654,9 +8654,9 @@ openai-zod-to-json-schema@^1.0.3:
   integrity sha512-CFU+KtOmX1dk2nPCZcGYgbrI3YLJJgMSehx1mLbH1A2fsRmZevHzMau6vFIhtkCpHWkGQ3ossA4a0OzVHlGrkw==
 
 openai@^4.103.0:
-  version "4.103.0"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.103.0.tgz#84ee52fec22f3486dcc107338b2eaf568ef4924b"
-  integrity sha512-eWcz9kdurkGOFDtd5ySS5y251H2uBgq9+1a2lTBnjMMzlexJ40Am5t6Mu76SSE87VvitPa0dkIAp75F+dZVC0g==
+  version "4.104.0"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.104.0.tgz#c489765dc051b95019845dab64b0e5207cae4d30"
+  integrity sha512-p99EFNsA/yX6UhVO93f5kJsDRLAg+CTA2RBqdHK4RtK8u5IJw32Hyb2dTGKbnnFmnuoBv5r7Z2CURI9sGZpSuA==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -10504,13 +10504,6 @@ tr46@~0.0.3:
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
 
-tree-sitter-wasms@^0.1.11:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/tree-sitter-wasms/-/tree-sitter-wasms-0.1.12.tgz#a94d1fb0edb5768d2f49451267aa7b48d8fa30f1"
-  integrity sha512-N9Jp+dkB23Ul5Gw0utm+3pvG4km4Fxsi2jmtMFg7ivzwqWPlSyrYQIrOmcX+79taVfcHEA+NzP0hl7vXL8DNUQ==
-  dependencies:
-    tree-sitter-wasms "^0.1.11"
-
 trim-lines@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/trim-lines/-/trim-lines-3.0.1.tgz#d802e332a07df861c48802c04321017b1bd87338"
@@ -11342,11 +11335,6 @@ web-streams-polyfill@^3.0.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz#2073b91a2fdb1fbfbd401e7de0ac9f8214cecb4b"
   integrity sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==
-
-web-tree-sitter@0.22.2:
-  version "0.22.2"
-  resolved "https://registry.yarnpkg.com/web-tree-sitter/-/web-tree-sitter-0.22.2.tgz#44036b26ae95b83f5ef1950ddeffb581eb4370c5"
-  integrity sha512-gY/aw1wNQbTU0m7U5PojDOftsKMbBIpusJ9Ia/y7sfIN4jk9xXLHwQs+eQ3QP772IdjxVqje0hRTCh5CzrWeGg==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"

@@ -16,7 +16,6 @@ import { parseAnnotations } from "./annotations"
 import { dotEnvTryParse } from "./dotenv"
 import { INITryParse } from "./ini"
 import { XMLTryParse } from "./xml"
-import { treeSitterQuery } from "./treesitter"
 import { parsePdf } from "./pdf"
 import { HTMLToMarkdown, HTMLToText } from "./html"
 import { MathTryEvaluate } from "./math"
@@ -72,7 +71,6 @@ import { mermaidParse } from "./mermaid"
  *   - HTMLToMarkdown: Converts HTML content to Markdown with optional configurations.
  *   - DOCX: Parses DOCX files asynchronously.
  *   - PDF: Parses PDF files asynchronously, extracting pages, images, and file content.
- *   - code: Queries code syntax trees with Tree-sitter using a query string.
  *   - math: Evaluates mathematical expressions with a given scope.
  *   - validateJSON: Validates JSON content against a schema.
  *   - mustache: Renders Mustache templates with provided arguments.
@@ -193,10 +191,6 @@ export async function createParsers(
             const f = filenameOrFileToContent(file)
             const res = await mermaidParse(f)
             return res
-        },
-        code: async (file, query) => {
-            await resolveFileContent(file, { trace })
-            return await treeSitterQuery(file, query, { trace })
         },
         math: async (expression, scope) =>
             await MathTryEvaluate(expression, { scope, trace }),

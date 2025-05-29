@@ -62,6 +62,7 @@ Options:
   --python                  Install Python 3.x support
   --image <string>          Docker image identifier
   --apks <string...>        Linux packages to install
+  --provider <string>       LLM provider to use
   -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
                             exclude
   -h, --help                display help for command
@@ -708,8 +709,6 @@ Commands:
   pdf [options] <file>          Parse a PDF into text and images
   docx [options] <file>         Parse a DOCX into texts
   html [options] <file_or_url>  Parse an HTML file to text
-  code <file> [query]           Parse code using tree sitter and executes a
-                                query
   tokens [options] <files...>   Count tokens in a set of files
   tokenize [options] <file>     Tokenizes a piece of text and display the
                                 tokens (in hex format)
@@ -784,17 +783,6 @@ Options:
   -f, --format <string>  output format (choices: "markdown", "text")
   -o, --out <string>     output file
   -h, --help             display help for command
-```
-
-### `parse code`
-
-```
-Usage: genaiscript parse code [options] <file> [query]
-
-Parse code using tree sitter and executes a query
-
-Options:
-  -h, --help  display help for command
 ```
 
 ### `parse tokens`

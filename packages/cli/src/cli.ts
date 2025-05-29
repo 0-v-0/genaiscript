@@ -33,7 +33,6 @@ import {
     listScripts,
     scriptInfo,
 } from "./scripts" // Script utilities
-import { codeQuery } from "./codequery" // Code parsing and query execution
 import {
     envInfo,
     modelAliasesInfo,
@@ -576,6 +575,7 @@ export async function cli() {
         .option("--python", "Install Python 3.x support")
         .option("--image <string>", "Docker image identifier")
         .option("--apks <string...>", "Linux packages to install")
+        .option("--provider <string>", "LLM provider to use")
         .action(actionConfigure)
     addGroupsOptions(actionConfigureCmd)
 
@@ -633,11 +633,6 @@ export async function cli() {
         .option("-o, --out <string>", "output file")
         .description("Parse an HTML file to text")
         .action(parseHTMLToText) // Action to parse HTML files
-    parser
-        .command("code")
-        .description("Parse code using tree sitter and executes a query")
-        .arguments("<file> [query]")
-        .action(codeQuery) // Action to parse and query code files
     parser
         .command("tokens")
         .description("Count tokens in a set of files")
