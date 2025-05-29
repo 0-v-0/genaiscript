@@ -113,6 +113,7 @@ import { genaiscriptDebug } from "../../core/src/debug"
 import { uriTryParse } from "../../core/src/url"
 import { tryResolveScript } from "../../core/src/scriptresolver"
 import { isCI } from "../../core/src/ci"
+import { githubActionSetOutputs } from "./githubaction"
 const dbg = genaiscriptDebug("run")
 
 /**
@@ -136,7 +137,8 @@ const dbg = genaiscriptDebug("run")
 export async function runScriptWithExitCode(
     scriptId: string,
     files: string[],
-    options: Partial<PromptScriptRunOptions> & TraceOptions
+    options: Partial<PromptScriptRunOptions> &
+        TraceOptions & { githubAction?: boolean }
 ) {
     dbg(`run %s`, scriptId)
     await ensureDotGenaiscriptPath()
@@ -144,6 +146,7 @@ export async function runScriptWithExitCode(
     const cancellationToken = canceller.token
     const runRetry = Math.max(1, normalizeInt(options.runRetry) || 1)
     let exitCode = -1
+    let result: GenerationResult
     for (let r = 0; r < runRetry; ++r) {
         if (cancellationToken.isCancellationRequested) break
 
@@ -152,6 +155,7 @@ export async function runScriptWithExitCode(
             cancellationToken,
             cli: true,
         })
+        result = res.result
         exitCode = res.exitCode
         if (
             exitCode === SUCCESS_ERROR_CODE ||
@@ -169,6 +173,8 @@ export async function runScriptWithExitCode(
     }
     if (cancellationToken.isCancellationRequested)
         exitCode = USER_CANCELLED_ERROR_CODE
+
+    if (options?.githubAction) await githubActionSetOutputs(result)
     process.exit(exitCode)
 }
 

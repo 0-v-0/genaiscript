@@ -9,6 +9,8 @@ This is the description
 - `github_token`: GitHub token with `models: read` permission at least. (required)
 ## Outputs
 
+- `text`: The generated text output.
+- `data`: The generated JSON data output, parsed and stringified.
 
 ## Usage
 

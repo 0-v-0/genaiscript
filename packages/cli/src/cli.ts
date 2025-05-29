@@ -260,6 +260,7 @@ export async function cli() {
         )
         .option("--no-run-trace", "disable automatic trace generation")
         .option("--no-output-trace", "disable automatic output generation")
+        .option("--github-action", "run as GitHub Action")
         .action(runScriptWithExitCode) // Action to execute the script with exit code
 
     // runs commands

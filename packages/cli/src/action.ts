@@ -83,7 +83,17 @@ export async function actionConfigure(
             required: true,
         },
     }
-    const outputs: Record<string, GitHubActionFieldType> = {}
+    const outputs: Record<string, GitHubActionFieldType> = {
+        text: {
+            description: "The generated text output.",
+            required: false,
+        },
+        data: {
+            description:
+                "The generated JSON data output, parsed and stringified.",
+            required: false,
+        },
+    }
     const pkg = (await nodeTryReadPackage()) || {}
 
     const apks = [
@@ -175,6 +185,7 @@ ${Object.entries(outputs || {})
             }${value.default ? ` (default: \`${value.default}\`)` : ""}`
     )
     .join("\n")}
+
 ## Usage
 
 \`\`\`yaml
