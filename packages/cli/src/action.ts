@@ -90,15 +90,19 @@ export async function actionConfigure(
 # Install git, python3, and pip
 RUN apk add --no-cache git python3 py3-pip
 
+
 # Set working directory
-WORKDIR /usr/src
-COPY package*.json ./
-RUN npm ci
+WORKDIR /github/action
 
 # Copy source code
 COPY . .
 
-ENTRYPOINT ["npx", "--yes", "genaiscript", "run", "${scriptId}"]`
+# Install dependencies
+RUN npm ci
+
+# Set the entrypoint to run the action
+ENTRYPOINT ["npm", "start"]
+`
     )
     await writeFile(
         "package.json",
