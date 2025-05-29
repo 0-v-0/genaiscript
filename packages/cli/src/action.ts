@@ -43,7 +43,7 @@ export async function actionConfigure(
     } = options || {}
 
     logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
-    const { inputSchema } = script
+    const { inputSchema, branding } = script
     const scriptSchema = (inputSchema?.properties
         .script as JSONSchemaObject) || {
         type: "object",
@@ -95,6 +95,7 @@ export async function actionConfigure(
                 description: script.title || "GitHub Action for " + script.id,
                 inputs,
                 outputs,
+                branding,
                 runs: {
                     using: "docker",
                     image: "Dockerfile",
