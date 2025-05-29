@@ -10,7 +10,7 @@ WORKDIR /genaiscript/action
 COPY . .
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Install playwright dependencies
 RUN npm install:playwright

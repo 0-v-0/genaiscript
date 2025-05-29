@@ -11,6 +11,7 @@ import { logInfo, logVerbose } from "../../core/src/util"
 import { dotGenaiscriptPath } from "../../core/src/workdir"
 import { writeText } from "../../core/src/fs"
 import { dedent } from "../../core/src/indent"
+import { runtimeHost } from "../../core/src/host"
 const dbg = genaiscriptDebug("cli:action")
 
 interface GitHubActionFieldType {
@@ -25,6 +26,7 @@ export async function actionConfigure(
         out?: string
         ffmpeg?: boolean
         playwright?: boolean
+        packageLock?: boolean
     }
 ) {
     const prj = await buildProject() // Build the project to get script templates
@@ -40,6 +42,7 @@ export async function actionConfigure(
         out = dotGenaiscriptPath("action", script.id),
         ffmpeg,
         playwright,
+        packageLock,
     } = options || {}
 
     logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
@@ -118,7 +121,7 @@ WORKDIR /genaiscript/action
 COPY . .
 
 # Install dependencies
-RUN npm ci
+RUN npm ${packageLock ? "ci" : "install"}
 
 ${
     playwright
@@ -225,4 +228,12 @@ ${Object.entries(inputs || {})
             2
         )
     )
+
+    // generate package-lock.json
+    if (packageLock) {
+        logVerbose("generating package-lock.json")
+        await runtimeHost.exec(undefined, "node", ["install"], {
+            cwd: out,
+        })
+    }
 }

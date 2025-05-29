@@ -673,6 +673,7 @@ Arguments:
 
 Options:
   -o, --out <string>        output folder for action files
+  --package-lock            generate package-lock.json file and use `npm ci`
   --ffmpeg                  use ffmpeg for video/audio processing
   --playwright              use playwright for web browsing
   -g, --groups <groups...>  groups to include or exclude. Use :! prefix to

@@ -564,6 +564,10 @@ export async function cli() {
         .description("Configure the current project for GitHub Actions")
         .argument("<script>", "Script to use for the action")
         .option("-o, --out <string>", "output folder for action files")
+        .option(
+            "--package-lock",
+            "generate package-lock.json file and use `npm ci`"
+        )
         .option("--ffmpeg", "use ffmpeg for video/audio processing")
         .option("--playwright", "use playwright for web browsing")
         .action(actionConfigure)
