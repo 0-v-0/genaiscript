@@ -126,7 +126,7 @@ RUN npm ${packageLock ? "ci" : "install"}
 ${
     playwright
         ? dedent`# Install playwright dependencies
-RUN npm install:playwright
+RUN npm run install:playwright
 
 `
         : ""
@@ -177,7 +177,15 @@ ${Object.keys(inputs || {})
 
 \`\`\`yaml
 name: Run ${script.id} Action
-on: [push]
+on:
+    workflow_dispatch:
+    push:
+permissions:
+    contents: read
+    models: read
+concurrency:
+    group: ${script.id}-\${{ github.workflow }}-\${{ github.ref }}
+    cancel-in-progress: true
 jobs:
   run-script:
     runs-on: ubuntu-latest

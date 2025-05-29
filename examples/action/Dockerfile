@@ -13,7 +13,7 @@ COPY . .
 RUN npm install
 
 # Install playwright dependencies
-RUN npm install:playwright
+RUN npm run install:playwright
 
 # GitHub Action forces the WORKDIR to GITHUB_WORKSPACE 
 ENTRYPOINT ["npm", "--prefix", "/genaiscript/action", "start"]

@@ -22,7 +22,15 @@ with:
 
 ```yaml
 name: Run action-poem Action
-on: [push]
+on:
+    workflow_dispatch:
+    push:
+permissions:
+    contents: read
+    models: read
+concurrency:
+    group: action-poem-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 jobs:
   run-script:
     runs-on: ubuntu-latest
