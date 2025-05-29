@@ -12,7 +12,7 @@ concurrency:
     group: blog-post-${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 jobs:
-    build:
+    genai_generate_blog_post:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4

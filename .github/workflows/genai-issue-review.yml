@@ -10,7 +10,7 @@ concurrency:
     group: issues-${{ github.event.issue.number }}
     cancel-in-progress: true
 jobs:
-    build:
+    issue-review:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
