@@ -97,9 +97,8 @@ export async function actionConfigure(
 # Install git, python3, and pip
 RUN apk add --no-cache git python3 py3-pip
 
-
 # Set working directory
-WORKDIR /github/action
+WORKDIR /.genaiscript/action
 
 # Copy source code
 COPY . .
