@@ -112,9 +112,9 @@ ENTRYPOINT ["npm", "start"]
     )
     await writeFile(
         "README.md",
-        dedent`# ${script.id} GitHub Action
+        dedent`# ${script.id} action
 
-This action runs the script \`${script.id}\` in the GenAIScript project.
+A custom GitHub Action that runs the script \`${script.id}\`.
 
 ${script.description || ""}
 
