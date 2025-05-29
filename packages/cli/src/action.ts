@@ -25,7 +25,7 @@ export async function actionConfigure(
     options: {
         out?: string
         ffmpeg?: boolean
-        browsers?: string[]
+        playwright?: boolean
         packageLock?: boolean
         image?: string
     }
@@ -42,12 +42,17 @@ export async function actionConfigure(
     const {
         out = dotGenaiscriptPath("action", script.id),
         ffmpeg,
-        browsers,
+        playwright,
         packageLock,
-        image = "node:lts-alpine",
     } = options || {}
+    const image =
+        options.image ||
+        (playwright
+            ? "mcr.microsoft.com/playwright:v1.52.0-noble"
+            : "node:lts-alpine")
 
     logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
+    logVerbose(`docker image: ${image}`)
     const { inputSchema, branding } = script
     const scriptSchema = (inputSchema?.properties
         .script as JSONSchemaObject) || {
@@ -126,11 +131,9 @@ COPY . .
 RUN npm ${packageLock ? "ci" : "install"}
 
 ${
-    browsers?.length
+    playwright
         ? dedent`# Install playwright dependencies
-RUN npx playwright install
-RUN npx playwright install-deps ${browsers.join(" ")}
-
+RUN npx playwright install --with-deps
 
 `
         : ""
@@ -231,7 +234,10 @@ ${Object.entries(inputs || {})
                     genaiscript: "^" + CORE_VERSION,
                 },
                 scripts: {
-                    start: `genaiscript run ${scriptId}`,
+                    "docker:build": `docker build -t ${script.id}-action .`,
+                    lint: `npx --yes prettier --write genaisrc/`,
+                    typecheck: `genaiscript scripts compile`,
+                    start: `GITHUB_TOKEN=$INPUT_GITHUB_TOKEN genaiscript run ${scriptId}`,
                 },
             }),
             null,

@@ -6,6 +6,9 @@
     "genaiscript": "^1.140.2"
   },
   "scripts": {
-    "start": "genaiscript run action-poem"
+    "docker:build": "docker build -t action-poem-action .",
+    "lint": "npx --yes prettier --write genaisrc/",
+    "typecheck": "genaiscript scripts compile",
+    "start": "GITHUB_TOKEN=$INPUT_GITHUB_TOKEN genaiscript run action-poem"
   }
 }

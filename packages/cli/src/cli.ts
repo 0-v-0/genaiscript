@@ -569,7 +569,7 @@ export async function cli() {
             "generate package-lock.json file and use `npm ci`"
         )
         .option("--ffmpeg", "use ffmpeg for video/audio processing")
-        .option("--browsers <string...>", "List of browser to install")
+        .option("--playwright", "Enable Playwright for browser testing")
         .option("--image <string>", "Docker image identifier")
         .action(actionConfigure)
     addGroupsOptions(actionConfigureCmd)
