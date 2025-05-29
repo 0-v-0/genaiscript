@@ -175,6 +175,16 @@ ${Object.entries(inputs || {})
 `
     )
     await writeFile(
+        ".gitignore",
+        dedent`node_modules
+.genaiscript
+.env
+.*.env
+.env.*
+`
+    )
+
+    await writeFile(
         "package.json",
         JSON.stringify(
             deleteUndefinedValues({
@@ -187,7 +197,7 @@ ${Object.entries(inputs || {})
                     genaiscript: "^" + CORE_VERSION,
                 },
                 scripts: {
-                    start: `npx genaiscript run ${scriptId}`,
+                    start: `genaiscript run ${scriptId}`,
                 },
             }),
             null,
