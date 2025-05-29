@@ -71,7 +71,8 @@ is at https://microsoft.github.io/genaiscript/reference/scripts.md
                         },
                         {
                             label: "Configuration",
-                            description: "Configure access to LLMs and other services",
+                            description:
+                                "Configure access to LLMs and other services",
                             paths: ["configuration/**"],
                         },
                         {
@@ -141,18 +142,22 @@ is at https://microsoft.github.io/genaiscript/reference/scripts.md
                 {
                     label: "Configuration",
                     autogenerate: { directory: "configuration" },
+                    collapsed: true,
                 },
                 {
                     label: "Case Studies",
                     autogenerate: { directory: "case-studies" },
+                    collapsed: true,
                 },
                 {
                     label: "Samples",
                     autogenerate: { directory: "samples" },
+                    collapsed: true,
                 },
                 {
                     label: "Guides",
                     autogenerate: { directory: "guides" },
+                    collapsed: true,
                 },
                 {
                     label: "Reference",

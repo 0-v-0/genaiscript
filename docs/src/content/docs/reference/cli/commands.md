@@ -11,9 +11,25 @@ A full list of the CLI command and its respective help text.
 ## `configure`
 
 ```
-Usage: genaiscript configure [options]
+Usage: genaiscript configure [options] [command]
 
-Interactive help to configure providers
+Configure LLMs or GitHub Actions
+
+Options:
+  -h, --help                               display help for command
+
+Commands:
+  llm [options]                            Configure LLM providers
+  action|github-action [options] <script>  Configure the current project for GitHub Actions
+  help [command]                           display help for command
+```
+
+### `configure llm`
+
+```
+Usage: genaiscript configure llm [options]
+
+Configure LLM providers
 
 Options:
   -p, --provider <string>  Preferred LLM provider aliases (choices: "openai",
@@ -25,6 +41,30 @@ Options:
                            "llamafile", "sglang", "vllm", "litellm",
                            "whisperasr", "echo")
   -h, --help               display help for command
+```
+
+### `configure action`
+
+```
+Usage: genaiscript configure action|github-action [options] <script>
+
+Configure the current project for GitHub Actions
+
+Arguments:
+  script                    Script to use for the action
+
+Options:
+  -f, --force               force override existing action files
+  -o, --out <string>        output folder for action files
+  --package-lock            generate package-lock.json file and use `npm ci`
+  --ffmpeg                  use ffmpeg for video/audio processing
+  --playwright              Enable Playwright for browser testing
+  --python                  Install Python 3.x support
+  --image <string>          Docker image identifier
+  --apks <string...>        Linux packages to install
+  -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
+                            exclude
+  -h, --help                display help for command
 ```
 
 ## `run`
@@ -644,45 +684,6 @@ Options:
   -g, --groups <groups...>          groups to include or exclude. Use :! prefix
                                     to exclude
   -h, --help                        display help for command
-```
-
-## `action`
-
-```
-Usage: genaiscript action [options] [command]
-
-GitHub Actions related command
-
-Options:
-  -h, --help                    display help for command
-
-Commands:
-  configure [options] <script>  Configure the current project for GitHub
-                                Actions
-  help [command]                display help for command
-```
-
-### `action configure`
-
-```
-Usage: genaiscript action configure [options] <script>
-
-Configure the current project for GitHub Actions
-
-Arguments:
-  script                    Script to use for the action
-
-Options:
-  -o, --out <string>        output folder for action files
-  --package-lock            generate package-lock.json file and use `npm ci`
-  --ffmpeg                  use ffmpeg for video/audio processing
-  --playwright              Enable Playwright for browser testing
-  --python                  Install Python 3.x support
-  --image <string>          Docker image identifier
-  --apks <string...>        Linux packages to install
-  -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
-                            exclude
-  -h, --help                display help for command
 ```
 
 ## `parse`

@@ -135,9 +135,12 @@ export async function cli() {
         debug.enable(c === DEBUG_SCRIPT_CATEGORY ? c : `genaiscript:${c}`)
     )
 
-    program
+    const configureCmd = program
         .command("configure")
-        .description("Interactive help to configure providers")
+        .description("Configure LLMs or GitHub Actions")
+    configureCmd
+        .command("llm", { isDefault: true })
+        .description("Configure LLM providers")
         .addOption(
             new Option(
                 "-p, --provider <string>",
@@ -557,13 +560,12 @@ export async function cli() {
     addModelOptions(openapi)
     addGroupsOptions(openapi)
 
-    const action = program
+    const actionConfigureCmd = configureCmd
         .command("action")
-        .description("GitHub Actions related command")
-    const actionConfigureCmd = action
-        .command("configure")
+        .alias("github-action")
         .description("Configure the current project for GitHub Actions")
         .argument("<script>", "Script to use for the action")
+        .option("-f, --force", "force override existing action files")
         .option("-o, --out <string>", "output folder for action files")
         .option(
             "--package-lock",

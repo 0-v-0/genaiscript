@@ -9,7 +9,7 @@ import { buildProject } from "./build"
 import { snakeCase } from "es-toolkit"
 import { logInfo, logVerbose } from "../../core/src/util"
 import { dotGenaiscriptPath } from "../../core/src/workdir"
-import { writeText } from "../../core/src/fs"
+import { tryStat, writeText } from "../../core/src/fs"
 import { dedent } from "../../core/src/indent"
 import { runtimeHost } from "../../core/src/host"
 const dbg = genaiscriptDebug("cli:action")
@@ -23,6 +23,7 @@ interface GitHubActionFieldType {
 export async function actionConfigure(
     scriptId: string,
     options: {
+        force?: boolean
         out?: string
         ffmpeg?: boolean
         python?: boolean
@@ -42,6 +43,7 @@ export async function actionConfigure(
     )
     if (!script) throw new Error(`Script with id "${scriptId}" not found.`)
     const {
+        force,
         out = dotGenaiscriptPath("action", script.id),
         ffmpeg,
         playwright,
@@ -104,8 +106,14 @@ export async function actionConfigure(
 
     const writeFile = async (name: string, content: string) => {
         const filePath = resolve(out, name)
-        logVerbose(`writing ${filePath}`)
-        await writeText(filePath, content)
+        if (!force && (await tryStat(filePath))) {
+            logInfo(
+                `skipping ${filePath} (file already exists), use --force to overwrite`
+            )
+        } else {
+            logVerbose(`writing ${filePath}`)
+            await writeText(filePath, content)
+        }
     }
 
     await writeFile(
