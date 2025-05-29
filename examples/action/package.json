@@ -9,8 +9,10 @@
   },
   "scripts": {
     "docker:build": "docker build -t action-poem-action .",
+    "docker:start": "docker run -e GITHUB_TOKEN action-poem-action",
     "lint": "npx --yes prettier --write genaisrc/",
     "typecheck": "genaiscript scripts compile",
-    "start": "GITHUB_TOKEN=$INPUT_GITHUB_TOKEN genaiscript run action-poem"
+    "configure": "genaiscript action configure action-poem --out .",
+    "start": "GITHUB_TOKEN=$INPUT_GITHUB_TOKEN genaiscript run action-poem --github-action"
   }
 }
