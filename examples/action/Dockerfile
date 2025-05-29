@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:lts
 
 # Install packages
 RUN apk add --no-cache git python3 py3-pip ffmpeg
@@ -13,7 +13,7 @@ COPY . .
 RUN npm install
 
 # Install playwright dependencies
-RUN npm run install:playwright
+RUN npm run install:playwright chromium
 
 # GitHub Action forces the WORKDIR to GITHUB_WORKSPACE 
 ENTRYPOINT ["npm", "--prefix", "/genaiscript/action", "start"]

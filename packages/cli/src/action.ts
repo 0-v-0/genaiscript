@@ -25,8 +25,9 @@ export async function actionConfigure(
     options: {
         out?: string
         ffmpeg?: boolean
-        playwright?: boolean
+        browsers?: string[]
         packageLock?: boolean
+        image?: string
     }
 ) {
     const prj = await buildProject() // Build the project to get script templates
@@ -41,8 +42,9 @@ export async function actionConfigure(
     const {
         out = dotGenaiscriptPath("action", script.id),
         ffmpeg,
-        playwright,
+        browsers,
         packageLock,
+        image = "node:lts",
     } = options || {}
 
     logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
@@ -109,7 +111,7 @@ export async function actionConfigure(
 
     await writeFile(
         "Dockerfile",
-        dedent`FROM node:22-alpine
+        dedent`FROM ${image}
 
 # Install packages
 RUN apk add --no-cache ${apks.join(" ")}
@@ -124,9 +126,9 @@ COPY . .
 RUN npm ${packageLock ? "ci" : "install"}
 
 ${
-    playwright
+    browsers?.length
         ? dedent`# Install playwright dependencies
-RUN npm run install:playwright
+RUN npm run install:playwright ${browsers.join(" ")}
 
 `
         : ""
