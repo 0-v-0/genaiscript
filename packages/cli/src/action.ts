@@ -58,9 +58,17 @@ export async function actionConfigure(
         },
     }
     const outputs = {}
-    const pkg = await nodeTryReadPackage()
-    const files: Record<string, string> = {
-        "action.yml": YAMLStringify(
+    const pkg = (await nodeTryReadPackage()) || {}
+
+    const writeFile = async (name: string, content: string) => {
+        const filePath = resolve(out, name)
+        logVerbose(`writing ${filePath}`)
+        await writeText(filePath, content)
+    }
+
+    await writeFile(
+        "action.yml",
+        YAMLStringify(
             deleteUndefinedValues({
                 name: script.id,
                 author: pkg.author || undefined,
@@ -72,19 +80,15 @@ export async function actionConfigure(
                     image: "Dockerfile",
                 },
             })
-        ),
-        "package.json": JSON.stringify(
-            deleteUndefinedValues({
-                name: pkg?.name || undefined,
-                version: pkg?.version || "0.0.0",
-                dependencies: {
-                    genaiscript: `^${CORE_VERSION}`,
-                },
-            }),
-            null,
-            2
-        ),
-        Dockerfile: `FROM node:22-alpine
+        )
+    )
+
+    await writeFile(
+        "Dockerfile",
+        `FROM node:22-alpine
+
+# Install git, python3, and pip
+RUN apk add --no-cache git python3 py3-pip
 
 # Set working directory
 WORKDIR /usr/src
@@ -94,20 +98,26 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-ENTRYPOINT ["/usr/src/entrypoint.sh"]`,
-        // starts the script
-        "entrypoint.sh": `#!/bin/sh -l
-set -e
-
-# GitHub Actions forces the workdir to be /github/workspace, 
-# so we need to set the working directory to the location of this script
-# so that things actually work.
-npx genaiscript run "$(dirname "$0")/${script.filename}"`,
-    }
-
-    for (const [key, value] of Object.entries(files)) {
-        const filePath = resolve(out, key)
-        logVerbose(`writing ${filePath}`)
-        await writeText(filePath, value)
-    }
+ENTRYPOINT ["npx", "--yes", "genaiscript", "run", "${scriptId}"]`
+    )
+    await writeFile(
+        "package.json",
+        JSON.stringify(
+            deleteUndefinedValues({
+                name: script.id + "-action",
+                version: CORE_VERSION,
+                description:
+                    script.description || "GitHub Action for " + script.id,
+                dependencies: {
+                    ...(pkg.dependencies || {}),
+                    genaiscript: "^" + CORE_VERSION,
+                },
+                scripts: {
+                    start: `npx genaiscript run ${scriptId}`,
+                },
+            }),
+            null,
+            2
+        )
+    )
 }
