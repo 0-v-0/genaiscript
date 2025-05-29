@@ -16,7 +16,7 @@ const dbg = genaiscriptDebug("cli:action")
 
 interface GitHubActionFieldType {
     description: string
-    required: boolean
+    required?: boolean
     default?: string
 }
 
@@ -86,12 +86,10 @@ export async function actionConfigure(
     const outputs: Record<string, GitHubActionFieldType> = {
         text: {
             description: "The generated text output.",
-            required: false,
         },
         data: {
             description:
                 "The generated JSON data output, parsed and stringified.",
-            required: false,
         },
     }
     const pkg = (await nodeTryReadPackage()) || {}
@@ -296,7 +294,7 @@ npm run docker:start
                     lint: `npx --yes prettier --write genaisrc/`,
                     typecheck: `genaiscript scripts compile`,
                     configure: `genaiscript action configure ${scriptId} --out .`,
-                    start: `GITHUB_TOKEN=$INPUT_GITHUB_TOKEN genaiscript run ${scriptId} --github-action`,
+                    start: `genaiscript run ${scriptId} --github-action`,
                 },
             }),
             null,

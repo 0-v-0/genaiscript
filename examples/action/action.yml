@@ -8,10 +8,8 @@ inputs:
 outputs:
   text:
     description: The generated text output.
-    required: false
   data:
     description: The generated JSON data output, parsed and stringified.
-    required: false
 branding:
   color: purple
   icon: anchor
