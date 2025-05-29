@@ -16,7 +16,7 @@ const dbg = genaiscriptDebug("cli:action")
 interface GitHubActionFieldType {
     description: string
     required: boolean
-    default: string
+    default?: string
 }
 
 export async function actionConfigure(
@@ -59,9 +59,9 @@ export async function actionConfigure(
             })
         ),
         github_token: {
-            description: "GitHub token for accessing the repository.",
-            required: false,
-            default: "${{ secrets.GITHUB_TOKEN }}",
+            description:
+                "GitHub token with `models: read` permission at least.",
+            required: true,
         },
     }
     const outputs: Record<string, GitHubActionFieldType> = {}
@@ -79,7 +79,7 @@ export async function actionConfigure(
             deleteUndefinedValues({
                 name: script.id,
                 author: pkg.author || undefined,
-                description: script.description || pkg.description,
+                description: script.title || "GitHub Action for " + script.id,
                 inputs,
                 outputs,
                 runs: {
@@ -117,7 +117,10 @@ ENTRYPOINT ["npm", "start"]
 
 This action runs the script \`${script.id}\` in the GenAIScript project.
 
+${script.description || ""}
+
 ## Inputs
+
 ${Object.entries(inputs || {})
     .map(
         ([key, value]) =>
@@ -127,6 +130,7 @@ ${Object.entries(inputs || {})
     )
     .join("\n")}
 ## Outputs
+
 ${Object.entries(outputs || {})
     .map(
         ([key, value]) =>
