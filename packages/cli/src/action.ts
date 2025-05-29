@@ -120,7 +120,8 @@ export async function actionConfigure(
 
     await writeFile(
         "Dockerfile",
-        dedent`FROM ${image}
+        dedent`# For additional guidance on containerized actions, see https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-docker-container-action
+FROM ${image}
 
 # Install packages
 RUN apk add --no-cache ${apks.join(" ")}
@@ -231,6 +232,8 @@ ${Object.entries(inputs || {})
             deleteUndefinedValues({
                 name: script.id + "-action",
                 version: CORE_VERSION,
+                author: pkg.author,
+                license: pkg.license,
                 description:
                     script.description || "GitHub Action for " + script.id,
                 dependencies: {

@@ -1,6 +1,8 @@
 {
   "name": "action-poem-action",
   "version": "1.140.2",
+  "author": "microsoft",
+  "license": "MIT",
   "description": "This is the description",
   "dependencies": {
     "genaiscript": "^1.140.2"
