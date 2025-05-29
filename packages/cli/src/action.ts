@@ -23,6 +23,8 @@ export async function actionConfigure(
     scriptId: string,
     options: {
         out?: string
+        ffmpeg?: boolean
+        playwright?: boolean
     }
 ) {
     const prj = await buildProject() // Build the project to get script templates
@@ -34,7 +36,11 @@ export async function actionConfigure(
                 resolve(t.filename) === resolve(scriptId))
     )
     if (!script) throw new Error(`Script with id "${scriptId}" not found.`)
-    const { out = dotGenaiscriptPath("action", script.id) } = options || {}
+    const {
+        out = dotGenaiscriptPath("action", script.id),
+        ffmpeg,
+        playwright,
+    } = options || {}
 
     logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
     const { inputSchema } = script
@@ -67,6 +73,13 @@ export async function actionConfigure(
     const outputs: Record<string, GitHubActionFieldType> = {}
     const pkg = (await nodeTryReadPackage()) || {}
 
+    const apks = [
+        "git",
+        "python3",
+        "py3-pip",
+        ffmpeg ? "ffmpeg" : undefined,
+    ].filter(Boolean)
+
     const writeFile = async (name: string, content: string) => {
         const filePath = resolve(out, name)
         logVerbose(`writing ${filePath}`)
@@ -94,8 +107,8 @@ export async function actionConfigure(
         "Dockerfile",
         dedent`FROM node:22-alpine
 
-# Install git, python3, and pip
-RUN apk add --no-cache git python3 py3-pip
+# Install packages
+RUN apk add --no-cache ${apks.join(" ")}
 
 # Set working directory
 WORKDIR /.genaiscript/action
@@ -106,8 +119,16 @@ COPY . .
 # Install dependencies
 RUN npm ci
 
+${
+    playwright
+        ? dedent`# Install playwright dependencies
+RUN npx playwright install-deps
+
+`
+        : ""
+}
 # Set the entrypoint to run the action
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "--prefix", "/.genaiscript/action", "start"]
 `
     )
     await writeFile(

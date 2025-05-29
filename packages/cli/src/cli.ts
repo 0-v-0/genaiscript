@@ -563,8 +563,10 @@ export async function cli() {
         .command("configure")
         .description("Configure the current project for GitHub Actions")
         .argument("<script>", "Script to use for the action")
-        .action(actionConfigure)
         .option("-o, --out <string>", "output folder for action files")
+        .option("--ffmpeg", "use ffmpeg for video/audio processing")
+        .option("--playwright", "use playwright for web browsing")
+        .action(actionConfigure)
     addGroupsOptions(actionConfigureCmd)
 
     // Define 'parse' command group for parsing tasks
