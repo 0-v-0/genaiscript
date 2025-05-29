@@ -44,7 +44,7 @@ export async function actionConfigure(
         ffmpeg,
         browsers,
         packageLock,
-        image = "node:lts",
+        image = "node:lts-alpine",
     } = options || {}
 
     logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
@@ -128,7 +128,9 @@ RUN npm ${packageLock ? "ci" : "install"}
 ${
     browsers?.length
         ? dedent`# Install playwright dependencies
-RUN npm run install:playwright ${browsers.join(" ")}
+RUN npx playwright install
+RUN npx playwright install-deps ${browsers.join(" ")}
+
 
 `
         : ""
@@ -229,8 +231,6 @@ ${Object.entries(inputs || {})
                     genaiscript: "^" + CORE_VERSION,
                 },
                 scripts: {
-                    "install:playwright":
-                        "npx playwright install && npx playwright install-deps",
                     start: `genaiscript run ${scriptId}`,
                 },
             }),
