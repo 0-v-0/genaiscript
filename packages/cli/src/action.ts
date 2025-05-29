@@ -25,9 +25,11 @@ export async function actionConfigure(
     options: {
         out?: string
         ffmpeg?: boolean
+        python?: boolean
         playwright?: boolean
         packageLock?: boolean
         image?: string
+        apks?: string[]
     }
 ) {
     const prj = await buildProject() // Build the project to get script templates
@@ -44,6 +46,7 @@ export async function actionConfigure(
         ffmpeg,
         playwright,
         packageLock,
+        python,
     } = options || {}
     const image =
         options.image ||
@@ -85,9 +88,10 @@ export async function actionConfigure(
 
     const apks = [
         "git",
-        "python3",
-        "py3-pip",
+        python ? "python3" : undefined,
+        python ? "py3-pip" : undefined,
         ffmpeg ? "ffmpeg" : undefined,
+        ...(options?.apks || []),
     ].filter(Boolean)
 
     const writeFile = async (name: string, content: string) => {

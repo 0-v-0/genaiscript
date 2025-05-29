@@ -570,7 +570,9 @@ export async function cli() {
         )
         .option("--ffmpeg", "use ffmpeg for video/audio processing")
         .option("--playwright", "Enable Playwright for browser testing")
+        .option("--python", "Install Python 3.x support")
         .option("--image <string>", "Docker image identifier")
+        .option("--apks <string...>", "Linux packages to install")
         .action(actionConfigure)
     addGroupsOptions(actionConfigureCmd)
 

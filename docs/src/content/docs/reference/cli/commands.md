@@ -676,7 +676,9 @@ Options:
   --package-lock            generate package-lock.json file and use `npm ci`
   --ffmpeg                  use ffmpeg for video/audio processing
   --playwright              Enable Playwright for browser testing
+  --python                  Install Python 3.x support
   --image <string>          Docker image identifier
+  --apks <string...>        Linux packages to install
   -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
                             exclude
   -h, --help                display help for command
