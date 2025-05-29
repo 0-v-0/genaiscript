@@ -10,7 +10,14 @@ import { snakeCase } from "es-toolkit"
 import { logInfo, logVerbose } from "../../core/src/util"
 import { dotGenaiscriptPath } from "../../core/src/workdir"
 import { writeText } from "../../core/src/fs"
+import { dedent } from "../../core/src/indent"
 const dbg = genaiscriptDebug("cli:action")
+
+interface GitHubActionFieldType {
+    description: string
+    required: boolean
+    default: string
+}
 
 export async function actionConfigure(
     scriptId: string,
@@ -37,7 +44,7 @@ export async function actionConfigure(
         properties: {},
         required: [],
     }
-    const inputs = {
+    const inputs: Record<string, GitHubActionFieldType> = {
         ...Object.fromEntries(
             Object.entries(scriptSchema.properties).map(([key, value]) => {
                 return [
@@ -47,7 +54,7 @@ export async function actionConfigure(
                             (value as JSONSchemaDescribed).description || "",
                         required: scriptSchema.required?.includes(key) || false,
                         default: (value as any).default || undefined,
-                    },
+                    } satisfies GitHubActionFieldType,
                 ]
             })
         ),
@@ -57,7 +64,7 @@ export async function actionConfigure(
             default: "${{ secrets.GITHUB_TOKEN }}",
         },
     }
-    const outputs = {}
+    const outputs: Record<string, GitHubActionFieldType> = {}
     const pkg = (await nodeTryReadPackage()) || {}
 
     const writeFile = async (name: string, content: string) => {
@@ -85,7 +92,7 @@ export async function actionConfigure(
 
     await writeFile(
         "Dockerfile",
-        `FROM node:22-alpine
+        dedent`FROM node:22-alpine
 
 # Install git, python3, and pip
 RUN apk add --no-cache git python3 py3-pip
@@ -102,6 +109,66 @@ RUN npm ci
 
 # Set the entrypoint to run the action
 ENTRYPOINT ["npm", "start"]
+`
+    )
+    await writeFile(
+        "README.md",
+        dedent`# ${script.id} GitHub Action
+
+This action runs the script \`${script.id}\` in the GenAIScript project.
+
+## Inputs
+${Object.entries(inputs || {})
+    .map(
+        ([key, value]) =>
+            `- \`${key}\`: ${value.description}${
+                value.required ? " (required)" : ""
+            }${value.default ? ` (default: \`${value.default}\`)` : ""}`
+    )
+    .join("\n")}
+## Outputs
+${Object.entries(outputs || {})
+    .map(
+        ([key, value]) =>
+            `- \`${key}\`: ${value.description || ""}${
+                value.required ? " (required)" : ""
+            }${value.default ? ` (default: \`${value.default}\`)` : ""}`
+    )
+    .join("\n")}
+## Usage
+
+\`\`\`yaml
+uses: ${script.id}-action
+with:
+${Object.entries(inputs || {})
+    .map(
+        ([key, value]) =>
+            `  ${key}: \${{ inputs.${key} || "${value.default || ""}" }}`
+    )
+    .join("\n")}
+\`\`\`
+
+## Example
+
+\`\`\`yaml
+name: Run ${script.id} Action
+on: [push]
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run ${script.id} Action
+        uses: ${script.id}-action@main
+        with:
+${Object.entries(inputs || {})
+    .map(
+        ([key, value]) =>
+            `          ${key}: \${{ inputs.${key} || "${value.default || ""}" }}`
+    )
+    .join("\n")}
+\`\`\`
 `
     )
     await writeFile(
