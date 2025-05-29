@@ -83,6 +83,7 @@ Options:
   -rr, --run-retry <number>                  number of retries for the entire run
   --no-run-trace                             disable automatic trace generation
   --no-output-trace                          disable automatic output generation
+  --github-action                            run as GitHub Action
   -h, --help                                 display help for command
 ```
 
@@ -464,7 +465,7 @@ Options:
 ## `retrieval`
 
 ```
-Usage: genaiscript retrieval|retreival [options] [command]
+Usage: genaiscript retrieval [options] [command]
 
 RAG support
 
@@ -572,8 +573,9 @@ Usage: genaiscript mcp|mcps [options]
 Starts a Model Context Protocol server that exposes scripts as tools
 
 Options:
-  --groups <string...>              Filter script by groups
   --ids <string...>                 Filter script by ids
+  -g, --groups <groups...>          groups to include or exclude. Use :! prefix
+                                    to exclude
   --startup <string>                Startup script id, executed after the
                                     server is started
   --remote <string>                 Remote repository URL to serve
@@ -615,7 +617,6 @@ Options:
   -c, --cors <string>               Enable CORS and sets the allowed origin.
                                     Use '*' to allow any origin.
   --route <string>                  Route prefix, like /api
-  --groups <string...>              Filter script by groups
   --ids <string...>                 Filter script by ids
   --startup <string>                Startup script id, executed after the
                                     server is started
@@ -640,7 +641,48 @@ Options:
   -ma, --model-alias <nameid...>    model alias as name=modelid
   -re, --reasoning-effort <string>  Reasoning effort for o* models (choices:
                                     "high", "medium", "low")
+  -g, --groups <groups...>          groups to include or exclude. Use :! prefix
+                                    to exclude
   -h, --help                        display help for command
+```
+
+## `action`
+
+```
+Usage: genaiscript action [options] [command]
+
+GitHub Actions related command
+
+Options:
+  -h, --help                    display help for command
+
+Commands:
+  configure [options] <script>  Configure the current project for GitHub
+                                Actions
+  help [command]                display help for command
+```
+
+### `action configure`
+
+```
+Usage: genaiscript action configure [options] <script>
+
+Configure the current project for GitHub Actions
+
+Arguments:
+  script                    Script to use for the action
+
+Options:
+  -o, --out <string>        output folder for action files
+  --package-lock            generate package-lock.json file and use `npm ci`
+  --ffmpeg                  use ffmpeg for video/audio processing
+  --playwright              Enable Playwright for browser testing
+  --python                  Install Python 3.x support
+  --image <string>          Docker image identifier
+  --apks <string...>        Linux packages to install
+  -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
+                            exclude
+  -h, --help                display help for command
 ```
 
 ## `parse`

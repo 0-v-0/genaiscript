@@ -3112,7 +3112,7 @@ Apache License
 
 The following npm package may be included in this product:
 
- - mathjs@14.5.0
+ - mathjs@14.5.1
 
 This package contains the following license:
 
@@ -3351,8 +3351,8 @@ The following npm packages may be included in this product:
  - @types/http-cache-semantics@4.0.4
  - @types/node-fetch@2.6.12
  - @types/node@16.9.1
- - @types/node@18.19.103
- - @types/node@22.15.21
+ - @types/node@18.19.105
+ - @types/node@22.15.24
  - @types/sarif@2.1.7
  - @types/trusted-types@2.0.7
  - @types/turndown@5.0.5
@@ -3387,7 +3387,7 @@ MIT License
 
 The following npm package may be included in this product:
 
- - genaiscript-vscode@1.139.0
+ - genaiscript-vscode@1.140.2
 
 This package contains the following license:
 
@@ -4950,6 +4950,36 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 **THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.**
+
+-----------
+
+The following npm package may be included in this product:
+
+ - @actions/http-client@2.2.3
+
+This package contains the following license:
+
+Actions Http Client for Node.js
+
+Copyright (c) GitHub, Inc.
+
+All rights reserved.
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
@@ -7090,7 +7120,7 @@ The following npm packages may be included in this product:
 
  - duck@0.1.12
  - lop@0.4.2
- - mammoth@1.9.0
+ - mammoth@1.9.1
  - option@0.2.4
 
 These packages each contain the following license:
@@ -8937,6 +8967,34 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following npm package may be included in this product:
 
+ - @fastify/busboy@2.1.1
+
+This package contains the following license:
+
+Copyright Brian White. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
+
+-----------
+
+The following npm package may be included in this product:
+
  - yaml@2.8.0
 
 This package contains the following license:
@@ -10621,10 +10679,10 @@ The following npm packages may be included in this product:
  - abstract-logging@2.0.1
  - data-uri-to-buffer@4.0.1
  - eastasianwidth@0.2.0
- - genaiscript-core-internal@1.139.0
- - genaiscript-sample@1.139.0
- - genaiscript-web@1.139.0
- - genaiscript@1.139.0
+ - genaiscript-core-internal@1.140.2
+ - genaiscript-sample@1.140.2
+ - genaiscript-web@1.140.2
+ - genaiscript@1.140.2
  - isarray@1.0.0
  - javascript-natural-sort@0.7.1
  - keyv@4.5.4
@@ -13143,7 +13201,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - zod@3.25.30
+ - zod@3.25.36
 
 This package contains the following license:
 
@@ -13473,6 +13531,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 The following npm packages may be included in this product:
 
  - undici-types@6.21.0
+ - undici@5.29.0
  - undici@6.21.3
 
 These packages each contain the following license:
@@ -15609,6 +15668,36 @@ THE SOFTWARE.
 
 The following npm package may be included in this product:
 
+ - tunnel@0.0.6
+
+This package contains the following license:
+
+The MIT License (MIT)
+
+Copyright (c) 2012 Koichi Kobayashi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-----------
+
+The following npm package may be included in this product:
+
  - xmlbuilder@10.1.1
 
 This package contains the following license:
@@ -17369,6 +17458,26 @@ THE SOFTWARE.
 
 The following npm packages may be included in this product:
 
+ - @actions/core@1.11.1
+ - @actions/exec@1.1.1
+ - @actions/io@1.1.3
+
+These packages each contain the following license:
+
+The MIT License (MIT)
+
+Copyright 2019 GitHub
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-----------
+
+The following npm packages may be included in this product:
+
  - @csstools/css-calc@2.1.4
  - @csstools/css-color-parser@3.0.10
  - @csstools/css-parser-algorithms@3.0.5
@@ -17708,7 +17817,7 @@ For more information, please refer to <https://unlicense.org>
 
 The following npm package may be included in this product:
 
- - protobufjs@7.4.0
+ - protobufjs@7.5.3
 
 This package contains the following license:
 

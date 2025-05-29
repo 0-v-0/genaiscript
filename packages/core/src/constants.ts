@@ -312,7 +312,7 @@ export const DOCKER_CONTAINER_VOLUME = "app"
 export const CLI_RUN_FILES_FOLDER = "files"
 
 export const GITHUB_API_VERSION = "2022-11-28"
-export const GITHUB_TOKENS = ["GITHUB_TOKEN", "GH_TOKEN"]
+export const GITHUB_TOKENS = ["GITHUB_TOKEN", "GH_TOKEN", "INPUT_GITHUB_TOKEN"]
 
 export const AI_REQUESTS_CACHE = "airaireequests"
 export const CHAT_CACHE = "chat"
@@ -363,7 +363,7 @@ export const TOKEN_TRUNCATION_THRESHOLD = 16
 export const GIT_IGNORE = ".gitignore"
 export const GIT_IGNORE_GENAI = ".gitignore.genai"
 export const GENAISCRIPTIGNORE = ".genaiscriptignore"
-export const CLI_ENV_VAR_RX = /^genaiscript_var_/i
+export const CLI_ENV_VAR_RX = /^(genaiscript_var_|input_)/i
 
 export const GIT_DIFF_MAX_TOKENS = 8000
 export const GIT_LOG_COUNT = 10

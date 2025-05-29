@@ -75,6 +75,7 @@ import { startMcpServer } from "./mcpserver"
 import { error } from "./log"
 import { DEBUG_CATEGORIES } from "../../core/src/dbg"
 import { startOpenAPIServer } from "./openapi"
+import { actionConfigure } from "./action"
 
 /**
  * /NOП/
@@ -259,6 +260,7 @@ export async function cli() {
         )
         .option("--no-run-trace", "disable automatic trace generation")
         .option("--no-output-trace", "disable automatic output generation")
+        .option("--github-action", "run as GitHub Action")
         .action(runScriptWithExitCode) // Action to execute the script with exit code
 
     // runs commands
@@ -298,22 +300,16 @@ export async function cli() {
             `promptfoo version, default is ${PROMPTFOO_VERSION}`
         )
         .option("-os, --out-summary <file>", "append output summary in file")
-        .option(
-            "-g, --groups <groups...>",
-            "groups to include or exclude. Use :! prefix to exclude"
-        )
+    addGroupsOptions(testRun)
         .option("--test-timeout <number>", "test timeout in seconds")
         .action(scriptsTest) // Action to run the tests
 
     // List available tests
-    test.command("list")
+    const testList = test
+        .command("list")
         .description("List available tests in workspace")
         .option("--redteam", "list red team tests")
-        .option(
-            "-g, --groups <groups...>",
-            "groups to include or exclude. Use :! prefix to exclude"
-        )
-        .action(scriptTestList) // Action to list the tests
+    addGroupsOptions(testList).action(scriptTestList) // Action to list the tests
 
     // Launch test viewer
     test.command("view")
@@ -368,17 +364,13 @@ export async function cli() {
         .command("scripts")
         .alias("script")
         .description("Utility tasks for scripts")
-    scripts
+    const scriptList = scripts
         .command("list", { isDefault: true })
         .description("List all available scripts in workspace")
         .argument("[script...]", "Script ids")
         .option("--unlisted", "show unlisted scripts")
         .option("--json", "output in JSON format")
-        .option(
-            "-g, --groups <groups...>",
-            "groups to include or exclude. Use :! prefix to exclude"
-        )
-        .action(listScripts) // Action to list scripts
+    addGroupsOptions(scriptList).action(listScripts) // Action to list scripts
     scripts
         .command("create")
         .description("Create a new script")
@@ -455,10 +447,7 @@ export async function cli() {
         .action(extractVideoFrames)
 
     // Define 'retrieval' command group for RAG support
-    const retrieval = program
-        .command("retrieval")
-        .alias("retreival")
-        .description("RAG support")
+    const retrieval = program.command("retrieval").description("RAG support")
     const index = retrieval
         .command("index")
         .arguments("<name> <files...>")
@@ -526,8 +515,8 @@ export async function cli() {
 
     const mcp = program
         .command("mcp")
-        .option("--groups <string...>", "Filter script by groups")
         .option("--ids <string...>", "Filter script by ids")
+    addGroupsOptions(mcp)
         .option(
             "--startup <string>",
             "Startup script id, executed after the server is started"
@@ -555,7 +544,6 @@ export async function cli() {
             "Enable CORS and sets the allowed origin. Use '*' to allow any origin."
         )
         .option("--route <string>", "Route prefix, like /api")
-        .option("--groups <string...>", "Filter script by groups")
         .option("--ids <string...>", "Filter script by ids")
         .option(
             "--startup <string>",
@@ -567,6 +555,27 @@ export async function cli() {
         .action(startOpenAPIServer)
     addRemoteOptions(openapi)
     addModelOptions(openapi)
+    addGroupsOptions(openapi)
+
+    const action = program
+        .command("action")
+        .description("GitHub Actions related command")
+    const actionConfigureCmd = action
+        .command("configure")
+        .description("Configure the current project for GitHub Actions")
+        .argument("<script>", "Script to use for the action")
+        .option("-o, --out <string>", "output folder for action files")
+        .option(
+            "--package-lock",
+            "generate package-lock.json file and use `npm ci`"
+        )
+        .option("--ffmpeg", "use ffmpeg for video/audio processing")
+        .option("--playwright", "Enable Playwright for browser testing")
+        .option("--python", "Install Python 3.x support")
+        .option("--image <string>", "Docker image identifier")
+        .option("--apks <string...>", "Linux packages to install")
+        .action(actionConfigure)
+    addGroupsOptions(actionConfigureCmd)
 
     // Define 'parse' command group for parsing tasks
     const parser = program
@@ -720,6 +729,13 @@ export async function cli() {
                 "--remote-install",
                 "Install dependencies from remote repository"
             )
+    }
+
+    function addGroupsOptions(command: Command) {
+        return command.option(
+            "-g, --groups <groups...>",
+            "groups to include or exclude. Use :! prefix to exclude"
+        )
     }
 
     function addModelOptions(command: Command) {
