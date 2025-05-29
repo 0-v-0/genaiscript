@@ -1,0 +1,12 @@
+{
+  "name": "action-poem-action",
+  "version": "1.140.2",
+  "description": "This is the description",
+  "dependencies": {
+    "genaiscript": "^1.140.2"
+  },
+  "scripts": {
+    "install:playwright": "npx playwright install && npx playwright install-deps",
+    "start": "genaiscript run action-poem"
+  }
+}

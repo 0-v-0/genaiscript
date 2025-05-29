@@ -1,0 +1,14 @@
+name: action-poem
+author: microsoft
+description: This is the title
+inputs:
+  github_token:
+    description: "GitHub token with `models: read` permission at least."
+    required: true
+outputs: {}
+branding:
+  color: purple
+  icon: anchor
+runs:
+  using: docker
+  image: Dockerfile

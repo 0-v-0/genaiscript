@@ -165,11 +165,8 @@ ${Object.entries(outputs || {})
 \`\`\`yaml
 uses: ${script.id}-action
 with:
-${Object.entries(inputs || {})
-    .map(
-        ([key, value]) =>
-            `  ${key}: \${{ inputs.${key} || "${value.default || ""}" }}`
-    )
+${Object.keys(inputs || {})
+    .map((key) => `  ${key}: \${{ ... }}`)
     .join("\n")}
 \`\`\`
 
