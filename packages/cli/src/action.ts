@@ -59,7 +59,7 @@ export async function actionConfigure(
                         description:
                             (value as JSONSchemaDescribed).description || "",
                         required: scriptSchema.required?.includes(key) || false,
-                        default: (value as any).default || undefined,
+                        default: (value as any).default ?? undefined,
                     } satisfies GitHubActionFieldType,
                 ]
             })
@@ -112,7 +112,7 @@ export async function actionConfigure(
 RUN apk add --no-cache ${apks.join(" ")}
 
 # Set working directory
-WORKDIR /.genaiscript/action
+WORKDIR /genaiscript/action
 
 # Copy source code
 COPY . .
@@ -123,13 +123,13 @@ RUN npm ci
 ${
     playwright
         ? dedent`# Install playwright dependencies
-RUN npx playwright install-deps
+RUN npm install:playwright
 
 `
         : ""
 }
-# Set the entrypoint to run the action
-ENTRYPOINT ["npm", "--prefix", "/.genaiscript/action", "start"]
+# GitHub Action forces the WORKDIR to GITHUB_WORKSPACE 
+ENTRYPOINT ["npm", "--prefix", "/genaiscript/action", "start"]
 `
     )
     await writeFile(
@@ -219,6 +219,8 @@ ${Object.entries(inputs || {})
                     genaiscript: "^" + CORE_VERSION,
                 },
                 scripts: {
+                    "install:playwright":
+                        "npx playwright install && npx playwright install-deps",
                     start: `genaiscript run ${scriptId}`,
                 },
             }),
