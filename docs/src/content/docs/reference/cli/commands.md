@@ -672,6 +672,7 @@ Arguments:
   script                    Script to use for the action
 
 Options:
+  -o, --out <string>        output folder for action files
   -g, --groups <groups...>  groups to include or exclude. Use :! prefix to
                             exclude
   -h, --help                display help for command

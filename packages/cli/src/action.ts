@@ -1,17 +1,23 @@
 import { resolve } from "node:path"
-import { filterScripts, ScriptFilterOptions } from "../../core/src/ast"
 import { deleteUndefinedValues } from "../../core/src/cleaners"
 import { GENAI_ANY_REGEX } from "../../core/src/constants"
 import { genaiscriptDebug } from "../../core/src/debug"
-import { tryReadJSON } from "../../core/src/fs"
 import { nodeTryReadPackage } from "../../core/src/nodepackage"
 import { CORE_VERSION } from "../../core/src/version"
 import { YAMLStringify } from "../../core/src/yaml"
 import { buildProject } from "./build"
 import { snakeCase } from "es-toolkit"
+import { logInfo, logVerbose } from "../../core/src/util"
+import { dotGenaiscriptPath } from "../../core/src/workdir"
+import { writeText } from "../../core/src/fs"
 const dbg = genaiscriptDebug("cli:action")
 
-export async function actionConfigure(scriptId: string) {
+export async function actionConfigure(
+    scriptId: string,
+    options: {
+        out?: string
+    }
+) {
     const prj = await buildProject() // Build the project to get script templates
     const script = prj.scripts.find(
         (t) =>
@@ -21,7 +27,9 @@ export async function actionConfigure(scriptId: string) {
                 resolve(t.filename) === resolve(scriptId))
     )
     if (!script) throw new Error(`Script with id "${scriptId}" not found.`)
+    const { out = dotGenaiscriptPath("action", script.id) } = options || {}
 
+    logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
     const { inputSchema } = script
     const scriptSchema = (inputSchema?.properties
         .script as JSONSchemaObject) || {
@@ -49,11 +57,7 @@ export async function actionConfigure(scriptId: string) {
             default: "${{ secrets.GITHUB_TOKEN }}",
         },
     }
-    const outputs = {
-        text: {
-            description: "The generated text.",
-        },
-    }
+    const outputs = {}
     const pkg = await nodeTryReadPackage()
     const files: Record<string, string> = {
         "action.yml": YAMLStringify(
@@ -76,19 +80,22 @@ export async function actionConfigure(scriptId: string) {
                 dependencies: {
                     genaiscript: `^${CORE_VERSION}`,
                 },
-            })
+            }),
+            null,
+            2
         ),
         Dockerfile: `FROM node:22-alpine
 
 # Set working directory
 WORKDIR /usr/src
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 # Copy source code
 COPY . .
 
 ENTRYPOINT ["/usr/src/entrypoint.sh"]`,
+        // starts the script
         "entrypoint.sh": `#!/bin/sh -l
 set -e
 
@@ -99,5 +106,8 @@ npx genaiscript run "$(dirname "$0")/${script.filename}"`,
     }
 
     for (const [key, value] of Object.entries(files)) {
+        const filePath = resolve(out, key)
+        logVerbose(`writing ${filePath}`)
+        await writeText(filePath, value)
     }
 }
