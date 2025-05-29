@@ -2,9 +2,14 @@ name: genai commit tests
 permissions:
     contents: read
     models: read
+concurrency:
+    group: genai-commit-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 on:
     push:
         branches: [main, dev]
+        paths:
+            - packages/core/src/*.ts
     pull_request:
     workflow_dispatch:
 jobs:
