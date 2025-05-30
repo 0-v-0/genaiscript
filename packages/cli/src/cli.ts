@@ -116,10 +116,10 @@ export async function cli() {
             include: string
             githubAction: boolean
         } = cmd.opts() // Get environment options from command
-
         const includes: string[] = [] // Array to hold include paths
         if (include) includes.push(resolve(include))
         if (githubAction) {
+            if (process.env.INPUT_DEBUG) debug.enable(process.env.INPUT_DEBUG) // Enable debugging if INPUT_DEBUG is set
             const githubWorkspace = process.env.GITHUB_WORKSPACE
             if (
                 githubWorkspace &&
