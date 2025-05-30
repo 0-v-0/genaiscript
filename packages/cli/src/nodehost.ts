@@ -57,7 +57,7 @@ import {
     createAzureContentSafetyClient,
     isAzureContentSafetyClientConfigured,
 } from "../../core/src/azurecontentsafety"
-import { readConfig } from "../../core/src/config"
+import { readHostConfig } from "../../core/src/config"
 import { HostConfiguration } from "../../core/src/hostconfiguration"
 import { resolveLanguageModel } from "../../core/src/lm"
 import { CancellationOptions } from "../../core/src/cancellation"
@@ -83,6 +83,7 @@ class NodeServerManager implements ServerManager {
 export class NodeHost extends EventTarget implements RuntimeHost {
     private pulledModels: string[] = []
     readonly _dotEnvPaths: string[]
+    readonly _hostConfig: HostConfiguration = {}
     project: Project
     userState: any = {}
     readonly path = createNodePath()
@@ -141,6 +142,10 @@ export class NodeHost extends EventTarget implements RuntimeHost {
         )
         this.mcp = new McpClientManager()
         this.resources = new ResourceManager()
+    }
+
+    get hostConfig(): HostConfiguration {
+        return this._hostConfig
     }
 
     get modelAliases(): Readonly<ModelConfigurations> {
@@ -242,7 +247,7 @@ export class NodeHost extends EventTarget implements RuntimeHost {
 
     async readConfig(): Promise<HostConfiguration> {
         dbg(`reading configuration`)
-        this._config = await readConfig(this._dotEnvPaths)
+        this._config = await readHostConfig(this._dotEnvPaths, this._hostConfig)
         const { modelAliases } = this._config
         if (modelAliases) {
             for (const kv of Object.entries(modelAliases)) {
