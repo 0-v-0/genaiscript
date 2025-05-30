@@ -8,4 +8,6 @@ script({
         icon: "anchor",
     },
 })
+console.debug(`cwd: ${process.cwd()}`)
+console.debug(`GITHUB_WORKSPACE: ${process.env.GITHUB_WORKSPACE}`)
 $`Write a very very very short poem`
