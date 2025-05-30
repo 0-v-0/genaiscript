@@ -54,8 +54,8 @@ export function mergeHostConfigs(
 }
 
 async function resolveGlobalConfiguration(
-    dotEnvPaths?: string[],
-    hostConfig?: HostConfiguration
+    dotEnvPaths: string[],
+    hostConfig: HostConfiguration
 ): Promise<HostConfiguration> {
     const dirs = [homedir(), "."]
     const exts = ["yml", "yaml", "json"]

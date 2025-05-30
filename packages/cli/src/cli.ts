@@ -119,7 +119,11 @@ export async function cli() {
         const includes: string[] = [] // Array to hold include paths
         if (include) includes.push(resolve(include))
         if (githubAction) {
-            if (process.env.INPUT_DEBUG) debug.enable(process.env.INPUT_DEBUG) // Enable debugging if INPUT_DEBUG is set
+            const inputDebug = process.env.INPUT_DEBUG // Check for INPUT_DEBUG environment variable
+            if (inputDebug) {
+                debug.enable(inputDebug) // Enable debugging if INPUT_DEBUG is set
+                dbg(`github action debug enabled: %s`, inputDebug)
+            }
             const githubWorkspace = process.env.GITHUB_WORKSPACE
             if (
                 githubWorkspace &&

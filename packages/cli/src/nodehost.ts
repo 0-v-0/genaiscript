@@ -268,8 +268,8 @@ export class NodeHost extends EventTarget implements RuntimeHost {
     }
 
     static async install(
-        dotEnvPaths?: string[],
-        hostConfig?: HostConfiguration
+        dotEnvPaths: string[],
+        hostConfig: HostConfiguration
     ) {
         const h = new NodeHost(dotEnvPaths)
         setRuntimeHost(h)
