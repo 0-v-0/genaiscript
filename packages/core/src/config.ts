@@ -66,7 +66,7 @@ async function resolveGlobalConfiguration(
 
     // merge host configuration
     if (hostConfig && Object.keys(hostConfig).length > 0) {
-        dbg("merging host configuration")
+        dbg(`merging host configuration %O`, hostConfig)
         config = mergeConfigs(config, hostConfig)
     }
 
