@@ -1,19 +1,18 @@
 ---
 title: GitHub Actions
 description: Learn how to use GitHub Actions to automate your workflows and
-  improve your development process.
+    improve your development process.
 sidebar:
-  order: 10
+    order: 10
 hero:
-  image:
-    alt: A retro 8-bit depiction shows a geometric computer screen featuring
-      interconnected gears and a branching workflow diagram, representing
-      automation and CI/CD processes. Beside it, a small server icon connects to
-      a cloud through a pipeline, surrounded by abstract AI node designs,
-      symbolizing GitHub Actions and AI model integration. The design uses a
-      simple five-color palette with minimalistic elements.
-    file: ./github-actions.png
-
+    image:
+        alt: A retro 8-bit depiction shows a geometric computer screen featuring
+            interconnected gears and a branching workflow diagram, representing
+            automation and CI/CD processes. Beside it, a small server icon connects to
+            a cloud through a pipeline, surrounded by abstract AI node designs,
+            symbolizing GitHub Actions and AI model integration. The design uses a
+            simple five-color palette with minimalistic elements.
+        file: ./github-actions.png
 ---
 
 import { Steps } from "@astrojs/starlight/components"
@@ -60,6 +59,13 @@ env:
 ## Custom Actions
 
 GitHub supports packaging tasks as [custom actions](https://docs.github.com/en/actions/sharing-automations/creating-actions/about-custom-actions), typically in a dedicated repository. This is a great way to package an AI script and share it with others.
+
+```yaml "uses: <owner>/<repo>@<tag>"
+- name: Run AI Script
+  uses: <owner>/<repo>@<tag>
+  with:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 The GenAIScript CLI provides a command to generate/update the boilerplate code to package a script as a
 [Docker container action](https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-docker-container-action) so that it can be used in GitHub Actions regardless of the language used to write the script.
@@ -150,6 +156,20 @@ inputs:
         required: false
         default: nature
 ```
+
+There are also additional fields that are common to all GenAIScript actions:
+
+- `github_token`: This is required to authenticate with GitHub Models.
+  It will become `INPUT_GITHUB_TOKEN` when the container is created and GenAIScript will pick it up automatically.
+- `debug`: The filter to control debug [logging](/genaiscript/reference/scripts/logging) messages.
+
+### Outputs
+
+The action populates a few output fields.
+
+- `text`: this is the generated text from the script.
+- `data`: this is the structure output parsed and stringified as JSON. This field is populated
+  if you provide a [responseSchema](/genaiscript/reference/scripts/schemas) in the script and if the LLM is able to generate a response that matches the schema.
 
 ### Branding
 
