@@ -29,10 +29,12 @@ import { parseDefaultsFromEnv } from "./env"
 import { genaiscriptDebug } from "./debug"
 const dbg = genaiscriptDebug("config")
 
-function mergeConfigs(
+export function mergeHostConfigs(
     config: HostConfiguration,
     parsed: HostConfiguration
 ): HostConfiguration {
+    if (!config && !parsed) return undefined
+    if (!parsed) return config
     return deleteEmptyValues({
         include: structuralMerge(config?.include || [], parsed?.include || []),
         envFile: [...arrayify(parsed?.envFile), ...arrayify(config?.envFile)],
@@ -67,7 +69,7 @@ async function resolveGlobalConfiguration(
     // merge host configuration
     if (hostConfig && Object.keys(hostConfig).length > 0) {
         dbg(`merging host configuration %O`, hostConfig)
-        config = mergeConfigs(config, hostConfig)
+        config = mergeHostConfigs(config, hostConfig)
     }
 
     for (const dir of dirs) {
@@ -106,7 +108,7 @@ async function resolveGlobalConfiguration(
                 throw new Error(`config: ` + validation.schemaError)
             }
             dbg(`merging parsed configuration %O`, parsed)
-            config = mergeConfigs(config, parsed)
+            config = mergeHostConfigs(config, parsed)
         }
     }
 

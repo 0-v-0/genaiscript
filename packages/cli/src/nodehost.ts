@@ -57,7 +57,7 @@ import {
     createAzureContentSafetyClient,
     isAzureContentSafetyClientConfigured,
 } from "../../core/src/azurecontentsafety"
-import { readHostConfig } from "../../core/src/config"
+import { mergeHostConfigs, readHostConfig } from "../../core/src/config"
 import { HostConfiguration } from "../../core/src/hostconfiguration"
 import { resolveLanguageModel } from "../../core/src/lm"
 import { CancellationOptions } from "../../core/src/cancellation"
@@ -82,8 +82,8 @@ class NodeServerManager implements ServerManager {
 
 export class NodeHost extends EventTarget implements RuntimeHost {
     private pulledModels: string[] = []
-    readonly _dotEnvPaths: string[]
-    readonly _hostConfig: HostConfiguration = {}
+    private readonly _dotEnvPaths: string[]
+    private _hostConfig: HostConfiguration = {}
     project: Project
     userState: any = {}
     readonly path = createNodePath()
@@ -157,6 +157,14 @@ export class NodeHost extends EventTarget implements RuntimeHost {
             ...this._modelAliases.cli,
         } as ModelConfigurations
         return Object.freeze(res)
+    }
+
+    async updateHostConfig(config: Partial<HostConfiguration>): Promise<void> {
+        dbg(`updating host configuration with: %O`, config)
+        this._hostConfig = mergeHostConfigs(this._hostConfig, config)
+        if (this._config) {
+            await this.readConfig()
+        }
     }
 
     clearModelAlias(source: "cli" | "env" | "config" | "script") {
