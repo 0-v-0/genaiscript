@@ -76,7 +76,7 @@ import { actionConfigure } from "./action"
 import { resolve } from "node:path"
 import debug from "debug"
 import { genaiscriptDebug } from "../../core/src/debug"
-import { HostConfiguration } from "../../core/src/hostconfiguration"
+import { githubActionConfigure } from "./githubaction"
 const dbg = genaiscriptDebug("cli")
 
 /**
@@ -109,32 +109,25 @@ export async function cli() {
             env,
             cwd,
             include,
-            githubAction,
+            githubWorkspace,
         }: {
             env: string[]
             cwd: string
             include: string
-            githubAction: boolean
+            githubWorkspace: boolean
         } = cmd.opts() // Get environment options from command
         const includes: string[] = [] // Array to hold include paths
         if (include) includes.push(resolve(include))
-        if (githubAction) {
-            const inputDebug = process.env.INPUT_DEBUG // Check for INPUT_DEBUG environment variable
-            if (inputDebug) {
-                debug.enable(inputDebug) // Enable debugging if INPUT_DEBUG is set
-                dbg(`github action debug enabled: %s`, inputDebug)
-            }
-            const githubWorkspace = process.env.GITHUB_WORKSPACE
-            if (
-                githubWorkspace &&
-                resolve(githubWorkspace) !== resolve(process.cwd())
-            ) {
-                includes.push(resolve("."))
-                cwd = resolve(githubWorkspace)
-                dbg(`github action: switching to github workspace %s`, cwd)
-            }
+        const { workspaceDir } = githubActionConfigure()
+        if (
+            githubWorkspace &&
+            workspaceDir &&
+            resolve(workspaceDir) !== resolve(process.cwd())
+        ) {
+            includes.push(resolve("."))
+            cwd = resolve(workspaceDir)
+            dbg(`github action workspace: %s`, cwd)
         }
-
         if (cwd) {
             dbg(`chdir %s`, cwd)
             process.chdir(cwd)
@@ -170,8 +163,8 @@ export async function cli() {
         )
         .option("--perf", "enable performance logging")
         .option(
-            "--github-action",
-            "Run within the content of a custom GitHub Action"
+            "--github-workspace",
+            "Use GitHub Actions workspace directory as cwd"
         )
 
     program.on("option:no-colors", () => setConsoleColors(false))

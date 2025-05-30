@@ -313,7 +313,7 @@ npm run docker:start
                         `genaiscript`,
                         `run`,
                         scriptId,
-                        `--github-action`,
+                        `--github-workspace`,
                         provider ? `--provider` : undefined,
                         provider,
                     ]
