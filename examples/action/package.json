@@ -1,11 +1,11 @@
 {
   "name": "action-poem-action",
-  "version": "1.141.1",
+  "version": "1.142.0",
   "author": "microsoft",
   "license": "MIT",
   "description": "This is the description",
   "dependencies": {
-    "genaiscript": "^1.141.1"
+    "genaiscript": "^1.142.0"
   },
   "scripts": {
     "docker:build": "docker build -t action-poem-action .",
