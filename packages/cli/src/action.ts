@@ -86,6 +86,11 @@ export async function actionConfigure(
                 "GitHub token with `models: read` permission at least.",
             required: true,
         },
+        debug: {
+            description: "Enable debug logging.",
+            required: false,
+            default: "*",
+        },
     }
     const outputs: Record<string, GitHubActionFieldType> = {
         text: {
@@ -308,7 +313,7 @@ npm run docker:start
                         `genaiscript`,
                         `run`,
                         scriptId,
-                        `--github-action`,
+                        `--github-workspace`,
                         provider ? `--provider` : undefined,
                         provider,
                     ]

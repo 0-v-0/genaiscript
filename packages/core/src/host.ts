@@ -120,7 +120,6 @@ export interface Host {
     createUTF8Decoder(): UTF8Decoder
     createUTF8Encoder(): UTF8Encoder
     projectFolder(): string
-    installFolder(): string
     resolvePath(...segments: string[]): string
 
     getLanguageModelConfiguration(
@@ -181,6 +180,7 @@ export interface RuntimeHost extends Host {
      * Reloads the configuration
      */
     readConfig(): Promise<HostConfiguration>
+
     /**
      * Gets the current loaded configuration
      */

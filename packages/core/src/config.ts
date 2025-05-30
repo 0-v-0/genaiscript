@@ -26,12 +26,36 @@ import { host } from "./host"
 import { uniq } from "es-toolkit"
 import { expandHomeDir, tryReadText, tryStat } from "./fs"
 import { parseDefaultsFromEnv } from "./env"
+import { genaiscriptDebug } from "./debug"
+const dbg = genaiscriptDebug("config")
 
-import debug from "debug"
-const dbg = debug("genaiscript:config")
+export function mergeHostConfigs(
+    config: HostConfiguration,
+    parsed: HostConfiguration
+): HostConfiguration {
+    if (!config && !parsed) return undefined
+    if (!parsed) return config
+    return deleteEmptyValues({
+        include: structuralMerge(config?.include || [], parsed?.include || []),
+        envFile: [...arrayify(parsed?.envFile), ...arrayify(config?.envFile)],
+        modelAliases: structuralMerge(
+            config?.modelAliases || {},
+            parsed?.modelAliases || {}
+        ),
+        modelEncodings: structuralMerge(
+            config?.modelEncodings || {},
+            parsed?.modelEncodings || {}
+        ),
+        secretScanners: structuralMerge(
+            config?.secretPatterns || {},
+            parsed?.secretPatterns || {}
+        ),
+    })
+}
 
 async function resolveGlobalConfiguration(
-    dotEnvPaths?: string[]
+    dotEnvPaths: string[],
+    hostConfig: HostConfiguration
 ): Promise<HostConfiguration> {
     const dirs = [homedir(), "."]
     const exts = ["yml", "yaml", "json"]
@@ -40,7 +64,13 @@ async function resolveGlobalConfiguration(
     // import and merge global local files
     let config: HostConfiguration = structuredClone(defaultConfig)
     delete (config as any)["$schema"]
-    dbg("initialized config from defaultConfig")
+    dbg(`loaded defaultConfig: %O`, config)
+
+    // merge host configuration
+    if (hostConfig && Object.keys(hostConfig).length > 0) {
+        dbg(`merging host configuration %O`, hostConfig)
+        config = mergeHostConfigs(config, hostConfig)
+    }
 
     for (const dir of dirs) {
         for (const ext of exts) {
@@ -77,29 +107,8 @@ async function resolveGlobalConfiguration(
                 )
                 throw new Error(`config: ` + validation.schemaError)
             }
-            dbg("merging parsed configuration", parsed)
-            config = deleteEmptyValues({
-                include: structuralMerge(
-                    config?.include || [],
-                    parsed?.include || []
-                ),
-                envFile: [
-                    ...arrayify(parsed?.envFile),
-                    ...arrayify(config?.envFile),
-                ],
-                modelAliases: structuralMerge(
-                    config?.modelAliases || {},
-                    parsed?.modelAliases || {}
-                ),
-                modelEncodings: structuralMerge(
-                    config?.modelEncodings || {},
-                    parsed?.modelEncodings || {}
-                ),
-                secretScanners: structuralMerge(
-                    config?.secretPatterns || {},
-                    parsed?.secretPatterns || {}
-                ),
-            })
+            dbg(`merging parsed configuration %O`, parsed)
+            config = mergeHostConfigs(config, parsed)
         }
     }
 
@@ -150,11 +159,12 @@ async function resolveGlobalConfiguration(
  *
  * @throws An error if any provided `.env` file is invalid, unreadable, or not a file.
  */
-export async function readConfig(
-    dotEnvPaths?: string[]
+export async function readHostConfig(
+    dotEnvPaths: string[],
+    hostConfig: HostConfiguration
 ): Promise<HostConfiguration> {
     dbg(`reading configuration`)
-    const config = await resolveGlobalConfiguration(dotEnvPaths)
+    const config = await resolveGlobalConfiguration(dotEnvPaths, hostConfig)
     const { envFile } = config
     for (const dotEnv of arrayify(envFile)) {
         dbg(`.env: ${dotEnv}`)

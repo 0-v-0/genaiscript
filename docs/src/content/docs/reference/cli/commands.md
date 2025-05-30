@@ -124,7 +124,6 @@ Options:
   -rr, --run-retry <number>                  number of retries for the entire run
   --no-run-trace                             disable automatic trace generation
   --no-output-trace                          disable automatic output generation
-  --github-action                            run as GitHub Action
   -h, --help                                 display help for command
 ```
 

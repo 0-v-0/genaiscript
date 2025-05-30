@@ -1,6 +1,3 @@
-import debug from "debug"
-const dbg = debug("genaiscript:nodehost")
-
 import { TextDecoder, TextEncoder } from "util"
 import { lstat, mkdir, readFile, unlink, writeFile } from "node:fs/promises"
 import { ensureDir, exists, remove } from "fs-extra"
@@ -57,7 +54,7 @@ import {
     createAzureContentSafetyClient,
     isAzureContentSafetyClientConfigured,
 } from "../../core/src/azurecontentsafety"
-import { readConfig } from "../../core/src/config"
+import { mergeHostConfigs, readHostConfig } from "../../core/src/config"
 import { HostConfiguration } from "../../core/src/hostconfiguration"
 import { resolveLanguageModel } from "../../core/src/lm"
 import { CancellationOptions } from "../../core/src/cancellation"
@@ -68,6 +65,8 @@ import { arrayify } from "../../core/src/cleaners"
 import { McpClientManager } from "../../core/src/mcpclient"
 import { ResourceManager } from "../../core/src/mcpresource"
 import { providerFeatures } from "../../core/src/features"
+import { genaiscriptDebug } from "../../core/src/debug"
+const dbg = genaiscriptDebug("nodehost")
 
 class NodeServerManager implements ServerManager {
     async start(): Promise<void> {
@@ -82,7 +81,8 @@ class NodeServerManager implements ServerManager {
 
 export class NodeHost extends EventTarget implements RuntimeHost {
     private pulledModels: string[] = []
-    readonly _dotEnvPaths: string[]
+    private readonly _dotEnvPaths: string[]
+    private _hostConfig: HostConfiguration = {}
     project: Project
     userState: any = {}
     readonly path = createNodePath()
@@ -143,6 +143,10 @@ export class NodeHost extends EventTarget implements RuntimeHost {
         this.resources = new ResourceManager()
     }
 
+    get hostConfig(): HostConfiguration {
+        return this._hostConfig
+    }
+
     get modelAliases(): Readonly<ModelConfigurations> {
         const res = {
             ...this._modelAliases.default,
@@ -152,6 +156,12 @@ export class NodeHost extends EventTarget implements RuntimeHost {
             ...this._modelAliases.cli,
         } as ModelConfigurations
         return Object.freeze(res)
+    }
+
+    updateHostConfig(config: Partial<HostConfiguration>): void {
+        this._hostConfig = mergeHostConfigs(this._hostConfig, config)
+        dbg(`updated host configuration %O`, this._hostConfig)
+        this._config = undefined
     }
 
     clearModelAlias(source: "cli" | "env" | "config" | "script") {
@@ -242,7 +252,7 @@ export class NodeHost extends EventTarget implements RuntimeHost {
 
     async readConfig(): Promise<HostConfiguration> {
         dbg(`reading configuration`)
-        this._config = await readConfig(this._dotEnvPaths)
+        this._config = await readHostConfig(this._dotEnvPaths, this._hostConfig)
         const { modelAliases } = this._config
         if (modelAliases) {
             for (const kv of Object.entries(modelAliases)) {
@@ -257,9 +267,13 @@ export class NodeHost extends EventTarget implements RuntimeHost {
         return this._config
     }
 
-    static async install(dotEnvPaths?: string[]) {
+    static async install(
+        dotEnvPaths: string[],
+        hostConfig: HostConfiguration
+    ) {
         const h = new NodeHost(dotEnvPaths)
         setRuntimeHost(h)
+        if (hostConfig) h.updateHostConfig(hostConfig)
         await h.readConfig()
         return h
     }
@@ -431,9 +445,6 @@ export class NodeHost extends EventTarget implements RuntimeHost {
     }
     projectFolder(): string {
         return this.path.resolve(".")
-    }
-    installFolder(): string {
-        return this.projectFolder()
     }
     resolvePath(...segments: string[]) {
         return this.path.resolve(...segments)

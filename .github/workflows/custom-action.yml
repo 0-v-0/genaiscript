@@ -18,3 +18,4 @@ jobs:
               id: genai
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
+                  debug: "genaiscript:*"

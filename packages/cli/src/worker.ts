@@ -27,7 +27,7 @@ export async function worker() {
     const { type, ...data } = workerData as {
         type: string
     }
-    await NodeHost.install(undefined) // Install NodeHost with environment options
+    await NodeHost.install(undefined, undefined) // Install NodeHost with environment options
     if (process.platform === "win32") {
         // https://github.com/Azure/azure-sdk-for-js/issues/32374
         process.env.SystemRoot = process.env.SYSTEMROOT

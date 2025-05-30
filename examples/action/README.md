@@ -7,6 +7,7 @@ This is the description
 ## Inputs
 
 - `github_token`: GitHub token with `models: read` permission at least. (required)
+- `debug`: Enable debug logging. (default: `*`)
 ## Outputs
 
 - `text`: The generated text output.
@@ -18,6 +19,7 @@ This is the description
 uses: action-poem-action
 with:
   github_token: ${{ ... }}
+  debug: ${{ ... }}
 ```
 
 ## Example
@@ -43,6 +45,7 @@ jobs:
         uses: action-poem-action@main
         with:
           github_token: ${{ ... }}
+          debug: ${{ ... }}
 ```
 
 ## Development
