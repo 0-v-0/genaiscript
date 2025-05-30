@@ -169,6 +169,10 @@ export async function cli() {
             `debug categories (${DEBUG_CATEGORIES.map((c) => c).join(", ")})`
         )
         .option("--perf", "enable performance logging")
+        .option(
+            "--github-action",
+            "Run within the content of a custom GitHub Action"
+        )
 
     program.on("option:no-colors", () => setConsoleColors(false))
     program.on("option:quiet", () => setQuiet(true))
@@ -305,7 +309,6 @@ export async function cli() {
         )
         .option("--no-run-trace", "disable automatic trace generation")
         .option("--no-output-trace", "disable automatic output generation")
-        .option("--github-action", "run as GitHub Action")
         .action(runScriptWithExitCode) // Action to execute the script with exit code
 
     // runs commands
