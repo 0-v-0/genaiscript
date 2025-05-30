@@ -182,11 +182,6 @@ export interface RuntimeHost extends Host {
     readConfig(): Promise<HostConfiguration>
 
     /**
-     * Update default host configuration.
-     */
-    updateHostConfig(config: Partial<HostConfiguration>): void
-
-    /**
      * Gets the current loaded configuration
      */
     get config(): HostConfiguration
