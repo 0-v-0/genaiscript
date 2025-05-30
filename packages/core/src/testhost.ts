@@ -108,11 +108,6 @@ export class TestHost implements RuntimeHost {
         return resolve(".")
     }
 
-    // Placeholder for the method to get the installation folder path
-    installFolder(): string {
-        throw new Error("Method not implemented.")
-    }
-
     // Placeholder for path resolution method
     resolvePath(...segments: string[]): string {
         return this.path.resolve(...segments)

@@ -47,9 +47,6 @@ export class VSCodeHost extends EventTarget implements Host {
     projectFolder(): string {
         return this.projectUri?.fsPath ?? "."
     }
-    installFolder(): string {
-        return this.context.extensionUri.fsPath
-    }
     resolvePath(...segments: string[]): string {
         if (segments.length === 0) return "."
         const s0 = segments.shift()

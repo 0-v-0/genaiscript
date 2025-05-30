@@ -432,9 +432,6 @@ export class NodeHost extends EventTarget implements RuntimeHost {
     projectFolder(): string {
         return this.path.resolve(".")
     }
-    installFolder(): string {
-        return this.projectFolder()
-    }
     resolvePath(...segments: string[]) {
         return this.path.resolve(...segments)
     }
