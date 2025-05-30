@@ -2,8 +2,6 @@
  * CLI entry point for the GenAIScript tool, providing various commands and options
  * for interacting with scripts, parsing files, testing, and managing cache.
  */
-import debug from "debug"
-const dbg = debug("genaiscript:cli")
 import { NodeHost } from "./nodehost" // Handles node environment setup
 import { Command, Option, program } from "commander" // Command-line argument parsing library
 import { isQuiet, setQuiet } from "../../core/src/quiet" // Logging utilities
@@ -75,6 +73,11 @@ import { error } from "./log"
 import { DEBUG_CATEGORIES } from "../../core/src/dbg"
 import { startOpenAPIServer } from "./openapi"
 import { actionConfigure } from "./action"
+import { resolve } from "node:path"
+import debug from "debug"
+import { genaiscriptDebug } from "../../core/src/debug"
+import { HostConfiguration } from "../../core/src/hostconfiguration"
+const dbg = genaiscriptDebug("cli")
 
 /**
  * /NOП/
@@ -102,8 +105,42 @@ export async function cli() {
     }
 
     program.hook("preAction", async (cmd) => {
-        const { env }: { env: string[] } = cmd.opts() // Get environment options from command
-        nodeHost = await NodeHost.install(env?.length ? env : undefined) // Install NodeHost with environment options
+        let {
+            env,
+            cwd,
+            include,
+            githubAction,
+        }: {
+            env: string[]
+            cwd: string
+            include: string
+            githubAction: boolean
+        } = cmd.opts() // Get environment options from command
+
+        const includes: string[] = [] // Array to hold include paths
+        if (include) includes.push(resolve(include))
+        if (githubAction) {
+            const githubWorkspace = process.env.GITHUB_WORKSPACE
+            if (
+                githubWorkspace &&
+                resolve(githubWorkspace) !== resolve(process.cwd())
+            ) {
+                includes.push(resolve("."))
+                cwd = resolve(githubWorkspace)
+                dbg(`github action: switching to github workspace %s`, cwd)
+            }
+        }
+
+        if (cwd) {
+            dbg(`chdir %s`, cwd)
+            process.chdir(cwd)
+        }
+        nodeHost = await NodeHost.install(
+            env?.length ? env : undefined,
+            includes.length ? { include: includes } : undefined
+        ) // Install NodeHost with environment options
+        dbg(`cwd: %s`, process.cwd())
+        dbg(`config: %O`, nodeHost.config)
     })
 
     // Configure CLI program options and commands
@@ -113,6 +150,10 @@ export async function cli() {
         .description(`CLI for ${TOOL_NAME} ${GITHUB_REPO}`)
         .showHelpAfterError(true)
         .option("--cwd <string>", "Working directory")
+        .option(
+            "--include <string>",
+            "Add 'include' directory to lookup scripts"
+        )
         .option(
             "--env <paths...>",
             "paths to .env files, defaults to './.env' if not specified"
@@ -125,8 +166,6 @@ export async function cli() {
         )
         .option("--perf", "enable performance logging")
 
-    // Set options for color and verbosity
-    program.on("option:cwd", (cwd) => process.chdir(cwd)) // Change working directory if specified
     program.on("option:no-colors", () => setConsoleColors(false))
     program.on("option:quiet", () => setQuiet(true))
     program.on("option:perf", () => logPerformance())

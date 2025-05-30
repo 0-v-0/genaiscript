@@ -1,6 +1,3 @@
-import debug from "debug"
-const dbg = debug("genaiscript:nodehost")
-
 import { TextDecoder, TextEncoder } from "util"
 import { lstat, mkdir, readFile, unlink, writeFile } from "node:fs/promises"
 import { ensureDir, exists, remove } from "fs-extra"
@@ -68,6 +65,8 @@ import { arrayify } from "../../core/src/cleaners"
 import { McpClientManager } from "../../core/src/mcpclient"
 import { ResourceManager } from "../../core/src/mcpresource"
 import { providerFeatures } from "../../core/src/features"
+import { genaiscriptDebug } from "../../core/src/debug"
+const dbg = genaiscriptDebug("nodehost")
 
 class NodeServerManager implements ServerManager {
     async start(): Promise<void> {
@@ -159,12 +158,10 @@ export class NodeHost extends EventTarget implements RuntimeHost {
         return Object.freeze(res)
     }
 
-    async updateHostConfig(config: Partial<HostConfiguration>): Promise<void> {
-        dbg(`updating host configuration with: %O`, config)
+    updateHostConfig(config: Partial<HostConfiguration>): void {
         this._hostConfig = mergeHostConfigs(this._hostConfig, config)
-        if (this._config) {
-            await this.readConfig()
-        }
+        dbg(`updated host configuration %O`, this._hostConfig)
+        this._config = undefined
     }
 
     clearModelAlias(source: "cli" | "env" | "config" | "script") {
@@ -270,9 +267,13 @@ export class NodeHost extends EventTarget implements RuntimeHost {
         return this._config
     }
 
-    static async install(dotEnvPaths?: string[]) {
+    static async install(
+        dotEnvPaths?: string[],
+        hostConfig?: HostConfiguration
+    ) {
         const h = new NodeHost(dotEnvPaths)
         setRuntimeHost(h)
+        if (hostConfig) h.updateHostConfig(hostConfig)
         await h.readConfig()
         return h
     }
