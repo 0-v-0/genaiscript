@@ -14,6 +14,7 @@ import { HTTP_OR_S_REGEX } from "./constants"
 import { genaiscriptDebug } from "./debug"
 import { join, resolve } from "node:path"
 import { unfence } from "./unwrappers"
+import { dedent } from "./indent"
 const dbg = genaiscriptDebug("markdown")
 
 /**
@@ -22,7 +23,8 @@ const dbg = genaiscriptDebug("markdown")
  * @returns The cleaned and formatted markdown string.
  */
 export function prettifyMarkdown(md: string) {
-    let res = unfence(md, ["markdown", "md", "text"])
+    let res = dedent(md)
+    res = unfence(res, ["markdown", "md", "text"])
     res = convertAnnotationsToMarkdown(res) // Convert annotations to markdown format
     res = convertThinkToMarkdown(res)
     res = collapseNewlines(res) // Clean up excessive newlines
