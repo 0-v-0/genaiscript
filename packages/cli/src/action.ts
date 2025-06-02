@@ -1,6 +1,6 @@
 import { resolve } from "node:path"
 import { deleteUndefinedValues } from "../../core/src/cleaners"
-import { GENAI_ANY_REGEX } from "../../core/src/constants"
+import { GENAI_ANY_REGEX, GENAI_SRC } from "../../core/src/constants"
 import { genaiscriptDebug } from "../../core/src/debug"
 import { nodeTryReadPackage } from "../../core/src/nodepackage"
 import { CORE_VERSION } from "../../core/src/version"
@@ -13,8 +13,8 @@ import { tryStat, writeText } from "../../core/src/fs"
 import { dedent } from "../../core/src/indent"
 import { runtimeHost } from "../../core/src/host"
 import { shellInput } from "./input"
-import { copyPrompt } from "../../core/src/copy"
 import { createScript as coreCreateScript } from "../../core/src/scripts"
+import { templateIdFromFileName } from "../../core/src/template"
 
 const dbg = genaiscriptDebug("cli:action")
 
@@ -73,16 +73,32 @@ export async function actionConfigure(
         provider,
     } = options || {}
 
+    const writeFile = async (name: string, content: string) => {
+        const filePath = resolve(out, name)
+        if (!force && (await tryStat(filePath))) {
+            logInfo(
+                `skipping ${filePath} (file already exists), use --force to overwrite`
+            )
+        } else {
+            logVerbose(`writing ${filePath}`)
+            await writeText(filePath, content)
+        }
+    }
+
     let script: PromptScript
     if (!scriptId) {
         scriptId = await shellInput("Enter the name of the script") // Prompt user for script name if not provided
         if (!scriptId) return
         script = coreCreateScript(scriptId) // Call core function to create a script
-        await copyPrompt(script, {
-            fork: true,
-            name: scriptId,
-            javascript: false,
-        })
+        // Write the prompt script to the determined path
+        await writeFile(
+            resolve(
+                out,
+                GENAI_SRC,
+                templateIdFromFileName(scriptId) + ".genai.mts"
+            ),
+            script.jsSource
+        )
     } else {
         const prj = await buildProject() // Build the project to get script templates
         script = prj.scripts.find(
@@ -101,7 +117,7 @@ export async function actionConfigure(
             : "node:lts-alpine")
     const alpine = /alpine$/.test(image)
 
-    logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
+    logVerbose(`script: ${script.filename}`)
     logVerbose(`docker image: ${image}`)
     const { inputSchema, branding } = script
     const scriptSchema = (inputSchema?.properties
@@ -157,18 +173,6 @@ export async function actionConfigure(
         ffmpeg ? "ffmpeg" : undefined,
         ...(options?.apks || []),
     ].filter(Boolean)
-
-    const writeFile = async (name: string, content: string) => {
-        const filePath = resolve(out, name)
-        if (!force && (await tryStat(filePath))) {
-            logInfo(
-                `skipping ${filePath} (file already exists), use --force to overwrite`
-            )
-        } else {
-            logVerbose(`writing ${filePath}`)
-            await writeText(filePath, content)
-        }
-    }
 
     await writeFile(
         "action.yml",

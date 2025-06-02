@@ -19,7 +19,7 @@ import { deleteUndefinedValues } from "./cleaners"
  * @param filename - The filename to extract the template ID from.
  * @returns The extracted template ID.
  */
-function templateIdFromFileName(filename: string) {
+export function templateIdFromFileName(filename: string) {
     return filename
         .replace(/\.(mjs|ts|js|mts|prompty)$/i, "")
         .replace(/\.genai$/i, "")
