@@ -12,6 +12,10 @@ import { dotGenaiscriptPath } from "../../core/src/workdir"
 import { tryStat, writeText } from "../../core/src/fs"
 import { dedent } from "../../core/src/indent"
 import { runtimeHost } from "../../core/src/host"
+import { shellInput } from "./input"
+import { copyPrompt } from "../../core/src/copy"
+import { createScript as coreCreateScript } from "../../core/src/scripts"
+
 const dbg = genaiscriptDebug("cli:action")
 
 interface GitHubActionFieldType {
@@ -20,6 +24,31 @@ interface GitHubActionFieldType {
     default?: string
 }
 
+/**
+ * Generates GitHub Action files for a given script, including action.yml, Dockerfile, package.json, README.md, and .gitignore, using script metadata and provided options.
+ *
+ * If scriptId is not provided, prompts the user for the script name and initializes a new script. If scriptId is given, attempts to load the script from the project.
+ *
+ * Parameters:
+ *   scriptId: The identifier or filename of the script for which action files will be generated. If falsy, user will be prompted to enter a name and a new script will be created.
+ *   options: Configuration object with the following optional properties:
+ *     force: If true, overwrite existing files without prompting.
+ *     out: Output directory for generated files. Defaults to action/<script.id> under the genaiscript workspace.
+ *     ffmpeg: If true, install ffmpeg in the Docker image.
+ *     python: If true, install python3 and py3-pip in the Docker image.
+ *     playwright: If true, use Playwright Docker image and install Playwright dependencies.
+ *     packageLock: If true, generate a package-lock.json file using npm ci or npm install.
+ *     image: Base Docker image to use. Defaults to Playwright image if playwright flag is set, otherwise node:lts-alpine.
+ *     apks: Additional Alpine packages to install in the Docker image.
+ *     provider: Name of the GenAI provider to use in the start command.
+ *
+ * Throws:
+ *   Error if the script cannot be found when scriptId is provided.
+ *
+ * Side Effects:
+ *   Writes or overwrites files in the output directory.
+ *   Executes npm or node commands to generate lock files if packageLock is set.
+ */
 export async function actionConfigure(
     scriptId: string,
     options: {
@@ -34,15 +63,27 @@ export async function actionConfigure(
         provider?: string
     }
 ) {
-    const prj = await buildProject() // Build the project to get script templates
-    const script = prj.scripts.find(
-        (t) =>
-            t.id === scriptId ||
-            (t.filename &&
-                GENAI_ANY_REGEX.test(scriptId) &&
-                resolve(t.filename) === resolve(scriptId))
-    )
-    if (!script) throw new Error(`Script with id "${scriptId}" not found.`)
+    let script: PromptScript
+    if (!scriptId) {
+        scriptId = await shellInput("Enter the name of the script") // Prompt user for script name if not provided
+        if (!scriptId) return
+        script = coreCreateScript(scriptId) // Call core function to create a script
+        await copyPrompt(script, {
+            fork: true,
+            name: scriptId,
+            javascript: false,
+        })
+    } else {
+        const prj = await buildProject() // Build the project to get script templates
+        script = prj.scripts.find(
+            (t) =>
+                t.id === scriptId ||
+                (t.filename &&
+                    GENAI_ANY_REGEX.test(scriptId) &&
+                    resolve(t.filename) === resolve(scriptId))
+        )
+    }
+    if (!script) throw new Error("Script not found: " + scriptId)
     const {
         force,
         out = dotGenaiscriptPath("action", script.id),
@@ -86,10 +127,12 @@ export async function actionConfigure(
                 "GitHub token with `models: read` permission at least.",
             required: true,
         },
+        github_issue: {
+            description: "GitHub issue number to use when generating comments.",
+        },
         debug: {
             description: "Enable debug logging.",
             required: false,
-            default: "*",
         },
     }
     const outputs: Record<string, GitHubActionFieldType> = {
@@ -101,6 +144,8 @@ export async function actionConfigure(
                 "The generated JSON data output, parsed and stringified.",
         },
     }
+
+    const { owner = "<owner>", repo = "<repo>" } = (await github.info()) || {}
     const pkg = (await nodeTryReadPackage()) || {}
 
     const apks = [
@@ -188,6 +233,7 @@ ${Object.entries(inputs || {})
             }${value.default ? ` (default: \`${value.default}\`)` : ""}`
     )
     .join("\n")}
+
 ## Outputs
 
 ${Object.entries(outputs || {})
@@ -215,21 +261,19 @@ ${Object.keys(inputs || {})
 name: Run ${script.id} Action
 on:
     workflow_dispatch:
-    push:
+    push: # TODO: update event type
 permissions:
     contents: read
     models: read
 concurrency:
-    group: ${script.id}-\${{ github.workflow }}-\${{ github.ref }}
+    group: \${{ github.workflow }}-\${{ github.ref }}
     cancel-in-progress: true
 jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Run ${script.id} Action
-        uses: ${script.id}-action@main
+      - uses: actions/checkout@v4
+      - uses: ${owner}/${repo}@main
         with:
 ${Object.entries(inputs || {})
     .map(([key, value]) => `          ${key}: \${{ ... }}`)

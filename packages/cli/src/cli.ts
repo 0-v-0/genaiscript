@@ -77,6 +77,7 @@ import { resolve } from "node:path"
 import debug from "debug"
 import { genaiscriptDebug } from "../../core/src/debug"
 import { githubActionConfigure } from "./githubaction"
+import { uniq } from "es-toolkit"
 const dbg = genaiscriptDebug("cli")
 
 /**
@@ -124,7 +125,7 @@ export async function cli() {
             workspaceDir &&
             resolve(workspaceDir) !== resolve(process.cwd())
         ) {
-            includes.push(resolve("."))
+            includes.push(resolve(process.cwd(), "**", "*.genai.*s"))
             cwd = resolve(workspaceDir)
             dbg(`github action workspace: %s`, cwd)
         }
@@ -134,7 +135,7 @@ export async function cli() {
         }
         nodeHost = await NodeHost.install(
             env?.length ? env : undefined,
-            includes.length ? { include: includes } : undefined
+            includes.length ? { include: uniq(includes) } : undefined
         ) // Install NodeHost with environment options
         dbg(`cwd: %s`, process.cwd())
         dbg(`config: %O`, nodeHost.config)
@@ -598,11 +599,14 @@ export async function cli() {
     addModelOptions(openapi)
     addGroupsOptions(openapi)
 
-    const actionConfigureCmd = configureCmd
+    configureCmd
         .command("action")
         .alias("github-action")
         .description("Configure the current project for GitHub Actions")
-        .argument("<script>", "Script to use for the action")
+        .argument(
+            "[script]",
+            "Script to use for the action; if not found, a script will be created."
+        )
         .option("-f, --force", "force override existing action files")
         .option("-o, --out <string>", "output folder for action files")
         .option(
@@ -616,7 +620,6 @@ export async function cli() {
         .option("--apks <string...>", "Linux packages to install")
         .option("--provider <string>", "LLM provider to use")
         .action(actionConfigure)
-    addGroupsOptions(actionConfigureCmd)
 
     // Define 'parse' command group for parsing tasks
     const parser = program
