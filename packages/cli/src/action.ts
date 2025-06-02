@@ -98,6 +98,7 @@ export async function actionConfigure(
         (playwright
             ? "mcr.microsoft.com/playwright:v1.52.0-noble"
             : "node:lts-alpine")
+    const alpine = /alpine$/.test(image)
 
     logInfo(`Generating GitHub Action for ${script.id} (${script.filename})`)
     logVerbose(`docker image: ${image}`)
@@ -192,7 +193,7 @@ export async function actionConfigure(
 FROM ${image}
 
 # Install packages
-RUN apk add --no-cache ${apks.join(" ")}
+${alpine ? `RUN apk add --no-cache ${apks.join(" ")}` : `RUN apt-get update && apt-get install -y ${apks.join(" ")}`}
 
 # Set working directory
 WORKDIR /genaiscript/action
