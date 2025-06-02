@@ -1,12 +1,8 @@
 {
-  "name": "genaiscript-core-internal",
+  "name": "@genaiscript/core",
   "version": "1.141.1",
-  "main": "src/index.ts",
   "license": "MIT",
-  "private": true,
-  "npm": {
-    "publish": false
-  },
+  "type": "module",
   "repository": {
     "directory": "packages/core",
     "url": "https://github.com/microsoft/genaiscript"
@@ -96,6 +92,7 @@
     "toml": "^3.0.0",
     "ts-dedent": "^2.2.0",
     "tsx": "^4.19.4",
+    "tshy": "^3.0.2",
     "typescript": "5.8.3",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "yaml": "^2.8.0"
@@ -116,5 +113,13 @@
     "pyodide": "^0.27.6",
     "turndown": "^7.2.0",
     "turndown-plugin-gfm": "^1.0.2"
+  },
+  "tshy": {
+    "dialects": ["esm", "commonjs"],
+    "exports": {
+      ".": "./src/index.ts",
+      "./package.json": "./package.json"
+    },
+    "selfLink": false
   }
 }

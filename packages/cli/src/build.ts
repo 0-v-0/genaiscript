@@ -1,12 +1,8 @@
-import { uniq } from "es-toolkit"
-import {
-    GENAI_ANY_REGEX,
-    GENAI_ANYJS_GLOB,
-    GENAISCRIPT_FOLDER,
-} from "../../core/src/constants"
-import { host, runtimeHost } from "../../core/src/host"
-import { parseProject } from "../../core/src/parser"
-import { arrayify } from "../../core/src/util"
+import { uniq } from "es-toolkit";
+import { GENAI_ANY_REGEX, GENAI_ANYJS_GLOB, GENAISCRIPT_FOLDER } from "../../core/src/constants";
+import { host, runtimeHost } from "../../core/src/host";
+import { parseProject } from "../../core/src/parser";
+import { arrayify } from "../../core/src/util";
 
 /**
  * Asynchronously builds a project by parsing tool files.
@@ -17,40 +13,40 @@ import { arrayify } from "../../core/src/util"
  * @returns A promise that resolves to the newly parsed project structure.
  */
 export async function buildProject(options?: {
-    toolFiles?: string[]
-    toolsPath?: string | string[]
+  toolFiles?: string[];
+  toolsPath?: string | string[];
 }) {
-    const { toolFiles, toolsPath } = options || {}
-    let scriptFiles: string[] = []
-    if (toolFiles?.length) {
-        scriptFiles = toolFiles
-    } else {
-        let tps = arrayify(toolsPath)
-        if (!tps?.length) {
-            const config = await runtimeHost.config
-            tps = [GENAI_ANYJS_GLOB, ...arrayify(config.include)]
-        }
-        tps = arrayify(tps)
-        scriptFiles = []
-        for (const tp of tps) {
-            const fs = await host.findFiles(tp, {
-                ignore: `**/${GENAISCRIPT_FOLDER}/**`,
-            })
-            scriptFiles.push(...fs)
-        }
+  const { toolFiles, toolsPath } = options || {};
+  let scriptFiles: string[] = [];
+  if (toolFiles?.length) {
+    scriptFiles = toolFiles;
+  } else {
+    let tps = arrayify(toolsPath);
+    if (!tps?.length) {
+      const config = await runtimeHost.config;
+      tps = [GENAI_ANYJS_GLOB, ...arrayify(config.include)];
     }
+    tps = arrayify(tps);
+    scriptFiles = [];
+    for (const tp of tps) {
+      const fs = await host.findFiles(tp, {
+        ignore: `**/${GENAISCRIPT_FOLDER}/**`,
+      });
+      scriptFiles.push(...fs);
+    }
+  }
 
-    // filter out unwanted files
-    scriptFiles = scriptFiles.filter((f) => GENAI_ANY_REGEX.test(f))
+  // filter out unwanted files
+  scriptFiles = scriptFiles.filter((f) => GENAI_ANY_REGEX.test(f));
 
-    // Ensure that the script files are unique
-    scriptFiles = uniq(scriptFiles)
+  // Ensure that the script files are unique
+  scriptFiles = uniq(scriptFiles);
 
-    // Parse the project using the determined script files
-    const newProject = await parseProject({
-        scriptFiles,
-    })
+  // Parse the project using the determined script files
+  const newProject = await parseProject({
+    scriptFiles,
+  });
 
-    // Return the newly parsed project structure
-    return newProject
+  // Return the newly parsed project structure
+  return newProject;
 }

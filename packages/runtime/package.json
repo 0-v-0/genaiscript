@@ -1,0 +1,38 @@
+{
+  "name": "@genaiscript/runtime",
+  "version": "1.0.0",
+  "main": "dist/commonjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/commonjs/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "description": "The runtime for GenAIScript, providing the core functionality and APIs for executing scripts.",
+  "repository": "github:microsoft/genaiscript",
+  "bugs": {
+    "url": "https://github.com/microsoft/genaiscript/issues"
+  },
+  "tshy": {
+    "dialects": ["esm", "commonjs"],
+    "exports": {
+      ".": "./src/index.ts",
+      "./package.json": "./package.json"
+    },
+    "selfLink": false
+  }
+}
