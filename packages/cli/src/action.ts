@@ -63,6 +63,16 @@ export async function actionConfigure(
         provider?: string
     }
 ) {
+    const {
+        force,
+        out = resolve("."),
+        ffmpeg,
+        playwright,
+        packageLock,
+        python,
+        provider,
+    } = options || {}
+
     let script: PromptScript
     if (!scriptId) {
         scriptId = await shellInput("Enter the name of the script") // Prompt user for script name if not provided
@@ -84,15 +94,6 @@ export async function actionConfigure(
         )
     }
     if (!script) throw new Error("Script not found: " + scriptId)
-    const {
-        force,
-        out = dotGenaiscriptPath("action", script.id),
-        ffmpeg,
-        playwright,
-        packageLock,
-        python,
-        provider,
-    } = options || {}
     const image =
         options.image ||
         (playwright
@@ -251,8 +252,9 @@ ${Object.entries(outputs || {})
 \`\`\`yaml
 uses: ${script.id}-action
 with:
-${Object.keys(inputs || {})
-    .map((key) => `  ${key}: \${{ ... }}`)
+${Object.entries(inputs || {})
+    .filter(([, value]) => value.required)
+    .map(([key, value]) => `  ${key}: \${{ ... }}`)
     .join("\n")}
 \`\`\`
 
@@ -277,6 +279,7 @@ jobs:
       - uses: ${owner}/${repo}@main
         with:
 ${Object.entries(inputs || {})
+    .filter(([, value]) => value.required)
     .map(([key, value]) => `          ${key}: \${{ ... }}`)
     .join("\n")}
 \`\`\`

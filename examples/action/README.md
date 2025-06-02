@@ -21,8 +21,6 @@ This is the description
 uses: action-poem-action
 with:
   github_token: ${{ ... }}
-  github_issue: ${{ ... }}
-  debug: ${{ ... }}
 ```
 
 ## Example
@@ -46,8 +44,6 @@ jobs:
       - uses: microsoft/genaiscript@main
         with:
           github_token: ${{ ... }}
-          github_issue: ${{ ... }}
-          debug: ${{ ... }}
 ```
 
 ## Development
