@@ -3901,6 +3901,12 @@ interface GitHubIssueUpdateOptions {
     labels?: string[]
 }
 
+interface GitHubLabel {
+    name: string
+    color?: string
+    description?: string
+}
+
 interface GitHub {
     /**
      * Gets connection information for octokit
@@ -3981,6 +3987,11 @@ interface GitHub {
      * Diffs two GitHub Action workflow job logs
      */
     diffWorkflowJobLogs(job_id: number, other_job_id: number): Promise<string>
+
+    /**
+     * List labels in repository
+     */
+    listIssueLabels(issueNumber?: string | number): Promise<GitHubLabel[]>
 
     /**
      * Lists issues for a given repository
