@@ -426,6 +426,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./
+        with:
+          github_token: \${{ secrets.GITHUB_TOKEN }}
 `
     )
 
