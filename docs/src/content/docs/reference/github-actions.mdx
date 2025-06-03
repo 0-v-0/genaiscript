@@ -124,7 +124,7 @@ The action boilerplate generator will override the following files:
 To update the action boilerplate, you can run the same command again:
 
 ```bash
-npx -y genaiscript configure action
+npm run configure
 ```
 
 ### Metadata
@@ -197,7 +197,7 @@ By default, GenAIScript uses [node:lts-alpine](https://hub.docker.com/_/node/) a
 You can change this by specifying a different base image in the `cli`.
 
 ```dockerfile "--image <image>"
-npx -y genaiscript configure action <scriptid> ... --image <image>
+npx -y genaiscript configure action ... --image <image>
 ```
 
 ### ffmpeg, playwright and other packages
@@ -206,13 +206,13 @@ To keep the action container small, GenAIScript does not include `ffmpeg`, `play
 You can add them to the container by specifying them in the `cli` command.
 
 ```bash "--ffmpeg --playwright"
-npx -y genaiscript configure action <scriptid> ... --ffmpeg --playwright
+npx -y genaiscript configure action ... --ffmpeg --playwright
 ```
 
 You can also add any other packages you need by specifying them in the `cli` command.
 
 ```bash "--apks <package1> <package2>"
-npx -y genaiscript configure action <scriptid> ... --apks <package1> <package2>
+npx -y genaiscript configure action ... --apks <package1> <package2>
 ```
 
 ### Testing the Action
