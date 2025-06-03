@@ -3797,6 +3797,10 @@ interface GitHubIssue {
     reactions?: GitHubReactions
     user: GitHubUser
     assignee?: GitHubUser
+    labels?: (string | { name?: string })[]
+    created_at: string
+    updated_at?: string
+    closed_at?: string
 }
 
 interface GitHubRef {

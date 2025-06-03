@@ -428,6 +428,7 @@ jobs:
       - uses: ./
         with:
           github_token: \${{ secrets.GITHUB_TOKEN }}
+${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
 `
     )
 
