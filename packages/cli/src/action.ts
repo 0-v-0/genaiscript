@@ -59,6 +59,9 @@ export async function actionConfigure(
         image?: string
         apks?: string[]
         provider?: string
+        pullRequestComment?: string | boolean
+        pullRequestDescription?: string | boolean
+        pullRequestReviews?: boolean
     }
 ) {
     const {
@@ -69,6 +72,9 @@ export async function actionConfigure(
         packageLock,
         python,
         provider,
+        pullRequestComment,
+        pullRequestDescription,
+        pullRequestReviews,
     } = options || {}
 
     const { owner = "<owner>", repo = "<repo>" } = (await github.info()) || {}
@@ -83,6 +89,11 @@ export async function actionConfigure(
             await writeText(filePath, content)
         }
     }
+    const event =
+        pullRequestComment || pullRequestDescription || pullRequestReviews
+            ? "pull_request"
+            : "push"
+    logVerbose(`event: ${event}`)
 
     let script: PromptScript
     if (!scriptId) {
@@ -255,7 +266,10 @@ uses: ${script.id}-action
 with:
 ${Object.entries(inputs || {})
     .filter(([, value]) => value.required)
-    .map(([key, value]) => `  ${key}: \${{ ... }}`)
+    .map(
+        ([key, value]) =>
+            `  ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`
+    )
     .join("\n")}
 \`\`\`
 
@@ -265,9 +279,10 @@ ${Object.entries(inputs || {})
 name: Run ${script.id} Action
 on:
     workflow_dispatch:
-    push: # TODO: update event type
+    ${event}:
 permissions:
     contents: read
+    ${event !== "pull_request" ? "# " : ""}pull-requests: write
     models: read
 concurrency:
     group: \${{ github.workflow }}-\${{ github.ref }}
@@ -281,7 +296,10 @@ jobs:
         with:
 ${Object.entries(inputs || {})
     .filter(([, value]) => value.required)
-    .map(([key, value]) => `          ${key}: \${{ ... }}`)
+    .map(
+        ([key, value]) =>
+            `          ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`
+    )
     .join("\n")}
 \`\`\`
 
@@ -378,6 +396,21 @@ npm run act
                         `--github-workspace`,
                         provider ? `--provider` : undefined,
                         provider,
+                        pullRequestComment
+                            ? `--pull-request-comment`
+                            : undefined,
+                        typeof pullRequestComment === "string"
+                            ? pullRequestComment
+                            : undefined,
+                        pullRequestDescription
+                            ? `--pull-request-description`
+                            : undefined,
+                        typeof pullRequestDescription === "string"
+                            ? pullRequestDescription
+                            : undefined,
+                        pullRequestReviews
+                            ? `--pull-request-reviews`
+                            : undefined,
                     ]
                         .filter(Boolean)
                         .join(" "),

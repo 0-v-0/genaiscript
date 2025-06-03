@@ -234,18 +234,7 @@ export async function cli() {
         )
         .option("-ocl, --out-changelog <string>", "output file for changelogs")
         .option("-pr, --pull-request <number>", "pull request identifier")
-        .option(
-            "-prc, --pull-request-comment [string]",
-            "create comment on a pull request with a unique id (defaults to script id)"
-        )
-        .option(
-            "-prd, --pull-request-description [string]",
-            "create comment on a pull request description with a unique id (defaults to script id)"
-        )
-        .option(
-            "-prr, --pull-request-reviews",
-            "create pull request reviews from annotations"
-        )
+    addPullRequestOptions(run)
         .option("-tm, --teams-message", "Posts a message to the teams channel")
         .option("-j, --json", "emit full JSON response to output")
         .option("-y, --yaml", "emit full YAML response to output")
@@ -599,7 +588,7 @@ export async function cli() {
     addModelOptions(openapi)
     addGroupsOptions(openapi)
 
-    configureCmd
+    const configureActionCmd = configureCmd
         .command("action")
         .alias("github-action")
         .description("Configure the current project for GitHub Actions")
@@ -620,6 +609,7 @@ export async function cli() {
         .option("--apks <string...>", "Linux packages to install")
         .option("--provider <string>", "LLM provider to use")
         .action(actionConfigure)
+    addPullRequestOptions(configureActionCmd) // Add pull request options to the action command
 
     // Define 'parse' command group for parsing tasks
     const parser = program
@@ -775,6 +765,22 @@ export async function cli() {
             "-g, --groups <groups...>",
             "groups to include or exclude. Use :! prefix to exclude"
         )
+    }
+
+    function addPullRequestOptions(command: Command) {
+        return command
+            .option(
+                "-prc, --pull-request-comment [string]",
+                "create comment on a pull request with a unique id (defaults to script id)"
+            )
+            .option(
+                "-prd, --pull-request-description [string]",
+                "create comment on a pull request description with a unique id (defaults to script id)"
+            )
+            .option(
+                "-prr, --pull-request-reviews",
+                "create pull request reviews from annotations"
+            )
     }
 
     function addModelOptions(command: Command) {

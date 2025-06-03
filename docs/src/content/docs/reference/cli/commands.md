@@ -51,20 +51,22 @@ Usage: genaiscript configure action|github-action [options] [script]
 Configure the current project for GitHub Actions
 
 Arguments:
-  script               Script to use for the action; if not found, a script
-                       will be created.
+  script                                     Script to use for the action; if not found, a script will be created.
 
 Options:
-  -f, --force          force override existing action files
-  -o, --out <string>   output folder for action files
-  --package-lock       generate package-lock.json file and use `npm ci`
-  --ffmpeg             use ffmpeg for video/audio processing
-  --playwright         Enable Playwright for browser testing
-  --python             Install Python 3.x support
-  --image <string>     Docker image identifier
-  --apks <string...>   Linux packages to install
-  --provider <string>  LLM provider to use
-  -h, --help           display help for command
+  -f, --force                                force override existing action files
+  -o, --out <string>                         output folder for action files
+  --package-lock                             generate package-lock.json file and use `npm ci`
+  --ffmpeg                                   use ffmpeg for video/audio processing
+  --playwright                               Enable Playwright for browser testing
+  --python                                   Install Python 3.x support
+  --image <string>                           Docker image identifier
+  --apks <string...>                         Linux packages to install
+  --provider <string>                        LLM provider to use
+  -prc, --pull-request-comment [string]      create comment on a pull request with a unique id (defaults to script id)
+  -prd, --pull-request-description [string]  create comment on a pull request description with a unique id (defaults to script id)
+  -prr, --pull-request-reviews               create pull request reviews from annotations
+  -h, --help                                 display help for command
 ```
 
 ## `run`

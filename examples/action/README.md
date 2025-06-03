@@ -20,7 +20,7 @@ This is the description
 ```yaml
 uses: action-poem-action
 with:
-  github_token: ${{ ... }}
+  github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Example
@@ -29,9 +29,10 @@ with:
 name: Run action-poem Action
 on:
     workflow_dispatch:
-    push: # TODO: update event type
+    push:
 permissions:
     contents: read
+    # pull-requests: write
     models: read
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -43,7 +44,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: microsoft/genaiscript@main
         with:
-          github_token: ${{ ... }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Development
