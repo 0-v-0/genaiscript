@@ -16,6 +16,8 @@ This is the description
 
 ## Usage
 
+Add the following to your step in your workflow file:
+
 ```yaml
 uses: microsoft/genaiscript@main
 with:

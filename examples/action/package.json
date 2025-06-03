@@ -15,6 +15,7 @@
     "fix": "genaiscript scripts fix",
     "typecheck": "genaiscript scripts compile",
     "configure": "genaiscript action configure action --out .",
+    "test": "echo 'No tests defined.'",
     "start": "genaiscript run action --github-workspace --provider echo"
   }
 }

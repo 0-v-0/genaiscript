@@ -63,9 +63,6 @@ export async function actionConfigure(options: {
     const {
         force,
         out = resolve("."),
-        ffmpeg,
-        playwright,
-        python,
         provider,
         pullRequestComment,
         pullRequestDescription,
@@ -117,6 +114,10 @@ export async function actionConfigure(options: {
         // Write the prompt script to the determined path
         await writeFile(script.filename, script.jsSource)
     }
+    const ffmpeg = options?.ffmpeg || /ffmpeg$/.test(script.jsSource)
+    const playwright =
+        options?.playwright || /host\.browser/.test(script.jsSource)
+    const python = options?.python
     const image =
         options.image ||
         (playwright
@@ -125,6 +126,9 @@ export async function actionConfigure(options: {
     const alpine = /alpine$/.test(image)
     logVerbose(`script: ${script.filename}`)
     logVerbose(`docker image: ${image}`)
+    logVerbose(`ffmpeg: ${ffmpeg}`)
+    logVerbose(`python: ${python}`)
+    logVerbose(`playwright: ${playwright}`)
     const { inputSchema, branding } = script
     const scriptSchema = (inputSchema?.properties
         .script as JSONSchemaObject) || {
@@ -265,6 +269,8 @@ ${Object.entries(outputs || {})
 
 ## Usage
 
+Add the following to your step in your workflow file:
+
 \`\`\`yaml
 uses: ${owner}/${repo}@main
 with:
@@ -381,6 +387,37 @@ npm run upgrade
     )
 
     await writeFile(
+        ".github/workflows/ci.yml",
+        `name: Continuous Integration
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+      - run: npm ci
+      - run: npm test
+  test-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+`
+    )
+
+    await writeFile(
         "package.json",
         JSON.stringify(
             deleteUndefinedValues({
@@ -403,6 +440,7 @@ npm run upgrade
                     fix: "genaiscript scripts fix",
                     typecheck: `genaiscript scripts compile`,
                     configure: `genaiscript action configure ${scriptId} --out .`,
+                    test: "echo 'No tests defined.'",
                     start: [
                         `genaiscript`,
                         `run`,
