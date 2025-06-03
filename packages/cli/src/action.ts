@@ -4,7 +4,7 @@ import { GENAI_ANY_REGEX, GENAI_SRC } from "../../core/src/constants"
 import { genaiscriptDebug } from "../../core/src/debug"
 import { nodeTryReadPackage } from "../../core/src/nodepackage"
 import { CORE_VERSION } from "../../core/src/version"
-import { YAMLStringify } from "../../core/src/yaml"
+import { YAMLStringify, YAMLTryParse } from "../../core/src/yaml"
 import { buildProject } from "./build"
 import { snakeCase } from "es-toolkit"
 import { logInfo, logVerbose } from "../../core/src/util"
@@ -196,23 +196,31 @@ export async function actionConfigure(options: {
         ...(options?.apks || []),
     ].filter(Boolean)
 
-    await writeFile(
-        "action.yml",
-        YAMLStringify(
-            deleteUndefinedValues({
-                name: repo,
-                author: pkg?.author,
-                description: script.title || pkg?.description,
-                inputs,
-                outputs,
-                branding,
-                runs: {
-                    using: "docker",
-                    image: "Dockerfile",
-                },
-            })
+    const action = YAMLTryParse({ filename: "action.yml" })
+    if (action && !force) {
+        logVerbose(`action.yml already exists, using existing values`)
+        action.description = script.title || pkg?.description
+        action.inputs = inputs
+        action.branding = branding
+        await writeFile("action.yml", YAMLStringify(action))
+    } else
+        await writeFile(
+            "action.yml",
+            YAMLStringify(
+                deleteUndefinedValues({
+                    name: repo,
+                    author: pkg?.author,
+                    description: script.title || pkg?.description,
+                    inputs,
+                    outputs,
+                    branding,
+                    runs: {
+                        using: "docker",
+                        image: "Dockerfile",
+                    },
+                })
+            )
         )
-    )
 
     await writeFile(
         "Dockerfile",
@@ -421,7 +429,7 @@ jobs:
 `
     )
 
-    if (!pkg) {
+    if (!pkg || force) {
         await writeFile(
             "package.json",
             JSON.stringify(
