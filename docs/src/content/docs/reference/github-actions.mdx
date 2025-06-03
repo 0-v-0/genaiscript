@@ -24,6 +24,12 @@ import { FileTree } from "@astrojs/starlight/components"
 
 The combo of Actions and Models allows you to run GenAIScript as part of your CI/CD.
 
+:::tip
+
+Jump to the [Custom Actions](#custom-actions) section to learn how to package a GenAIScript script as a GitHub Action.
+
+:::
+
 ## GitHub Models Permissions
 
 [To use Models in a GitHub Action](https://docs.github.com/en/github-models/use-github-models/integrating-ai-models-into-your-development-workflow#using-ai-models-with-github-actions), you need to set the `permissions` for the action to include `models: read`.
@@ -37,7 +43,8 @@ GenAIScript has built-in support for GitHub Models, so you can use it directly i
 
 ## Using the CLI
 
-The simplest way to use GenAIScript in a GitHub Action is to run the [CLI](/genaiscript/reference/cli) directly. You can do this by adding a step to your workflow that runs the `genaiscript` command.
+The simplest way to use GenAIScript in a GitHub Action is to run the [CLI](/genaiscript/reference/cli) directly.
+You can do this by adding a step to your workflow that runs the `genaiscript` command.
 
 ```yaml "npx -y genaiscript run ..."
 - uses: actions/setup-node@v4 # make sure node.js is installed
