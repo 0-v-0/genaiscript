@@ -60,6 +60,7 @@ Options:
   --image <string>                           Docker image identifier
   --apks <string...>                         Linux packages to install
   --provider <string>                        LLM provider to use
+  -e, --event <string>                       GitHub event type (choices: "push", "pull_request", "issue_comment", "issue")
   -prc, --pull-request-comment [string]      create comment on a pull request with a unique id (defaults to script id)
   -prd, --pull-request-description [string]  create comment on a pull request description with a unique id (defaults to script id)
   -prr, --pull-request-reviews               create pull request reviews from annotations

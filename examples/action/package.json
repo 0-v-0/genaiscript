@@ -3,7 +3,7 @@
   "license": "MIT",
   "description": "This is the description",
   "dependencies": {
-    "genaiscript": "1.142.1"
+    "genaiscript": "1.142.2"
   },
   "scripts": {
     "upgrade": "npx -y npm-check-updates -u && npm install",
@@ -14,7 +14,7 @@
     "lint": "npx --yes prettier --write genaisrc/",
     "fix": "genaiscript scripts fix",
     "typecheck": "genaiscript scripts compile",
-    "configure": "genaiscript action configure action --out .",
+    "configure": "genaiscript configure action",
     "test": "echo 'No tests defined.'",
     "start": "genaiscript run action --github-workspace --provider echo"
   }

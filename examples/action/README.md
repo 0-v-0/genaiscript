@@ -1,7 +1,5 @@
 # action action
 
-A custom GitHub Action that runs the script `action`.
-
 This is the description
 
 ## Inputs

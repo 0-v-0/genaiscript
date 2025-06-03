@@ -603,6 +603,14 @@ export async function cli() {
         .option("--apks <string...>", "Linux packages to install")
         .option("--provider <string>", "LLM provider to use")
         .action(actionConfigure)
+    configureActionCmd.addOption(
+        new Option("-e, --event <string>", "GitHub event type").choices([
+            "push",
+            "pull_request",
+            "issue_comment",
+            "issue",
+        ])
+    )
     addPullRequestOptions(configureActionCmd) // Add pull request options to the action command
 
     // Define 'parse' command group for parsing tasks

@@ -59,6 +59,7 @@ export async function actionConfigure(options: {
     pullRequestComment?: string | boolean
     pullRequestDescription?: string | boolean
     pullRequestReviews?: boolean
+    event?: string
 }) {
     const {
         force,
@@ -68,8 +69,17 @@ export async function actionConfigure(options: {
         pullRequestDescription,
         pullRequestReviews,
     } = options || {}
+    const event: "push" | "pull_request" | "issue_comment" | "issue" =
+        (options?.event as any) ??
+        (pullRequestComment || pullRequestDescription || pullRequestReviews
+            ? "pull_request"
+            : "push")
     const issue =
-        pullRequestComment || pullRequestDescription || pullRequestReviews
+        event === "issue" ||
+        event === "issue_comment" ||
+        pullRequestComment ||
+        pullRequestDescription ||
+        pullRequestReviews
     const { owner, repo } = (await github.info()) || {}
     if (!owner || !repo)
         throw new Error("GitHub repository information not found.")
@@ -89,10 +99,6 @@ export async function actionConfigure(options: {
             await writeText(filePath, content)
         }
     }
-    const event =
-        pullRequestComment || pullRequestDescription || pullRequestReviews
-            ? "pull_request"
-            : "push"
     logVerbose(`event: ${event}`)
 
     const prj = await buildProject() // Build the project to get script templates
@@ -181,7 +187,7 @@ export async function actionConfigure(options: {
         },
     }
 
-    const pkg = (await nodeTryReadPackage()) || {}
+    const pkg = await nodeTryReadPackage()
     const apks = [
         "git",
         python ? "python3" : undefined,
@@ -195,8 +201,8 @@ export async function actionConfigure(options: {
         YAMLStringify(
             deleteUndefinedValues({
                 name: repo,
-                author: pkg.author,
-                description: script.title,
+                author: pkg?.author,
+                description: script.title || pkg?.description,
                 inputs,
                 outputs,
                 branding,
@@ -240,8 +246,6 @@ ENTRYPOINT ["npm", "--prefix", "/genaiscript/action", "start"]
     await writeFile(
         "README.md",
         dedent`# ${script.id} action
-
-A custom GitHub Action that runs the script \`${script.id}\`.
 
 ${script.description || ""}
 
@@ -417,64 +421,67 @@ jobs:
 `
     )
 
-    await writeFile(
-        "package.json",
-        JSON.stringify(
-            deleteUndefinedValues({
-                author: pkg.author,
-                license: pkg.license,
-                description:
-                    script.description || "GitHub Action for " + script.id,
-                dependencies: {
-                    ...(pkg.dependencies || {}),
-                    genaiscript: CORE_VERSION,
-                },
-                scripts: {
-                    upgrade: "npx -y npm-check-updates -u && npm install",
-                    "docker:build": `docker build -t ${owner}-${repo} .`,
-                    "docker:start": `docker run -e GITHUB_TOKEN ${owner}-${repo}`,
-                    "act:install":
-                        "gh extension install https://github.com/nektos/gh-act",
-                    act: "gh act",
-                    lint: `npx --yes prettier --write genaisrc/`,
-                    fix: "genaiscript scripts fix",
-                    typecheck: `genaiscript scripts compile`,
-                    configure: `genaiscript action configure ${scriptId} --out .`,
-                    test: "echo 'No tests defined.'",
-                    start: [
-                        `genaiscript`,
-                        `run`,
-                        scriptId,
-                        `--github-workspace`,
-                        provider ? `--provider` : undefined,
-                        provider,
-                        pullRequestComment
-                            ? `--pull-request-comment`
-                            : undefined,
-                        typeof pullRequestComment === "string"
-                            ? pullRequestComment
-                            : undefined,
-                        pullRequestDescription
-                            ? `--pull-request-description`
-                            : undefined,
-                        typeof pullRequestDescription === "string"
-                            ? pullRequestDescription
-                            : undefined,
-                        pullRequestReviews
-                            ? `--pull-request-reviews`
-                            : undefined,
-                    ]
-                        .filter(Boolean)
-                        .join(" "),
-                },
-            }),
-            null,
-            2
+    if (!pkg) {
+        await writeFile(
+            "package.json",
+            JSON.stringify(
+                deleteUndefinedValues({
+                    author: pkg.author,
+                    license: pkg.license,
+                    description: script.description,
+                    dependencies: {
+                        ...(pkg.dependencies || {}),
+                        genaiscript: CORE_VERSION,
+                    },
+                    scripts: {
+                        upgrade: "npx -y npm-check-updates -u && npm install",
+                        "docker:build": `docker build -t ${owner}-${repo} .`,
+                        "docker:start": `docker run -e GITHUB_TOKEN ${owner}-${repo}`,
+                        "act:install":
+                            "gh extension install https://github.com/nektos/gh-act",
+                        act: "gh act",
+                        lint: `npx --yes prettier --write genaisrc/`,
+                        fix: "genaiscript scripts fix",
+                        typecheck: `genaiscript scripts compile`,
+                        configure: [`genaiscript configure action`]
+                            .filter(Boolean)
+                            .join(" "),
+                        test: "echo 'No tests defined.'",
+                        start: [
+                            `genaiscript`,
+                            `run`,
+                            scriptId,
+                            `--github-workspace`,
+                            provider ? `--provider` : undefined,
+                            provider,
+                            pullRequestComment
+                                ? `--pull-request-comment`
+                                : undefined,
+                            typeof pullRequestComment === "string"
+                                ? pullRequestComment
+                                : undefined,
+                            pullRequestDescription
+                                ? `--pull-request-description`
+                                : undefined,
+                            typeof pullRequestDescription === "string"
+                                ? pullRequestDescription
+                                : undefined,
+                            pullRequestReviews
+                                ? `--pull-request-reviews`
+                                : undefined,
+                        ]
+                            .filter(Boolean)
+                            .join(" "),
+                    },
+                }),
+                null,
+                2
+            )
         )
-    )
+    }
 
-    // generate package-lock.json
-    await runtimeHost.exec(undefined, "node", ["install"], {
+    // upgrade dependencies
+    await runtimeHost.exec(undefined, "node", ["run", "upgrade"], {
         cwd: out,
     })
 
