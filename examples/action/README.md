@@ -7,6 +7,9 @@ This is the description
 ## Inputs
 
 - `github_token`: GitHub token with `models: read` permission at least. (required)
+- `github_issue`: GitHub issue number to use when generating comments.
+- `debug`: Enable debug logging.
+
 ## Outputs
 
 - `text`: The generated text output.
@@ -26,21 +29,19 @@ with:
 name: Run action-poem Action
 on:
     workflow_dispatch:
-    push:
+    push: # TODO: update event type
 permissions:
     contents: read
     models: read
 concurrency:
-    group: action-poem-${{ github.workflow }}-${{ github.ref }}
+    group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Run action-poem Action
-        uses: action-poem-action@main
+      - uses: actions/checkout@v4
+      - uses: microsoft/genaiscript@main
         with:
           github_token: ${{ ... }}
 ```
