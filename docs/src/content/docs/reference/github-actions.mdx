@@ -85,23 +85,13 @@ To get started,
 
 <li>
 
-Create a new repository for your action, or use an existing one.
-The action boilerplate generator will override the following files:
-
-<FileTree>
-
-- action.yml Action metadata file
-- Dockerfile Dockerfile for the action
-- README.md Documentation for the action
-- .gitignore Files to ignore in the repository
-
-</FileTree>
+Create a new repository for your action.
 
 </li>
 
 <li>
 
-Open a terminal in the root of your repository where you have a GenAIScript script you want to package as an action.
+Open a terminal in the root of your repository.
 
 </li>
 
@@ -110,22 +100,32 @@ Open a terminal in the root of your repository where you have a GenAIScript scri
 Run the command to generate the action boilerplate:
 
 ```bash
-npx -y genaiscript configure action <scriptid> --out .
+npx -y genaiscript configure action
 ```
-
-where `<scriptid>` is the ID of the script you want to package as an action (filename without `.genai...`).
-
-</li>
-
-<li>
-
-Push the changes, create a release and your action is ready!
 
 </li>
 
 </ol>
 
 </Steps>
+
+The action boilerplate generator will override the following files:
+
+<FileTree>
+
+- `action.yml` Action metadata file
+- `Dockerfile` Dockerfile for the action
+- `README.md` Documentation for the action
+- `.gitignore` Files to ignore in the repository
+- `.github/workflows/ci.yml` CI workflow to test the action
+
+</FileTree>
+
+To update the action boilerplate, you can run the same command again:
+
+```bash
+npx -y genaiscript configure action
+```
 
 ### Metadata
 
