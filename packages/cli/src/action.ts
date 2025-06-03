@@ -8,11 +8,9 @@ import { YAMLStringify } from "../../core/src/yaml"
 import { buildProject } from "./build"
 import { snakeCase } from "es-toolkit"
 import { logInfo, logVerbose } from "../../core/src/util"
-import { dotGenaiscriptPath } from "../../core/src/workdir"
 import { tryStat, writeText } from "../../core/src/fs"
 import { dedent } from "../../core/src/indent"
 import { runtimeHost } from "../../core/src/host"
-import { shellInput } from "./input"
 import { createScript as coreCreateScript } from "../../core/src/scripts"
 import { templateIdFromFileName } from "../../core/src/template"
 
@@ -73,6 +71,7 @@ export async function actionConfigure(
         provider,
     } = options || {}
 
+    const { owner = "<owner>", repo = "<repo>" } = (await github.info()) || {}
     const writeFile = async (name: string, content: string) => {
         const filePath = resolve(out, name)
         if (!force && (await tryStat(filePath))) {
@@ -162,7 +161,6 @@ export async function actionConfigure(
         },
     }
 
-    const { owner = "<owner>", repo = "<repo>" } = (await github.info()) || {}
     const pkg = (await nodeTryReadPackage()) || {}
 
     const apks = [
@@ -356,8 +354,6 @@ npm run act
         "package.json",
         JSON.stringify(
             deleteUndefinedValues({
-                name: script.id + "-action",
-                version: CORE_VERSION,
                 author: pkg.author,
                 license: pkg.license,
                 description:
