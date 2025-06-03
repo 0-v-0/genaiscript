@@ -13,7 +13,7 @@ import {
 import { createFetch } from "./fetch"
 import { runtimeHost } from "./host"
 import { prettifyMarkdown } from "./markdown"
-import { arrayify, assert, ellipse, logError, logVerbose } from "./util"
+import { arrayify, assert, logError, logVerbose } from "./util"
 import { shellRemoveAsciiColors } from "./shell"
 import { isGlobMatch } from "./glob"
 import { concurrentLimit } from "./concurrency"
@@ -34,6 +34,7 @@ import { diagnosticToGitHubMarkdown } from "./annotations"
 import { TraceOptions } from "./trace"
 import { unzip } from "./zip"
 import { uriRedact, uriTryParse } from "./url"
+import { dedent } from "./indent"
 const dbg = genaiscriptDebug("github")
 
 export interface GithubConnectionInfo {
@@ -769,16 +770,22 @@ export class GitHubClient implements GitHub {
             ref,
             refName,
             issue,
+            runId,
+            runUrl,
         } = await this.connection()
-        return Object.freeze({
-            baseUrl,
-            repo,
-            owner,
-            auth,
-            ref,
-            refName,
-            issueNumber: issue,
-        })
+        return Object.freeze(
+            deleteUndefinedValues({
+                baseUrl,
+                repo,
+                owner,
+                auth,
+                ref,
+                refName,
+                runId,
+                runUrl,
+                issueNumber: issue,
+            })
+        )
     }
 
     async repo(): Promise<{
@@ -1142,7 +1149,7 @@ export class GitHubClient implements GitHub {
             owner,
             repo,
             issue_number,
-            body,
+            body: prettifyMarkdown(dedent(body)),
         })
         dbg(`created comment %s`, data.id)
         return data
@@ -1155,7 +1162,7 @@ export class GitHubClient implements GitHub {
             owner,
             repo,
             comment_id: normalizeInt(comment_id),
-            body,
+            body: prettifyMarkdown(dedent(body)),
         })
         dbg(`updated comment %s`, data.id)
         return data

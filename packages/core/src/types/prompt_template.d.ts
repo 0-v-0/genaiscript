@@ -3736,6 +3736,8 @@ interface GitHubOptions {
     ref?: string
     refName?: string
     issueNumber?: number
+    runId?: string
+    runUrl?: string
 }
 
 type GitHubWorkflowRunStatus =
@@ -4064,7 +4066,8 @@ interface GitHub {
      */
     updateIssueComment(
         comment_id: number | string,
-        body: string
+        body: string,
+        options?: GitHubAIDisclaimerOptions
     ): Promise<GitHubComment>
 
     /**
