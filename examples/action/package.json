@@ -10,6 +10,8 @@
   "scripts": {
     "docker:build": "docker build -t action-poem-action .",
     "docker:start": "docker run -e GITHUB_TOKEN action-poem-action",
+    "act:install": "gh extension install https://github.com/nektos/gh-act",
+    "act": "gh act",
     "lint": "npx --yes prettier --write genaisrc/",
     "typecheck": "genaiscript scripts compile",
     "configure": "genaiscript action configure action-poem --out .",

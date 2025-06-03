@@ -87,9 +87,8 @@ export async function actionConfigure(
 
     let script: PromptScript
     if (!scriptId) {
-        scriptId = await shellInput("Enter the name of the script") // Prompt user for script name if not provided
-        if (!scriptId) return
-        script = coreCreateScript(scriptId) // Call core function to create a script
+        scriptId = "action"
+        script = coreCreateScript(scriptId)
         // Write the prompt script to the determined path
         await writeFile(
             resolve(
@@ -329,6 +328,18 @@ To run the action locally in Docker (build it first), use:
 npm run docker:start
 \`\`\`
 
+To run the action using [act](https://nektosact.com/), first install the act CLI:
+
+\`\`\`bash
+npm run act:install
+\`\`\`
+
+Then, you can run the action with:
+
+\`\`\`bash
+npm run act
+\`\`\`
+
 `
     )
     await writeFile(
@@ -358,6 +369,9 @@ npm run docker:start
                 scripts: {
                     "docker:build": `docker build -t ${script.id}-action .`,
                     "docker:start": `docker run -e GITHUB_TOKEN ${script.id}-action`,
+                    "act:install":
+                        "gh extension install https://github.com/nektos/gh-act",
+                    act: "gh act",
                     lint: `npx --yes prettier --write genaisrc/`,
                     typecheck: `genaiscript scripts compile`,
                     configure: `genaiscript action configure ${scriptId} --out .`,
