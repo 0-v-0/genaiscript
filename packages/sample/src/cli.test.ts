@@ -126,7 +126,7 @@ describe("action", () => {
     test("configure", async () => {
         const action = "action"
         const res =
-            await $`node ${cli} ${cmd} ${action} poem --out .genaiscript/action --ffmpeg --playwright`
-        assert(res.stderr.includes("poem"))
+            await $`node ${cli} ${cmd} ${action} --out .genaiscript/action --ffmpeg --playwright`
+        assert(res.stderr.includes("action"))
     })
 })
