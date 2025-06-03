@@ -16,12 +16,13 @@ Usage: genaiscript configure [options] [command]
 Configure LLMs or GitHub Actions
 
 Options:
-  -h, --help                               display help for command
+  -h, --help                      display help for command
 
 Commands:
-  llm [options]                            Configure LLM providers
-  action|github-action [options] [script]  Configure the current project for GitHub Actions
-  help [command]                           display help for command
+  llm [options]                   Configure LLM providers
+  action|github-action [options]  Configure a GitHub repository as a custom
+                                  dockerized GitHub Action
+  help [command]                  display help for command
 ```
 
 ### `configure llm`
@@ -46,17 +47,13 @@ Options:
 ### `configure action`
 
 ```
-Usage: genaiscript configure action|github-action [options] [script]
+Usage: genaiscript configure action|github-action [options]
 
-Configure the current project for GitHub Actions
-
-Arguments:
-  script                                     Script to use for the action; if not found, a script will be created.
+Configure a GitHub repository as a custom dockerized GitHub Action
 
 Options:
   -f, --force                                force override existing action files
   -o, --out <string>                         output folder for action files
-  --package-lock                             generate package-lock.json file and use `npm ci`
   --ffmpeg                                   use ffmpeg for video/audio processing
   --playwright                               Enable Playwright for browser testing
   --python                                   Install Python 3.x support

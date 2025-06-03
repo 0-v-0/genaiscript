@@ -3,16 +3,18 @@
   "license": "MIT",
   "description": "This is the description",
   "dependencies": {
-    "genaiscript": "^1.142.1"
+    "genaiscript": "1.142.1"
   },
   "scripts": {
-    "docker:build": "docker build -t action-poem-action .",
-    "docker:start": "docker run -e GITHUB_TOKEN action-poem-action",
+    "upgrade": "npx -y npm-check-updates -u && npm install",
+    "docker:build": "docker build -t microsoft-genaiscript .",
+    "docker:start": "docker run -e GITHUB_TOKEN microsoft-genaiscript",
     "act:install": "gh extension install https://github.com/nektos/gh-act",
     "act": "gh act",
     "lint": "npx --yes prettier --write genaisrc/",
+    "fix": "genaiscript scripts fix",
     "typecheck": "genaiscript scripts compile",
-    "configure": "genaiscript action configure action-poem --out .",
-    "start": "genaiscript run action-poem --github-workspace --provider echo"
+    "configure": "genaiscript action configure action --out .",
+    "start": "genaiscript run action --github-workspace --provider echo"
   }
 }

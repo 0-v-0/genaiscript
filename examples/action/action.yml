@@ -1,12 +1,10 @@
-name: action-poem
+name: genaiscript
 author: microsoft
 description: This is the title
 inputs:
   github_token:
     description: "GitHub token with `models: read` permission at least."
     required: true
-  github_issue:
-    description: GitHub issue number to use when generating comments.
   debug:
     description: Enable debug logging.
     required: false

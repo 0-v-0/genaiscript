@@ -47,37 +47,40 @@ interface GitHubActionFieldType {
  *   Writes or overwrites files in the output directory.
  *   Executes npm or node commands to generate lock files if packageLock is set.
  */
-export async function actionConfigure(
-    scriptId: string,
-    options: {
-        force?: boolean
-        out?: string
-        ffmpeg?: boolean
-        python?: boolean
-        playwright?: boolean
-        packageLock?: boolean
-        image?: string
-        apks?: string[]
-        provider?: string
-        pullRequestComment?: string | boolean
-        pullRequestDescription?: string | boolean
-        pullRequestReviews?: boolean
-    }
-) {
+export async function actionConfigure(options: {
+    force?: boolean
+    out?: string
+    ffmpeg?: boolean
+    python?: boolean
+    playwright?: boolean
+    image?: string
+    apks?: string[]
+    provider?: string
+    pullRequestComment?: string | boolean
+    pullRequestDescription?: string | boolean
+    pullRequestReviews?: boolean
+}) {
     const {
         force,
         out = resolve("."),
         ffmpeg,
         playwright,
-        packageLock,
         python,
         provider,
         pullRequestComment,
         pullRequestDescription,
         pullRequestReviews,
     } = options || {}
+    const issue =
+        pullRequestComment || pullRequestDescription || pullRequestReviews
+    const { owner, repo } = (await github.info()) || {}
+    if (!owner || !repo)
+        throw new Error("GitHub repository information not found.")
+    const scriptId = "action"
+    dbg(`owner: %s`, owner)
+    dbg(`repo: %s`, repo)
+    dbg(`script: %s`, scriptId)
 
-    const { owner = "<owner>", repo = "<repo>" } = (await github.info()) || {}
     const writeFile = async (name: string, content: string) => {
         const filePath = resolve(out, name)
         if (!force && (await tryStat(filePath))) {
@@ -95,37 +98,31 @@ export async function actionConfigure(
             : "push"
     logVerbose(`event: ${event}`)
 
-    let script: PromptScript
-    if (!scriptId) {
-        scriptId = "action"
+    const prj = await buildProject() // Build the project to get script templates
+    let script = prj.scripts.find(
+        (t) =>
+            t.id === scriptId ||
+            (t.filename &&
+                GENAI_ANY_REGEX.test(scriptId) &&
+                resolve(t.filename) === resolve(scriptId))
+    )
+    if (!script) {
         script = coreCreateScript(scriptId)
+        script.id = scriptId
+        script.filename = resolve(
+            out,
+            GENAI_SRC,
+            templateIdFromFileName(scriptId) + ".genai.mts"
+        )
         // Write the prompt script to the determined path
-        await writeFile(
-            resolve(
-                out,
-                GENAI_SRC,
-                templateIdFromFileName(scriptId) + ".genai.mts"
-            ),
-            script.jsSource
-        )
-    } else {
-        const prj = await buildProject() // Build the project to get script templates
-        script = prj.scripts.find(
-            (t) =>
-                t.id === scriptId ||
-                (t.filename &&
-                    GENAI_ANY_REGEX.test(scriptId) &&
-                    resolve(t.filename) === resolve(scriptId))
-        )
+        await writeFile(script.filename, script.jsSource)
     }
-    if (!script) throw new Error("Script not found: " + scriptId)
     const image =
         options.image ||
         (playwright
             ? "mcr.microsoft.com/playwright:v1.52.0-noble"
             : "node:lts-alpine")
     const alpine = /alpine$/.test(image)
-
     logVerbose(`script: ${script.filename}`)
     logVerbose(`docker image: ${image}`)
     const { inputSchema, branding } = script
@@ -135,33 +132,41 @@ export async function actionConfigure(
         properties: {},
         required: [],
     }
-    const inputs: Record<string, GitHubActionFieldType> = {
-        ...Object.fromEntries(
-            Object.entries(scriptSchema.properties).map(([key, value]) => {
-                return [
-                    snakeCase(key),
-                    {
-                        description:
-                            (value as JSONSchemaDescribed).description || "",
-                        required: scriptSchema.required?.includes(key) || false,
-                        default: (value as any).default ?? undefined,
-                    } satisfies GitHubActionFieldType,
-                ]
-            })
-        ),
-        github_token: {
-            description:
-                "GitHub token with `models: read` permission at least.",
-            required: true,
-        },
-        github_issue: {
-            description: "GitHub issue number to use when generating comments.",
-        },
-        debug: {
-            description: "Enable debug logging.",
-            required: false,
-        },
-    }
+    const inputs: Record<string, GitHubActionFieldType> = deleteUndefinedValues(
+        {
+            ...Object.fromEntries(
+                Object.entries(scriptSchema.properties).map(([key, value]) => {
+                    return [
+                        snakeCase(key),
+                        {
+                            description:
+                                (value as JSONSchemaDescribed).description ||
+                                "",
+                            required:
+                                scriptSchema.required?.includes(key) || false,
+                            default: (value as any).default ?? undefined,
+                        } satisfies GitHubActionFieldType,
+                    ]
+                })
+            ),
+            github_token: {
+                description:
+                    "GitHub token with `models: read` permission at least.",
+                required: true,
+            },
+            github_issue:
+                event !== "pull_request" && issue
+                    ? {
+                          description:
+                              "GitHub issue number to use when generating comments.",
+                      }
+                    : undefined,
+            debug: {
+                description: "Enable debug logging.",
+                required: false,
+            },
+        }
+    )
     const outputs: Record<string, GitHubActionFieldType> = {
         text: {
             description: "The generated text output.",
@@ -173,7 +178,6 @@ export async function actionConfigure(
     }
 
     const pkg = (await nodeTryReadPackage()) || {}
-
     const apks = [
         "git",
         python ? "python3" : undefined,
@@ -186,9 +190,9 @@ export async function actionConfigure(
         "action.yml",
         YAMLStringify(
             deleteUndefinedValues({
-                name: script.id,
-                author: pkg.author || undefined,
-                description: script.title || "GitHub Action for " + script.id,
+                name: repo,
+                author: pkg.author,
+                description: script.title,
                 inputs,
                 outputs,
                 branding,
@@ -215,7 +219,7 @@ WORKDIR /genaiscript/action
 COPY . .
 
 # Install dependencies
-RUN npm ${packageLock ? "ci" : "install"}
+RUN npm ci
 
 ${
     playwright
@@ -262,7 +266,7 @@ ${Object.entries(outputs || {})
 ## Usage
 
 \`\`\`yaml
-uses: ${script.id}-action
+uses: ${owner}/${repo}@main
 with:
 ${Object.entries(inputs || {})
     .filter(([, value]) => value.required)
@@ -276,12 +280,12 @@ ${Object.entries(inputs || {})
 ## Example
 
 \`\`\`yaml
-name: Run ${script.id} Action
+name: My action
 on:
-    workflow_dispatch:
     ${event}:
 permissions:
     contents: read
+    ${!issue ? "# " : ""}issues: write
     ${event !== "pull_request" ? "# " : ""}pull-requests: write
     models: read
 concurrency:
@@ -356,6 +360,14 @@ Then, you can run the action with:
 npm run act
 \`\`\`
 
+## Upgrade
+
+The GenAIScript version is pinned in the \`package.json\` file. To upgrade it, run:
+
+\`\`\`bash
+npm run upgrade
+\`\`\`
+
 `
     )
     await writeFile(
@@ -378,15 +390,17 @@ npm run act
                     script.description || "GitHub Action for " + script.id,
                 dependencies: {
                     ...(pkg.dependencies || {}),
-                    genaiscript: "^" + CORE_VERSION,
+                    genaiscript: CORE_VERSION,
                 },
                 scripts: {
-                    "docker:build": `docker build -t ${script.id}-action .`,
-                    "docker:start": `docker run -e GITHUB_TOKEN ${script.id}-action`,
+                    upgrade: "npx -y npm-check-updates -u && npm install",
+                    "docker:build": `docker build -t ${owner}-${repo} .`,
+                    "docker:start": `docker run -e GITHUB_TOKEN ${owner}-${repo}`,
                     "act:install":
                         "gh extension install https://github.com/nektos/gh-act",
                     act: "gh act",
                     lint: `npx --yes prettier --write genaisrc/`,
+                    fix: "genaiscript scripts fix",
                     typecheck: `genaiscript scripts compile`,
                     configure: `genaiscript action configure ${scriptId} --out .`,
                     start: [
@@ -422,10 +436,10 @@ npm run act
     )
 
     // generate package-lock.json
-    if (packageLock) {
-        logVerbose("generating package-lock.json")
-        await runtimeHost.exec(undefined, "node", ["install"], {
-            cwd: out,
-        })
-    }
+    await runtimeHost.exec(undefined, "node", ["install"], {
+        cwd: out,
+    })
+
+    // fix scripts
+    await runtimeHost.exec(undefined, "npm", ["run", "fix"], { cwd: out })
 }

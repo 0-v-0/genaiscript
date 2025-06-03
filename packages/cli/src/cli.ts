@@ -591,17 +591,11 @@ export async function cli() {
     const configureActionCmd = configureCmd
         .command("action")
         .alias("github-action")
-        .description("Configure the current project for GitHub Actions")
-        .argument(
-            "[script]",
-            "Script to use for the action; if not found, a script will be created."
+        .description(
+            "Configure a GitHub repository as a custom dockerized GitHub Action"
         )
         .option("-f, --force", "force override existing action files")
         .option("-o, --out <string>", "output folder for action files")
-        .option(
-            "--package-lock",
-            "generate package-lock.json file and use `npm ci`"
-        )
         .option("--ffmpeg", "use ffmpeg for video/audio processing")
         .option("--playwright", "Enable Playwright for browser testing")
         .option("--python", "Install Python 3.x support")

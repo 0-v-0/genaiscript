@@ -1,13 +1,12 @@
-# action-poem action
+# action action
 
-A custom GitHub Action that runs the script `action-poem`.
+A custom GitHub Action that runs the script `action`.
 
 This is the description
 
 ## Inputs
 
 - `github_token`: GitHub token with `models: read` permission at least. (required)
-- `github_issue`: GitHub issue number to use when generating comments.
 - `debug`: Enable debug logging.
 
 ## Outputs
@@ -18,7 +17,7 @@ This is the description
 ## Usage
 
 ```yaml
-uses: action-poem-action
+uses: microsoft/genaiscript@main
 with:
   github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -26,12 +25,12 @@ with:
 ## Example
 
 ```yaml
-name: Run action-poem Action
+name: My action
 on:
-    workflow_dispatch:
     push:
 permissions:
     contents: read
+    # issues: write
     # pull-requests: write
     models: read
 concurrency:
@@ -98,4 +97,12 @@ Then, you can run the action with:
 
 ```bash
 npm run act
+```
+
+## Upgrade
+
+The GenAIScript version is pinned in the `package.json` file. To upgrade it, run:
+
+```bash
+npm run upgrade
 ```
