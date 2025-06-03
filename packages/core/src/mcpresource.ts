@@ -1,11 +1,14 @@
-import { resolveBufferLike } from "./bufferlike";
-import { CHANGE, MCP_RESOURCE_PROTOCOL, RESOURCE_CHANGE } from "./constants";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { resolveBufferLike } from "./bufferlike.js";
+import { CHANGE, MCP_RESOURCE_PROTOCOL, RESOURCE_CHANGE } from "./constants.js";
 import debug from "debug";
-import { fileTypeFromBuffer } from "./filetype";
-import { TraceOptions } from "./trace";
-import { hash } from "./crypto";
-import { resolveFileContent } from "./file";
-import { redactSecrets } from "./secretscanner";
+import { fileTypeFromBuffer } from "./filetype.js";
+import { TraceOptions } from "./trace.js";
+import { hash } from "./crypto.js";
+import { resolveFileContent } from "./file.js";
+import { redactSecrets } from "./secretscanner.js";
 const dbg = debug("genaiscript:resource");
 
 export interface ResourceReference {

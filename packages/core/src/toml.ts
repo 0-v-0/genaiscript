@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { parse } from "toml";
-import { unfence } from "./unwrappers";
-import { filenameOrFileToContent } from "./unwrappers";
+import { unfence } from "./unwrappers.js";
+import { filenameOrFileToContent } from "./unwrappers.js";
 
 /**
  * Parses a TOML-formatted input into a structured JavaScript object.

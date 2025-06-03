@@ -1,6 +1,9 @@
-import { splitMarkdown } from "./frontmatter";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { splitMarkdown } from "./frontmatter.js";
 import Mustache from "mustache";
-import { jinjaRender } from "./jinja";
+import { jinjaRender } from "./jinja.js";
 
 /**
  * Processes a markdown string by applying Mustache or Jinja templating.

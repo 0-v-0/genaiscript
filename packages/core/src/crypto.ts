@@ -1,11 +1,13 @@
-import { getRandomValues as cryptoGetRandomValues } from "crypto";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { createHash, getRandomValues as cryptoGetRandomValues } from "node:crypto";
 // crypto.ts - Provides cryptographic functions for secure operations
 
 // Importing the toHex function from the util module to convert byte arrays to hexadecimal strings
-import { concatBuffers, toHex, utf8Encode } from "./util";
-import { createReadStream } from "fs";
-import { createHash } from "crypto";
-import { CORE_VERSION } from "./version";
+import { concatBuffers, toHex, utf8Encode } from "./util.js";
+import { createReadStream } from "node:fs";
+import { CORE_VERSION } from "./version.js";
 
 function getRandomValues(bytes: Uint8Array) {
   if (typeof self !== "undefined" && self.crypto) {

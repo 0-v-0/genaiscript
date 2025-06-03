@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // forked from https://raw.githubusercontent.com/Stevenic/vectra/refs/heads/main/src/TextSplitter.ts
 // removed tokenizer dependency
 

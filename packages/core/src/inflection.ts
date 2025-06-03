@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { titleize as _titlelize, humanize as _humanize } from "inflection";
 
 /**

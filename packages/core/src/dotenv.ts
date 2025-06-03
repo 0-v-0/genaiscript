@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This module provides utilities for parsing and stringifying dotenv-style files.
 // It includes functions to handle parsing errors gracefully and formatting key-value pairs properly.
 // Tags: dotenv, parsing, error handling
@@ -6,7 +9,7 @@
 import { parse } from "dotenv";
 
 // Import a local utility function 'logError' for logging errors
-import { logError } from "./util";
+import { logError } from "./util.js";
 
 /**
  * Safely parses a dotenv-style string into a key-value object.

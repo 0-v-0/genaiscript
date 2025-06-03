@@ -1,16 +1,19 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   CONVERTS_DIR_NAME,
   GENAI_ANYTS_REGEX,
   GENAISCRIPT_FOLDER,
   RUNS_DIR_NAME,
   STATS_DIR_NAME,
-} from "./constants";
-import { randomHex } from "./crypto";
-import { genaiscriptDebug } from "./debug";
-import { ensureDir } from "./fs";
-import { gitIgnoreEnsure } from "./gitignore";
-import { host } from "./host";
-import { sanitizeFilename } from "./sanitize";
+} from "./constants.js";
+import { randomHex } from "./crypto.js";
+import { genaiscriptDebug } from "./debug.js";
+import { ensureDir } from "./fs.js";
+import { gitIgnoreEnsure } from "./gitignore.js";
+import { host } from "./host.js";
+import { sanitizeFilename } from "./sanitize.js";
 const dbg = genaiscriptDebug("dirs");
 
 /**

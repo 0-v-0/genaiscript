@@ -1,8 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import MiniSearch from "minisearch";
-import { resolveFileContent } from "./file";
-import { TraceOptions } from "./trace";
-import { randomHex } from "./crypto";
-import { CancellationOptions, checkCancelled } from "./cancellation";
+import { resolveFileContent } from "./file.js";
+import { TraceOptions } from "./trace.js";
+import { randomHex } from "./crypto.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
 
 /**
  * Performs a fuzzy search on a set of workspace files using a query.

@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ProxyAgent } from "undici";
-import { genaiscriptDebug } from "./debug";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("proxy");
 
 /**

@@ -1,7 +1,10 @@
-import { genaiscriptDebug } from "./debug";
-import { runtimeHost } from "./host";
-import { TraceOptions } from "./trace";
-import { logWarn } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { genaiscriptDebug } from "./debug.js";
+import { runtimeHost } from "./host.js";
+import { TraceOptions } from "./trace.js";
+import { logWarn } from "./util.js";
 const dbg = genaiscriptDebug("secrets");
 
 const cachedSecretScanners: Record<string, RegExp> = {};
@@ -23,8 +26,9 @@ export function redactSecrets(text: string, options?: TraceOptions) {
   const found: Record<string, number> = {};
   const res = Object.entries(secretPatterns).reduce((acc, [name, pattern]) => {
     if (!pattern) return acc; // null, undefined, or empty string
+    const stringPattern = pattern as string;
     const regex: RegExp =
-      cachedSecretScanners[pattern] ?? (cachedSecretScanners[pattern] = new RegExp(pattern, "g"));
+      cachedSecretScanners[stringPattern] ?? (cachedSecretScanners[stringPattern] = new RegExp(stringPattern, "g"));
     return acc.replace(regex, () => {
       found[name] = (found[name] ?? 0) + 1;
       return `<secret/>`;

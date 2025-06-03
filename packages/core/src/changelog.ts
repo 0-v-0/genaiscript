@@ -1,9 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * Defines interfaces and functions for parsing and applying changelogs.
  * A changelog describes changes between original and modified code segments.
  */
 
-import { unfence } from "./unwrappers";
+import { unfence } from "./unwrappers.js";
 
 // Represents a chunk of code with a start and end line and its content.
 export interface ChangeLogChunk {

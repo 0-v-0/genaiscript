@@ -1,5 +1,7 @@
-// Import necessary functions and types from other modules
-import { resolveBufferLike } from "./bufferlike";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { resolveBufferLike } from "./bufferlike.js";
 import {
   BOX_DOWN_AND_RIGHT,
   BOX_LEFT_AND_DOWN,
@@ -15,17 +17,17 @@ import {
   IMAGE_DETAIL_HIGH_WIDTH,
   IMAGE_DETAIL_LOW_HEIGHT,
   IMAGE_DETAIL_LOW_WIDTH,
-} from "./constants";
-import { TraceOptions } from "./trace";
-import { ellipse, logVerbose } from "./util";
+} from "./constants.js";
+import { TraceOptions } from "./trace.js";
+import { ellipse, logVerbose } from "./util.js";
 import pLimit from "p-limit";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { wrapColor, wrapRgbColor } from "./consolecolor";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { wrapColor, wrapRgbColor } from "./consolecolor.js";
 import { assert } from "console";
-import { genaiscriptDebug } from "./debug";
-import { ImageGenerationUsage } from "./chat";
-import { estimateImageCost } from "./usage";
-import { prettyCost } from "./pretty";
+import { genaiscriptDebug } from "./debug.js";
+import { ImageGenerationUsage } from "./chat.js";
+import { estimateImageCost } from "./usage.js";
+import { prettyCost } from "./pretty.js";
 const dbg = genaiscriptDebug("image");
 
 async function prepare(

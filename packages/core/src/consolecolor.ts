@@ -1,4 +1,8 @@
-import { stdout } from "./stdio";
+
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { stdout } from "./stdio.js";
 
 // Boolean indicating if console supports colors
 // Determines if the console supports color output based on terminal capability

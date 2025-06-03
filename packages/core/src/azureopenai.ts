@@ -1,9 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:azureopenai");
-import { LanguageModel, ListModelsFunction } from "./chat";
-import { AZURE_MANAGEMENT_API_VERSION, MODEL_PROVIDER_AZURE_OPENAI } from "./constants";
-import { errorMessage, serializeError } from "./error";
-import { createFetch } from "./fetch";
+import { LanguageModel, ListModelsFunction } from "./chat.js";
+import { AZURE_MANAGEMENT_API_VERSION, MODEL_PROVIDER_AZURE_OPENAI } from "./constants.js";
+import { errorMessage, serializeError } from "./error.js";
+import { createFetch } from "./fetch.js";
 import {
   OpenAIChatCompletion,
   OpenAIEmbedder,
@@ -11,8 +14,8 @@ import {
   OpenAIListModels,
   OpenAISpeech,
   OpenAITranscribe,
-} from "./openai";
-import { runtimeHost } from "./host";
+} from "./openai.js";
+import { runtimeHost } from "./host.js";
 
 const azureManagementOrOpenAIListModels: ListModelsFunction = async (cfg, options) => {
   const modelsApi = process.env.AZURE_OPENAI_API_MODELS_TYPE;

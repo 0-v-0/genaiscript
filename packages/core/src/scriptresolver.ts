@@ -1,12 +1,15 @@
-import { RESOURCE_HASH_LENGTH } from "./constants";
-import { runtimeHost } from "./host";
-import { dotGenaiscriptPath } from "./workdir";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { RESOURCE_HASH_LENGTH } from "./constants.js";
+import { runtimeHost } from "./host.js";
+import { dotGenaiscriptPath } from "./workdir.js";
 import { join } from "node:path";
-import { CancellationOptions } from "./cancellation";
-import { tryResolveResource } from "./resources";
-import { TraceOptions } from "./trace";
-import { genaiscriptDebug } from "./debug";
-import { hash } from "./crypto";
+import { CancellationOptions } from "./cancellation.js";
+import { tryResolveResource } from "./resources.js";
+import { TraceOptions } from "./trace.js";
+import { genaiscriptDebug } from "./debug.js";
+import { hash } from "./crypto.js";
 const dbg = genaiscriptDebug("scripts:resolve");
 
 /**

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug, { Debugger } from "debug";
 
 const _genaiscriptDebug = debug("genaiscript");

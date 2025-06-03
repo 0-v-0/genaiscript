@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * Chunks markdown into sections based on headings while maintaining subtrees.
  * Handles WorkspaceFile objects and plain markdown strings.

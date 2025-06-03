@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:node:package");
-import { tryReadJSON } from "./fs";
+import { tryReadJSON } from "./fs.js";
 
 export interface NodePackage {
   type?: string;

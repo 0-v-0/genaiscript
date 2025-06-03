@@ -1,14 +1,17 @@
-import { TraceOptions } from "./trace";
-import { runtimeHost } from "./host";
-import { JSONLTryParse } from "./jsonl";
-import { resolveFileContent, resolveFileContents } from "./file";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { TraceOptions } from "./trace.js";
+import { runtimeHost } from "./host.js";
+import { JSONLTryParse } from "./jsonl.js";
+import { resolveFileContents } from "./file.js";
 import { uniq } from "es-toolkit";
-import { addLineNumbers } from "./liner";
-import { arrayify } from "./util";
-import { filterGitIgnore } from "./gitignore";
-import { genaiscriptDebug } from "./debug";
-import { tryStat } from "./fs";
-import { CancellationOptions, checkCancelled } from "./cancellation";
+import { addLineNumbers } from "./liner.js";
+import { arrayify } from "./util.js";
+import { filterGitIgnore } from "./gitignore.js";
+import { genaiscriptDebug } from "./debug.js";
+import { tryStat } from "./fs.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
 const dbg = genaiscriptDebug("grep");
 
 async function importRipGrep(options?: TraceOptions) {

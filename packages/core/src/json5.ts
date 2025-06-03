@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable curly */
 
 /**
@@ -14,8 +17,8 @@ import { parse, stringify } from "json5";
 import { jsonrepair } from "jsonrepair";
 
 // Importing unfence function to handle fenced code blocks.
-import { unfence } from "./unwrappers";
-import { unthink } from "./think";
+import { unfence } from "./unwrappers.js";
+import { unthink } from "./think.js";
 
 /**
  * Checks if the input text starts with '{' or '[', indicating a JSON object or array.

@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { XMLParser } from "fast-xml-parser";
-import { unfence } from "./unwrappers";
-import { filenameOrFileToContent } from "./unwrappers";
+import { unfence } from "./unwrappers.js";
+import { filenameOrFileToContent } from "./unwrappers.js";
 
 /**
  * Attempts to parse an XML string or WorkspaceFile, returning a default value on failure.

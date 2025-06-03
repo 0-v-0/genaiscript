@@ -1,11 +1,13 @@
-import { FsCache } from "./fscache";
-import { JSONLineCache } from "./jsonlinecache";
-import { MemoryCache } from "./memcache";
-import { host } from "./host";
-import { NotSupportedError } from "./error";
-import { CancellationOptions } from "./cancellation";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { FsCache } from "./fscache.js";
+import { JSONLineCache } from "./jsonlinecache.js";
+import { MemoryCache } from "./memcache.js";
+import { host } from "./host.js";
+import { CancellationOptions } from "./cancellation.js";
 import debug from "debug";
-import { sanitizeFilename } from "./sanitize";
+import { sanitizeFilename } from "./sanitize.js";
 const dbg = debug("genaiscript:cache");
 
 /**

@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import pLimit, { LimitFunction } from "p-limit";
-import { runtimeHost } from "./host";
-import { normalizeInt } from "./cleaners";
-import { PROMISE_QUEUE_CONCURRENCY_DEFAULT } from "./constants";
+import { runtimeHost } from "./host.js";
+import { normalizeInt } from "./cleaners.js";
+import { PROMISE_QUEUE_CONCURRENCY_DEFAULT } from "./constants.js";
 
 export type ConcurrentLimitFunction = LimitFunction;
 

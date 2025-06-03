@@ -1,4 +1,7 @@
-import { MetadataFilter, MetadataTypes } from "./types";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { MetadataFilter, MetadataTypes } from "./types.js";
 
 export class ItemSelector {
   /**

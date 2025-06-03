@@ -1,6 +1,9 @@
-import { LocalDocument } from "./LocalDocument";
-import { LocalDocumentIndex } from "./LocalDocumentIndex";
-import { QueryResult, DocumentChunkMetadata, DocumentTextSection } from "./types";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { LocalDocument } from "./LocalDocument.js";
+import { LocalDocumentIndex } from "./LocalDocumentIndex.js";
+import { QueryResult, DocumentChunkMetadata, DocumentTextSection } from "./types.js";
 
 /**
  * Represents a search result for a document stored on disk.

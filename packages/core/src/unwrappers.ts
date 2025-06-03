@@ -1,4 +1,7 @@
-import { arrayify } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { arrayify } from "./cleaners.js";
 
 /**
  * Remove code fences from a fenced block for the specified language.

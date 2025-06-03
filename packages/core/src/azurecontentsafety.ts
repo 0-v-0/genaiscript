@@ -1,19 +1,22 @@
-import { createFetch, statusToMessage } from "./fetch";
-import { TraceOptions } from "./trace";
-import { arrayify } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { createFetch, statusToMessage } from "./fetch.js";
+import { TraceOptions } from "./trace.js";
+import { arrayify } from "./util.js";
 import {
   AZURE_CONTENT_SAFETY_PROMPT_SHIELD_MAX_LENGTH,
   DOCS_CONFIGURATION_CONTENT_SAFETY_URL,
-} from "./constants";
-import { runtimeHost } from "./host";
-import { CancellationOptions } from "./cancellation";
-import { YAMLStringify } from "./yaml";
-import { AzureCredentialsType } from "./server/messages";
-import { trimTrailingSlash } from "./cleaners";
-import { chunkString } from "./chunkers";
-import { createCache } from "./cache";
-import { traceFetchPost } from "./fetchtext";
-import { genaiscriptDebug } from "./debug";
+} from "./constants.js";
+import { runtimeHost } from "./host.js";
+import { CancellationOptions } from "./cancellation.js";
+import { YAMLStringify } from "./yaml.js";
+import { AzureCredentialsType } from "./server/messages.js";
+import { trimTrailingSlash } from "./cleaners.js";
+import { chunkString } from "./chunkers.js";
+import { createCache } from "./cache.js";
+import { traceFetchPost } from "./fetchtext.js";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("contentsafety:azure");
 
 interface AzureContentSafetyRequest {

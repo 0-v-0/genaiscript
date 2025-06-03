@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { serializeError as rawSerializeError } from "serialize-error";
 import debug from "debug";
 const dbg = debug("genaiscript:error");

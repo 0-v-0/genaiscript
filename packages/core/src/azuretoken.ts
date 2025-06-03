@@ -1,18 +1,21 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:azuretoken");
 
-import { AZURE_TOKEN_EXPIRATION } from "../../core/src/constants";
+import { AZURE_TOKEN_EXPIRATION } from "../../core/src/constants.js";
 import {
   AuthenticationToken,
   AzureTokenResolver,
   isAzureTokenExpired,
   runtimeHost,
-} from "../../core/src/host";
-import { logError, logVerbose } from "../../core/src/util";
+} from "./host.js";
+import { logError } from "../../core/src/util.js";
 import type { TokenCredential } from "@azure/identity";
-import { serializeError } from "../../core/src/error";
-import { CancellationOptions, CancellationToken, toSignal } from "../../core/src/cancellation";
-import { AzureCredentialsType } from "../../core/src/server/messages";
+import { serializeError } from "./error.js";
+import { CancellationOptions, CancellationToken, toSignal } from "./cancellation.js";
+import { AzureCredentialsType } from "./server/messages.js";
 
 /**
  * This module provides functions to handle Azure authentication tokens,

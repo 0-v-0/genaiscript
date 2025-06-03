@@ -1,10 +1,13 @@
-import { lstat, mkdir, writeFile, readFile, appendFile } from "fs/promises";
-import { HTTPS_REGEX } from "./constants";
-import { host } from "./host";
-import { dirname } from "path";
-import { JSON5TryParse } from "./json5";
-import { homedir } from "os";
-import { genaiscriptDebug } from "./debug";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { lstat, mkdir, writeFile, readFile, appendFile } from "node:fs/promises";
+import { HTTPS_REGEX } from "./constants.js";
+import { host } from "./host.js";
+import { dirname } from "node:path";
+import { JSON5TryParse } from "./json5.js";
+import { homedir } from "node:os";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("fs");
 
 /**

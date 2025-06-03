@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Import necessary functions from the "@tidyjs/tidy" library
 import {
   tidy,
@@ -9,7 +12,7 @@ import {
   arrange,
   asc,
 } from "@tidyjs/tidy";
-import { arrayify } from "./util";
+import { arrayify } from "./util.js";
 
 /**
  * Slices data rows based on provided options for sampling, head, and tail operations.

@@ -1,12 +1,15 @@
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { CancelError, errorMessage } from "./error";
-import { resolveFileContent } from "./file";
-import { host } from "./host";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { CancelError, errorMessage } from "./error.js";
+import { resolveFileContent } from "./file.js";
+import { host } from "./host.js";
 import { uniq } from "es-toolkit";
-import { readText, writeText } from "./fs";
+import { readText, writeText } from "./fs.js";
 import { extname } from "node:path";
-import { diffFindChunk, diffResolve } from "./diff";
-import { genaiscriptDebug } from "./debug";
+import { diffFindChunk, diffResolve } from "./diff.js";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("astgrep");
 const dbgLang = dbg.extend("lang");
 

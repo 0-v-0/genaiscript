@@ -1,30 +1,33 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const runnerDbg = debug("genaiscript:promptrunner");
 
 // Import necessary modules and functions for handling chat sessions, templates, file management, etc.
-import { executeChatSession, tracePromptResult } from "./chat";
-import { GenerationStatus, Project } from "./server/messages";
-import { arrayify, assert, relativePath } from "./util";
-import { runtimeHost } from "./host";
-import { MarkdownTrace } from "./trace";
-import { CORE_VERSION } from "./version";
-import { expandFiles } from "./fs";
-import { dataToMarkdownTable } from "./csv";
-import { Fragment, GenerationOptions } from "./generation";
-import { traceCliArgs } from "./clihelp";
-import { GenerationResult } from "./server/messages";
-import { resolveModelConnectionInfo } from "./models";
-import { RequestError, errorMessage } from "./error";
-import { renderFencedVariables } from "./fence";
-import { parsePromptParameters } from "./vars";
-import { resolveFileContent } from "./file";
-import { expandTemplate } from "./expander";
-import { resolveLanguageModel } from "./lm";
-import { checkCancelled } from "./cancellation";
-import { lastAssistantReasoning } from "./chatrender";
-import { unthink } from "./think";
-import { deleteUndefinedValues } from "./cleaners";
-import { DEBUG_SCRIPT_CATEGORY } from "./constants";
+import { executeChatSession, tracePromptResult } from "./chat.js";
+import { GenerationStatus, Project } from "./server/messages.js";
+import { arrayify, assert, relativePath } from "./util.js";
+import { runtimeHost } from "./host.js";
+import { MarkdownTrace } from "./trace.js";
+import { CORE_VERSION } from "./version.js";
+import { expandFiles } from "./fs.js";
+import { dataToMarkdownTable } from "./csv.js";
+import { Fragment, GenerationOptions } from "./generation.js";
+import { traceCliArgs } from "./clihelp.js";
+import { GenerationResult } from "./server/messages.js";
+import { resolveModelConnectionInfo } from "./models.js";
+import { RequestError, errorMessage } from "./error.js";
+import { renderFencedVariables } from "./fence.js";
+import { parsePromptParameters } from "./vars.js";
+import { resolveFileContent } from "./file.js";
+import { expandTemplate } from "./expander.js";
+import { resolveLanguageModel } from "./lm.js";
+import { checkCancelled } from "./cancellation.js";
+import { lastAssistantReasoning } from "./chatrender.js";
+import { unthink } from "./think.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { DEBUG_SCRIPT_CATEGORY } from "./constants.js";
 
 // Asynchronously resolve expansion variables needed for a template
 /**

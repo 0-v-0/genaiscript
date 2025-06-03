@@ -1,11 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:importprompt");
 
-import { host } from "./host";
-import { logError } from "./util";
-import { TraceOptions } from "./trace";
+import { host } from "./host.js";
+import { logError } from "./util.js";
+import { TraceOptions } from "./trace.js";
 import { pathToFileURL } from "node:url";
-import { mark } from "./performance";
+import { mark } from "./performance.js";
 
 /**
  * Dynamically imports a JavaScript module from a specified file.

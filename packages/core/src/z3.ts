@@ -1,7 +1,10 @@
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { genaiscriptDebug } from "./debug";
-import { TraceOptions } from "./trace";
-import { logWarn } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { genaiscriptDebug } from "./debug.js";
+import { TraceOptions } from "./trace.js";
+import { logWarn } from "./util.js";
 
 const dbg = genaiscriptDebug("z3");
 

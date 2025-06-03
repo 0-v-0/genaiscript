@@ -1,8 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as fs from "fs/promises";
 import * as path from "path";
 import { v4 } from "uuid";
-import { ItemSelector } from "./ItemSelector";
-import { IndexItem, IndexStats, MetadataFilter, MetadataTypes, QueryResult } from "./types";
+import { ItemSelector } from "./ItemSelector.js";
+import { IndexItem, IndexStats, MetadataFilter, MetadataTypes, QueryResult } from "./types.js";
 
 export interface CreateIndexConfig {
   version: number;

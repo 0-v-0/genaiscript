@@ -1,11 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // cspell: disable
-import { MarkdownTrace, TraceOptions } from "./trace";
-import { PromptImage, PromptPrediction, renderPromptNode } from "./promptdom";
-import { host, runtimeHost } from "./host";
-import { GenerationOptions } from "./generation";
-import { dispose } from "./dispose";
-import { JSON5TryParse, JSONLLMTryParse, isJSONObjectOrArray } from "./json5";
-import { CancellationOptions, CancellationToken, checkCancelled } from "./cancellation";
+import { MarkdownTrace, TraceOptions } from "./trace.js";
+import { PromptImage, PromptPrediction, renderPromptNode } from "./promptdom.js";
+import { host, runtimeHost } from "./host.js";
+import { GenerationOptions } from "./generation.js";
+import { dispose } from "./dispose.js";
+import { JSON5TryParse, JSONLLMTryParse, isJSONObjectOrArray } from "./json5.js";
+import { CancellationOptions, CancellationToken, checkCancelled } from "./cancellation.js";
 import {
   arrayify,
   assert,
@@ -15,9 +18,9 @@ import {
   logVerbose,
   logWarn,
   toStringList,
-} from "./util";
-import { extractFenced, findFirstDataFence } from "./fence";
-import { toStrictJSONSchema, validateFencesWithSchema, validateJSONWithSchema } from "./schema";
+} from "./util.js";
+import { extractFenced, findFirstDataFence } from "./fence.js";
+import { toStrictJSONSchema, validateFencesWithSchema, validateJSONWithSchema } from "./schema.js";
 import {
   CHOICE_LOGIT_BIAS,
   MAX_DATA_REPAIRS,
@@ -25,11 +28,11 @@ import {
   MAX_TOOL_CONTENT_TOKENS,
   MAX_TOOL_DESCRIPTION_LENGTH,
   SYSTEM_FENCE,
-} from "./constants";
-import { parseAnnotations } from "./annotations";
-import { errorMessage, isCancelError, serializeError } from "./error";
-import { createChatTurnGenerationContext } from "./runpromptcontext";
-import { parseModelIdentifier, traceLanguageModelConnection } from "./models";
+} from "./constants.js";
+import { parseAnnotations } from "./annotations.js";
+import { errorMessage, isCancelError, serializeError } from "./error.js";
+import { createChatTurnGenerationContext } from "./runpromptcontext.js";
+import { parseModelIdentifier, traceLanguageModelConnection } from "./models.js";
 import {
   ChatCompletionAssistantMessageParam,
   ChatCompletionContentPartImage,
@@ -43,22 +46,22 @@ import {
   ChatCompletionUserMessageParam,
   CreateChatCompletionRequest,
   EmbeddingResult,
-} from "./chattypes";
+} from "./chattypes.js";
 import {
   assistantText,
   collapseChatMessages,
   lastAssistantReasoning,
   renderMessagesToMarkdown,
   renderShellOutput,
-} from "./chatrender";
-import { promptParametersSchemaToJSONSchema } from "./parameters";
-import { prettifyMarkdown } from "./markdown";
-import { YAMLParse, YAMLStringify, YAMLTryParse } from "./yaml";
-import { resolveTokenEncoder } from "./encoders";
-import { approximateTokens, truncateTextToTokens } from "./tokens";
-import { computeFileEdits } from "./fileedits";
-import { HTMLEscape } from "./htmlescape";
-import { XMLTryParse } from "./xml";
+} from "./chatrender.js";
+import { promptParametersSchemaToJSONSchema } from "./parameters.js";
+import { prettifyMarkdown } from "./markdown.js";
+import { YAMLParse, YAMLStringify, YAMLTryParse } from "./yaml.js";
+import { resolveTokenEncoder } from "./encoders.js";
+import { approximateTokens, truncateTextToTokens } from "./tokens.js";
+import { computeFileEdits } from "./fileedits.js";
+import { HTMLEscape } from "./htmlescape.js";
+import { XMLTryParse } from "./xml.js";
 import {
   computePerplexity,
   computeStructuralUncertainty,
@@ -66,24 +69,23 @@ import {
   renderLogprob,
   serializeLogProb,
   topLogprobsToMarkdown,
-} from "./logprob";
+} from "./logprob.js";
 import { uniq } from "es-toolkit";
-import { renderWithPrecision } from "./precision";
-import { LanguageModelConfiguration, ResponseStatus } from "./server/messages";
-import { unfence } from "./unwrappers";
-import { fenceMD } from "./mkmd";
-import { ChatCompletionRequestCacheKey, getChatCompletionCache } from "./chatcache";
-import { deleteUndefinedValues } from "./cleaners";
-import { splitThink, unthink } from "./think";
-import { measure } from "./performance";
-import { renderMessagesToTerminal } from "./chatrenderterminal";
-import { fileCacheImage } from "./filecache";
-import { stderr } from "./stdio";
-import { isQuiet } from "./quiet";
-import { resolvePromptInjectionDetector } from "./contentsafety";
-import { genaiscriptDebug } from "./debug";
-import { providerFeatures } from "./features";
-import { redactSecrets } from "./secretscanner";
+import { renderWithPrecision } from "./precision.js";
+import { LanguageModelConfiguration, ResponseStatus } from "./server/messages.js";
+import { fenceMD } from "./mkmd.js";
+import { ChatCompletionRequestCacheKey, getChatCompletionCache } from "./chatcache.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { splitThink } from "./think.js";
+import { measure } from "./performance.js";
+import { renderMessagesToTerminal } from "./chatrenderterminal.js";
+import { fileCacheImage } from "./filecache.js";
+import { stderr } from "./stdio.js";
+import { isQuiet } from "./quiet.js";
+import { resolvePromptInjectionDetector } from "./contentsafety.js";
+import { genaiscriptDebug } from "./debug.js";
+import { providerFeatures } from "./features.js";
+import { redactSecrets } from "./secretscanner.js";
 const dbg = genaiscriptDebug("chat");
 const dbgt = dbg.extend("tool");
 

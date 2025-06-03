@@ -1,13 +1,16 @@
-import { ChatCompletionHandler, LanguageModel, ListModelsFunction } from "./chat";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { ChatCompletionHandler, LanguageModel, ListModelsFunction } from "./chat.js";
 import {
   ANTHROPIC_MAX_TOKEN,
   MODEL_PROVIDER_ANTHROPIC,
   MODEL_PROVIDER_ANTHROPIC_BEDROCK,
-} from "./constants";
-import { parseModelIdentifier } from "./models";
-import { NotSupportedError, serializeError } from "./error";
-import { approximateTokens } from "./tokens";
-import { resolveTokenEncoder } from "./encoders";
+} from "./constants.js";
+import { parseModelIdentifier } from "./models.js";
+import { NotSupportedError, serializeError } from "./error.js";
+import { approximateTokens } from "./tokens.js";
+import { resolveTokenEncoder } from "./encoders.js";
 import type { Anthropic } from "@anthropic-ai/sdk";
 
 import {
@@ -25,18 +28,18 @@ import {
   ChatCompletionContentPart,
   ChatCompletionContentPartRefusal,
   ChatCompletionsProgressReport,
-} from "./chattypes";
+} from "./chattypes.js";
 
-import { logError } from "./util";
-import { resolveHttpProxyAgent } from "./proxy";
+import { logError } from "./util.js";
+import { resolveHttpProxyAgent } from "./proxy.js";
 import { ProxyAgent } from "undici";
-import { MarkdownTrace } from "./trace";
-import { createFetch, FetchType } from "./fetch";
-import { JSONLLMTryParse } from "./json5";
-import { LanguageModelConfiguration } from "./server/messages";
-import { deleteUndefinedValues } from "./cleaners";
+import { MarkdownTrace } from "./trace.js";
+import { createFetch, FetchType } from "./fetch.js";
+import { JSONLLMTryParse } from "./json5.js";
+import { LanguageModelConfiguration } from "./server/messages.js";
+import { deleteUndefinedValues } from "./cleaners.js";
 import debug from "debug";
-import { providerFeatures } from "./features";
+import { providerFeatures } from "./features.js";
 const dbg = debug("genaiscript:anthropic");
 const dbgMessages = debug("genaiscript:anthropic:msg");
 

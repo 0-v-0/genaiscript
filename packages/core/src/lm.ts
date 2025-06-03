@@ -1,5 +1,8 @@
-import { AnthropicBedrockModel, AnthropicModel } from "./anthropic";
-import { LanguageModel } from "./chat";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { AnthropicBedrockModel, AnthropicModel } from "./anthropic.js";
+import { LanguageModel } from "./chat.js";
 import {
   MODEL_PROVIDER_ANTHROPIC,
   MODEL_PROVIDER_ANTHROPIC_BEDROCK,
@@ -12,19 +15,18 @@ import {
   MODEL_PROVIDER_ECHO,
   MODEL_PROVIDER_NONE,
   MODEL_PROVIDER_AZURE_AI_INFERENCE,
-} from "./constants";
-import { runtimeHost } from "./host";
-import { OllamaModel } from "./ollama";
-import { LocalOpenAICompatibleModel } from "./openai";
-import { GitHubModel } from "./github";
-import { LMStudioModel } from "./lmstudio";
-import { WhisperAsrModel } from "./whisperasr";
-import { AzureOpenAIModel } from "./azureopenai";
-import { EchoModel } from "./echomodel";
-import { NoneModel } from "./nonemodel";
-import { AzureAIInferenceModel } from "./azureaiinference";
-import { providerFeatures } from "./features";
-import { NotSupportedError } from "./error";
+} from "./constants.js";
+import { runtimeHost } from "./host.js";
+import { OllamaModel } from "./ollama.js";
+import { LocalOpenAICompatibleModel } from "./openai.js";
+import { GitHubModel } from "./github.js";
+import { LMStudioModel } from "./lmstudio.js";
+import { WhisperAsrModel } from "./whisperasr.js";
+import { AzureOpenAIModel } from "./azureopenai.js";
+import { EchoModel } from "./echomodel.js";
+import { NoneModel } from "./nonemodel.js";
+import { AzureAIInferenceModel } from "./azureaiinference.js";
+import { providerFeatures } from "./features.js";
 
 /**
  * Resolves and returns a language model based on the provided model provider identifier.

@@ -3,9 +3,9 @@
   "version": "1.142.0",
   "license": "MIT",
   "type": "module",
-  "repository": {
-    "directory": "packages/core",
-    "url": "https://github.com/microsoft/genaiscript"
+  "repository": "github:microsoft/genaiscript",
+  "bugs": {
+    "url": "https://github.com/microsoft/genaiscript/issues"
   },
   "optionalDependencies": {
     "@lvce-editor/ripgrep": "^1.6.0",
@@ -25,7 +25,6 @@
     "@octokit/plugin-throttling": "^11.0.1",
     "@octokit/rest": "^21.1.1",
     "@plussub/srt-vtt-parser": "^2.0.5",
-    "@smithy/util-base64": "^4.0.0",
     "@tidyjs/tidy": "^2.5.2",
     "@types/diff": "^6.0.0",
     "@types/fluent-ffmpeg": "^2.1.27",
@@ -39,6 +38,7 @@
     "@types/object-inspect": "^1.13.0",
     "@types/semver": "^7.7.0",
     "@types/shell-quote": "^1.7.5",
+    "@vitest/coverage-istanbul": "^3.2.1",
     "ajv": "^8.17.1",
     "chokidar": "^4.0.3",
     "cross-fetch": "^4.1.0",
@@ -95,13 +95,15 @@
     "tshy": "^3.0.2",
     "typescript": "5.8.3",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
+    "vitest": "^3.2.1",
     "yaml": "^2.8.0"
   },
   "scripts": {
-    "typecheck": "tsc -p src",
+    "build": "tshy",
     "prompts:bundle": "node bundleprompts.js",
     "pretypecheck": "yarn prompts:bundle",
-    "pretty": "prettier **.ts --write",
+    "format:check": "prettier --check **.ts",
+    "format:fix": "prettier **.ts --write",
     "test": "node --import tsx --test src/**.test.*ts"
   },
   "dependencies": {

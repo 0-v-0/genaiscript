@@ -1,9 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This module provides functions to add and remove line numbers from text.
 // It includes special handling for "diff" formatted text.
 
-import { llmifyDiff } from "./llmdiff";
-import { MIN_LINE_NUMBER_LENGTH } from "./constants";
-import { tryDiffParse } from "./diff";
+import { llmifyDiff } from "./llmdiff.js";
+import { MIN_LINE_NUMBER_LENGTH } from "./constants.js";
+import { tryDiffParse } from "./diff.js";
 
 /**
  * Adds 1-based line numbers to each line of the input text.

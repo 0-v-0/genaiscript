@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:evalprompt");
 
-import { host } from "./host";
+import { host } from "./host.js";
 
 /**
  * Evaluates a JavaScript prompt script with the provided context.

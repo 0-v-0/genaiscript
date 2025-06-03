@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * Determines if a given MIME type is binary.
  * Checks against common binary types and a predefined list of binary MIME types.

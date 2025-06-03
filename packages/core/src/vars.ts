@@ -1,11 +1,14 @@
-import { resolveScript } from "./ast";
-import { resolveSystems } from "./systems";
-import { logError } from "./util";
-import { YAMLStringify } from "./yaml";
-import { Project } from "./server/messages";
-import { promptParametersSchemaToJSONSchema, promptParameterTypeToJSONSchema } from "./parameters";
-import { normalizeFloat, normalizeInt, normalizeVarKey } from "./cleaners";
-import { genaiscriptDebug } from "./debug";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { resolveScript } from "./ast.js";
+import { resolveSystems } from "./systems.js";
+import { logError } from "./util.js";
+import { YAMLStringify } from "./yaml.js";
+import { Project } from "./server/messages.js";
+import { promptParametersSchemaToJSONSchema, promptParameterTypeToJSONSchema } from "./parameters.js";
+import { normalizeFloat, normalizeInt, normalizeVarKey } from "./cleaners.js";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("vars");
 const dbgSchema = dbg.extend("schema");
 const dbgSystem = dbg.extend("system");

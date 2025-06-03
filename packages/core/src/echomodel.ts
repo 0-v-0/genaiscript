@@ -1,7 +1,10 @@
-import { LanguageModel } from "./chat";
-import { renderMessagesToMarkdown } from "./chatrender";
-import { deleteEmptyValues } from "./cleaners";
-import { MODEL_PROVIDER_ECHO } from "./constants";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { LanguageModel } from "./chat.js";
+import { renderMessagesToMarkdown } from "./chatrender.js";
+import { deleteEmptyValues } from "./cleaners.js";
+import { MODEL_PROVIDER_ECHO } from "./constants.js";
 
 export const EchoModel = Object.freeze<LanguageModel>({
   id: MODEL_PROVIDER_ECHO,

@@ -1,5 +1,7 @@
-// Import the CancelError class from the error module
-import { CancelError } from "./error";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CancelError } from "./error.js";
 
 /**
  * A cancellation token is passed to an asynchronous or long running

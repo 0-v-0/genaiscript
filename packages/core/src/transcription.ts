@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { parse } from "@plussub/srt-vtt-parser";
-import { deleteEmptyValues, deleteUndefinedValues } from "./cleaners";
+import { deleteEmptyValues } from "./cleaners.js";
 
 /**
  * Renders SRT and VTT formats from a transcription result.

@@ -1,5 +1,8 @@
-import { assert } from "./util";
-import { tryDiffParse } from "./diff";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { assert } from "./util.js";
+import { tryDiffParse } from "./diff.js";
 
 /**
  * Represents a chunk of changes in a diff.

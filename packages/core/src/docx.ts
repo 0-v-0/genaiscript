@@ -1,18 +1,21 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { join } from "node:path";
-import { DOCX_HASH_LENGTH } from "./constants";
-import { hash } from "./crypto";
-import { host } from "./host";
-import { HTMLToMarkdown } from "./html";
-import { TraceOptions } from "./trace";
-import { logVerbose } from "./util";
+import { DOCX_HASH_LENGTH } from "./constants.js";
+import { hash } from "./crypto.js";
+import { host } from "./host.js";
+import { HTMLToMarkdown } from "./html.js";
+import { TraceOptions } from "./trace.js";
+import { logVerbose } from "./util.js";
 import { readFile, writeFile } from "node:fs/promises";
-import { YAMLStringify } from "./yaml";
-import { errorMessage, serializeError } from "./error";
-import { resolveFileBytes } from "./file";
-import { filenameOrFileToFilename } from "./unwrappers";
+import { YAMLStringify } from "./yaml.js";
+import { errorMessage, serializeError } from "./error.js";
+import { resolveFileBytes } from "./file.js";
+import { filenameOrFileToFilename } from "./unwrappers.js";
 import { ensureDir } from "fs-extra";
-import { mark, measure } from "./performance";
-import { dotGenaiscriptPath } from "./workdir";
+import { measure } from "./performance.js";
+import { dotGenaiscriptPath } from "./workdir.js";
 
 async function computeHashFolder(
   filename: string,

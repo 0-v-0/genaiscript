@@ -1,19 +1,22 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This module provides utilities for handling markdown, including prettifying, cleaning,
 // generating markdown structures, and parsing trace trees. It supports operations like
 // converting annotations to markdown, wrapping text in fences, creating links and details blocks,
 // and working with trace trees.
 
-import { titleize } from "./inflection";
-import { convertAnnotationsToMarkdown } from "./annotations";
-import { collapseNewlines } from "./cleaners";
-import { fenceMD } from "./mkmd";
-import { convertThinkToMarkdown } from "./think";
-import { resolveFileDataUri } from "./file";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { HTTP_OR_S_REGEX } from "./constants";
-import { genaiscriptDebug } from "./debug";
+import { titleize } from "./inflection.js";
+import { convertAnnotationsToMarkdown } from "./annotations.js";
+import { collapseNewlines } from "./cleaners.js";
+import { fenceMD } from "./mkmd.js";
+import { convertThinkToMarkdown } from "./think.js";
+import { resolveFileDataUri } from "./file.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { HTTP_OR_S_REGEX } from "./constants.js";
+import { genaiscriptDebug } from "./debug.js";
 import { join, resolve } from "node:path";
-import { unfence } from "./unwrappers";
+import { unfence } from "./unwrappers.js";
 const dbg = genaiscriptDebug("markdown");
 
 /**

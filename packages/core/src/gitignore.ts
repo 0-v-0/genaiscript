@@ -1,10 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Import the 'ignore' library to handle .gitignore file parsing and filtering
 import ignorer from "ignore";
-import { tryReadText, writeText } from "./fs";
-import { GENAISCRIPTIGNORE, GIT_IGNORE, GIT_IGNORE_GENAI } from "./constants";
-import { host } from "./host";
-import { logVerbose } from "./util";
-import { genaiscriptDebug } from "./debug";
+import { tryReadText, writeText } from "./fs.js";
+import { GENAISCRIPTIGNORE, GIT_IGNORE, GIT_IGNORE_GENAI } from "./constants.js";
+import { host } from "./host.js";
+import { logVerbose } from "./util.js";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("files:gitignore");
 
 export type GitIgnorer = (files: string[]) => string[];

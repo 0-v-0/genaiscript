@@ -1,10 +1,13 @@
-import { NPM_CLI_PACKAGE } from "./constants";
-import { GenerationOptions } from "./generation";
-import { MarkdownTrace } from "./trace";
-import { arrayify, relativePath } from "./util";
-import { CORE_VERSION } from "./version";
-import { host } from "./host";
-import { isCI } from "./ci";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { NPM_CLI_PACKAGE } from "./constants.js";
+import { GenerationOptions } from "./generation.js";
+import { MarkdownTrace } from "./trace.js";
+import { arrayify, relativePath } from "./util.js";
+import { CORE_VERSION } from "./version.js";
+import { host } from "./host.js";
+import { isCI } from "./ci.js";
 
 /**
  * Generates command-line arguments for executing or batching a CLI prompt template.

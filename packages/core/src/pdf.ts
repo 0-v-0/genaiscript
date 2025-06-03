@@ -1,23 +1,25 @@
-// Import necessary types and modules
-import type { TextItem } from "pdfjs-dist/types/src/display/api";
-import { host } from "./host";
-import { TraceOptions } from "./trace";
-import os from "os";
-import { serializeError } from "./error";
-import { logVerbose, logWarn } from "./util";
-import { INVALID_FILENAME_REGEX, PDF_HASH_LENGTH, PDF_SCALE } from "./constants";
-import { resolveGlobal } from "./global";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { TextItem } from "pdfjs-dist/types/src/display/api.js";
+import { host } from "./host.js";
+import { TraceOptions } from "./trace.js";
+import os from "node:os";
+import { serializeError } from "./error.js";
+import { logVerbose, logWarn } from "./util.js";
+import { INVALID_FILENAME_REGEX, PDF_HASH_LENGTH, PDF_SCALE } from "./constants.js";
+import { resolveGlobal } from "./global.js";
 import { isUint8Array, isUint8ClampedArray } from "util/types";
-import { hash } from "./crypto";
-import { join } from "path";
-import { readFile, writeFile } from "fs/promises";
+import { hash } from "./crypto.js";
+import { join } from "node:path";
+import { readFile, writeFile } from "node:fs/promises";
 import { ensureDir } from "fs-extra";
-import { YAMLStringify } from "./yaml";
-import { deleteUndefinedValues } from "./cleaners";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { measure } from "./performance";
-import { dotGenaiscriptPath } from "./workdir";
-import { genaiscriptDebug } from "./debug";
+import { YAMLStringify } from "./yaml.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { measure } from "./performance.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { genaiscriptDebug } from "./debug.js";
 import type { Canvas } from "@napi-rs/canvas";
 import { pathToFileURL } from "url";
 const dbg = genaiscriptDebug("pdf");

@@ -1,5 +1,7 @@
-// Importing TraceOptions from the local "trace" module
-import { TraceOptions } from "./trace";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { TraceOptions } from "./trace.js";
 
 /**
  * Asynchronously evaluates a mathematical expression.

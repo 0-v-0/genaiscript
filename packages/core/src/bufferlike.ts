@@ -1,8 +1,11 @@
-import { resolveFileBytes } from "./file";
-import { TraceOptions } from "./trace";
-import { fileTypeFromBuffer } from "./filetype";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { resolveFileBytes } from "./file.js";
+import { TraceOptions } from "./trace.js";
+import { fileTypeFromBuffer } from "./filetype.js";
 import { extname } from "node:path";
-import { genaiscriptDebug } from "./debug";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("buffer");
 
 async function bufferTryFrom(data: Uint8Array | Buffer | ArrayBuffer | SharedArrayBuffer) {

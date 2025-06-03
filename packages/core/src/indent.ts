@@ -1,4 +1,7 @@
-import tsDedent from "ts-dedent";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { dedent as localDedent } from "ts-dedent";
 
 /**
  * Indents each line of a given text by a specified indentation string.
@@ -24,5 +27,5 @@ export function indent(text: string, indentation: string) {
 export function dedent(templ: TemplateStringsArray | string, ...values: unknown[]): string {
   if (templ === undefined) return undefined;
   if (templ === null) return null;
-  return tsDedent(templ, ...values);
+  return localDedent(templ, ...values);
 }

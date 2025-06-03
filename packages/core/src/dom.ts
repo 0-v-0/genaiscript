@@ -1,5 +1,8 @@
-import { genaiscriptDebug } from "./debug";
-import { resolveGlobal } from "./global";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { genaiscriptDebug } from "./debug.js";
+import { resolveGlobal } from "./global.js";
 const dbg = genaiscriptDebug("dom");
 
 export async function installWindow() {
@@ -11,7 +14,7 @@ export async function installWindow() {
   const createDOMPurify = (await import("dompurify")).default;
 
   const { window } = new JSDOM("<!DOCTYPE html>");
-  const DOMPurify = createDOMPurify(window);
+  const DOMPurify = createDOMPurify(window as any);
   glb.window = window;
   glb.DOMPurify = DOMPurify;
 

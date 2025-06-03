@@ -1,11 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import type { PyodideInterface } from "pyodide";
-import { dotGenaiscriptPath } from "./workdir";
-import { TraceOptions } from "./trace";
-import { hash } from "./crypto";
-import { deleteUndefinedValues } from "./cleaners";
-import { dedent } from "./indent";
-import { PLimitPromiseQueue } from "./concurrency";
-import { stderr } from "./stdio";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { TraceOptions } from "./trace.js";
+import { hash } from "./crypto.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { dedent } from "./indent.js";
+import { PLimitPromiseQueue } from "./concurrency.js";
+import { stderr } from "./stdio.js";
 
 class PyProxy implements PythonProxy {
   constructor(

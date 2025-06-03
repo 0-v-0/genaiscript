@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Import the logInfo function for logging purposes
-import { logInfo } from "./util";
+import { logInfo } from "./util.js";
 
 /**
  * Parses XLSX data into an array of workbook sheets.

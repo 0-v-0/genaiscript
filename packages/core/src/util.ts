@@ -1,8 +1,11 @@
-import { GENAISCRIPT_FOLDER, HTTPS_REGEX } from "./constants";
-import { isCancelError, serializeError } from "./error";
-import { host } from "./host";
-import { YAMLStringify } from "./yaml";
-import { arrayify as arrayify_ } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { HTTPS_REGEX } from "./constants.js";
+import { isCancelError, serializeError } from "./error.js";
+import { host } from "./host.js";
+import { YAMLStringify } from "./yaml.js";
+import { arrayify as arrayify_ } from "./cleaners.js";
 
 /**
  * Compares two strings lexicographically.

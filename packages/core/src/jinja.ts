@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Import the Template class from the @huggingface/jinja package
 import { Template } from "@huggingface/jinja";
-import { ChatCompletionMessageParam } from "./chattypes";
-import { collapseEmptyLines } from "./util";
+import { ChatCompletionMessageParam } from "./chattypes.js";
+import { collapseEmptyLines } from "./util.js";
 
 /**
  * Renders a string template using the Jinja templating engine.
