@@ -43,3 +43,8 @@ TypeScript/
 react/
 docs/public/blog/*.mp4
 *.http
+
+# tshy
+.tshy
+.tshy-build-tmp
+.tshy-build
