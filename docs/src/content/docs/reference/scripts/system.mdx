@@ -16,7 +16,7 @@ System prompts are scripts that are executed and injected before the main prompt
 system({
     title: "Zero-shot Chain of Thought",
 })
-export default function (ctx: ChatGenerationContext) {    
+export default function (ctx: ChatGenerationContext) {
     const { $ } = ctx
     $`Let's think step by step.`
 }
@@ -64,7 +64,7 @@ system({ ...,
         },
     },
 })
-export default function (ctx: ChatGenerationContext) {    
+export default function (ctx: ChatGenerationContext) {
     const { env } = ctx
     // populate from the default value or script override
     const model = env.vars["system.fs_read_summary.model"]
@@ -87,11 +87,12 @@ script({ ...,
 ```js
 script({ ...,
     system: [
-        "system", 
-        { 
-            id: "system.fs_read_summary", 
-            parameters: { model: "ollama:phi3" },            
-         }],
+        "system",
+        {
+            id: "system.fs_read_summary",
+            parameters: { model: "ollama:phi3" },
+        }
+    ],
 })
 ```
 
@@ -212,7 +213,7 @@ export default function (ctx: ChatGenerationContext) {
         "docs",
         "query the documentation",
         async (ctx) => {
-            ctx.$`Your are a helpful LLM agent that is an expert at Technical documentation. You can provide the best analyzis to any query about the documentation.
+            ctx.$`Your are a helpful LLM agent that is an expert at Technical documentation. You can provide the best analysis to any query about the documentation.
 
         Analyze <QUERY> and respond with the requested information.
 
@@ -222,7 +223,7 @@ export default function (ctx: ChatGenerationContext) {
         To optimize search, convert the QUERY request into keywords or a regex pattern.
 
         Try multiple searches if you cannot find relevant files.
-        
+
         ## Context
 
         - the documentation is stored in markdown/MDX files in the ${docsRoot} folder
@@ -667,7 +668,7 @@ export default function (ctx: ChatGenerationContext) {
         "video",
         "Analyze and process video files or urls.",
         `Your are a helpful LLM agent that can analyze and process video or audio files or urls.
-    You can transcribe the audio and/or extract screenshot image frames. Use 'vision_ask_images' 
+    You can transcribe the audio and/or extract screenshot image frames. Use 'vision_ask_images'
     to answer questions about the video screenshots.
 
     Answer the question in <QUERY>.
@@ -755,14 +756,14 @@ export default function (ctx: ChatGenerationContext) {
             _.$`You are an expert at constraint solving, SMTLIB2 syntax and using the Z3 solver.
         You are an incredibly smart mathematician that can formalize any problem into a set of constraints
         (in the SMTLIB2 format) and solve it using the Z3 solver.
-        
+
         Your task is to
 
         1. formalize the content of <QUESTION> into a SMTLIB2 formula
         2. call the 'z3' tool to solve it
         3. interpret the 'z3' tool response back into natural language
 
-        ## Output 
+        ## Output
 
         You should return the SMTLIB2 formula, the Z3 response and the interpretation of the Z3 response in natural language
         using the following template:
@@ -821,7 +822,7 @@ Use the following format to report **file annotations** (same as GitHub Actions 
 
 - <filename> is the relative filename
 - <start line> is the starting line number starting at 1
-- <end line> is the ending line number starting at 1, 
+- <end line> is the ending line number starting at 1,
 - <error_id> is a unique identifier for the error (use snake_case)
 - <message> is the message to be displayed
 - <suggestion> is optional: it is a full text replacement of the <line> line in the file that fixes the error. The suggestion is a single line, not new lines.
@@ -998,22 +999,22 @@ export default function (ctx: ChatGenerationContext) {
 You always apply **Grice's Maxims** to ensure clear, cooperative, and effective communication.
 When responding to users or interacting with agents, adhere to the following principles:
 
-1. **Maxim of Quantity (Be Informative, But Not Overly Detailed)**  
-   - Provide as much information as is needed for clarity and completeness.  
-   - Avoid excessive or redundant details that do not contribute to the purpose of the conversation.  
+1. **Maxim of Quantity (Be Informative, But Not Overly Detailed)**
+   - Provide as much information as is needed for clarity and completeness.
+   - Avoid excessive or redundant details that do not contribute to the purpose of the conversation.
 
-2. **Maxim of Quality (Be Truthful and Accurate)**  
-   - Only provide information that is true and verifiable.  
-   - Avoid making statements without sufficient evidence or speculation without clarification.  
+2. **Maxim of Quality (Be Truthful and Accurate)**
+   - Only provide information that is true and verifiable.
+   - Avoid making statements without sufficient evidence or speculation without clarification.
 
-3. **Maxim of Relation (Be Relevant)**  
-   - Ensure responses are directly related to the context and purpose of the conversation.  
-   - Avoid digressions or irrelevant information that does not serve the user’s needs.  
+3. **Maxim of Relation (Be Relevant)**
+   - Ensure responses are directly related to the context and purpose of the conversation.
+   - Avoid digressions or irrelevant information that does not serve the user’s needs.
 
-4. **Maxim of Manner (Be Clear and Orderly)**  
-   - Use clear, concise, and unambiguous language.  
-   - Present information in a structured and logical way to improve readability.  
-   - Avoid obscure terms, overly complex explanations, or unnecessary jargon unless explicitly requested.  
+4. **Maxim of Manner (Be Clear and Orderly)**
+   - Use clear, concise, and unambiguous language.
+   - Present information in a structured and logical way to improve readability.
+   - Avoid obscure terms, overly complex explanations, or unnecessary jargon unless explicitly requested.
 `
 }
 
@@ -1108,7 +1109,7 @@ export default function (ctx: ChatGenerationContext) {
 
     $`## DIFF file format
 
-The DIFF format should be used to generate diff changes on large files with small number of changes: 
+The DIFF format should be used to generate diff changes on large files with small number of changes:
 
 - existing lines must start with their original line number: [<line number>] <line>
 - deleted lines MUST start with - followed by the line number: - [<line number>] <deleted line>
@@ -1138,7 +1139,7 @@ The DIFF format should be used to generate diff changes on large files with smal
 
 ### Examples:
 
-FOLLOW THE SYNTAX PRECISLY. THIS IS IMPORTANT.
+FOLLOW THE SYNTAX PRECISELY. THIS IS IMPORTANT.
 DIFF ./file.ts:
 \`\`\`diff
 [original line number]  line before changes
@@ -1366,19 +1367,19 @@ What goes in\n${folder}/file1.js.
 \`\`\`\`
 
 
-File ${folder}/file1.py: 
+File ${folder}/file1.py:
 \`\`\`\`python
 What goes in\n${folder}/file1.py.
 \`\`\`\`
 
 
-File /path/to/file/file2.md: 
+File /path/to/file/file2.md:
 \`\`\`\`markdown
 What goes in\n/path/to/file/file2.md.
 \`\`\`\`
 `
 
-    $`If you need to save a file and there are no tools available, use the FILE file format. The output of the LLM will parsed 
+    $`If you need to save a file and there are no tools available, use the FILE file format. The output of the LLM will parsed
 and saved. It is important to use the proper syntax.`
     $`You MUST specify a start_line and end_line to only update a specific part of a file:
 
@@ -1429,7 +1430,7 @@ export default function (ctx: ChatGenerationContext) {
     $`
 ## Files with Schema
 
-When you generate JSON or YAML or CSV according to a named schema, 
+When you generate JSON or YAML or CSV according to a named schema,
 you MUST add the schema identifier in the code fence header.
 `
 
@@ -1566,14 +1567,14 @@ export default function (ctx: ChatGenerationContext) {
 
 File Diff Files
 
-Tool to compute a diff betweeen two files.
+Tool to compute a diff between two files.
 
 -  tool `fs_diff_files`: Computes a diff between two different files. Use git diff instead to compare versions of a file.
 
 `````js wrap title="system.fs_diff_files"
 system({
     title: "File Diff Files",
-    description: "Tool to compute a diff betweeen two files.",
+    description: "Tool to compute a diff between two files.",
 })
 
 export default function (ctx: ChatGenerationContext) {
@@ -2143,8 +2144,8 @@ export default function (ctx: ChatGenerationContext) {
 
     defTool(
         "github_actions_runs_list",
-        `List all runs for a workflow or the entire repository. 
-    - Use 'git_actions_list_workflows' to list workflows. 
+        `List all runs for a workflow or the entire repository.
+    - Use 'git_actions_list_workflows' to list workflows.
     - Omit 'workflow_id' to list all runs.
     - head_sha is the commit hash.`,
         {
@@ -2881,7 +2882,7 @@ Tools to help with documentation tasks
 
 
 
--  tool `md_find_files`: Get the file structure of the documentation markdown/MDX files. Retursn filename, title, description for each match. Use pattern to specify a regular expression to search for in the file content.
+-  tool `md_find_files`: Get the file structure of the documentation markdown/MDX files. Return filename, title, description for each match. Use pattern to specify a regular expression to search for in the file content.
 
 `````js wrap title="system.md_find_files"
 system({
@@ -2893,7 +2894,7 @@ export default function (ctx: ChatGenerationContext) {
 
     defTool(
         "md_find_files",
-        "Get the file structure of the documentation markdown/MDX files. Retursn filename, title, description for each match. Use pattern to specify a regular expression to search for in the file content.",
+        "Get the file structure of the documentation markdown/MDX files. Return filename, title, description for each match. Use pattern to specify a regular expression to search for in the file content.",
         {
             type: "object",
             properties: {
@@ -4219,7 +4220,7 @@ export default function (ctx: ChatGenerationContext) {
 
     $`## TypeScript Schema
 
-A TypeScript Schema is a TypeScript type that defines the structure of a JSON object. 
+A TypeScript Schema is a TypeScript type that defines the structure of a JSON object.
 The Type is used to validate JSON objects and to generate JSON objects.
 It has the 'lang="typescript-schema"' attribute.
 TypeScript schemas can also be applied to YAML or TOML files.
@@ -4231,8 +4232,8 @@ TypeScript schemas can also be applied to YAML or TOML files.
 
     $`## JSON Schema
 
-A JSON schema is a named JSON object that defines the structure of a JSON object. 
-The schema is used to validate JSON objects and to generate JSON objects. 
+A JSON schema is a named JSON object that defines the structure of a JSON object.
+The schema is used to validate JSON objects and to generate JSON objects.
 It has the 'lang="json-schema"' attribute.
 JSON schemas can also be applied to YAML or TOML files.
 
@@ -4243,7 +4244,7 @@ JSON schemas can also be applied to YAML or TOML files.
 
 ## Code section with Schema
 
-When you generate JSON or YAML or CSV code section according to a named schema, 
+When you generate JSON or YAML or CSV code section according to a named schema,
 you MUST add the schema identifier in the code fence header.
 `
 
@@ -4333,7 +4334,7 @@ Before taking any action or responding to the user after receiving tool results,
 - List the specific rules that apply to the current request
 - Check if all required information is collected
 - Verify that the planned action complies with all policies
-- Iterate over tool results for correctness 
+- Iterate over tool results for correctness
 
 Here are some examples of what to iterate over inside the think tool:
 <think_tool_example_1>
@@ -4409,7 +4410,7 @@ system({
 export default function (ctx: ChatGenerationContext) {
     const { $ } = ctx
 
-    $`## Tool support                 
+    $`## Tool support
 
 You can call external tools to help generating the answer of the user questions.
 
@@ -4482,7 +4483,7 @@ export default function (ctx: ChatGenerationContext) {
     const { $ } = ctx
     $`## Tools
 Use tools as much as possible instead of guessing answers.
-- **Do NOT invent function names**. 
+- **Do NOT invent function names**.
 - **Do NOT use function names starting with 'functions.'.
 - **Do NOT respond with multi_tool_use**.`
 }
