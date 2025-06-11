@@ -1,4 +1,6 @@
 {
+  "private": true,
+  "version": "0.0.0",
   "author": "microsoft",
   "license": "MIT",
   "description": "This is the description",
@@ -16,6 +18,8 @@
     "typecheck": "genaiscript scripts compile",
     "configure": "genaiscript configure action",
     "test": "echo 'No tests defined.'",
-    "start": "genaiscript run action --github-workspace --provider echo"
+    "dev": "genaiscript run action --provider echo",
+    "start": "genaiscript run action --provider echo --github-workspace",
+    "release": "sh release.sh"
   }
 }

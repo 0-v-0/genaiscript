@@ -386,6 +386,14 @@ The GenAIScript version is pinned in the \`package.json\` file. To upgrade it, r
 npm run upgrade
 \`\`\`
 
+## Release
+
+To release a new version of this action, run the release script on a clean working directory.
+
+\`\`\`bash
+npm run release
+\`\`\`
+
 `
     )
     await writeFile(
@@ -395,6 +403,43 @@ npm run upgrade
 .env
 .*.env
 .env.*
+`
+    )
+
+    await writeFile(
+        "release.sh",
+        `
+# make sure there's no other changes
+git pull
+
+# Lint and build
+npm run lint
+# Step 0: ensure we're in sync
+if [ "$(git status --porcelain)" ]; then
+  echo "❌ Pending changes detected. Commit or stash them first."
+  exit 1
+fi
+
+# typecheck test
+npm run typecheck
+
+# Step 1: Bump patch version using npm
+NEW_VERSION=$(npm version patch -m "chore: bump version to %s")
+echo "version: $NEW_VERSION"
+
+# Step 2: Push commit and tag
+git push origin HEAD --tags
+
+# Step 3: Create GitHub release
+gh release create "$NEW_VERSION" --title "$NEW_VERSION" --notes "Patch release $NEW_VERSION"
+
+# Step 4: update major tag if any
+MAJOR=$(echo "$NEW_VERSION" | cut -d. -f1)
+echo "major: $MAJOR"
+git tag -f $MAJOR $NEW_VERSION
+git push origin $MAJOR --force
+
+echo "✅ GitHub release $NEW_VERSION created successfully."
 `
     )
 
@@ -433,10 +478,28 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
     )
 
     if (!pkg || force) {
+        const args = [
+            `genaiscript`,
+            `run`,
+            scriptId,
+            provider ? `--provider` : undefined,
+            provider,
+            pullRequestComment ? `--pull-request-comment` : undefined,
+            typeof pullRequestComment === "string"
+                ? pullRequestComment
+                : undefined,
+            pullRequestDescription ? `--pull-request-description` : undefined,
+            typeof pullRequestDescription === "string"
+                ? pullRequestDescription
+                : undefined,
+            pullRequestReviews ? `--pull-request-reviews` : undefined,
+        ].filter(Boolean)
         await writeFile(
             "package.json",
             JSON.stringify(
                 deleteUndefinedValues({
+                    private: true,
+                    version: "0.0.0",
                     author: pkg.author,
                     license: pkg.license,
                     description: script.description,
@@ -458,31 +521,9 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
                             .filter(Boolean)
                             .join(" "),
                         test: "echo 'No tests defined.'",
-                        start: [
-                            `genaiscript`,
-                            `run`,
-                            scriptId,
-                            `--github-workspace`,
-                            provider ? `--provider` : undefined,
-                            provider,
-                            pullRequestComment
-                                ? `--pull-request-comment`
-                                : undefined,
-                            typeof pullRequestComment === "string"
-                                ? pullRequestComment
-                                : undefined,
-                            pullRequestDescription
-                                ? `--pull-request-description`
-                                : undefined,
-                            typeof pullRequestDescription === "string"
-                                ? pullRequestDescription
-                                : undefined,
-                            pullRequestReviews
-                                ? `--pull-request-reviews`
-                                : undefined,
-                        ]
-                            .filter(Boolean)
-                            .join(" "),
+                        dev: args.join(" "),
+                        start: [...args, "--github-workspace"].join(" "),
+                        release: "sh release.sh",
                     },
                 }),
                 null,

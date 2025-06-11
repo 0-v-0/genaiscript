@@ -106,3 +106,11 @@ The GenAIScript version is pinned in the `package.json` file. To upgrade it, run
 ```bash
 npm run upgrade
 ```
+
+## Release
+
+To release a new version of this action, run the release script on a clean working directory.
+
+```bash
+npm run release
+```
