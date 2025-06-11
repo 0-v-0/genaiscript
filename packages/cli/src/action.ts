@@ -456,6 +456,9 @@ on:
       - main
 permissions:
   contents: read
+  models: read
+  pull-requests: write
+  issues: write
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -467,6 +470,7 @@ jobs:
       - run: npm ci
       - run: npm test
   test-action:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -522,7 +526,7 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
                             .join(" "),
                         test: "echo 'No tests defined.'",
                         dev: args.join(" "),
-                        start: [...args, "--github-workspace"].join(" "),
+                        start: [...args, "--github-workspace", "--no-run-trace", "--no-output-trace"].join(" "),
                         release: "sh release.sh",
                     },
                 }),
