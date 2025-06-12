@@ -4,8 +4,8 @@
 
 ## Inputs
 
-- `github_token`: GitHub token with `models: read` permission at least. (required)
-- `debug`: Enable debug logging.
+- `github_token`: GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions). (required)
+- `debug`: Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).
 
 ## Outputs
 

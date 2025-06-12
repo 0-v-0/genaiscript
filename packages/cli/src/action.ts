@@ -1,5 +1,8 @@
-import { join, resolve } from "node:path"
-import { deleteUndefinedValues } from "../../core/src/cleaners"
+import { resolve } from "node:path"
+import {
+    deleteEmptyValues,
+    deleteUndefinedValues,
+} from "../../core/src/cleaners"
 import { GENAI_ANY_REGEX, GENAI_SRC } from "../../core/src/constants"
 import { genaiscriptDebug } from "../../core/src/debug"
 import { nodeTryReadPackage } from "../../core/src/nodepackage"
@@ -211,33 +214,34 @@ export async function actionConfigure(
             ),
             github_token: {
                 description:
-                    "GitHub token with `models: read` permission at least.",
+                    "GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions).",
                 required: true,
             },
             github_issue:
                 issue || pullRequest
                     ? {
-                          description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments.`,
+                          description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments (https://microsoft.github.io/genaiscript/reference/scripts/github/).`,
                       }
                     : undefined,
             debug: {
-                description: "Enable debug logging.",
+                description:
+                    "Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).",
                 required: false,
             },
         }
     )
-    const outputs: Record<string, GitHubActionFieldType> =
-        deleteUndefinedValues({
-            text: {
-                description: "The generated text output.",
-            },
-            data: script.responseSchema
-                ? {
-                      description:
-                          "The generated JSON data output, parsed and stringified.",
-                  }
-                : undefined,
-        })
+    let outputs: Record<string, GitHubActionFieldType> = deleteUndefinedValues({
+        text: {
+            description: "The generated text output.",
+        },
+        data: script.responseSchema
+            ? {
+                  description:
+                      "The generated data output, parsed and stringified as JSON.",
+              }
+            : undefined,
+    })
+    if (!Object.keys(outputs).length) outputs = undefined
 
     const pkg = await nodeTryReadPackage()
     const apks = [
@@ -254,12 +258,12 @@ export async function actionConfigure(
         action.description = script.title || pkg?.description
         action.inputs = inputs
         action.branding = branding
-        await writeFile("action.yml", YAMLStringify(action))
+        await writeText("action.yml", YAMLStringify(action))
     } else
         await writeFile(
             "action.yml",
             YAMLStringify(
-                deleteUndefinedValues({
+                deleteEmptyValues({
                     name: repo,
                     author: pkg?.author,
                     description: script.title || pkg?.description,
@@ -320,12 +324,16 @@ ${Object.entries(inputs || {})
     )
     .join("\n")}
 
-## Outputs
+${
+    outputs
+        ? `## Outputs
 
-${Object.entries(outputs || {})
+${Object.entries(outputs)
     .map(([key, value]) => `- \`${key}\`: ${value.description || ""}`)
     .join("\n")}
-
+`
+        : ""
+}
 ## Usage
 
 Add the following to your step in your workflow file:
