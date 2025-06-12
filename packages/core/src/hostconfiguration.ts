@@ -15,6 +15,11 @@ export interface HostConfiguration {
     include?: string[]
 
     /**
+     * Ignore scripts in the current workspace.
+     */
+    ignoreCurrentWorkspace?: boolean
+
+    /**
      * Configures a list of known aliases. Overridden by environment variables and CLI arguments
      */
     modelAliases?: Record<string, string | ModelConfiguration>

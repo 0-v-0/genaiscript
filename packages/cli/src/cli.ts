@@ -118,6 +118,7 @@ export async function cli() {
             githubWorkspace: boolean
         } = cmd.opts() // Get environment options from command
         const includes: string[] = [] // Array to hold include paths
+        let ignoreCurrentWorkspace = false
         if (include) includes.push(resolve(include))
         const { workspaceDir } = githubActionConfigure()
         if (
@@ -125,7 +126,8 @@ export async function cli() {
             workspaceDir &&
             resolve(workspaceDir) !== resolve(process.cwd())
         ) {
-            includes.push(resolve(process.cwd(), "**", "*.genai.*s"))
+            includes.push(resolve(process.cwd(), "genaisrc", "*.genai.mts"))
+            ignoreCurrentWorkspace = true
             cwd = resolve(workspaceDir)
             dbg(`github action workspace: %s`, cwd)
         }
@@ -133,10 +135,10 @@ export async function cli() {
             dbg(`chdir %s`, cwd)
             process.chdir(cwd)
         }
-        nodeHost = await NodeHost.install(
-            env?.length ? env : undefined,
-            includes.length ? { include: uniq(includes) } : undefined
-        ) // Install NodeHost with environment options
+        nodeHost = await NodeHost.install(env?.length ? env : undefined, {
+            include: includes.length ? uniq(includes) : undefined,
+            ignoreCurrentWorkspace,
+        }) // Install NodeHost with environment options
         dbg(`cwd: %s`, process.cwd())
         dbg(`config: %O`, nodeHost.config)
     })

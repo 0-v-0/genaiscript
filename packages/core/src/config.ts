@@ -38,6 +38,8 @@ export function mergeHostConfigs(
     return deleteEmptyValues({
         include: structuralMerge(config?.include || [], parsed?.include || []),
         envFile: [...arrayify(parsed?.envFile), ...arrayify(config?.envFile)],
+        ignoreCurrentWorkspace:
+            config?.ignoreCurrentWorkspace || parsed?.ignoreCurrentWorkspace,
         modelAliases: structuralMerge(
             config?.modelAliases || {},
             parsed?.modelAliases || {}

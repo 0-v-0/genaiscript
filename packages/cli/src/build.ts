@@ -7,6 +7,8 @@ import {
 import { host, runtimeHost } from "../../core/src/host"
 import { parseProject } from "../../core/src/parser"
 import { arrayify } from "../../core/src/util"
+import { genaiscriptDebug } from "../../core/src/debug"
+const dbg = genaiscriptDebug("cli:build")
 
 /**
  * Asynchronously builds a project by parsing tool files.
@@ -28,9 +30,14 @@ export async function buildProject(options?: {
         let tps = arrayify(toolsPath)
         if (!tps?.length) {
             const config = await runtimeHost.config
-            tps = [GENAI_ANYJS_GLOB, ...arrayify(config.include)]
+            tps = []
+            if (config.ignoreCurrentWorkspace)
+                dbg(`ignoring current workspace scripts`)
+            else tps.push(GENAI_ANYJS_GLOB)
+            tps.push(...arrayify(config.include))
         }
         tps = arrayify(tps)
+        dbg(`searching for script files in: %O`, tps)
         scriptFiles = []
         for (const tp of tps) {
             const fs = await host.findFiles(tp, {
@@ -38,6 +45,7 @@ export async function buildProject(options?: {
             })
             scriptFiles.push(...fs)
         }
+        dbg(`found script files: %O`, scriptFiles)
     }
 
     // filter out unwanted files
