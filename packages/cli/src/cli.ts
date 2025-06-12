@@ -594,6 +594,7 @@ export async function cli() {
         .description(
             "Configure a GitHub repository as a custom dockerized GitHub Action"
         )
+        .argument("[script]", "Script id to use as action", "action")
         .option("-f, --force", "force override existing action files")
         .option("-o, --out <string>", "output folder for action files")
         .option("--ffmpeg", "use ffmpeg for video/audio processing")

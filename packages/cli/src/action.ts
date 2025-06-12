@@ -1,4 +1,4 @@
-import { resolve } from "node:path"
+import { join, resolve } from "node:path"
 import { deleteUndefinedValues } from "../../core/src/cleaners"
 import { GENAI_ANY_REGEX, GENAI_SRC } from "../../core/src/constants"
 import { genaiscriptDebug } from "../../core/src/debug"
@@ -13,6 +13,7 @@ import { dedent } from "../../core/src/indent"
 import { runtimeHost } from "../../core/src/host"
 import { createScript as coreCreateScript } from "../../core/src/scripts"
 import { templateIdFromFileName } from "../../core/src/template"
+import { shellConfirm, shellSelect } from "./input"
 
 const dbg = genaiscriptDebug("cli:action")
 
@@ -47,20 +48,23 @@ interface GitHubActionFieldType {
  *   Writes or overwrites files in the output directory.
  *   Executes npm or node commands to generate lock files if packageLock is set.
  */
-export async function actionConfigure(options: {
-    force?: boolean
-    out?: string
-    ffmpeg?: boolean
-    python?: boolean
-    playwright?: boolean
-    image?: string
-    apks?: string[]
-    provider?: string
-    pullRequestComment?: string | boolean
-    pullRequestDescription?: string | boolean
-    pullRequestReviews?: boolean
-    event?: string
-}) {
+export async function actionConfigure(
+    scriptId: string,
+    options: {
+        force?: boolean
+        out?: string
+        ffmpeg?: boolean
+        python?: boolean
+        playwright?: boolean
+        image?: string
+        apks?: string[]
+        provider?: string
+        pullRequestComment?: string | boolean
+        pullRequestDescription?: string | boolean
+        pullRequestReviews?: boolean
+        event?: string
+    }
+) {
     const {
         force,
         out = resolve("."),
@@ -83,7 +87,8 @@ export async function actionConfigure(options: {
     const { owner, repo } = (await github.info()) || {}
     if (!owner || !repo)
         throw new Error("GitHub repository information not found.")
-    const scriptId = "action"
+
+    scriptId = scriptId || "action"
     dbg(`owner: %s`, owner)
     dbg(`repo: %s`, repo)
     dbg(`script: %s`, scriptId)
@@ -100,6 +105,49 @@ export async function actionConfigure(options: {
         }
     }
     logVerbose(`event: ${event}`)
+
+    if (!(await tryStat(join(out, "action.yml")))) {
+        options.event =
+            options.event ||
+            (await shellSelect("What event will trigger the action?", [
+                "push",
+                "pull_request",
+                "issue_comment",
+                "issue",
+            ]))
+        options.python =
+            options.python === undefined
+                ? await shellConfirm("Will you use Python?", {
+                      default: false,
+                  })
+                : options.python
+        if (options.event === "pull_request") {
+            options.pullRequestComment =
+                options.pullRequestComment === undefined
+                    ? await shellConfirm(
+                          "Will you publish the output as a pull request comment?",
+                          {
+                              default: false,
+                          }
+                      )
+                    : options.pullRequestComment
+        }
+        options.playwright =
+            options.playwright === undefined
+                ? await shellConfirm(
+                      "Will you use Playwright? (host.browser...)",
+                      {
+                          default: false,
+                      }
+                  )
+                : options.playwright
+        options.ffmpeg =
+            options.ffmpeg === undefined
+                ? await shellConfirm("Will you use ffmpeg?", {
+                      default: false,
+                  })
+                : options.ffmpeg
+    }
 
     const prj = await buildProject() // Build the project to get script templates
     let script = prj.scripts.find(
@@ -526,7 +574,12 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
                             .join(" "),
                         test: "echo 'No tests defined.'",
                         dev: args.join(" "),
-                        start: [...args, "--github-workspace", "--no-run-trace", "--no-output-trace"].join(" "),
+                        start: [
+                            ...args,
+                            "--github-workspace",
+                            "--no-run-trace",
+                            "--no-output-trace",
+                        ].join(" "),
                         release: "sh release.sh",
                     },
                 }),

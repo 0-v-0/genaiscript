@@ -1,6 +1,6 @@
 name: genaiscript
 author: microsoft
-description: This is the title
+description: Action-poem
 inputs:
   github_token:
     description: "GitHub token with `models: read` permission at least."
@@ -14,8 +14,7 @@ outputs:
   data:
     description: The generated JSON data output, parsed and stringified.
 branding:
-  color: purple
-  icon: anchor
+  color: yellow
 runs:
   using: docker
   image: Dockerfile

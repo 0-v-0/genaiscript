@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "author": "microsoft",
   "license": "MIT",
-  "description": "This is the description",
   "dependencies": {
-    "genaiscript": "1.142.3"
+    "genaiscript": "1.142.4"
   },
   "scripts": {
     "upgrade": "npx -y npm-check-updates -u && npm install",
@@ -18,8 +17,8 @@
     "typecheck": "genaiscript scripts compile",
     "configure": "genaiscript configure action",
     "test": "echo 'No tests defined.'",
-    "dev": "genaiscript run action --provider echo",
-    "start": "genaiscript run action --provider echo --github-workspace",
+    "dev": "genaiscript run action-poem --provider echo",
+    "start": "genaiscript run action-poem --provider echo --github-workspace --no-run-trace --no-output-trace",
     "release": "sh release.sh"
   }
 }

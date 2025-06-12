@@ -19,7 +19,6 @@ import {
     GithubConnectionInfo,
 } from "../../core/src/githubclient"
 import {
-    HTTPS_REGEX,
     FILES_NOT_FOUND_ERROR_CODE,
     CONFIGURATION_ERROR_CODE,
     USER_CANCELLED_ERROR_CODE,
@@ -114,7 +113,7 @@ import { uriTryParse } from "../../core/src/url"
 import { tryResolveScript } from "../../core/src/scriptresolver"
 import { isCI } from "../../core/src/ci"
 import { githubActionSetOutputs } from "./githubaction"
-const dbg = genaiscriptDebug("run")
+const dbg = genaiscriptDebug("cli:run")
 
 /**
  * Executes a script with a possible retry mechanism and exits the process with the appropriate code.
@@ -547,13 +546,12 @@ export async function runScriptInternal(
         workspaceFiles,
     }
     dbg(
-        `%O\n%O`,
+        `files %O\n workspace files %O`,
         fragment.files,
         fragment.workspaceFiles.map((f) => f.filename)
     )
-    const vars = Array.isArray(options.vars)
-        ? parseOptionsVars(options.vars, process.env)
-        : structuredClone(options.vars || {})
+    const vars = parseOptionsVars(options.vars, process.env)
+    dbg(`vars: %o`, Object.keys(vars))
     const stats = new GenerationStats("")
     const userState: Record<string, any> = {}
     try {

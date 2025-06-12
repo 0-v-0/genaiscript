@@ -16,13 +16,12 @@ Usage: genaiscript configure [options] [command]
 Configure LLMs or GitHub Actions
 
 Options:
-  -h, --help                      display help for command
+  -h, --help                               display help for command
 
 Commands:
-  llm [options]                   Configure LLM providers
-  action|github-action [options]  Configure a GitHub repository as a custom
-                                  dockerized GitHub Action
-  help [command]                  display help for command
+  llm [options]                            Configure LLM providers
+  action|github-action [options] [script]  Configure a GitHub repository as a custom dockerized GitHub Action
+  help [command]                           display help for command
 ```
 
 ### `configure llm`
@@ -47,9 +46,12 @@ Options:
 ### `configure action`
 
 ```
-Usage: genaiscript configure action|github-action [options]
+Usage: genaiscript configure action|github-action [options] [script]
 
 Configure a GitHub repository as a custom dockerized GitHub Action
+
+Arguments:
+  script                                     Script id to use as action (default: "action")
 
 Options:
   -f, --force                                force override existing action files
