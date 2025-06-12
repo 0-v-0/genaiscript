@@ -11,8 +11,6 @@ inputs:
 outputs:
   text:
     description: The generated text output.
-  data:
-    description: The generated JSON data output, parsed and stringified.
 branding:
   color: yellow
 runs:

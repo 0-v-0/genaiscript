@@ -10,7 +10,6 @@
 ## Outputs
 
 - `text`: The generated text output.
-- `data`: The generated JSON data output, parsed and stringified.
 
 ## Usage
 

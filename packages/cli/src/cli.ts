@@ -603,6 +603,7 @@ export async function cli() {
         .option("--image <string>", "Docker image identifier")
         .option("--apks <string...>", "Linux packages to install")
         .option("--provider <string>", "LLM provider to use")
+        .option("--interactive", "Enable interactive mode")
         .action(actionConfigure)
     configureActionCmd.addOption(
         new Option("-e, --event <string>", "GitHub event type").choices([

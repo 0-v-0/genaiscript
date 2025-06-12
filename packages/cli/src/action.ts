@@ -63,8 +63,14 @@ export async function actionConfigure(
         pullRequestDescription?: string | boolean
         pullRequestReviews?: boolean
         event?: string
+        interactive?: boolean
     }
 ) {
+    options = options || {}
+    const { owner, repo } = (await github.info()) || {}
+    if (!owner || !repo)
+        throw new Error("GitHub repository information not found.")
+
     const {
         force,
         out = resolve("."),
@@ -72,21 +78,8 @@ export async function actionConfigure(
         pullRequestComment,
         pullRequestDescription,
         pullRequestReviews,
-    } = options || {}
-    const event: "push" | "pull_request" | "issue_comment" | "issue" =
-        (options?.event as any) ??
-        (pullRequestComment || pullRequestDescription || pullRequestReviews
-            ? "pull_request"
-            : "push")
-    const issue =
-        event === "issue" ||
-        event === "issue_comment" ||
-        pullRequestComment ||
-        pullRequestDescription ||
-        pullRequestReviews
-    const { owner, repo } = (await github.info()) || {}
-    if (!owner || !repo)
-        throw new Error("GitHub repository information not found.")
+        interactive,
+    } = options
 
     scriptId = scriptId || "action"
     dbg(`owner: %s`, owner)
@@ -104,9 +97,9 @@ export async function actionConfigure(
             await writeText(filePath, content)
         }
     }
-    logVerbose(`event: ${event}`)
 
-    if (!(await tryStat(join(out, "action.yml")))) {
+    const actionYmlFilename = resolve(out, "action.yml")
+    if (interactive || !(await tryStat(actionYmlFilename))) {
         options.event =
             options.event ||
             (await shellSelect("What event will trigger the action?", [
@@ -149,6 +142,15 @@ export async function actionConfigure(
                 : options.ffmpeg
     }
 
+    const event: "push" | "pull_request" | "issue_comment" | "issue" =
+        (options.event as any) ??
+        (pullRequestComment || pullRequestDescription || pullRequestReviews
+            ? "pull_request"
+            : "push")
+    const issue = event === "issue" || event === "issue_comment"
+    const pullRequest = event === "pull_request"
+    logVerbose(`event: ${event}`)
+
     const prj = await buildProject() // Build the project to get script templates
     let script = prj.scripts.find(
         (t) =>
@@ -168,10 +170,10 @@ export async function actionConfigure(
         // Write the prompt script to the determined path
         await writeFile(script.filename, script.jsSource)
     }
-    const ffmpeg = options?.ffmpeg || /ffmpeg$/.test(script.jsSource)
+    const ffmpeg = options.ffmpeg || /ffmpeg$/.test(script.jsSource)
     const playwright =
-        options?.playwright || /host\.browser/.test(script.jsSource)
-    const python = options?.python
+        options.playwright || /host\.browser/.test(script.jsSource)
+    const python = options.python
     const image =
         options.image ||
         (playwright
@@ -213,10 +215,9 @@ export async function actionConfigure(
                 required: true,
             },
             github_issue:
-                event !== "pull_request" && issue
+                issue || pullRequest
                     ? {
-                          description:
-                              "GitHub issue number to use when generating comments.",
+                          description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments.`,
                       }
                     : undefined,
             debug: {
@@ -225,15 +226,18 @@ export async function actionConfigure(
             },
         }
     )
-    const outputs: Record<string, GitHubActionFieldType> = {
-        text: {
-            description: "The generated text output.",
-        },
-        data: {
-            description:
-                "The generated JSON data output, parsed and stringified.",
-        },
-    }
+    const outputs: Record<string, GitHubActionFieldType> =
+        deleteUndefinedValues({
+            text: {
+                description: "The generated text output.",
+            },
+            data: script.responseSchema
+                ? {
+                      description:
+                          "The generated JSON data output, parsed and stringified.",
+                  }
+                : undefined,
+        })
 
     const pkg = await nodeTryReadPackage()
     const apks = [
@@ -241,10 +245,10 @@ export async function actionConfigure(
         python ? "python3" : undefined,
         python ? "py3-pip" : undefined,
         ffmpeg ? "ffmpeg" : undefined,
-        ...(options?.apks || []),
+        ...(options.apks || []),
     ].filter(Boolean)
 
-    const action = YAMLTryParse({ filename: "action.yml" })
+    const action = YAMLTryParse({ filename: actionYmlFilename })
     if (action && !force) {
         logVerbose(`action.yml already exists, using existing values`)
         action.description = script.title || pkg?.description
@@ -290,7 +294,7 @@ RUN npm ci
 ${
     playwright
         ? dedent`# Install playwright dependencies
-RUN npx playwright install --with-deps
+RUN npx --yes playwright install --with-deps
 
 `
         : ""
@@ -319,12 +323,7 @@ ${Object.entries(inputs || {})
 ## Outputs
 
 ${Object.entries(outputs || {})
-    .map(
-        ([key, value]) =>
-            `- \`${key}\`: ${value.description || ""}${
-                value.required ? " (required)" : ""
-            }${value.default ? ` (default: \`${value.default}\`)` : ""}`
-    )
+    .map(([key, value]) => `- \`${key}\`: ${value.description || ""}`)
     .join("\n")}
 
 ## Usage
