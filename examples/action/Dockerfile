@@ -11,7 +11,8 @@ WORKDIR /genaiscript/action
 COPY . .
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN npm ci
+
 
 # GitHub Action forces the WORKDIR to GITHUB_WORKSPACE 
 ENTRYPOINT ["npm", "--prefix", "/genaiscript/action", "start"]
