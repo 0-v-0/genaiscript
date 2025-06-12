@@ -490,22 +490,26 @@ export class NodeHost extends EventTarget implements RuntimeHost {
     ): Promise<string[]> {
         const { ignore, applyGitIgnore } = options || {}
         const paths = arrayify(path).filter((p) => !!p)
-        dbg(`finding files: ${paths}`)
+        dbg(`finding files: %o`, paths)
         const negatives = paths
             .filter((p) => NEGATIVE_GLOB_REGEX.test(p))
             .map((p) => p.replace(NEGATIVE_GLOB_REGEX, ""))
         const positives = paths.filter((p) => !NEGATIVE_GLOB_REGEX.test(p))
+        const allIgnore = uniq([...arrayify(ignore), ...negatives])
+        dbg(`ignoring files: %o`, allIgnore)
         let files = await glob(positives, {
             nodir: true,
             windowsPathsNoEscape: true,
             ignore: uniq([...arrayify(ignore), ...negatives]),
             dot: true,
         })
+        dbg(`found files: %d`, files.length)
         if (applyGitIgnore !== false) {
+            dbg(`applying .gitignore filter`)
             files = await filterGitIgnore(files)
         }
         const res = uniq(files)
-        dbg(`found files: %d\n%O`, res.length, res)
+        dbg(`filtered files: %d\n%O`, res.length, res)
         return res
     }
     async writeFile(name: string, content: Uint8Array): Promise<void> {

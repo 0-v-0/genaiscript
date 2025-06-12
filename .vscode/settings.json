@@ -260,6 +260,7 @@
         "structurify",
         "suffixext",
         "sysr",
+        "SYSTEMROOT",
         "tabletojson",
         "TAVILY",
         "templ",

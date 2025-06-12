@@ -12,7 +12,13 @@ export interface HostConfiguration {
     /**
      * List of glob paths to scan for genai scripts
      */
-    include?: string[]
+    include?: (
+        | string
+        | {
+              pattern: string
+              ignoreGitIgnore?: boolean
+          }
+    )[]
 
     /**
      * Ignore scripts in the current workspace.
