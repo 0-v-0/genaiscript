@@ -1041,8 +1041,8 @@ system({
 })
 const dbg = host.logger("genaiscript:system:diagrams")
 
-export default function (ctx: ChatGenerationContext) {
-    const { $, defChatParticipant } = ctx
+export default function (context: ChatGenerationContext) {
+    const { $, defChatParticipant } = context
     const repair = env.vars["system.diagrams.repair"]
 
     $`## Diagrams Format
@@ -1058,30 +1058,49 @@ Implement appropriate styling and colors to enhance readability.
     if (!(repair > 0)) return
 
     dbg(`registering mermaid repair`)
-    const repaired = new Set<string>()
-    defChatParticipant(async (ctx, messages, assistantText) => {
-        if (repaired.size > repair) {
-            dbg(`too many diagram repairs, skipping`)
-            return
-        }
-        const fences = parsers.fences(assistantText)
+    defChatParticipant(async (ctx, messages) => {
+        const lastMessage = messages.at(-1)
+        if (lastMessage.role !== "assistant") return
+        if (typeof lastMessage.content !== "string") return
+        const fences = parsers.fences(lastMessage.content)
         const diagrams = fences.filter((f) => f.language === "mermaid")
-        const errors: string[] = []
         for (const diagram of diagrams) {
-            if (!repaired.has(diagram.content)) {
-                repaired.add(diagram.content)
-                dbg(`validating %s`, diagram.content)
-                const res = await parsers.mermaid(diagram.content)
-                if (res?.error) {
-                    dbg(`error: %s`, res)
-                    errors.push(res.error)
+            dbg(`validating %s`, diagram.content)
+            const { error: diagramError } =
+                (await parsers.mermaid(diagram.content)) || {}
+            if (diagramError) {
+                ctx.console.log(`repairing mermaid diagram`)
+                dbg(`error: %s`, diagramError)
+                const { text, error } = await runPrompt(
+                    (dctx) => {
+                        const mermaidRef = dctx.def("MERMAID", diagram.content)
+                        const errorRef = dctx.def("ERROR", diagramError)
+                        dctx.$`Repair the mermaid diagram in ${mermaidRef} and fix the syntax error in ${errorRef}. Use the latest mermaid syntax. Respond with the mermaid syntax, nothing else.`
+                    },
+                    {
+                        responseType: "text",
+                        system: [],
+                        model: "small",
+                        label: `repair mermaid diagram`,
+                    }
+                )
+                if (error) {
+                    dbg(`repair failed: %s`, error)
+                    return
                 }
-                dbg(`parsed %s`, res.diagramType)
+                const { error: repairedError } =
+                    (await parsers.mermaid(text)) || {}
+                if (repairedError) {
+                    dbg(`repaired error: %s`, repairedError)
+                    return
+                }
+                dbg(`repaired diagram: %s`, text)
+                lastMessage.content = lastMessage.content.replace(
+                    diagram.content,
+                    text
+                )
+                return { messages: messages.slice(0) }
             }
-        }
-        if (errors.length > 0) {
-            ctx.$`I found syntax errors in the mermaid diagram. Please repair the parse error and replay with the full response:
-            ${errors.join("\n")}`
         }
     })
 }
