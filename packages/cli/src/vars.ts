@@ -1,6 +1,7 @@
 import { CLI_ENV_VAR_RX } from "../../core/src/constants"
 import { genaiscriptDebug } from "../../core/src/debug"
 import { parseKeyValuePair } from "../../core/src/fence"
+import { camelCase } from "es-toolkit"
 const dbg = genaiscriptDebug("cli:vars")
 
 /**
@@ -21,7 +22,7 @@ export function parseOptionsVars(
     const envVals = Object.keys(env)
         .filter((k) => CLI_ENV_VAR_RX.test(k))
         .map((k) => ({
-            [k.replace(CLI_ENV_VAR_RX, "").toLocaleLowerCase()]: env[k],
+            [camelCase(k.replace(CLI_ENV_VAR_RX, ""))]: env[k],
         }))
         .reduce((acc, v) => ({ ...acc, ...v }), {})
     dbg(`env %O`, Object.keys(envVals))
