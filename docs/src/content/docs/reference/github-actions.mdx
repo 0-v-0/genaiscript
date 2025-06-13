@@ -145,6 +145,7 @@ Each parameter is converted to an input with the same name, and the type is infe
 ```js title="poem.genai.mts"
 script({
     title: "A poem generator",
+    accept: "none",
     parameters: {
         topic: "nature"
     }
@@ -166,8 +167,10 @@ inputs:
 
 There are also additional fields that are common to all GenAIScript actions:
 
-- `github_token`: This is required to authenticate with GitHub Models.
+- `files`: Specify a file path to populate the `env.files` variable. To remove this field, set `accept: "none"` in the script.
+- `github_token`: **This is required to authenticate with GitHub Models.**
   It will become `INPUT_GITHUB_TOKEN` when the container is created and GenAIScript will pick it up automatically.
+- `github_issue`: The current GitHub issue or pull request number.
 - `debug`: The filter to control debug [logging](/genaiscript/reference/scripts/logging) messages.
 
 ### Outputs
@@ -217,18 +220,17 @@ npx -y genaiscript configure action ... --apks <package1> <package2>
 
 ### Testing the Action
 
-Your script should be testable locally using the `genaiscript run` command
-and parameters.
+Your script should be testable locally using the `npm run dev` command. Feel free to edit it in `package.json`.
 
 ```bash
-npx -y genaiscript run poem --vars topic=food
+npm run dev
 ```
 
 Or if you want to simulate the GitHub Action environment,
 you can set the `INPUT_<parameter>` variables in the environment.
 
 ```bash
-INPUT_TOPIC=nature npx -y genaiscript run poem
+INPUT_TOPIC=nature genaiscript run poem
 ```
 
 ### GitHub Workspace vs Action Workspace
