@@ -32,9 +32,9 @@ Implement appropriate styling and colors to enhance readability.
         const lastMessage = messages.at(-1)
         if (lastMessage.role !== "assistant") return
         if (typeof lastMessage.content !== "string") return
+        const original = lastMessage.content
         const fences = parsers.fences(lastMessage.content)
         const diagrams = fences.filter((f) => f.language === "mermaid")
-        let repairs = 0
         for (const diagram of diagrams) {
             const content = diagram.content
             dbg(`validating %s`, content)
@@ -73,7 +73,7 @@ Implement appropriate styling and colors to enhance readability.
                 diagram.content
             )
         }
-        // if (repairs > 0) return { messages: messages.slice(0) }
-        // return undefined
+        if (original !== lastMessage.content) return { messages }
+        return undefined
     })
 }

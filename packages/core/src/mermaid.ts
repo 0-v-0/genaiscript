@@ -23,6 +23,7 @@ export async function mermaidParse(
         dbg(`parsing %s`, text)
         const res = await mermaid.parse(text, { suppressErrors: false })
         if (!res) return { error: "no result" }
+        dbg(`parsed diagram type: %s`, res.diagramType)
         return { diagramType: res.diagramType }
     } catch (e) {
         dbg(e)

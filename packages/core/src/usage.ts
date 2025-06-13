@@ -30,6 +30,23 @@ import { genaiscriptDebug } from "./debug"
 import { ImageGenerationUsage } from "./chat"
 const dbg = genaiscriptDebug("usage")
 
+function resolveCost(modelId: string) {
+    let { provider, model } = parseModelIdentifier(modelId)
+    let mid = `${provider}:${model}`.toLowerCase()
+    let cost = MODEL_PRICINGS[mid]
+    if (!cost) {
+        const m = model.match(
+            /^(?:openai\/)?(gpt-(3\.5|4|4o|o1|o3|o4|o4-mini|o1-mini|o1-preview|4o-mini|o3-mini|4\.1|4\.1-mini|4\.1-nano))/
+        )
+        if (m) {
+            model = m[1]
+            mid = `${provider}:${model}`.toLowerCase()
+            cost = MODEL_PRICINGS[mid]
+        }
+    }
+    return cost
+}
+
 /**
  * Estimates the cost of a chat completion based on model pricing and token usage.
  *
@@ -41,23 +58,9 @@ export function estimateCost(modelId: string, usage: ChatCompletionUsage) {
     if (!modelId || !usage.total_tokens) return undefined
 
     const { completion_tokens, prompt_tokens } = usage
-    let { provider, model } = parseModelIdentifier(modelId)
-    let mid = `${provider}:${model}`.toLowerCase()
-    let cost = MODEL_PRICINGS[mid]
-    if (!cost) {
-        const m = model.match(
-            /^gpt-(3\.5|4|4o|o1|o3|o4|o4-mini|o1-mini|o1-preview|4o-mini|o3-mini|4\.1|4\.1-mini|4\.1-nano)/
-        )
-        if (m) {
-            model = m[0]
-            mid = `${provider}:${model}`.toLowerCase()
-            cost = MODEL_PRICINGS[mid]
-        }
-    }
-    dbg(`pricing: %s <- %s %o`, mid, modelId, cost)
-    if (!cost) {
-        return undefined
-    }
+    const cost = resolveCost(modelId)
+    dbg(`pricing: %s <- %o`, modelId, cost)
+    if (!cost) return undefined
 
     const {
         price_per_million_output_tokens,
@@ -79,12 +82,9 @@ export function estimateImageCost(
 ) {
     if (!modelId || !usage?.total_tokens) return undefined
 
-    const { provider, model } = parseModelIdentifier(modelId)
-    const mid = `${provider}:${model}`.toLowerCase()
-    const cost = MODEL_PRICINGS[mid]
-    if (!cost) {
-        return undefined
-    }
+    const cost = resolveCost(modelId)
+    dbg(`pricing: %s <- %o`, modelId, cost)
+    if (!cost) return undefined
 
     const { price_per_million_input_tokens, price_per_million_output_tokens } =
         cost
@@ -102,9 +102,7 @@ export function estimateImageCost(
  * @returns True if the model has pricing data available, otherwise false.
  */
 export function isCosteable(model: string): boolean {
-    const { provider } = parseModelIdentifier(model)
-    const prefix = `${provider}:`
-    return Object.keys(MODEL_PRICINGS).some((k) => k.startsWith(prefix))
+    return !!resolveCost(model)
 }
 
 /**
