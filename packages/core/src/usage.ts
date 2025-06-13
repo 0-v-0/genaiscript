@@ -328,7 +328,7 @@ export class GenerationStats {
                 .filter((n) => !!n)
                 .join(" ")
             logVerbose(
-                `${indent}${this.label ? `${this.label}:` : ""}${this.resolvedModel}> ${stats}`
+                `${indent}${this.label ? `${this.label}> ` : ""}${this.resolvedModel}> ${stats}`
             )
         }
         if (this.model && isNaN(c) && isCosteable(this.model))

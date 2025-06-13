@@ -14,6 +14,7 @@ export async function installWindow() {
     const DOMPurify = createDOMPurify(window)
     glb.window = window
     glb.DOMPurify = DOMPurify
+    glb.Element = window.Element
 
     // mermaid workaround
     createDOMPurify.addHook = DOMPurify.addHook.bind(DOMPurify)

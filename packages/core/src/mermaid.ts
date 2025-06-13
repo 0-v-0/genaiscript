@@ -25,8 +25,8 @@ export async function mermaidParse(
         if (!res) return { error: "no result" }
         return { diagramType: res.diagramType }
     } catch (e) {
+        dbg(e)
         const m = errorMessage(e)
-        dbg(`mermaid error: %s`, m)
         return { error: m }
     }
 }
