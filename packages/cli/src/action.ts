@@ -173,6 +173,7 @@ export async function actionConfigure(
         // Write the prompt script to the determined path
         await writeFile(script.filename, script.jsSource)
     }
+    const accept = script.accept
     const ffmpeg = options.ffmpeg || /ffmpeg$/.test(script.jsSource)
     const playwright =
         options.playwright || /host\.browser/.test(script.jsSource)
@@ -212,6 +213,13 @@ export async function actionConfigure(
                     ]
                 })
             ),
+            files:
+                accept === "none"
+                    ? undefined
+                    : {
+                          description: `Files to process, separated by semi columns (;). ${accept || ""}`,
+                          required: false,
+                      },
             github_token: {
                 description:
                     "GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions).",
