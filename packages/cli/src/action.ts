@@ -118,6 +118,15 @@ export async function actionConfigure(
                   })
                 : options.python
         if (options.event === "pull_request") {
+            options.pullRequestDescription =
+                options.pullRequestDescription === undefined
+                    ? await shellConfirm(
+                          "Will you publish the output as a pull request description?",
+                          {
+                              default: false,
+                          }
+                      )
+                    : options.pullRequestDescription
             options.pullRequestComment =
                 options.pullRequestComment === undefined
                     ? await shellConfirm(
@@ -127,6 +136,15 @@ export async function actionConfigure(
                           }
                       )
                     : options.pullRequestComment
+            options.pullRequestReviews =
+                options.pullRequestReviews === undefined
+                    ? await shellConfirm(
+                          "Will you publish diagnostics as a pull request review comments?",
+                          {
+                              default: false,
+                          }
+                      )
+                    : options.pullRequestReviews
         }
         options.playwright =
             options.playwright === undefined
@@ -262,9 +280,10 @@ export async function actionConfigure(
 
     const action = YAMLTryParse({ filename: actionYmlFilename })
     if (action && !force) {
-        logVerbose(`action.yml already exists, using existing values`)
+        logVerbose(`updating action.yml`)
         action.description = script.title || pkg?.description
         action.inputs = inputs
+        action.outputs = outputs
         action.branding = branding
         await writeText("action.yml", YAMLStringify(action))
     } else
@@ -317,9 +336,7 @@ ENTRYPOINT ["npm", "--prefix", "/genaiscript/action", "start"]
     )
     await writeFile(
         "README.md",
-        dedent`# ${script.id} action
-
-${script.description || ""}
+        dedent`${script.description || ""}
 
 ## Inputs
 
@@ -360,9 +377,13 @@ ${Object.entries(inputs || {})
 
 ## Example
 
+Save this file in your \`.github/workflows/\` directory as \`${script.id}.yml\`:
+
 \`\`\`yaml
-name: My action
+name: ${script.id}
 on:
+    workflow_dispatch:
+
     ${event}:
 permissions:
     contents: read
@@ -386,6 +407,7 @@ ${Object.entries(inputs || {})
             `          ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`
     )
     .join("\n")}
+${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
 \`\`\`
 
 ## Development
@@ -567,11 +589,11 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
                 deleteUndefinedValues({
                     private: true,
                     version: "0.0.0",
-                    author: pkg.author,
-                    license: pkg.license,
+                    author: pkg?.author,
+                    license: pkg?.license,
                     description: script.description,
                     dependencies: {
-                        ...(pkg.dependencies || {}),
+                        ...(pkg?.dependencies || {}),
                         genaiscript: CORE_VERSION,
                     },
                     scripts: {
