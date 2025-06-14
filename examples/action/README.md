@@ -1,5 +1,3 @@
-# action-poem action
-
 
 
 ## Inputs
@@ -24,9 +22,12 @@ with:
 
 ## Example
 
+Save this file in your `.github/workflows/` directory as `action-poem.yml`:
+
 ```yaml
-name: My action
+name: Genaiscript
 on:
+    workflow_dispatch:
     push:
 permissions:
     contents: read
@@ -37,13 +38,14 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 jobs:
-  run-script:
+  genaiscript:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: microsoft/genaiscript@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
 ```
 
 ## Development

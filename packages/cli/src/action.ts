@@ -10,6 +10,7 @@ import { CORE_VERSION } from "../../core/src/version"
 import { YAMLStringify, YAMLTryParse } from "../../core/src/yaml"
 import { buildProject } from "./build"
 import { snakeCase } from "es-toolkit"
+import { titleize } from "../../core/src/inflection"
 import { logInfo, logVerbose } from "../../core/src/util"
 import { tryStat, writeText } from "../../core/src/fs"
 import { dedent } from "../../core/src/indent"
@@ -380,10 +381,9 @@ ${Object.entries(inputs || {})
 Save this file in your \`.github/workflows/\` directory as \`${script.id}.yml\`:
 
 \`\`\`yaml
-name: ${script.id}
+name: ${titleize(repo)}
 on:
     workflow_dispatch:
-
     ${event}:
 permissions:
     contents: read
@@ -394,7 +394,7 @@ concurrency:
     group: \${{ github.workflow }}-\${{ github.ref }}
     cancel-in-progress: true
 jobs:
-  run-script:
+  ${snakeCase(repo)}:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -597,7 +597,8 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
                         genaiscript: CORE_VERSION,
                     },
                     scripts: {
-                        upgrade: "npx -y npm-check-updates -u && npm install",
+                        upgrade:
+                            "npx -y npm-check-updates -u && npm install && npm run fix",
                         "docker:build": `docker build -t ${owner}-${repo} .`,
                         "docker:start": `docker run -e GITHUB_TOKEN ${owner}-${repo}`,
                         "act:install":
@@ -630,7 +631,4 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
     await runtimeHost.exec(undefined, "node", ["run", "upgrade"], {
         cwd: out,
     })
-
-    // fix scripts
-    await runtimeHost.exec(undefined, "npm", ["run", "fix"], { cwd: out })
 }
