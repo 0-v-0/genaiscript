@@ -4,6 +4,11 @@ permissions:
     issues: write
     models: read
 on:
+    workflow_dispatch:
+        inputs:
+            issue-number:
+                description: "Issue number to process"
+                required: true
     issues:
         types: [closed]
 concurrency:
@@ -28,3 +33,4 @@ jobs:
               run: node packages/cli/built/genaiscript.cjs run issue-bot -p github -prc bot --out-output $GITHUB_STEP_SUMMARY
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_ISSUE: ${{ github.event.issue.number}}
