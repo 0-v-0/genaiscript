@@ -3738,6 +3738,14 @@ interface GitHubOptions {
     issueNumber?: number
     runId?: string
     runUrl?: string
+    eventName?: OptionsOrString<
+        | "push"
+        | "pull_request"
+        | "workflow_dispatch"
+        | "issue"
+        | "issue_comment"
+    >
+    event?: unknown
 }
 
 type GitHubWorkflowRunStatus =
