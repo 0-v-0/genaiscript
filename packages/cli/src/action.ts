@@ -12,7 +12,7 @@ import { buildProject } from "./build"
 import { snakeCase } from "es-toolkit"
 import { titleize } from "../../core/src/inflection"
 import { logInfo, logVerbose } from "../../core/src/util"
-import { tryStat, writeText } from "../../core/src/fs"
+import { tryReadText, tryStat, writeText } from "../../core/src/fs"
 import { dedent } from "../../core/src/indent"
 import { runtimeHost } from "../../core/src/host"
 import { createScript as coreCreateScript } from "../../core/src/scripts"
@@ -279,14 +279,14 @@ export async function actionConfigure(
         ...(options.apks || []),
     ].filter(Boolean)
 
-    const action = YAMLTryParse({ filename: actionYmlFilename })
+    const action = YAMLTryParse(await tryReadText(actionYmlFilename))
     if (action && !force) {
         logVerbose(`updating action.yml`)
         action.description = script.title || pkg?.description
         action.inputs = inputs
         action.outputs = outputs
         action.branding = branding
-        await writeText("action.yml", YAMLStringify(action))
+        await writeText(actionYmlFilename, YAMLStringify(action))
     } else
         await writeFile(
             "action.yml",
