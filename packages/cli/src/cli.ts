@@ -78,6 +78,7 @@ import debug from "debug"
 import { genaiscriptDebug } from "../../core/src/debug"
 import { githubActionConfigure } from "./githubaction"
 import { uniq } from "es-toolkit"
+import { GitClient } from "../../core/src/git"
 const dbg = genaiscriptDebug("cli")
 
 /**
@@ -137,6 +138,7 @@ export async function cli() {
                 ignoreCurrentWorkspace = true
                 cwd = resolve(workspaceDir)
                 dbg(`github action workspace: %s`, cwd)
+                GitClient.default().setGitHubWorkspace(cwd)
             }
         }
         if (cwd) {
