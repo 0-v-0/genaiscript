@@ -1,15 +1,12 @@
 ---
 title: "Writing GenAIScript Workflows Faster with Coding Assistants"
 date: 2025-06-17
-authors: genaiscript
-draft: true
+authors: volkanunsal
 tags:
     - automation
     - cline
     - coding-assistants
 ---
-
-# Writing GenAIScript Workflows Faster with Coding Assistants
 
 ## Introduction
 
@@ -29,7 +26,7 @@ Peli explored this feature in his [AST Grep and Transform](https://microsoft.git
 
 Here is an example of what we want to achieve:
 
-```typescript
+```typescript wrap
 // Before
 function calculateTotal(price: number, tax: number): number {
     return price + price * tax
@@ -79,7 +76,7 @@ Finally, we will write a prompt for Cline to generate the GenAIScript code. The 
 
 The following is the prompt I wrote for Cline to generate the GenAIScript code. It is designed to be clear and concise, while also providing enough detail for Cline to understand the task.
 
-```markdown
+```markdown wrap
 You are an expert software engineer, familiar in all aspects of TypeScript and GenAIScript. You will find the documentation for GenAIScript at https://microsoft.github.io/genaiscript/llms.txt. Make sure to follow the links in all the Documentation Sets to understand the full capabilities of GenAIScript before writing the script.
 
 ## Task
@@ -115,7 +112,7 @@ After writing the prompt, we use Cline to generate the GenAIScript code. Cline w
 
 This is the script Cline generated for me (your script may vary slightly):
 
-```typescript
+```typescript wrap
 script({
     title: "Add JSDoc Comments to TypeScript Code",
     description:
@@ -398,7 +395,7 @@ Set \`applyEdits: true\` to automatically apply the generated JSDoc comments to 
 
 To run the script, we need to execute it in our terminal. Make sure you have GenAIScript installed and configured correctly.
 
-```bash
+```bash wrap
 npx genaiscript run jsdoc-commentator.genai.mts
 ```
 
