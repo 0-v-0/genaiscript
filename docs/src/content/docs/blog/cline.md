@@ -1,11 +1,30 @@
 ---
-title: "Writing GenAIScript Workflows Faster with Coding Assistants"
+title: Writing GenAIScript Workflows Faster with Coding Assistants
 date: 2025-06-17
 authors: volkanunsal
 tags:
-    - automation
-    - cline
-    - coding-assistants
+  - automation
+  - cline
+  - coding-assistants
+cover:
+  alt: "A pixelated 2D illustration of a computer workstation in a corporate
+    theme. The centerpiece is a monitor showing TypeScript code snippets, where
+    JSDoc comments stand out clearly above corresponding functions in blocky
+    text format. Around the monitor are minimalist, geometric icons: a gear
+    symbolizing workflow, a tree structure signifying abstract syntax trees, and
+    a lightning bolt representing optimization and automation. The backdrop
+    features a tidy grid pattern, utilizing a muted palette of five professional
+    colors. The scene is clean and devoid of human figures or written labels."
+  image: ./cline.png
+excerpt: Documenting code can be tedious but remains critical for maintaining
+  quality and collaboration. Using GenAIScript, you can automate the generation
+  of JSDoc comments in TypeScript projects by leveraging AST grep for precise
+  code analysis and LLMs for producing detailed documentation. This approach not
+  only saves time but also enhances consistency and ensures clarity across your
+  codebase. Practical benefits like parallel task execution, cost-efficient
+  prompt utilization, and the shareability of workflows make GenAIScript a
+  powerful tool for scaling such tasks in development teams.
+
 ---
 
 ## Introduction
