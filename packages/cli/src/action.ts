@@ -383,7 +383,6 @@ Save this file in your \`.github/workflows/\` directory as \`${script.id}.yml\`:
 \`\`\`yaml
 name: ${titleize(repo)}
 on:
-    workflow_dispatch:
     ${event}:
 permissions:
     contents: read
@@ -407,7 +406,6 @@ ${Object.entries(inputs || {})
             `          ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`
     )
     .join("\n")}
-${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
 \`\`\`
 
 ## Development
@@ -421,14 +419,11 @@ We recommend updating the script metadata instead of editing the action files di
 - the readme description is the script description
 - the action branding is the script branding
 
-To **regenerate** the action files (\`action.yml\`, \`Dockerfile\`, \`README.md\`, \`package.json\`, \`.gitignore\`), run:
+To **regenerate** the action files (\`action.yml\`), run:
 
 \`\`\`bash
 npm run configure
 \`\`\`
-
-> [!CAUTION]
-> This will overwrite any changes you made to these files!
 
 To lint script files, run:
 
@@ -493,9 +488,14 @@ npm run release
 
     await writeFile(
         "release.sh",
-        `
+        `#!/bin/bash
+set -e  # exit immediately if a command exits with a non-zero status
+
 # make sure there's no other changes
 git pull
+
+# re-generate action.yml
+npm run configure
 
 # Lint and build
 npm run lint
@@ -532,7 +532,6 @@ echo "✅ GitHub release $NEW_VERSION created successfully."
         ".github/workflows/ci.yml",
         `name: Continuous Integration
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - main
@@ -542,8 +541,6 @@ on:
 permissions:
   contents: read
   models: read
-  pull-requests: write
-  issues: write
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -562,7 +559,6 @@ jobs:
       - uses: ./
         with:
           github_token: \${{ secrets.GITHUB_TOKEN }}
-${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
 `
     )
 
@@ -607,7 +603,7 @@ ${issue ? `          github_issue: \${{ github.event.issue.number }}` : ""}
                         lint: `npx --yes prettier --write genaisrc/`,
                         fix: "genaiscript scripts fix",
                         typecheck: `genaiscript scripts compile`,
-                        configure: [`genaiscript configure action`]
+                        configure: [`genaiscript configure action`, scriptId]
                             .filter(Boolean)
                             .join(" "),
                         test: "echo 'No tests defined.'",
