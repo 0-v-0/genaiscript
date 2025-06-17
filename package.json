@@ -2,7 +2,7 @@
     "name": "genaiscript-workspace",
     "displayName": "GenAIScript",
     "description": "Programmatically assemble prompts for LLMs using JavaScript. Orchestrate LLMs, tools, and data in code.",
-    "version": "1.142.12",
+    "version": "1.142.13",
     "license": "MIT",
     "private": true,
     "author": "microsoft",
