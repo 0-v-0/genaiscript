@@ -71,6 +71,11 @@ export class GitClient implements Git {
         this._cwd = cwd
         this._defaultBranch = undefined // Reset default branch
         this._requiresSafeDirectory = true
+
+        if (!process.env.GITHUB_TOKEN && process.env.INPUT_GITHUB_TOKEN) {
+            dbg(`setting GITHUB_TOKEN from INPUT_GITHUB_TOKEN`)
+            process.env.GITHUB_TOKEN = process.env.INPUT_GITHUB_TOKEN
+        }
         return this
     }
 

@@ -97,9 +97,8 @@ async function githubFromEnv(
             /^refs\/pull\/(?<issue>\d+)\/merge$/.exec(ref || "")?.groups?.issue
     )
     if (event && isNaN(issue)) {
-        dbg(`resolving issue from event`)
-        dbg(`event.issue: %O`, event.issue)
-        issue = normalizeInt(event.issue?.number)
+        dbg(`resolving issue/pull_request from event`)
+        issue = normalizeInt(event.issue?.number || event.pull_request?.number)
     }
     return deleteUndefinedValues({
         token,
