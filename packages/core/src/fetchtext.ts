@@ -1,16 +1,21 @@
-import { MarkdownTrace, TraceOptions } from "./trace";
-import { logVerbose } from "./util";
-import { CancellationOptions } from "./cancellation";
-import { host } from "./host";
-import { fileTypeFromBuffer } from "./filetype";
-import { isBinaryMimeType } from "./binary";
-import { toBase64 } from "./base64";
-import { deleteUndefinedValues } from "./cleaners";
-import { prettyBytes } from "./pretty";
-import { uriRedact } from "./url";
-import { HTMLTablesToJSON, HTMLToMarkdown, HTMLToText } from "./html";
-import { createFetch } from "./fetch";
-import { genaiscriptDebug } from "./debug";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { MarkdownTrace, TraceOptions } from "./trace.js";
+import { logVerbose } from "./util.js";
+import { CancellationOptions } from "./cancellation.js";
+import { host } from "./host.js";
+import { fileTypeFromBuffer } from "./filetype.js";
+import { isBinaryMimeType } from "./binary.js";
+import { toBase64 } from "./base64.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { prettyBytes } from "./pretty.js";
+import { uriRedact } from "./url.js";
+import { HTMLTablesToJSON, HTMLToMarkdown, HTMLToText } from "./html.js";
+import { createFetch } from "./fetch.js";
+import { genaiscriptDebug } from "./debug.js";
+import type { FetchTextOptions, WorkspaceFile } from "./types.js";
+
 const dbg = genaiscriptDebug("fetch:text");
 
 /**

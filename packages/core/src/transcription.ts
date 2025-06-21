@@ -1,5 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { parse } from "@plussub/srt-vtt-parser";
-import { deleteEmptyValues, deleteUndefinedValues } from "./cleaners";
+import { deleteEmptyValues } from "./cleaners.js";
+import type { TranscriptionResult, TranscriptionSegment } from "./types.js";
+
+interface Entry {
+  id: string;
+  from: number;
+  to: number;
+  text: string;
+}
 
 /**
  * Renders SRT and VTT formats from a transcription result.
@@ -35,7 +46,7 @@ export function srtVttRender(transcription: TranscriptionResult) {
   const vtt =
     "WEBVTT\n\n" +
     segments
-      .map((segment, index) => {
+      .map((segment) => {
         const start = formatVRTTime(segment.start);
         const end = formatVRTTime(segment.end);
         return `${start} --> ${end}\n${segment.text.trim()}\n`;
@@ -79,7 +90,7 @@ export function srtVttRender(transcription: TranscriptionResult) {
  * - An array of extracted timestamp strings in the format `[hh:mm:ss.sss]` or `[mm:ss.sss]`.
  */
 export function parseTimestamps(transcription: string) {
-  let ts: string[] = [];
+  const ts: string[] = [];
   transcription?.replace(/\[((\d{2}:)?\d{2}:\d{2}(.\d{3})?)\]/g, (match, p1) => {
     ts.push(p1);
     return "";
@@ -99,7 +110,7 @@ export function parseTimestamps(transcription: string) {
 export function vttSrtParse(transcription: string): TranscriptionSegment[] {
   if (!transcription) return [];
   const p = parse(transcription);
-  return p.entries.map((e) =>
+  return p.entries.map((e: Entry) =>
     deleteEmptyValues({
       id: e.id,
       start: e.from,

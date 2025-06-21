@@ -1,15 +1,15 @@
-import { getRandomValues as cryptoGetRandomValues } from "crypto";
-// crypto.ts - Provides cryptographic functions for secure operations
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
-// Importing the toHex function from the util module to convert byte arrays to hexadecimal strings
-import { concatBuffers, toHex, utf8Encode } from "./util";
-import { createReadStream } from "fs";
-import { createHash } from "crypto";
-import { CORE_VERSION } from "./version";
+import { createHash, getRandomValues as cryptoGetRandomValues, subtle } from "node:crypto";
+import type { HashOptions } from "./types.js";
+import { concatBuffers, toHex, utf8Encode } from "./util.js";
+import { createReadStream } from "node:fs";
+import { CORE_VERSION } from "./version.js";
 
 function getRandomValues(bytes: Uint8Array) {
-  if (typeof self !== "undefined" && self.crypto) {
-    return self.crypto.getRandomValues(bytes);
+  if (globalThis.crypto) {
+    return globalThis.crypto.getRandomValues(bytes);
   } else {
     return cryptoGetRandomValues(bytes);
   }
@@ -17,10 +17,9 @@ function getRandomValues(bytes: Uint8Array) {
 
 async function digest(algorithm: string, data: Uint8Array) {
   algorithm = algorithm.toUpperCase();
-  if (typeof self !== "undefined" && self.crypto) {
-    return self.crypto.subtle.digest(algorithm, data);
+  if (globalThis.crypto) {
+    return globalThis.crypto.subtle.digest(algorithm, data);
   } else {
-    const { subtle } = await import("crypto");
     return subtle.digest(algorithm, data);
   }
 }

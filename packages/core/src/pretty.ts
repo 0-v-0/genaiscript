@@ -1,7 +1,15 @@
-import type { ChatCompletionUsage } from "./chattypes";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { ChatCompletionUsage } from "./chattypes.js";
 import _prettyBytes from "pretty-bytes";
-import { CHAR_DOWN_ARROW, CHAR_TEMPERATURE, CHAR_UP_ARROW, CHAR_UP_DOWN_ARROWS } from "./constants";
-import { roundWithPrecision } from "./precision";
+import {
+  CHAR_DOWN_ARROW,
+  CHAR_TEMPERATURE,
+  CHAR_UP_ARROW,
+  CHAR_UP_DOWN_ARROWS,
+} from "./constants.js";
+import { roundWithPrecision } from "./precision.js";
 
 /**
  * Formats token usage into a human-readable string indicating tokens per second.

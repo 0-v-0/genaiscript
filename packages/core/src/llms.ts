@@ -1,7 +1,10 @@
-import { LARGE_MODEL_ID, SMALL_MODEL_ID, VISION_MODEL_ID } from "./constants";
-import { ModelConfiguration, ModelConfigurations } from "./host";
-import LLMS from "./llms.json";
-import { deleteEmptyValues } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { LARGE_MODEL_ID, SMALL_MODEL_ID, VISION_MODEL_ID } from "./constants.js";
+import { ModelConfiguration, ModelConfigurations } from "./host.js";
+import LLMS from "./llmsdata.js";
+import { deleteEmptyValues } from "./cleaners.js";
 import { uniq } from "es-toolkit";
 
 /**

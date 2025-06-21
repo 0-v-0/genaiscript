@@ -1,4 +1,7 @@
-import { trimNewlines } from "./unwrappers";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { trimNewlines } from "./unwrappers.js";
 
 const contentTypes: Record<string, string> = {
   markdown: "md",

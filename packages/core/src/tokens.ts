@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Importing constants and utility functions
 import {
   ESTIMATE_TOKEN_OVERHEAD,
@@ -5,10 +8,12 @@ import {
   MAX_TOKENS_ELLIPSE,
   PROMPT_DOM_TRUNCATE_ATTEMPTS,
   TOKEN_TRUNCATION_THRESHOLD,
-} from "./constants";
-import { measure } from "./performance";
-import { logVerbose } from "./util";
-import { genaiscriptDebug } from "./debug";
+} from "./constants.js";
+import { measure } from "./performance.js";
+import { logVerbose } from "./util.js";
+import { genaiscriptDebug } from "./debug.js";
+import type { TokenEncoder } from "./types.js";
+
 const dbg = genaiscriptDebug("tokens");
 /**
  * Estimates the token count of a given text by dividing its length

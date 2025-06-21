@@ -1,4 +1,7 @@
-import { assert } from "./assert";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { assert } from "./assert.js";
 
 /**
  * Splits a string into chunks of specified size.

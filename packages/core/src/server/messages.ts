@@ -1,4 +1,24 @@
-import type { ChatCompletionAssistantMessageParam, ChatCompletionMessageParam } from "../chattypes";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type {
+  ChatCompletionAssistantMessageParam,
+  ChatCompletionMessageParam,
+} from "../chattypes.js";
+import type {
+  ChatToolChoice,
+  Diagnostic,
+  Edits,
+  ExpansionVariables,
+  FenceFormat,
+  GenerationOutput,
+  LanguageModelInfo,
+  LanguageModelReference,
+  Logprob,
+  PromptScript,
+  SerializedError,
+  WorkspaceFile,
+} from "../types.js";
 
 export interface ResponseStatus {
   ok: boolean;

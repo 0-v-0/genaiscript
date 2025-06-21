@@ -1,25 +1,33 @@
-// Import necessary types and modules
-import type { TextItem } from "pdfjs-dist/types/src/display/api";
-import { host } from "./host";
-import { TraceOptions } from "./trace";
-import os from "os";
-import { serializeError } from "./error";
-import { logVerbose, logWarn } from "./util";
-import { INVALID_FILENAME_REGEX, PDF_HASH_LENGTH, PDF_SCALE } from "./constants";
-import { resolveGlobal } from "./global";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { TextItem } from "pdfjs-dist/types/src/display/api.js";
+import { host } from "./host.js";
+import { TraceOptions } from "./trace.js";
+import os from "node:os";
+import { serializeError } from "./error.js";
+import { logVerbose, logWarn } from "./util.js";
+import { INVALID_FILENAME_REGEX, PDF_HASH_LENGTH, PDF_SCALE } from "./constants.js";
+import { resolveGlobal } from "./global.js";
 import { isUint8Array, isUint8ClampedArray } from "util/types";
-import { hash } from "./crypto";
-import { join } from "path";
-import { readFile, writeFile } from "fs/promises";
-import { ensureDir } from "fs-extra";
-import { YAMLStringify } from "./yaml";
-import { deleteUndefinedValues } from "./cleaners";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { measure } from "./performance";
-import { dotGenaiscriptPath } from "./workdir";
-import { genaiscriptDebug } from "./debug";
+import { hash } from "./crypto.js";
+import { join } from "node:path";
+import { readFile, writeFile } from "node:fs/promises";
+import { ensureDir } from "./fs.js";
+import { YAMLStringify } from "./yaml.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { measure } from "./performance.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { genaiscriptDebug } from "./debug.js";
 import type { Canvas } from "@napi-rs/canvas";
-import { pathToFileURL } from "url";
+import { pathToFileURL } from "node:url";
+import { ParsePDFOptions, PDFPage, PDFPageImage } from "./types.js";
+import canvas from "@napi-rs/canvas";
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
+import { moduleResolve } from "./pathUtils.js";
+
 const dbg = genaiscriptDebug("pdf");
 
 let standardFontDataUrl: string;
@@ -30,16 +38,16 @@ let standardFontDataUrl: string;
  * @param options - Optional tracing options
  * @returns A promise resolving to the pdfjs module
  */
-async function tryImportPdfjs(options?: TraceOptions) {
-  const { trace } = options || {};
+async function tryImportPdfjs() {
   installPromiseWithResolversShim(); // Ensure Promise.withResolvers is available
-  const pdfjs = await import("pdfjs-dist");
-  let workerSrc = require.resolve("pdfjs-dist/build/pdf.worker.min.mjs");
+
+  let workerSrc = moduleResolve("pdfjs-dist/build/pdf.worker.min.mjs");
+  dbg(`workerSrc: %s`, workerSrc);
 
   // Adjust worker source path for Windows platform
   if (os.platform() === "win32") {
-    dbg("detected Windows platform, adjusting workerSrc: %s", workerSrc);
     workerSrc = "file://" + workerSrc.replace(/\\/g, "/");
+    dbg("detected Windows platform, worker: %s", workerSrc);
   }
 
   standardFontDataUrl = pathToFileURL(
@@ -108,7 +116,6 @@ async function tryImportCanvas() {
 
   try {
     dbg(`initializing pdf canvas`);
-    const canvas = await import("@napi-rs/canvas");
     const createCanvas = (w: number, h: number) => canvas.createCanvas(w, h);
     const glob = resolveGlobal();
     glob.ImageData ??= canvas.ImageData;
@@ -129,14 +136,14 @@ async function tryImportCanvas() {
  * Installs a shim for Promise.withResolvers if not available.
  */
 function installPromiseWithResolversShim() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   (Promise as any).withResolvers ||
     ((Promise as any).withResolvers = function () {
-      let rs,
-        rj,
-        pm = new this((resolve: any, reject: any) => {
-          rs = resolve;
-          rj = reject;
-        });
+      let rs, rj;
+      const pm = new this((resolve: any, reject: any) => {
+        rs = resolve;
+        rj = reject;
+      });
       return {
         resolve: rs,
         reject: rj,
@@ -155,7 +162,7 @@ async function computeHashFolder(
   filename: string | WorkspaceFile,
   options: TraceOptions & ParsePDFOptions & { content?: Uint8Array },
 ) {
-  const { trace, content, ...rest } = options;
+  const { content, ...rest } = options;
   const h = await hash([typeof filename === "string" ? { filename } : filename, content, rest], {
     readWorkspaceFiles: true,
     version: true,
@@ -224,7 +231,7 @@ async function PDFTryParse(
   const m = measure("parsers.pdf");
   try {
     const createCanvas = await tryImportCanvas();
-    const pdfjs = await tryImportPdfjs(options);
+    const pdfjs = await tryImportPdfjs();
     checkCancelled(cancellationToken);
     const { getDocument } = pdfjs;
     const data = content || (await host.readFile(fileOrUrl));
@@ -299,7 +306,7 @@ async function PDFTryParse(
           const imageObj = args[0];
           if (imageObj) {
             checkCancelled(cancellationToken);
-            const img = await new Promise<any>((resolve, reject) => {
+            const img = await new Promise<any>((resolve) => {
               if (page.commonObjs.has(imageObj)) {
                 resolve(page.commonObjs.get(imageObj));
               } else if (page.objs.has(imageObj)) {

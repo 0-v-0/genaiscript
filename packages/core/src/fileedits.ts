@@ -1,19 +1,32 @@
-import { applyChangeLog, parseChangeLogs } from "./changelog";
-import { dataToMarkdownTable } from "./csv";
-import { applyLLMDiff, applyLLMPatch, parseLLMDiffs } from "./llmdiff";
-import { errorMessage, isCancelError } from "./error";
-import { unquote } from "./unwrappers";
-import { fileExists, readText } from "./fs";
-import { isGlobMatch } from "./glob";
-import { runtimeHost } from "./host";
-import { JSON5parse } from "./json5";
-import { stringToPos } from "./parser";
-import { validateJSONWithSchema } from "./schema";
-import { MarkdownTrace, TraceOptions } from "./trace";
-import { logError, logVerbose, relativePath } from "./util";
-import { YAMLParse } from "./yaml";
-import { writeText } from "./fs";
-import { diffCreatePatch } from "./diff";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { applyChangeLog, parseChangeLogs } from "./changelog.js";
+import { dataToMarkdownTable } from "./csv.js";
+import { applyLLMDiff, applyLLMPatch, parseLLMDiffs } from "./llmdiff.js";
+import { errorMessage, isCancelError } from "./error.js";
+import { unquote } from "./unwrappers.js";
+import { fileExists, readText } from "./fs.js";
+import { isGlobMatch } from "./glob.js";
+import { runtimeHost } from "./host.js";
+import { JSON5parse } from "./json5.js";
+import { stringToPos } from "./parser.js";
+import { validateJSONWithSchema } from "./schema.js";
+import { MarkdownTrace, TraceOptions } from "./trace.js";
+import { logError, logVerbose, relativePath } from "./util.js";
+import { YAMLParse } from "./yaml.js";
+import { writeText } from "./fs.js";
+import { diffCreatePatch } from "./diff.js";
+import type {
+  Edits,
+  FileMergeHandler,
+  FileOutput,
+  FileUpdate,
+  JSONSchema,
+  PromptOutputProcessorHandler,
+  ReplaceEdit,
+  RunPromptResult,
+} from "./types.js";
 
 /**
  * Computes file edits based on the specified runtime prompt result and processing options.

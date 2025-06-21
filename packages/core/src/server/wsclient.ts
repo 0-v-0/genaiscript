@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   CHANGE,
   CLIENT_RECONNECT_DELAY,
@@ -8,7 +11,7 @@ import {
   OPEN,
   QUEUE_SCRIPT_START,
   RECONNECT,
-} from "../constants";
+} from "../constants.js";
 import type {
   ChatEvents,
   LanguageModelConfiguration,
@@ -27,7 +30,7 @@ import type {
   ServerEnvResponse,
   ServerResponse,
   ServerVersion,
-} from "./messages";
+} from "./messages.js";
 
 interface Awaiter {
   msg: Omit<RequestMessage, "id">;

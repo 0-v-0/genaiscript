@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * Filters a tag based on a list of tags.
  * It checks if the tag starts with any of the tags in the list.

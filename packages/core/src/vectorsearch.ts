@@ -1,20 +1,30 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module provides functionality for creating embeddings using OpenAI's API
  * and performing vector search on documents.
  */
 
-import { TraceOptions } from "./trace";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { resolveFileContent } from "./file";
-import { vectraWorkspaceFileIndex } from "./vectra";
-import { azureAISearchIndex } from "./azureaisearch";
-import { EmbeddingFunction, WorkspaceFileIndexCreator } from "./chat";
-import { resolveModelConnectionInfo } from "./models";
-import { EMBEDDINGS_MODEL_ID } from "./constants";
-import { runtimeHost } from "./host";
-import { resolveLanguageModel } from "./lm";
-import { assert } from "./util";
-import { createCache } from "./cache";
+import { TraceOptions } from "./trace.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { resolveFileContent } from "./file.js";
+import { vectraWorkspaceFileIndex } from "./vectra.js";
+import { azureAISearchIndex } from "./azureaisearch.js";
+import { EmbeddingFunction, WorkspaceFileIndexCreator } from "./chat.js";
+import { resolveModelConnectionInfo } from "./models.js";
+import { EMBEDDINGS_MODEL_ID } from "./constants.js";
+import { runtimeHost } from "./host.js";
+import { resolveLanguageModel } from "./lm.js";
+import { assert } from "./assert.js";
+import { createCache } from "./cache.js";
+import type {
+  VectorIndexOptions,
+  VectorSearchOptions,
+  WorkspaceFile,
+  WorkspaceFileIndex,
+  WorkspaceFileWithScore,
+} from "./types.js";
 
 interface EmbeddingsResponse {
   /**

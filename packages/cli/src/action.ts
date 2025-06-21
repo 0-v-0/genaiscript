@@ -1,23 +1,38 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { resolve } from "node:path";
-import { deleteEmptyValues, deleteUndefinedValues } from "../../core/src/cleaners";
-import { GENAI_ANY_REGEX, GENAI_SRC } from "../../core/src/constants";
-import { genaiscriptDebug } from "../../core/src/debug";
-import { nodeTryReadPackage } from "../../core/src/nodepackage";
-import { CORE_VERSION } from "../../core/src/version";
-import { YAMLStringify, YAMLTryParse } from "../../core/src/yaml";
-import { buildProject } from "./build";
 import { snakeCase } from "es-toolkit";
-import { titleize } from "../../core/src/inflection";
-import { logInfo, logVerbose } from "../../core/src/util";
-import { tryReadText, tryStat, writeText } from "../../core/src/fs";
-import { dedent } from "../../core/src/indent";
-import { runtimeHost } from "../../core/src/host";
-import { createScript as coreCreateScript } from "../../core/src/scripts";
-import { templateIdFromFileName } from "../../core/src/template";
-import { shellConfirm, shellSelect } from "./input";
-import { isCI } from "../../core/src/ci";
+import {
+  CORE_VERSION,
+  GENAI_ANY_REGEX,
+  GENAI_SRC,
+  GitHubClient,
+  YAMLStringify,
+  YAMLTryParse,
+  createScript as coreCreateScript,
+  dedent,
+  deleteEmptyValues,
+  deleteUndefinedValues,
+  genaiscriptDebug,
+  isCI,
+  logInfo,
+  logVerbose,
+  nodeTryReadPackage,
+  runtimeHost,
+  templateIdFromFileName,
+  titleize,
+  tryReadText,
+  tryStat,
+  writeText,
+} from "@genaiscript/core";
+import { buildProject } from "@genaiscript/core";
+import type { JSONSchemaDescribed, JSONSchemaObject, JSONSchemaString } from "@genaiscript/core";
+import { shellConfirm, shellSelect } from "@genaiscript/runtime";
 
 const dbg = genaiscriptDebug("cli:action");
+
+const github = GitHubClient.default();
 
 interface GitHubActionFieldType {
   description: string;
@@ -147,7 +162,7 @@ export async function actionConfigure(
   }
 
   const event: "push" | "pull_request" | "issue_comment" | "issue" =
-    (options.event as any) ??
+    (options.event as "push" | "pull_request" | "issue_comment" | "issue" | undefined) ??
     (pullRequestComment || pullRequestDescription || pullRequestReviews ? "pull_request" : "push");
   const issue = event === "issue" || event === "issue_comment";
   const pullRequest = event === "pull_request";
@@ -193,7 +208,7 @@ export async function actionConfigure(
           {
             description: (value as JSONSchemaDescribed).description || "",
             required: scriptSchema.required?.includes(key) || false,
-            default: (value as any).default ?? undefined,
+            default: (value as JSONSchemaString).default ?? undefined,
           } satisfies GitHubActionFieldType,
         ];
       }),
@@ -337,10 +352,7 @@ uses: ${owner}/${repo}@main
 with:
 ${Object.entries(inputs || {})
   .filter(([, value]) => value.required)
-  .map(
-    ([key, value]) =>
-      `  ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`,
-  )
+  .map(([key]) => `  ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`)
   .join("\n")}
 \`\`\`
 
@@ -370,7 +382,7 @@ jobs:
 ${Object.entries(inputs || {})
   .filter(([, value]) => value.required)
   .map(
-    ([key, value]) =>
+    ([key]) =>
       `          ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`,
   )
   .join("\n")}

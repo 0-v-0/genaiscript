@@ -1,7 +1,11 @@
-import { filenameOrFileToContent } from "./unwrappers";
-import { JSON5TryParse } from "./json5";
-import { TOMLTryParse } from "./toml";
-import { YAMLTryParse, YAMLStringify } from "./yaml";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { filenameOrFileToContent } from "./unwrappers.js";
+import { JSON5TryParse } from "./json5.js";
+import { TOMLTryParse } from "./toml.js";
+import { YAMLTryParse, YAMLStringify } from "./yaml.js";
+import type { WorkspaceFile } from "./types.js";
 
 /**
  * Parses the frontmatter section of a text input and attempts to convert it into a structured format.

@@ -1,14 +1,22 @@
-import { collectFolders } from "./ast";
-import { DOCS_URL, NEW_SCRIPT_TEMPLATE, TYPE_DEFINITION_BASENAME } from "./constants";
-import { githubCopilotInstructions as ghInstructions, promptDefinitions } from "./default_prompts";
-import { tryReadText, writeText } from "./fs";
-import { host } from "./host";
-import { logVerbose } from "./util";
-import { Project } from "./server/messages";
-import { collapseNewlines } from "./cleaners";
-import { gitIgnoreEnsure } from "./gitignore";
-import { dotGenaiscriptPath } from "./workdir";
-import { genaiscriptDebug } from "./debug";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { collectFolders } from "./ast.js";
+import { DOCS_URL, NEW_SCRIPT_TEMPLATE, TYPE_DEFINITION_BASENAME } from "./constants.js";
+import {
+  githubCopilotInstructions as ghInstructions,
+  promptDefinitions,
+} from "./default_prompts.js";
+import { tryReadText, writeText } from "./fs.js";
+import { host } from "./host.js";
+import { logVerbose } from "./util.js";
+import { Project } from "./server/messages.js";
+import { collapseNewlines } from "./cleaners.js";
+import { gitIgnoreEnsure } from "./gitignore.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { genaiscriptDebug } from "./debug.js";
+import type { PromptScript } from "./types.js";
+
 const dbg = genaiscriptDebug("scripts");
 
 /**
@@ -60,7 +68,7 @@ export async function fixPromptDefinitions(project: Project, options?: { force?:
       // patch genaiscript
       if (defName === "genaiscript.d.ts") {
         // update the system prompt identifiers
-        defContent = defContent
+        defContent = String(defContent)
           .replace(
             "type SystemPromptId = OptionsOrString<string>",
             `type SystemPromptId = OptionsOrString<\n    | ${systems
@@ -78,7 +86,7 @@ ${systems.map((s) => `     * - \`${s.id}\`: ${s.title || s.description}`).join("
           );
 
         // update the tool prompt identifiers
-        defContent = defContent
+        defContent = String(defContent)
           .replace(
             "type SystemToolId = OptionsOrString<string>",
             `type SystemToolId = OptionsOrString<\n    | ${tools
@@ -103,7 +111,7 @@ ${tools.map((s) => `* - \`${s.id}\`: ${s.description}`).join("\n")}
       const current = await tryReadText(fn);
       if (current !== defContent) {
         logVerbose(`updating ${fn}`);
-        await writeText(fn, defContent);
+        await writeText(fn, String(defContent));
       }
     }
   }

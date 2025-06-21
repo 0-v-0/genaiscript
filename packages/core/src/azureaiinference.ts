@@ -1,6 +1,9 @@
-import { LanguageModel } from "./chat";
-import { MODEL_PROVIDER_AZURE_AI_INFERENCE } from "./constants";
-import { OpenAIChatCompletion, OpenAIEmbedder } from "./openai";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { LanguageModel } from "./chat.js";
+import { MODEL_PROVIDER_AZURE_AI_INFERENCE } from "./constants.js";
+import { OpenAIChatCompletion, OpenAIEmbedder } from "./openai.js";
 
 export const AzureAIInferenceModel = Object.freeze<LanguageModel>({
   id: MODEL_PROVIDER_AZURE_AI_INFERENCE,

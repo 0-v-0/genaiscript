@@ -1,8 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:tools");
 
-import { parseModelIdentifier } from "./models";
-import { providerFeatures } from "./features";
+import { parseModelIdentifier } from "./models.js";
+import { providerFeatures } from "./features.js";
 
 /**
  * Escapes a tool name by sanitizing it according to specific rules.

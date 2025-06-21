@@ -1,4 +1,7 @@
-import { deleteEmptyValues } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { deleteEmptyValues } from "./cleaners.js";
 
 /**
  * Creates a deep clone of the input object and removes any properties with empty values.

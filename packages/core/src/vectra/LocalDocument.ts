@@ -1,7 +1,10 @@
-import * as fs from "fs/promises";
-import * as path from "path";
-import { MetadataTypes } from "./types";
-import { LocalDocumentIndex } from "./LocalDocumentIndex";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+import { MetadataTypes } from "./types.js";
+import { LocalDocumentIndex } from "./LocalDocumentIndex.js";
 
 /**
  * Represents an indexed document stored on disk.

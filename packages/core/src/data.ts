@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   XLSX_REGEX,
   CSV_REGEX,
@@ -9,21 +12,22 @@ import {
   MD_REGEX,
   MDX_REGEX,
   JSONL_REGEX,
-} from "./constants";
-import { CSVTryParse } from "./csv";
-import { splitMarkdown } from "./frontmatter";
-import { INITryParse } from "./ini";
-import { JSON5TryParse } from "./json5";
-import { TOMLTryParse } from "./toml";
-import { XLSXParse } from "./xlsx";
-import { XMLTryParse } from "./xml";
-import { YAMLTryParse } from "./yaml";
-import { resolveFileContent } from "./file";
-import { TraceOptions } from "./trace";
-import { host } from "./host";
-import { fromBase64 } from "./base64";
-import { JSONLTryParse } from "./jsonl";
-import { tryValidateJSONWithSchema } from "./schema";
+} from "./constants.js";
+import { CSVTryParse } from "./csv.js";
+import { splitMarkdown } from "./frontmatter.js";
+import { INITryParse } from "./ini.js";
+import { JSON5TryParse } from "./json5.js";
+import { TOMLTryParse } from "./toml.js";
+import { XLSXParse } from "./xlsx.js";
+import { XMLTryParse } from "./xml.js";
+import { YAMLTryParse } from "./yaml.js";
+import { resolveFileContent } from "./file.js";
+import { TraceOptions } from "./trace.js";
+import { host } from "./host.js";
+import { fromBase64 } from "./base64.js";
+import { JSONLTryParse } from "./jsonl.js";
+import { tryValidateJSONWithSchema } from "./schema.js";
+import type { CSVParseOptions, INIParseOptions, WorkspaceFile, XMLParseOptions } from "./types.js";
 
 /**
  * Attempts to parse the provided file's content based on its detected format.

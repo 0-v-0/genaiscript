@@ -1,5 +1,8 @@
-import { deleteUndefinedValues } from "./cleaners";
-import { THINK_REGEX } from "./constants";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { deleteUndefinedValues } from "./cleaners.js";
+import { THINK_REGEX } from "./constants.js";
 
 /**
  * Converts custom "think" tags within a string to Markdown format with collapsible HTML elements.

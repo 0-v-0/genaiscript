@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // cspell: disable
 import {
   PromptNode,
@@ -25,22 +28,24 @@ import {
   toDefRefName,
   resolveFenceFormat,
   createFileImageNodes,
-} from "./promptdom";
-import { MarkdownTrace } from "./trace";
-import { GenerationOptions } from "./generation";
-import { promptParametersSchemaToJSONSchema } from "./parameters";
-import { consoleLogFormat } from "./logging";
-import { isGlobMatch } from "./glob";
-import { arrayify, assert, ellipse, logError, logVerbose, logWarn } from "./util";
-import { lastAssistantReasoning, renderShellOutput } from "./chatrender";
-import { jinjaRender } from "./jinja";
-import { mustacheRender } from "./mustache";
+} from "./promptdom.js";
+import { MarkdownTrace } from "./trace.js";
+import { GenerationOptions } from "./generation.js";
+import { promptParametersSchemaToJSONSchema } from "./parameters.js";
+import { consoleLogFormat } from "./logging.js";
+import { isGlobMatch } from "./glob.js";
+import { assert } from "./assert.js";
+import { arrayify } from "./cleaners.js";
+import { ellipse, logError, logVerbose, logWarn } from "./util.js";
+import { lastAssistantReasoning, renderShellOutput } from "./chatrender.js";
+import { jinjaRender } from "./jinja.js";
+import { mustacheRender } from "./mustache.js";
 import {
   imageEncodeForLLM,
   imageTileEncodeForLLM,
   imageTransform,
   renderImageToTerminal,
-} from "./image";
+} from "./image.js";
 import { delay, uniq } from "es-toolkit";
 import {
   addToolDefinitionsMessage,
@@ -50,10 +55,10 @@ import {
   executeChatSession,
   mergeGenerationOptions,
   tracePromptResult,
-} from "./chat";
-import { CancellationToken, checkCancelled } from "./cancellation";
-import { ChatCompletionMessageParam } from "./chattypes";
-import { resolveModelConnectionInfo } from "./models";
+} from "./chat.js";
+import { CancellationToken, checkCancelled } from "./cancellation.js";
+import { ChatCompletionMessageParam } from "./chattypes.js";
+import { resolveModelConnectionInfo } from "./models.js";
 import {
   CHAT_REQUEST_PER_MODEL_CONCURRENT_LIMIT,
   TOKEN_MISSING_INFO,
@@ -64,38 +69,44 @@ import {
   SPEECH_MODEL_ID,
   IMAGE_GENERATION_MODEL_ID,
   LARGE_MODEL_ID,
-} from "./constants";
-import { addFallbackToolSystems, resolveSystems, resolveTools } from "./systems";
-import { callExpander } from "./expander";
-import { errorMessage, isCancelError, NotSupportedError, serializeError } from "./error";
-import { resolveLanguageModel } from "./lm";
-import { concurrentLimit } from "./concurrency";
-import { resolveScript } from "./ast";
-import { dedent } from "./indent";
-import { runtimeHost } from "./host";
-import { writeFileEdits } from "./fileedits";
-import { agentAddMemory, agentCreateCache, agentQueryMemory } from "./agent";
-import { YAMLStringify } from "./yaml";
-import { Project } from "./server/messages";
-import { mergeEnvVarsWithSystem, parametersToVars } from "./vars";
-import { FFmepgClient } from "./ffmpeg";
-import { BufferToBlob } from "./bufferlike";
-import { host } from "./host";
-import { srtVttRender } from "./transcription";
-import { hash } from "./crypto";
-import { fileTypeFromBuffer } from "./filetype";
-import { deleteUndefinedValues } from "./cleaners";
-import { sliceData } from "./tidy";
-import { toBase64 } from "@smithy/util-base64";
-import { consoleColors } from "./consolecolor";
-import { terminalSize } from "./terminal";
-import { stderr, stdout } from "./stdio";
-import { dotGenaiscriptPath } from "./workdir";
-import { prettyBytes } from "./pretty";
-import { createCache } from "./cache";
-import { measure } from "./performance";
-import { genaiscriptDebug } from "./debug";
+} from "./constants.js";
+import { addFallbackToolSystems, resolveSystems, resolveTools } from "./systems.js";
+import { callExpander } from "./expander.js";
+import { errorMessage, isCancelError, NotSupportedError, serializeError } from "./error.js";
+import { resolveLanguageModel } from "./lm.js";
+import { concurrentLimit } from "./concurrency.js";
+import { resolveScript } from "./ast.js";
+import { dedent } from "./indent.js";
+import { runtimeHost } from "./host.js";
+import { writeFileEdits } from "./fileedits.js";
+import { agentAddMemory, agentCreateCache, agentQueryMemory } from "./agent.js";
+import { YAMLStringify } from "./yaml.js";
+import { Project } from "./server/messages.js";
+import { mergeEnvVarsWithSystem, parametersToVars } from "./vars.js";
+import { FFmepgClient } from "./ffmpeg.js";
+import { BufferToBlob } from "./bufferlike.js";
+import { host } from "./host.js";
+import { srtVttRender } from "./transcription.js";
+import { hash } from "./crypto.js";
+import { fileTypeFromBuffer } from "./filetype.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { sliceData } from "./tidy.js";
+import { toBase64 } from "./base64.js";
+import { consoleColors } from "./consolecolor.js";
+import { terminalSize } from "./terminal.js";
+import { stderr, stdout } from "./stdio.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { prettyBytes } from "./pretty.js";
+import { createCache } from "./cache.js";
+import { measure } from "./performance.js";
+import { genaiscriptDebug } from "./debug.js";
 import debug from "debug";
+import type {
+  ChatGenerationContext,
+  ChatTurnGenerationContext,
+  ExpansionVariables,
+} from "./types.js";
+
 const dbg = genaiscriptDebug("prompt:context");
 
 /**
@@ -783,7 +794,7 @@ export function createChatGenerationContext(
     Object.freeze(runOptions);
     const { label, applyEdits, throwOnError } = runOptions || {};
     const runTrace = trace.startTraceDetails(`🎁 ${label || "prompt"}`);
-    let messages: ChatCompletionMessageParam[] = [];
+    const messages: ChatCompletionMessageParam[] = [];
     try {
       infoCb?.({ text: label || "prompt" });
 

@@ -1,10 +1,15 @@
-import { lstat, mkdir, writeFile, readFile, appendFile } from "fs/promises";
-import { HTTPS_REGEX } from "./constants";
-import { host } from "./host";
-import { dirname } from "path";
-import { JSON5TryParse } from "./json5";
-import { homedir } from "os";
-import { genaiscriptDebug } from "./debug";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { lstat, mkdir, writeFile, readFile, appendFile, rm } from "node:fs/promises";
+import { HTTPS_REGEX } from "./constants.js";
+import { host } from "./host.js";
+import { dirname } from "node:path";
+import { JSON5TryParse } from "./json5.js";
+import { homedir } from "node:os";
+import { genaiscriptDebug } from "./debug.js";
+import type { WorkspaceFile } from "./types.js";
+
 const dbg = genaiscriptDebug("fs");
 
 /**
@@ -127,6 +132,13 @@ export async function tryStat(fn: string) {
   }
 }
 
+export async function rmDir(dir: string) {
+  if (await tryStat(dir)) {
+    dbg(`removing directory ${dir}`);
+    await rm(dir, { recursive: true });
+  }
+}
+
 /**
  * Reads and parses a JSON file from the specified path.
  *
@@ -169,7 +181,7 @@ export async function tryReadJSON5(fn: string) {
  * @param fn - The path to the file where the JSON object will be written.
  * @param obj - The JSON object to be written to the file.
  */
-export async function writeJSON(fn: string, obj: any) {
+export async function writeJSON(fn: string, obj: unknown) {
   if (!fn) throw new Error("filename is required");
   dbg(`writing JSON to file ${fn}`);
   await writeText(fn, JSON.stringify(obj));

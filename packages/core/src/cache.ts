@@ -1,11 +1,15 @@
-import { FsCache } from "./fscache";
-import { JSONLineCache } from "./jsonlinecache";
-import { MemoryCache } from "./memcache";
-import { host } from "./host";
-import { NotSupportedError } from "./error";
-import { CancellationOptions } from "./cancellation";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { FsCache } from "./fscache.js";
+import { JSONLineCache } from "./jsonlinecache.js";
+import { MemoryCache } from "./memcache.js";
+import { host } from "./host.js";
+import { CancellationOptions } from "./cancellation.js";
 import debug from "debug";
-import { sanitizeFilename } from "./sanitize";
+import { sanitizeFilename } from "./sanitize.js";
+import type { WorkspaceFileCache } from "./types.js";
+
 const dbg = debug("genaiscript:cache");
 
 /**
@@ -18,9 +22,9 @@ export interface CacheEntry<V> {
   val: V;
 }
 
-export interface CacheOptions {
+export interface CreateCacheOptions {
   type: "memory" | "jsonl" | "fs";
-  userState?: Record<string, any>;
+  userState?: Record<string, unknown>;
   lookupOnly?: boolean;
 }
 
@@ -30,7 +34,7 @@ function cacheNormalizeName(name: string) {
 
 export function createCache<K, V>(
   name: string,
-  options: CacheOptions & CancellationOptions,
+  options: CreateCacheOptions & CancellationOptions,
 ): WorkspaceFileCache<K, V> {
   name = cacheNormalizeName(name); // Sanitize name
   if (!name) {

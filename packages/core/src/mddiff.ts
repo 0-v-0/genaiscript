@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { diffLines } from "diff";
-import { fenceMD } from "./mkmd";
+import { fenceMD } from "./mkmd.js";
 
 /**
  * Generates a markdown-styled diff between two strings.

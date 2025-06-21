@@ -1,17 +1,21 @@
-import { fileTypeFromBuffer } from "./filetype";
-import { CancellationOptions } from "./cancellation";
-import { deleteUndefinedValues } from "./cleaners";
-import { createFetch } from "./fetch";
-import { runtimeHost } from "./host";
-import { HTMLEscape } from "./htmlescape";
-import { TraceOptions } from "./trace";
-import { logError, logVerbose } from "./util";
-import { dedent } from "./indent";
-import { TOOL_ID } from "./constants";
-import { filenameOrFileToFilename } from "./unwrappers";
-import { resolveFileBytes } from "./file";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { fileTypeFromBuffer } from "./filetype.js";
+import { CancellationOptions } from "./cancellation.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { createFetch } from "./fetch.js";
+import { runtimeHost } from "./host.js";
+import { HTMLEscape } from "./htmlescape.js";
+import { TraceOptions } from "./trace.js";
+import { logError, logVerbose } from "./util.js";
+import { dedent } from "./indent.js";
+import { TOOL_ID } from "./constants.js";
+import { filenameOrFileToFilename } from "./unwrappers.js";
+import { resolveFileBytes } from "./file.js";
 import { basename } from "node:path";
-import { frontmatterTryParse, splitMarkdown } from "./frontmatter";
+import { frontmatterTryParse, splitMarkdown } from "./frontmatter.js";
+import type { MessageChannelClient, PromptScript, WorkspaceFileWithDescription } from "./types.js";
 
 /**
  * Converts a Markdown string into HTML formatted for Microsoft Teams.

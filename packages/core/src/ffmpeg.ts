@@ -1,29 +1,43 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:ffmpeg");
 
-import { logVerbose } from "./util";
-import { TraceOptions } from "./trace";
-import { lookupMime } from "./mime";
+import { logVerbose } from "./util.js";
+import { TraceOptions } from "./trace.js";
+import { lookupMime } from "./mime.js";
 import pLimit from "p-limit";
 import { join, basename } from "node:path";
-import { ensureDir } from "fs-extra";
+import { ensureDir } from "./fs.js";
 import type { FfmpegCommand } from "fluent-ffmpeg";
-import { hash } from "./crypto";
-import { VIDEO_HASH_LENGTH } from "./constants";
-import { writeFile, readFile } from "fs/promises";
-import { errorMessage, serializeError } from "./error";
-import { fromBase64 } from "./base64";
-import { fileTypeFromBuffer } from "./filetype";
+import { hash } from "./crypto.js";
+import { VIDEO_HASH_LENGTH } from "./constants.js";
+import { writeFile, readFile } from "node:fs/promises";
+import { errorMessage, serializeError } from "./error.js";
+import { fromBase64 } from "./base64.js";
+import { fileTypeFromBuffer } from "./filetype.js";
 import { appendFile, readdir, stat } from "node:fs/promises";
 import prettyBytes from "pretty-bytes";
-import { filenameOrFileToFilename } from "./unwrappers";
-import { Stats } from "node:fs";
-import { roundWithPrecision } from "./precision";
-import { parseTimestamps } from "./transcription";
-import { mark } from "./performance";
-import { dotGenaiscriptPath } from "./workdir";
-import { arrayify } from "./cleaners";
-import { tryStat } from "./fs";
+import { filenameOrFileToFilename } from "./unwrappers.js";
+import { roundWithPrecision } from "./precision.js";
+import { parseTimestamps } from "./transcription.js";
+import { mark } from "./performance.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { arrayify } from "./cleaners.js";
+import { tryStat } from "./fs.js";
+import type {
+  Awaitable,
+  Ffmpeg,
+  FfmpegCommandBuilder,
+  FFmpegCommandOptions,
+  VideoExtractAudioOptions,
+  VideoExtractClipOptions,
+  VideoExtractFramesOptions,
+  VideoProbeResult,
+  WorkspaceFile,
+} from "./types.js";
+import cmd from "fluent-ffmpeg";
 
 const ffmpegLimit = pLimit(1);
 const WILD_CARD = "%06d";
@@ -39,8 +53,6 @@ interface FFmpegCommandResult {
 }
 
 async function ffmpegCommand(options?: { timeout?: number }) {
-  const m = await import("fluent-ffmpeg");
-  const cmd = m.default;
   return cmd(options);
 }
 

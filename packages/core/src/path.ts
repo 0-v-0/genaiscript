@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   dirname,
   extname,
@@ -9,9 +12,10 @@ import {
   isAbsolute,
   parse,
 } from "node:path";
-import { changeext } from "../../core/src/fs";
+import { changeext } from "./fs.js";
 import { fileURLToPath } from "node:url";
-import { sanitizeFilename } from "../../core/src/sanitize";
+import { sanitizeFilename } from "./sanitize.js";
+import type { Path } from "./types.js";
 
 /**
  * Creates a frozen object that provides various path manipulation functions.

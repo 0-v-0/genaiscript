@@ -1,15 +1,25 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { select, input, confirm, password } from "@inquirer/prompts";
-import { MODEL_PROVIDERS } from "../../core/src/constants";
-import { resolveLanguageModelConfigurations } from "../../core/src/config";
+import { run } from "@genaiscript/api";
+import {
+  MODEL_PROVIDERS,
+  createYAML,
+  deleteUndefinedValues,
+  logInfo,
+  logVerbose,
+  logWarn,
+  resolveLanguageModelConfigurations,
+  runtimeHost,
+  stderr,
+  tryReadText,
+} from "@genaiscript/core";
 import { parse } from "dotenv";
 import { writeFile } from "fs/promises";
-import { runtimeHost } from "../../core/src/host";
-import { deleteUndefinedValues } from "../../core/src/cleaners";
-import { logInfo, logVerbose, logWarn } from "../../core/src/util";
-import { run } from "./api";
-import { tryReadText } from "../../core/src/fs";
-import { stderr } from "../../core/src/stdio";
 import { URL } from "node:url";
+
+const YAML = createYAML();
 
 /**
  * Configures a selected language model provider by updating the environment file

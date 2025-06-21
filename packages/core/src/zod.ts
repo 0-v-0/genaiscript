@@ -1,4 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { zodToJsonSchema as _zodToJsonSchema } from "zod-to-json-schema";
+import type { JSONSchema, ZodTypeLike } from "./types.js";
 
 /**
  * Converts a Zod schema to a JSON schema.

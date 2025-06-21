@@ -1,4 +1,17 @@
-import { deleteUndefinedValues } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { deleteUndefinedValues } from "./cleaners.js";
+import type {
+  JSONSchema,
+  JSONSchemaArray,
+  JSONSchemaBoolean,
+  JSONSchemaNumber,
+  JSONSchemaObject,
+  JSONSchemaString,
+  PromptParametersSchema,
+  PromptParameterType,
+} from "./types.js";
 
 function isJSONSchema(obj: any) {
   if (typeof obj === "object" && obj.type === "object") return true;

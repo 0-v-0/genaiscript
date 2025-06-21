@@ -1,20 +1,25 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IncomingMessage, ServerResponse } from "http";
-import {
+import type {
+  CancellationOptions,
   ChatCompletion,
-  ChatCompletionTokenLogprob,
   ChatModel,
   ChatModels,
   CreateChatCompletionRequest,
-} from "../../core/src/chattypes";
-import { parseModelIdentifier, resolveModelConnectionInfo } from "../../core/src/models";
-import { LARGE_MODEL_ID } from "../../core/src/constants";
-import { resolveLanguageModel } from "../../core/src/lm";
-import { errorMessage } from "../../core/src/error";
-import { TraceOptions } from "../../core/src/trace";
-import { CancellationOptions } from "../../core/src/cancellation";
-import { logError, logVerbose } from "../../core/src/util";
-import { resolveLanguageModelConfigurations } from "../../core/src/config";
-import { generateId } from "../../core/src/id";
+  TraceOptions,
+} from "@genaiscript/core";
+import {
+  LARGE_MODEL_ID,
+  errorMessage,
+  generateId,
+  logError,
+  logVerbose,
+  resolveLanguageModel,
+  resolveLanguageModelConfigurations,
+  resolveModelConnectionInfo,
+} from "@genaiscript/core";
 
 async function readRequestBody<T>(req: IncomingMessage): Promise<T> {
   return new Promise((resolve, reject) => {

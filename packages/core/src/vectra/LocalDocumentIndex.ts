@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as fs from "fs/promises";
 import * as path from "path";
 import { v4 } from "uuid";
-import { CreateIndexConfig, LocalIndex } from "./LocalIndex";
+import { CreateIndexConfig, LocalIndex } from "./LocalIndex.js";
 import {
   MetadataFilter,
   EmbeddingsModel,
@@ -10,10 +13,10 @@ import {
   QueryResult,
   DocumentChunkMetadata,
   DocumentCatalogStats,
-} from "./types";
-import { LocalDocumentResult } from "./LocalDocumentResult";
-import { LocalDocument } from "./LocalDocument";
-import { TextSplitter, TextSplitterConfig } from "../textsplitter";
+} from "./types.js";
+import { LocalDocumentResult } from "./LocalDocumentResult.js";
+import { LocalDocument } from "./LocalDocument.js";
+import { TextSplitter, TextSplitterConfig } from "../textsplitter.js";
 
 /**
  * Options for querying documents in the index.

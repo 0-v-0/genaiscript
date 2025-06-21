@@ -1,5 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // forked from https://raw.githubusercontent.com/Stevenic/vectra/refs/heads/main/src/TextSplitter.ts
 // removed tokenizer dependency
+
+import type { Tokenizer } from "./types.js";
 
 export interface TextSplitterConfig {
   separators: string[];
@@ -10,7 +15,7 @@ export interface TextSplitterConfig {
   docType?: string;
 }
 
-export interface TextChunk {
+export interface TextSplitterTextChunk {
   text: string;
   tokens: number[];
   startPos: number;
@@ -27,7 +32,7 @@ export interface TextChunk {
  *
  * @returns The reconstructed text built by combining all text chunks and their respective positions.
  */
-export function unchunk(text: string, chunks: TextChunk[]) {
+export function unchunk(text: string, chunks: TextSplitterTextChunk[]) {
   let rebuild = "";
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
@@ -71,7 +76,7 @@ export class TextSplitter {
     }
   }
 
-  public split(text: string): TextChunk[] {
+  public split(text: string): TextSplitterTextChunk[] {
     if (!text) return [];
 
     // Get basic chunks
@@ -102,8 +107,12 @@ export class TextSplitter {
     return chunks;
   }
 
-  private recursiveSplit(text: string, separators: string[], startPos: number): TextChunk[] {
-    const chunks: TextChunk[] = [];
+  private recursiveSplit(
+    text: string,
+    separators: string[],
+    startPos: number,
+  ): TextSplitterTextChunk[] {
+    const chunks: TextSplitterTextChunk[] = [];
     if (text.length > 0) {
       // Split text into parts
       let parts: string[];
@@ -168,9 +177,9 @@ export class TextSplitter {
     return this.combineChunks(chunks);
   }
 
-  private combineChunks(chunks: TextChunk[]): TextChunk[] {
-    const combinedChunks: TextChunk[] = [];
-    let currentChunk: TextChunk | undefined;
+  private combineChunks(chunks: TextSplitterTextChunk[]): TextSplitterTextChunk[] {
+    const combinedChunks: TextSplitterTextChunk[] = [];
+    let currentChunk: TextSplitterTextChunk | undefined;
     let currentLength = 0;
     const separator = this._config.keepSeparators ? "" : " ";
     for (let i = 0; i < chunks.length; i++) {
@@ -205,7 +214,7 @@ export class TextSplitter {
   private splitBySpaces(text: string): string[] {
     // Split text by tokens and return parts
     const parts: string[] = [];
-    let tokens = this._config.tokenizer.encode(text);
+    const tokens = this._config.tokenizer.encode(text);
     do {
       if (tokens.length <= this._config.chunkSize) {
         parts.push(this._config.tokenizer.decode(tokens));

@@ -1,4 +1,7 @@
-import { details } from "./mkmd";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { details } from "./mkmd.js";
 
 // Interface representing an item node in a trace tree
 export interface ItemNode {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable curly */
 
 /**
@@ -8,14 +11,15 @@
  */
 
 // Importing parse and stringify functions from the json5 library.
-import { parse, stringify } from "json5";
+import json5Pkg from "json5";
+const { parse, stringify } = json5Pkg;
 
 // Importing jsonrepair function for fixing broken JSON strings.
 import { jsonrepair } from "jsonrepair";
 
 // Importing unfence function to handle fenced code blocks.
-import { unfence } from "./unwrappers";
-import { unthink } from "./think";
+import { unfence } from "./unwrappers.js";
+import { unthink } from "./think.js";
 
 /**
  * Checks if the input text starts with '{' or '[', indicating a JSON object or array.

@@ -1,10 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This module defines a TestHost class that implements the RuntimeHost interface.
 // It provides various functionalities related to language models, file operations, and other utilities.
 // Tags: RuntimeHost, TestHost, LanguageModel, FileSystem, Node.js
 
 // Import necessary modules and functions from various files
 import { readFile, writeFile } from "fs/promises";
-import { ensureDir } from "fs-extra";
+import { ensureDir } from "./fs.js";
 import {
   ServerManager,
   UTF8Decoder,
@@ -13,20 +18,25 @@ import {
   RuntimeHost,
   ModelConfigurations,
   ModelConfiguration,
-} from "./host";
-import { TraceOptions } from "./trace";
+} from "./host.js";
+import { TraceOptions } from "./trace.js";
 import { resolve } from "node:path";
-import { LanguageModel } from "./chat";
-import { errorMessage, NotSupportedError } from "./error";
-import { LanguageModelConfiguration, LogLevel, Project, ResponseStatus } from "./server/messages";
-import { defaultModelConfigurations } from "./llms";
-import { CancellationToken } from "./cancellation";
-import { createNodePath } from "./path";
-import { McpClientManager } from "./mcpclient";
-import { ResourceManager } from "./mcpresource";
+import { LanguageModel } from "./chat.js";
+import { errorMessage, NotSupportedError } from "./error.js";
+import {
+  LanguageModelConfiguration,
+  LogLevel,
+  Project,
+  ResponseStatus,
+} from "./server/messages.js";
+import { defaultModelConfigurations } from "./llms.js";
+import { CancellationToken } from "./cancellation.js";
+import { createNodePath } from "./path.js";
+import { McpClientManager } from "./mcpclient.js";
+import { ResourceManager } from "./mcpresource.js";
 import { execSync } from "node:child_process";
-import { shellQuote } from "./shell";
-import { genaiscriptDebug } from "./debug";
+import { shellQuote } from "./shell.js";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("host:test");
 
 // Class representing a test host for runtime, implementing the RuntimeHost interface
@@ -151,7 +161,7 @@ export class TestHost implements RuntimeHost {
   }
 
   // Placeholder for finding files with a glob pattern
-  async findFiles(pattern: string, options?: {}): Promise<string[]> {
+  async findFiles(pattern: string, options?: unknown): Promise<string[]> {
     return [pattern];
   }
 

@@ -1,20 +1,28 @@
-import { TraceOptions } from "./trace";
-import { arrayify, logError, logVerbose } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { TraceOptions } from "./trace.js";
+import { arrayify } from "./cleaners.js";
+import { logError, logVerbose } from "./util.js";
 import type {
   TextContent,
   ImageContent,
   EmbeddedResource,
 } from "@modelcontextprotocol/sdk/types.js";
-import { errorMessage } from "./error";
-import { CancellationOptions, toSignal } from "./cancellation";
+import { errorMessage } from "./error.js";
+import { CancellationOptions, toSignal } from "./cancellation.js";
 import type { ProgressCallback } from "@modelcontextprotocol/sdk/shared/protocol.js";
-import { deleteUndefinedValues } from "./cleaners";
-import { hash } from "./crypto";
-import { fileWriteCachedJSON } from "./filecache";
-import { dotGenaiscriptPath } from "./workdir";
-import { YAMLStringify } from "./yaml";
-import { resolvePromptInjectionDetector } from "./contentsafety";
-import { genaiscriptDebug } from "./debug";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { hash } from "./crypto.js";
+import { fileWriteCachedJSON } from "./filecache.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { YAMLStringify } from "./yaml.js";
+import { resolvePromptInjectionDetector } from "./contentsafety.js";
+import { genaiscriptDebug } from "./debug.js";
+import type { McpClient, McpServerConfig, ToolCallback } from "./types.js";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+
 const dbg = genaiscriptDebug("mcp:client");
 
 export interface McpClientProxy extends McpClient {
@@ -93,8 +101,6 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
     dbgc(`starting`);
     const trace = options.trace.startTraceDetails(`🪚 mcp ${id}`);
     try {
-      const { Client } = await import("@modelcontextprotocol/sdk/client/index.js");
-      const { StdioClientTransport } = await import("@modelcontextprotocol/sdk/client/stdio.js");
       const progress: (msg: string) => ProgressCallback = (msg) => (ev) =>
         dbgc(msg + " ", `${ev.progress || ""}/${ev.total || ""}`);
       const capabilities = { tools: {} };

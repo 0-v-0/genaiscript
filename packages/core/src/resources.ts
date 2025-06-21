@@ -1,18 +1,23 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { fileURLToPath } from "node:url";
-import { isBinaryMimeType } from "./binary";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { genaiscriptDebug } from "./debug";
-import { createFetch } from "./fetch";
-import { GitHubClient } from "./githubclient";
-import { TraceOptions } from "./trace";
-import { uriRedact, uriScheme, uriTryParse } from "./url";
-import { arrayify } from "./cleaners";
+import { isBinaryMimeType } from "./binary.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { genaiscriptDebug } from "./debug.js";
+import { createFetch } from "./fetch.js";
+import { GitHubClient } from "./githubclient.js";
+import { TraceOptions } from "./trace.js";
+import { uriRedact, uriScheme, uriTryParse } from "./url.js";
+import { arrayify } from "./cleaners.js";
 import { URL } from "node:url";
-import { GitClient } from "./git";
-import { expandFiles } from "./fs";
+import { GitClient } from "./git.js";
+import { expandFiles } from "./fs.js";
 import { join } from "node:path";
-import { isCancelError } from "./error";
-import { GITHUB_ASSET_URL_RX } from "./constants";
+import { isCancelError } from "./error.js";
+import { GITHUB_ASSET_URL_RX } from "./constants.js";
+import type { Awaitable, ElementOrArray, WorkspaceFile } from "./types.js";
+
 const dbg = genaiscriptDebug("res");
 const dbgAdaptors = dbg.extend("adaptors");
 const dbgFiles = dbg.extend("files");

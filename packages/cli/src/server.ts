@@ -1,69 +1,84 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { WebSocketServer } from "ws";
-import { runPromptScriptTests } from "./test";
-import { PROMPTFOO_VERSION } from "./version";
-import { runScriptInternal } from "./run";
-import { AbortSignalCancellationController } from "../../core/src/cancellation";
-import {
-  SERVER_PORT,
-  TRACE_CHUNK,
-  USER_CANCELLED_ERROR_CODE,
-  UNHANDLED_ERROR_CODE,
-  MODEL_PROVIDER_GITHUB_COPILOT_CHAT,
-  WS_MAX_FRAME_LENGTH,
-  LOG,
-  TRACE_FILENAME,
-  WS_MAX_FRAME_CHUNK_LENGTH,
-} from "../../core/src/constants";
-import { isCancelError, serializeError } from "../../core/src/error";
-import { host, LogEvent, runtimeHost } from "../../core/src/host";
-import { MarkdownTrace, TraceChunkEvent } from "../../core/src/trace";
-import { chunkLines, chunkString } from "../../core/src/chunkers";
-import { logVerbose, logError, assert, logWarn } from "../../core/src/util";
-import { CORE_VERSION } from "../../core/src/version";
-import {
-  RequestMessages,
-  PromptScriptProgressResponseEvent,
-  PromptScriptEndResponseEvent,
-  ChatStart,
-  ChatChunk,
+import { runPromptScriptTests } from "./test.js";
+import { PROMPTFOO_VERSION, NodeHost } from "@genaiscript/runtime";
+import { runScriptInternal } from "@genaiscript/api";
+import type {
   ChatCancel,
-  LanguageModelConfigurationResponse,
-  PromptScriptListResponse,
-  ResponseStatus,
-  LanguageModelConfiguration,
-  ServerEnvResponse,
-  ServerResponse,
-  RunResultListResponse,
-} from "../../core/src/server/messages";
-import { LanguageModel } from "../../core/src/chat";
-import {
+  ChatChunk,
   ChatCompletionResponse,
   ChatCompletionsOptions,
+  ChatStart,
   CreateChatCompletionRequest,
-} from "../../core/src/chattypes";
-import { randomHex } from "../../core/src/crypto";
-import * as http from "http";
-import { extname, join } from "path";
-import { createReadStream } from "fs";
+  LanguageModel,
+  LanguageModelConfiguration,
+  LanguageModelConfigurationResponse,
+  LogEvent,
+  PromptScriptEndResponseEvent,
+  PromptScriptListResponse,
+  PromptScriptProgressResponseEvent,
+  RequestMessages,
+  ResponseStatus,
+  RunResultListResponse,
+  ServerEnvResponse,
+  ServerResponse,
+  TraceChunkEvent,
+} from "@genaiscript/core";
+import {
+  CORE_VERSION,
+  LOG,
+  MODEL_PROVIDER_GITHUB_COPILOT_CHAT,
+  SERVER_PORT,
+  TRACE_CHUNK,
+  TRACE_FILENAME,
+  UNHANDLED_ERROR_CODE,
+  USER_CANCELLED_ERROR_CODE,
+  WS_MAX_FRAME_CHUNK_LENGTH,
+  WS_MAX_FRAME_LENGTH,
+  AbortSignalCancellationController,
+  MarkdownTrace,
+  assert,
+  chunkLines,
+  chunkString,
+  deleteUndefinedValues,
+  generateId,
+  genaiscriptDebug,
+  host,
+  isCancelError,
+  logError,
+  logVerbose,
+  nodeTryReadPackage,
+  randomHex,
+  resolveLanguageModelConfigurations,
+  runtimeHost,
+  serializeError,
+  tryReadJSON,
+  tryReadText,
+  unthink,
+  getModulePaths,
+} from "@genaiscript/core";
+import { createReadStream } from "node:fs";
 import { URL } from "node:url";
-import { resolveLanguageModelConfigurations } from "../../core/src/config";
-import { networkInterfaces } from "os";
-import { exists } from "fs-extra";
-import { deleteUndefinedValues } from "../../core/src/cleaners";
-import { readFile } from "fs/promises";
-import { unthink } from "../../core/src/think";
-import { NodeHost } from "./nodehost";
-import { findRandomOpenPort, isPortInUse } from "../../core/src/net";
-import { tryReadJSON, tryReadText } from "../../core/src/fs";
-import { collectRuns } from "./runs";
-import { generateId } from "../../core/src/id";
-import { openaiApiChatCompletions, openaiApiModels } from "./openaiapi";
-import { applyRemoteOptions, RemoteOptions } from "./remote";
-import { nodeTryReadPackage } from "../../core/src/nodepackage";
-import { genaiscriptDebug } from "../../core/src/debug";
-import { startProjectWatcher } from "./watch";
-import { findOpenPort } from "./port";
+import { findOpenPort } from "./port.js";
+import { applyRemoteOptions, RemoteOptions } from "./remote.js";
+import * as http from "node:http";
+import { startProjectWatcher } from "./watch.js";
+import { extname, join, resolve } from "node:path";
+import { readFile } from "node:fs/promises";
+import { tryStat } from "@genaiscript/core";
+import { collectRuns } from "./runs.js";
+import { openaiApiChatCompletions, openaiApiModels } from "./openaiapi.js";
+import { networkInterfaces } from "node:os";
 const dbg = genaiscriptDebug("server");
+
+const { __dirname } =
+  typeof module !== "undefined" && module.filename
+    ? getModulePaths(module)
+    : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      getModulePaths(import.meta);
 
 /**
  * Starts a WebSocket server for handling chat and script execution.
@@ -98,8 +113,6 @@ export async function startServer(
   const dispatchProgress = !!options.dispatchProgress;
 
   const port = await findOpenPort(SERVER_PORT, options);
-  // store original working directory
-  const cwd = process.cwd();
 
   await applyRemoteOptions(options);
   const watcher = await startProjectWatcher({});
@@ -110,6 +123,7 @@ export async function startServer(
   const readme = (await tryReadText("README.genai.md")) || (await tryReadText("README.md"));
 
   const wss = new WebSocketServer({ noServer: true });
+  const dirname = resolve(__dirname, "..");
 
   // Stores active script runs with their cancellation controllers and traces.
   let lastRunResult: PromptScriptEndResponseEvent = undefined;
@@ -630,7 +644,7 @@ window.vscodeWebviewPlaygroundNonce = ${JSON.stringify(nonce)};
 </script>
         `;
 
-      const filePath = join(__dirname, "index.html");
+      const filePath = join(dirname, "index.html");
       const html = (await readFile(filePath, { encoding: "utf8" })).replace("<!--csp-->", csp);
       res.write(html);
       res.statusCode = 200;
@@ -638,30 +652,30 @@ window.vscodeWebviewPlaygroundNonce = ${JSON.stringify(nonce)};
     } else if (method === "GET" && route === "/built/markdown.css") {
       res.setHeader("Content-Type", "text/css");
       res.statusCode = 200;
-      const filePath = join(__dirname, "markdown.css");
+      const filePath = join(dirname, "markdown.css");
       const stream = createReadStream(filePath);
       stream.pipe(res);
     } else if (method === "GET" && route === "/built/codicon.css") {
       res.setHeader("Content-Type", "text/css");
       res.statusCode = 200;
-      const filePath = join(__dirname, "codicon.css");
+      const filePath = join(dirname, "codicon.css");
       const stream = createReadStream(filePath);
       stream.pipe(res);
     } else if (method === "GET" && route === "/built/codicon.ttf") {
       res.setHeader("Content-Type", "font/ttf");
       res.statusCode = 200;
-      const filePath = join(__dirname, "codicon.ttf");
+      const filePath = join(dirname, "codicon.ttf");
       const stream = createReadStream(filePath);
       stream.pipe(res);
     } else if (method === "GET" && route === "/built/web.mjs") {
       res.setHeader("Content-Type", "application/javascript");
       res.statusCode = 200;
-      const filePath = join(__dirname, "web.mjs");
+      const filePath = join(dirname, "web.mjs");
       const stream = createReadStream(filePath);
       stream.pipe(res);
     } else if (method === "GET" && route === "/built/web.mjs.map") {
-      const filePath = join(__dirname, "web.mjs.map");
-      if (await exists(filePath)) {
+      const filePath = join(dirname, "web.mjs.map");
+      if (await tryStat(filePath)) {
         res.setHeader("Content-Type", "text/json");
         res.statusCode = 200;
         const stream = createReadStream(filePath);
@@ -673,7 +687,7 @@ window.vscodeWebviewPlaygroundNonce = ${JSON.stringify(nonce)};
     } else if (method === "GET" && route === "/favicon.svg") {
       res.setHeader("Content-Type", "image/svg+xml");
       res.statusCode = 200;
-      const filePath = join(__dirname, "favicon.svg");
+      const filePath = join(dirname, "favicon.svg");
       const stream = createReadStream(filePath);
       stream.pipe(res);
     } else if (method === "GET" && imageRx.test(route)) {
@@ -683,7 +697,7 @@ window.vscodeWebviewPlaygroundNonce = ${JSON.stringify(nonce)};
         res.setHeader("Content-Type", "image/" + extname(route));
         res.statusCode = 200;
         stream.pipe(res);
-      } catch (e) {
+      } catch {
         res.statusCode = 404;
         res.end();
       }

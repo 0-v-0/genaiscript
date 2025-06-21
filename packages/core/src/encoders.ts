@@ -1,16 +1,20 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:encoders");
 
 // Import the function to parse model identifiers
-import { parseModelIdentifier } from "./models";
-import { runtimeHost } from "./host";
+import { parseModelIdentifier } from "./models.js";
+import { runtimeHost } from "./host.js";
 import path from "node:path";
-import { addLineNumbers, indexToLineNumber } from "./liner";
-import { resolveFileContent } from "./file";
+import { addLineNumbers, indexToLineNumber } from "./liner.js";
+import { resolveFileContent } from "./file.js";
 import type { EncodeOptions } from "gpt-tokenizer/GptEncoding";
-import { assert } from "./util";
-import { TextSplitter } from "./textsplitter";
-import { errorMessage } from "./error";
+import { assert } from "./assert.js";
+import { TextSplitter } from "./textsplitter.js";
+import type { Awaitable, TextChunk, TextChunkerConfig, Tokenizer, WorkspaceFile } from "./types.js";
+import api, { encode, decode } from "gpt-tokenizer/model/gpt-4o";
 
 /**
  * Resolves the token encoder for a specified model identifier.
@@ -53,13 +57,12 @@ export async function resolveTokenEncoder(
       encode: (line) => encode(line, encoderOptions), // Return the default encoder function
       decode,
     });
-  } catch (e) {
+  } catch {
     if (disableFallback) {
       dbg(`encoder fallback disabled for ${encoding}`);
       return undefined;
     }
 
-    const { encode, decode, default: api } = await import("gpt-tokenizer/model/gpt-4o");
     assert(!!encode);
     const { modelName, vocabularySize } = api;
     dbg(`fallback ${encoding} to gpt-4o encoder`);

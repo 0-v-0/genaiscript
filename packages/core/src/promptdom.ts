@@ -1,12 +1,17 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Importing various utility functions and constants from different modules.
-import { dataToMarkdownTable, CSVTryParse } from "./csv";
-import { renderFileContent, resolveFileContent } from "./file";
-import { addLineNumbers, extractRange } from "./liner";
-import { JSONSchemaStringifyToTypeScript } from "./schema";
-import { approximateTokens, truncateTextToTokens } from "./tokens";
-import { MarkdownTrace, TraceOptions } from "./trace";
-import { arrayify, assert, ellipse, logError, logWarn, toStringList } from "./util";
-import { YAMLStringify } from "./yaml";
+import { dataToMarkdownTable, CSVTryParse } from "./csv.js";
+import { renderFileContent, resolveFileContent } from "./file.js";
+import { addLineNumbers, extractRange } from "./liner.js";
+import { JSONSchemaStringifyToTypeScript } from "./schema.js";
+import { approximateTokens, truncateTextToTokens } from "./tokens.js";
+import { MarkdownTrace, TraceOptions } from "./trace.js";
+import { assert } from "./assert.js";
+import { arrayify } from "./cleaners.js";
+import { ellipse, logError, toStringList } from "./util.js";
+import { YAMLStringify } from "./yaml.js";
 import {
   DEFAULT_FENCE_FORMAT,
   MARKDOWN_PROMPT_FENCE,
@@ -17,32 +22,66 @@ import {
   SCHEMA_DEFAULT_FORMAT,
   TEMPLATE_ARG_DATA_SLICE_SAMPLE,
   TEMPLATE_ARG_FILE_MAX_TOKENS,
-} from "./constants";
-import { appendAssistantMessage, appendSystemMessage, appendUserMessage } from "./chat";
-import { errorMessage } from "./error";
-import { sliceData, tidyData } from "./tidy";
-import { dedent } from "./indent";
-import { ChatCompletionMessageParam } from "./chattypes";
-import { resolveTokenEncoder } from "./encoders";
-import { expandFileOrWorkspaceFiles } from "./fs";
-import { interpolateVariables } from "./mustache";
-import { diffCreatePatch } from "./diff";
-import { promptyParse } from "./prompty";
-import { jinjaRenderChatMessage } from "./jinja";
-import { runtimeHost } from "./host";
-import { hash } from "./crypto";
-import { tryZodToJsonSchema } from "./zod";
-import { GROQEvaluate } from "./groq";
-import { trimNewlines } from "./unwrappers";
-import { CancellationOptions } from "./cancellation";
-import { promptParametersSchemaToJSONSchema } from "./parameters";
-import { redactSecrets } from "./secretscanner";
-import { escapeToolName } from "./tools";
-import { measure } from "./performance";
+} from "./constants.js";
+import { appendAssistantMessage, appendSystemMessage, appendUserMessage } from "./chat.js";
+import { errorMessage } from "./error.js";
+import { sliceData, tidyData } from "./tidy.js";
+import { dedent } from "./indent.js";
+import { ChatCompletionMessageParam } from "./chattypes.js";
+import { resolveTokenEncoder } from "./encoders.js";
+import { expandFileOrWorkspaceFiles } from "./fs.js";
+import { interpolateVariables } from "./mustache.js";
+import { diffCreatePatch } from "./diff.js";
+import { promptyParse } from "./prompty.js";
+import { jinjaRenderChatMessage } from "./jinja.js";
+import { runtimeHost } from "./host.js";
+import { hash } from "./crypto.js";
+import { tryZodToJsonSchema } from "./zod.js";
+import { GROQEvaluate } from "./groq.js";
+import { trimNewlines } from "./unwrappers.js";
+import { CancellationOptions } from "./cancellation.js";
+import { promptParametersSchemaToJSONSchema } from "./parameters.js";
+import { redactSecrets } from "./secretscanner.js";
+import { escapeToolName } from "./tools.js";
+import { measure } from "./performance.js";
 import debug from "debug";
-import { imageEncodeForLLM } from "./image";
-import { providerFeatures } from "./features";
-import { parseModelIdentifier } from "./models";
+import { imageEncodeForLLM } from "./image.js";
+import { providerFeatures } from "./features.js";
+import { parseModelIdentifier } from "./models.js";
+import type {
+  Awaitable,
+  ChatFunctionHandler,
+  ChatGenerationContext,
+  ChatMessageRole,
+  ChatParticipant,
+  ChatParticipantOptions,
+  ContextExpansionOptions,
+  ContentSafetyOptions,
+  DefDataOptions,
+  DefDiffOptions,
+  DefImagesOptions,
+  DefOptions,
+  DefSchemaOptions,
+  DefToolOptions,
+  ElementOrArray,
+  FenceFormat,
+  FenceFormatOptions,
+  FileMergeHandler,
+  FileOutput,
+  ImportTemplateArgumentType,
+  ImportTemplateOptions,
+  JSONSchema,
+  JSONSchemaObject,
+  McpServerConfig,
+  ModelOptions,
+  ModelTemplateOptions,
+  PromptOutputProcessorHandler,
+  ToolCallback,
+  SecretDetectionOptions,
+  WorkspaceFile,
+  ZodTypeLike,
+} from "./types.js";
+
 const dbg = debug("genaiscript:prompt:dom");
 const dbgMcp = debug("genaiscript:prompt:dom:mcp");
 

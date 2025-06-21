@@ -1,27 +1,31 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("globals");
 // Import various parsing and stringifying utilities
-import { createYAML } from "./yaml";
-import { CSVParse, dataToMarkdownTable, CSVStringify, CSVChunk } from "./csv";
-import { INIParse, INIStringify } from "./ini";
-import { XMLParse } from "./xml";
-import { frontmatterTryParse, splitMarkdown, updateFrontmatter } from "./frontmatter";
-import { JSONLStringify, JSONLTryParse } from "./jsonl";
-import { HTMLTablesToJSON, HTMLToMarkdown, HTMLToText } from "./html";
-import { CancelError } from "./error";
-import { fetchText } from "./fetchtext";
-import { GitHubClient } from "./githubclient";
-import { GitClient } from "./git";
-import { estimateTokens, truncateTextToTokens } from "./tokens";
-import { chunk, resolveTokenEncoder } from "./encoders";
-import { JSON5Stringify, JSON5TryParse } from "./json5";
-import { JSONSchemaInfer } from "./schema";
-import { FFmepgClient } from "./ffmpeg";
-import { promptParametersSchemaToJSONSchema } from "./parameters";
-import { chunkMarkdown } from "./mdchunk";
-import { resolveGlobal } from "./global";
-import { MarkdownStringify } from "./markdown";
-import { diffCreatePatch, diffFindChunk, tryDiffParse } from "./diff";
+import { createYAML } from "./yaml.js";
+import { CSVParse, dataToMarkdownTable, CSVStringify, CSVChunk } from "./csv.js";
+import { INIParse, INIStringify } from "./ini.js";
+import { XMLParse } from "./xml.js";
+import { frontmatterTryParse, splitMarkdown, updateFrontmatter } from "./frontmatter.js";
+import { JSONLStringify, JSONLTryParse } from "./jsonl.js";
+import { HTMLTablesToJSON, HTMLToMarkdown, HTMLToText } from "./html.js";
+import { CancelError } from "./error.js";
+import { fetchText } from "./fetchtext.js";
+import { GitHubClient } from "./githubclient.js";
+import { GitClient } from "./git.js";
+import { estimateTokens, truncateTextToTokens } from "./tokens.js";
+import { chunk, resolveTokenEncoder } from "./encoders.js";
+import { JSON5Stringify, JSON5TryParse } from "./json5.js";
+import { JSONSchemaInfer } from "./schema.js";
+import { FFmepgClient } from "./ffmpeg.js";
+import { promptParametersSchemaToJSONSchema } from "./parameters.js";
+import { chunkMarkdown } from "./mdchunk.js";
+import { resolveGlobal } from "./global.js";
+import { MarkdownStringify } from "./markdown.js";
+import { diffCreatePatch, diffFindChunk, tryDiffParse } from "./diff.js";
+import type { PromptContext } from "./types.js";
 
 /**
  * Installs global utilities for various data formats and operations.

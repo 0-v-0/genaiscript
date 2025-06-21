@@ -1,13 +1,12 @@
 {
   "name": "genaiscript-slides",
-  "version": "1.142.15",
+  "version": "2.0.0",
   "type": "module",
   "private": true,
   "npm": {
     "publish": false
   },
   "scripts": {
-    "install:force": "rm yarn.lock && yarn install",
     "build": "node build.mjs",
     "dev": "slidev --open"
   },

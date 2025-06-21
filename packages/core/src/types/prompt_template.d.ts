@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * GenAIScript Ambient Type Definition File
  * @version 0.0.0
@@ -6032,7 +6035,7 @@ interface PromiseQueue {
    * @param values
    * @param fn
    */
-  mapAll<T extends unknown, Arguments extends unknown[], ReturnType>(
+  mapAll<T, Arguments extends unknown[], ReturnType>(
     values: T[],
     fn: (value: T, ...arguments_: Arguments) => Awaitable<ReturnType>,
     ...arguments_: Arguments
@@ -6042,6 +6045,7 @@ interface PromiseQueue {
 interface LanguageModelReference {
   provider: ModelProviderType;
   model: ModelType;
+  modelId?: ModelType;
 }
 
 interface LanguageModelInfo {

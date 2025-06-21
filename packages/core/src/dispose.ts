@@ -1,5 +1,10 @@
-import { TraceOptions } from "./trace";
-import { arrayify, logError } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { TraceOptions } from "./trace.js";
+import { arrayify } from "./cleaners.js";
+import { logError } from "./util.js";
+import type { ElementOrArray } from "./types.js";
 
 /**
  * Disposes of the provided disposables by invoking their `Symbol.asyncDispose` method.

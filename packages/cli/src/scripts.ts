@@ -1,24 +1,26 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This file contains functions to manage and compile project scripts,
 // including listing, creating, fixing, and compiling scripts.
 
-import { buildProject } from "./build";
-import { TYPESCRIPT_VERSION } from "./version";
-import { copyPrompt } from "../../core/src/copy";
+import { buildProject } from "@genaiscript/core";
+import { shellInput } from "@genaiscript/runtime";
+import type { ScriptFilterOptions } from "@genaiscript/core";
 import {
-  fixPromptDefinitions,
+  CONSOLE_COLOR_DEBUG,
+  copyPrompt,
   createScript as coreCreateScript,
+  dedent,
+  deleteEmptyValues,
+  filterScripts,
   fixGitHubCopilotInstructions,
-} from "../../core/src/scripts";
-import { logInfo, logVerbose } from "../../core/src/util";
-import { runtimeHost } from "../../core/src/host";
-import { CONSOLE_COLOR_DEBUG, RUNTIME_ERROR_CODE } from "../../core/src/constants";
-import { collectFolders, filterScripts, ScriptFilterOptions } from "../../core/src/ast";
-import { deleteEmptyValues } from "../../core/src/cleaners";
+  fixPromptDefinitions,
+  JSONSchemaToFunctionParameters,
+  wrapColor,
+} from "@genaiscript/core";
 import { dirname } from "node:path";
-import { shellInput } from "./input";
-import { wrapColor } from "../../core/src/consolecolor";
-import { dedent } from "../../core/src/indent";
-import { JSONSchemaToFunctionParameters } from "../../core/src/schema";
+import { compileScript } from "./typescript.js";
 
 /**
  * Lists all the scripts in the project.
@@ -135,71 +137,4 @@ export async function fixScripts(options?: {
   const project = await buildProject(); // Build the project to access information
   await fixPromptDefinitions(project, options); // Fix any issues in prompt definitions
   await fixGitHubCopilotInstructions(options);
-}
-
-/**
- * Compiles scripts in specified folders or all if none specified.
- * Fixes prompt definitions before compiling.
- * Handles both JavaScript and TypeScript compilation based on folder content.
- * Logs errors and verbose output during the compilation process.
- * Exits process with error code if any compilation fails.
- *
- * @param folders - An array of folder names to compile. If empty, compiles all available script folders.
- */
-export async function compileScript(folders: string[]) {
-  const project = await buildProject(); // Build the project to gather script information
-  await fixPromptDefinitions(project); // Fix prompt definitions before compiling
-  const scriptFolders = collectFolders(project); // Retrieve available script folders
-  const foldersToCompile = (folders?.length ? folders : scriptFolders.map((f) => f.dirname))
-    .map((f) => scriptFolders.find((sf) => sf.dirname === f))
-    .filter((f) => f);
-
-  let errors = 0;
-  for (const folder of foldersToCompile) {
-    const { dirname, js, ts } = folder;
-    if (js) {
-      logInfo(`compiling ${dirname}/*.js`); // Log the start of JS compilation
-      const res = await runtimeHost.exec(
-        undefined,
-        "npx",
-        [
-          "--yes",
-          "--package",
-          `typescript@${TYPESCRIPT_VERSION}`,
-          "tsc",
-          "--project",
-          runtimeHost.path.resolve(dirname, "jsconfig.json"),
-        ],
-        {
-          cwd: dirname,
-        },
-      );
-      if (res.stderr) logInfo(res.stderr); // Log any standard errors
-      if (res.stdout) logVerbose(res.stdout); // Log verbose output if needed
-      if (res.exitCode) errors++; // Increment error count if exit code indicates failure
-    }
-    if (ts) {
-      logInfo(`compiling ${dirname}/*.{mjs,.mts}`); // Log the start of TypeScript compilation
-      const res = await runtimeHost.exec(
-        undefined,
-        "npx",
-        [
-          "--yes",
-          "--package",
-          `typescript@${TYPESCRIPT_VERSION}`,
-          "tsc",
-          "--project",
-          runtimeHost.path.resolve(dirname, "tsconfig.json"),
-        ],
-        {
-          cwd: dirname,
-        },
-      );
-      if (res.stderr) logInfo(res.stderr); // Log any standard errors
-      if (res.stdout) logVerbose(res.stdout); // Log verbose output if needed
-      if (res.exitCode) errors++; // Increment error count if exit code indicates failure
-    }
-  }
-
-  if (errors) process.exit(RUNTIME_ERROR_CODE); // Exit process with error code if any compilation failed
 }

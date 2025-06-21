@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module defines TypeScript types and interfaces for chat completions using the OpenAI API.
  * These types represent structured data for various chat-related functionalities.
@@ -6,6 +9,7 @@
  */
 
 import OpenAI from "openai";
+import type { Logprob, PromptCacheControlType, SerializedError } from "./types.js";
 
 export type ChatModel = OpenAI.Models.Model;
 

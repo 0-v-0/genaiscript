@@ -1,17 +1,21 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:websearch");
 
-import { deleteUndefinedValues } from "./cleaners";
+import { deleteUndefinedValues } from "./cleaners.js";
 import {
   BING_SEARCH_ENDPOINT,
   DOCS_WEB_SEARCH_BING_SEARCH_URL,
   DOCS_WEB_SEARCH_TAVILY_URL,
   TAVILY_ENDPOINT,
-} from "./constants";
-import { createFetch } from "./fetch";
-import { runtimeHost } from "./host";
-import { MarkdownTrace, TraceOptions } from "./trace";
-import { logVerbose } from "./util";
+} from "./constants.js";
+import { createFetch } from "./fetch.js";
+import { runtimeHost } from "./host.js";
+import { TraceOptions } from "./trace.js";
+import { logVerbose } from "./util.js";
+import type { WorkspaceFile } from "./types.js";
 
 /**
  * Converts an object into a URL search parameters string.

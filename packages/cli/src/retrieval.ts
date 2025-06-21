@@ -1,8 +1,16 @@
-import { normalizeFloat, normalizeInt } from "../../core/src/cleaners";
-import { expandFiles } from "../../core/src/fs";
-import { fuzzSearch } from "../../core/src/fuzzsearch";
-import { vectorIndex, vectorSearch } from "../../core/src/vectorsearch";
-import { YAMLStringify } from "../../core/src/yaml";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { WorkspaceFile } from "@genaiscript/core";
+import {
+  YAMLStringify,
+  expandFiles,
+  fuzzSearch,
+  normalizeFloat,
+  normalizeInt,
+  vectorIndex,
+  vectorSearch,
+} from "@genaiscript/core";
 
 /**
  * Generates a vector index for retrieval tasks by processing specified files.
@@ -123,7 +131,8 @@ export async function retrievalFuzz(
   },
 ) {
   // Destructure options with default values
-  let { excludedFiles, topK, minScore } = options || {};
+  const { topK, minScore } = options || {};
+  let { excludedFiles } = options || {};
 
   // Default to searching all files if no globs are provided
   if (!filesGlobs?.length) filesGlobs = ["**"];

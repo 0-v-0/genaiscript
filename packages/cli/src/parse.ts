@@ -1,34 +1,50 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import replaceExt from "replace-ext";
 import { readFile, writeFile } from "node:fs/promises";
-import { DOCXTryParse } from "../../core/src/docx";
-import { extractFenced } from "../../core/src/fence";
-import { expandFiles, writeText, readText, tryReadText } from "../../core/src/fs";
-import { HTMLToMarkdown, HTMLToText } from "../../core/src/html";
-import { isJSONLFilename, JSONLTryParse } from "../../core/src/jsonl";
-import { parsePdf } from "../../core/src/pdf";
-import { estimateTokens } from "../../core/src/tokens";
-import { YAMLStringify } from "../../core/src/yaml";
-import { resolveTokenEncoder } from "../../core/src/encoders";
-import { CONSOLE_TOKEN_COLORS, MD_REGEX, PROMPTY_REGEX } from "../../core/src/constants";
-import { promptyParse, promptyToGenAIScript } from "../../core/src/prompty";
+import {
+  CONSOLE_TOKEN_COLORS,
+  MD_REGEX,
+  PROMPTY_REGEX,
+  CSVStringify,
+  DOCXTryParse,
+  HTMLToMarkdown,
+  HTMLToText,
+  INIStringify,
+  JSON5Stringify,
+  JSONLTryParse,
+  YAMLStringify,
+  chunkMarkdown,
+  dataToMarkdownTable,
+  dataTryParse,
+  ellipse,
+  estimateTokens,
+  expandFiles,
+  extractFenced,
+  genaiscriptDebug,
+  isJSONLFilename,
+  jinjaRender,
+  logVerbose,
+  normalizeInt,
+  parsePdf,
+  prettyBytes,
+  promptyParse,
+  promptyToGenAIScript,
+  readText,
+  redactSecrets,
+  resolveFileContent,
+  resolveTokenEncoder,
+  splitMarkdown,
+  stdout,
+  terminalSize,
+  tryReadText,
+  wrapColor,
+  writeText,
+} from "@genaiscript/core";
+import type { DocxParseOptions, WorkspaceFile } from "@genaiscript/core";
 import { basename, join } from "node:path";
-import { CSVStringify, dataToMarkdownTable } from "../../core/src/csv";
-import { INIStringify } from "../../core/src/ini";
-import { JSON5Stringify } from "../../core/src/json5";
-import { jinjaRender } from "../../core/src/jinja";
-import { splitMarkdown } from "../../core/src/frontmatter";
-import { parseOptionsVars } from "./vars";
-import { dataTryParse } from "../../core/src/data";
-import { resolveFileContent } from "../../core/src/file";
-import { redactSecrets } from "../../core/src/secretscanner";
-import { ellipse, logVerbose } from "../../core/src/util";
-import { chunkMarkdown } from "../../core/src/mdchunk";
-import { normalizeInt } from "../../core/src/cleaners";
-import { prettyBytes } from "../../core/src/pretty";
-import { terminalSize } from "../../core/src/terminal";
-import { consoleColors, wrapColor } from "../../core/src/consolecolor";
-import { genaiscriptDebug } from "../../core/src/debug";
-import { stderr, stdout } from "../../core/src/stdio";
+import { parseOptionsVars } from "@genaiscript/core";
 const dbg = genaiscriptDebug("cli:parse");
 
 /**

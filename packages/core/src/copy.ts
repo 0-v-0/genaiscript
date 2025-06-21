@@ -1,10 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This file defines functions related to copying and managing prompt scripts,
 // including constructing file paths and handling copy operations,
 // with optional forking functionality.
 
-import { GENAI_MJS_EXT, GENAI_MTS_EXT, GENAI_SRC } from "./constants"; // Import constants for file extensions and source directory
-import { host } from "./host"; // Import host module for file operations
-import { fileExists, writeText } from "./fs"; // Import file system utilities
+import { GENAI_MJS_EXT, GENAI_MTS_EXT, GENAI_SRC } from "./constants.js"; // Import constants for file extensions and source directory
+import { host } from "./host.js"; // Import host module for file operations
+import { fileExists, writeText } from "./fs.js"; // Import file system utilities
+import type { PromptScript } from "./types.js"; // Import type definitions for prompt scripts
 
 /**
  * Constructs the path to a prompt file.

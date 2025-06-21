@@ -1,9 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:modelalias");
-import { parseKeyValuePair } from "../../core/src/fence";
-import { runtimeHost } from "../../core/src/host";
-import { PromptScriptRunOptions } from "./server/messages";
-import { providerFeatures } from "./features";
+import { parseKeyValuePair } from "./fence.js";
+import { runtimeHost } from "./host.js";
+import { PromptScriptRunOptions } from "./server/messages.js";
+import { providerFeatures } from "./features.js";
+import type { PromptScript } from "./types.js";
 
 /**
  * Configures model provider aliases based on the given provider ID and source type.

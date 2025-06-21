@@ -1,6 +1,11 @@
-import { deleteUndefinedValues } from "./cleaners";
-import { genaiscriptDebug } from "./debug";
-import { ellipse } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { deleteUndefinedValues } from "./cleaners.js";
+import { genaiscriptDebug } from "./debug.js";
+import { ellipse } from "./util.js";
+import type { PromptScript } from "./types.js";
+
 const dbg = genaiscriptDebug("metadata");
 
 export function metadataValidate(

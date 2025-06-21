@@ -1,19 +1,28 @@
-import { ScriptFilterOptions } from "../../core/src/ast";
-import { deleteUndefinedValues, ensureHeadSlash, trimTrailingSlash } from "../../core/src/cleaners";
-import { genaiscriptDebug } from "../../core/src/debug";
-import { nodeTryReadPackage } from "../../core/src/nodepackage";
-import { toStrictJSONSchema } from "../../core/src/schema";
-import { logError, logVerbose, logWarn } from "../../core/src/util";
-import { RemoteOptions, applyRemoteOptions } from "./remote";
-import { startProjectWatcher } from "./watch";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import type { FastifyInstance, FastifyRequest } from "fastify";
-import { findOpenPort } from "./port";
-import { OPENAPI_SERVER_PORT } from "../../core/src/constants";
-import { CORE_VERSION } from "../../core/src/version";
-import { run } from "./api";
-import { errorMessage } from "../../core/src/error";
-import { PromptScriptRunOptions } from "./main";
-import { ensureDotGenaiscriptPath } from "../../core/src/workdir";
+import type { PromptScriptRunOptions, ScriptFilterOptions } from "@genaiscript/core";
+import {
+  CORE_VERSION,
+  JSONSchemaObject,
+  OPENAPI_SERVER_PORT,
+  deleteUndefinedValues,
+  ensureDotGenaiscriptPath,
+  ensureHeadSlash,
+  errorMessage,
+  genaiscriptDebug,
+  logError,
+  logVerbose,
+  logWarn,
+  nodeTryReadPackage,
+  toStrictJSONSchema,
+  trimTrailingSlash,
+} from "@genaiscript/core";
+import { run } from "@genaiscript/api";
+import { RemoteOptions, applyRemoteOptions } from "./remote.js";
+import { findOpenPort } from "./port.js";
+import { startProjectWatcher } from "./watch.js";
 import { uniq } from "es-toolkit";
 const dbg = genaiscriptDebug("openapi");
 const dbgError = dbg.extend("error");
@@ -34,18 +43,7 @@ export async function startOpenAPIServer(
 
   await ensureDotGenaiscriptPath();
   await applyRemoteOptions(options);
-  const {
-    startup,
-    cors,
-    network,
-    remote,
-    remoteBranch,
-    remoteForce,
-    remoteInstall,
-    groups,
-    ids,
-    ...runOptions
-  } = options || {};
+  const { startup, cors, network, ...runOptions } = options || {};
   const serverHost = network ? "0.0.0.0" : "127.0.0.1";
   const route = ensureHeadSlash(trimTrailingSlash(options?.route || "/api"));
   const docsRoute = `${route}/docs`;

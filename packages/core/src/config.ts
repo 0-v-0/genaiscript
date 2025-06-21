@@ -1,29 +1,35 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import dotenv from "dotenv";
-import { homedir } from "os";
-import { YAMLTryParse } from "./yaml";
-import { JSON5TryParse } from "./json5";
+import { homedir } from "node:os";
+import { YAMLTryParse } from "./yaml.js";
+import { JSON5TryParse } from "./json5.js";
 import {
   DOT_ENV_FILENAME,
   DOT_ENV_GENAISCRIPT_FILENAME,
   MODEL_PROVIDERS,
   TOOL_ID,
-} from "./constants";
-import { join, resolve } from "path";
-import { validateJSONWithSchema } from "./schema";
-import { HostConfiguration } from "./hostconfiguration";
-import { structuralMerge } from "./merge";
-import { LanguageModelConfiguration, ResolvedLanguageModelConfiguration } from "./server/messages";
-import { resolveLanguageModel } from "./lm";
-import { arrayify, deleteEmptyValues } from "./cleaners";
-import { errorMessage } from "./error";
-import schema from "../../../docs/public/schemas/config.json";
-import defaultConfig from "./config.json";
-import { CancellationOptions } from "./cancellation";
-import { host } from "./host";
+} from "./constants.js";
+import { join, resolve } from "node:path";
+import { validateJSONWithSchema } from "./schema.js";
+import { HostConfiguration } from "./hostconfiguration.js";
+import { structuralMerge } from "./merge.js";
+import {
+  LanguageModelConfiguration,
+  ResolvedLanguageModelConfiguration,
+} from "./server/messages.js";
+import { resolveLanguageModel } from "./lm.js";
+import { arrayify, deleteEmptyValues } from "./cleaners.js";
+import { errorMessage } from "./error.js";
+import schema from "./configschema.js";
+import defaultConfig from "./configjson.js";
+import { CancellationOptions } from "./cancellation.js";
+import { host } from "./host.js";
 import { uniq } from "es-toolkit";
-import { expandHomeDir, tryReadText, tryStat } from "./fs";
-import { parseDefaultsFromEnv } from "./env";
-import { genaiscriptDebug } from "./debug";
+import { expandHomeDir, tryReadText, tryStat } from "./fs.js";
+import { parseDefaultsFromEnv } from "./env.js";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("config");
 
 export function mergeHostConfigs(

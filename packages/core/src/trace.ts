@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   CHANGE,
   EMOJI_FAIL,
@@ -8,28 +11,37 @@ import {
   TRACE_DETAILS,
   TRACE_MAX_FENCE_SIZE,
   TRACE_MAX_FILE_SIZE,
-} from "./constants";
+} from "./constants.js";
 import { stringify as yamlStringify } from "yaml";
-import { YAMLStringify } from "./yaml";
-import { errorMessage, serializeError } from "./error";
-import { host } from "./host";
-import { ellipse, toStringList } from "./util";
-import { renderWithPrecision } from "./precision";
-import { fenceMD } from "./mkmd";
-import { HTMLEscape } from "./htmlescape";
+import { YAMLStringify } from "./yaml.js";
+import { errorMessage, serializeError } from "./error.js";
+import { host } from "./host.js";
+import { ellipse, toStringList } from "./util.js";
+import { renderWithPrecision } from "./precision.js";
+import { fenceMD } from "./mkmd.js";
+import { HTMLEscape } from "./htmlescape.js";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { dedent } from "./indent";
-import { CSVStringify, dataToMarkdownTable } from "./csv";
-import { INIStringify } from "./ini";
-import { ChatCompletionsProgressReport } from "./chattypes";
-import { parseTraceTree, TraceTree } from "./traceparser";
-import { fileCacheImage } from "./filecache";
-import { CancellationOptions } from "./cancellation";
-import { generateId } from "./id";
-import { diffCreatePatch } from "./diff";
-import { prettyBytes } from "./pretty";
+import { dedent } from "./indent.js";
+import { CSVStringify, dataToMarkdownTable } from "./csv.js";
+import { INIStringify } from "./ini.js";
+import { ChatCompletionsProgressReport } from "./chattypes.js";
+import { parseTraceTree, TraceTree } from "./traceparser.js";
+import { fileCacheImage } from "./filecache.js";
+import { CancellationOptions } from "./cancellation.js";
+import { generateId } from "./id.js";
+import { diffCreatePatch } from "./diff.js";
+import { prettyBytes } from "./pretty.js";
 import assert from "node:assert/strict";
+import {
+  BufferLike,
+  ElementOrArray,
+  OptionsOrString,
+  OutputTrace,
+  SerializedError,
+  WorkspaceFile,
+  WorkspaceFileWithScore,
+} from "./types.js";
 
 export class TraceChunkEvent extends Event {
   constructor(

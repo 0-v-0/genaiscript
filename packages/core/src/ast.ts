@@ -1,10 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /// <reference path="./types/prompt_template.d.ts" />
 // Import necessary regular expressions for file type detection and host utilities
-import { GENAI_ANYJS_REGEX, GENAI_ANYTS_REGEX, PROMPTY_REGEX } from "./constants";
-import { Project } from "./server/messages";
-import { arrayify } from "./cleaners";
-import { tagFilter } from "./tags";
+import { GENAI_ANYJS_REGEX, GENAI_ANYTS_REGEX, PROMPTY_REGEX } from "./constants.js";
+import { Project } from "./server/messages.js";
+import { arrayify } from "./cleaners.js";
+import { tagFilter } from "./tags.js";
 import { dirname, resolve } from "node:path";
+import type { CharPosition, Diagnostic, PromptScript, SystemPromptInstance } from "./types.js";
 
 // Interface representing a file reference, with a name and filename property
 export interface FileReference {

@@ -1,11 +1,29 @@
-// Import necessary modules and functions
-import { JSON5parse } from "./json5";
-import { MarkdownTrace, TraceOptions } from "./trace";
-import Ajv from "ajv";
-import { YAMLParse } from "./yaml";
-import { errorMessage } from "./error";
-import { promptParametersSchemaToJSONSchema } from "./parameters";
-import { genaiscriptDebug } from "./debug";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { JSON5parse } from "./json5.js";
+import { MarkdownTrace, TraceOptions } from "./trace.js";
+import { Ajv } from "ajv";
+import { YAMLParse } from "./yaml.js";
+import { errorMessage } from "./error.js";
+import { promptParametersSchemaToJSONSchema } from "./parameters.js";
+import { genaiscriptDebug } from "./debug.js";
+import type {
+  DataFrame,
+  Fenced,
+  FileEditValidation,
+  JSONSchema,
+  JSONSchemaType,
+  JSONSchemaTypeName,
+  JSONSchemaSimpleType,
+  JSONSchemaAnyOf,
+  JSONSchemaObject,
+  JSONSchemaArray,
+  JSONSchemaDescribed,
+  JSONSchemaValidationOptions,
+  PromptParametersSchema,
+} from "./types.js";
+
 const dbg = genaiscriptDebug("schema");
 
 /**
@@ -85,7 +103,7 @@ export function JSONSchemaStringifyToTypeScript(
   options?: { typeName?: string; export?: boolean },
 ) {
   const { typeName = "Response" } = options || {};
-  let lines: string[] = []; // Array to accumulate lines of TypeScript code
+  const lines: string[] = []; // Array to accumulate lines of TypeScript code
   let indent = 0; // Manage indentation level
 
   const described = schema as JSONSchemaDescribed;

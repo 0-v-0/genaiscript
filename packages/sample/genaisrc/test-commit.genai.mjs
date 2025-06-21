@@ -40,7 +40,7 @@ if (!changes) cancel("No changes in the latest commit.")
 
 // list of tests
 const { stdout: tests } = await host.exec("node", [
-    "packages/cli/built/genaiscript.cjs",
+    "packages/cli/dist/src/index.js",
     "test",
     "list",
     "--groups",
@@ -49,7 +49,7 @@ const { stdout: tests } = await host.exec("node", [
 
 def("GIT_DIFF", changes, {
     language: "diff",
-    maxTokens: 20000,
+    maxTokens: 12000,
     ignoreEmpty: true,
     lineNumbers: false,
 })

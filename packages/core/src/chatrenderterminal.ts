@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   ChatCompletionAssistantMessageParam,
   ChatCompletionMessageParam,
@@ -7,29 +10,28 @@ import {
   ChatCompletionToolMessageParam,
   ChatCompletionUserMessageParam,
   CreateChatCompletionRequest,
-} from "./chattypes";
-import { renderImageToTerminal } from "./image";
-import { terminalSize } from "./terminal";
-import { ellipse } from "./util";
-import { YAMLStringify } from "./yaml";
-import { dataUriToBuffer } from "./file";
-import { wrapColor } from "./consolecolor";
+} from "./chattypes.js";
+import { renderImageToTerminal } from "./image.js";
+import { terminalSize } from "./terminal.js";
+import { ellipse } from "./util.js";
+import { YAMLStringify } from "./yaml.js";
+import { dataUriToBuffer } from "./file.js";
+import { wrapColor } from "./consolecolor.js";
 import {
   BOX_DOWN_AND_RIGHT,
   BOX_DOWN_UP_AND_RIGHT,
   BOX_RIGHT,
   BOX_UP_AND_DOWN,
-  BOX_UP_AND_RIGHT,
   CHAR_ENVELOPE,
   CONSOLE_COLOR_DEBUG,
   CONTROL_CHAT_COLLAPSED,
   CONTROL_CHAT_EXPANDED,
   CONTROL_CHAT_LAST,
-} from "./constants";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { prettyTemperature, prettyTokens } from "./pretty";
-import { genaiscriptDebug } from "./debug";
-import { JSONSchemaToFunctionParameters } from "./schema";
+} from "./constants.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { prettyTemperature } from "./pretty.js";
+import { genaiscriptDebug } from "./debug.js";
+import { JSONSchemaToFunctionParameters } from "./schema.js";
 const dbg = genaiscriptDebug("chat:render");
 
 function renderTrimmed(s: string, rows: number, width: number) {

@@ -1,4 +1,6 @@
-import type { Octokit } from "@octokit/rest";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import type { PaginateInterface } from "@octokit/plugin-paginate-rest";
 import {
   GITHUB_API_VERSION,
@@ -9,33 +11,63 @@ import {
   GITHUB_REST_PAGE_DEFAULT,
   GITHUB_TOKENS,
   TOOL_ID,
-} from "./constants";
-import { createFetch } from "./fetch";
-import { runtimeHost } from "./host";
-import { prettifyMarkdown } from "./markdown";
-import { arrayify, assert, logError, logVerbose } from "./util";
-import { shellRemoveAsciiColors } from "./shell";
-import { isGlobMatch } from "./glob";
-import { concurrentLimit } from "./concurrency";
-import { llmifyDiff } from "./llmdiff";
-import { JSON5TryParse } from "./json5";
-import { link } from "./mkmd";
-import { errorMessage } from "./error";
-import { deleteUndefinedValues, normalizeInt } from "./cleaners";
-import { diffCreatePatch } from "./diff";
-import { GitClient } from "./git";
-import { genaiscriptDebug } from "./debug";
-import { fetch } from "./fetch";
-import { resolveBufferLike } from "./bufferlike";
-import { fileTypeFromBuffer } from "./filetype";
+} from "./constants.js";
+import { createFetch } from "./fetch.js";
+import { runtimeHost } from "./host.js";
+import { prettifyMarkdown } from "./markdown.js";
+import { arrayify } from "./cleaners.js";
+import { assert } from "./assert.js";
+import { logError, logVerbose } from "./util.js";
+import { shellRemoveAsciiColors } from "./shell.js";
+import { isGlobMatch } from "./glob.js";
+import { concurrentLimit } from "./concurrency.js";
+import { llmifyDiff } from "./llmdiff.js";
+import { JSON5TryParse } from "./json5.js";
+import { link } from "./mkmd.js";
+import { errorMessage } from "./error.js";
+import { deleteUndefinedValues, normalizeInt } from "./cleaners.js";
+import { diffCreatePatch } from "./diff.js";
+import { GitClient } from "./git.js";
+import { genaiscriptDebug } from "./debug.js";
+import { fetch } from "./fetch.js";
+import { resolveBufferLike } from "./bufferlike.js";
+import { fileTypeFromBuffer } from "./filetype.js";
 import { createHash } from "node:crypto";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { diagnosticToGitHubMarkdown } from "./annotations";
-import { TraceOptions } from "./trace";
-import { unzip } from "./zip";
-import { uriRedact, uriTryParse } from "./url";
-import { dedent } from "./indent";
-import { tryReadJSON } from "./fs";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { diagnosticToGitHubMarkdown } from "./annotations.js";
+import { TraceOptions } from "./trace.js";
+import { unzip } from "./zip.js";
+import { uriRedact, uriTryParse } from "./url.js";
+import { dedent } from "./indent.js";
+import type {
+  BufferLike,
+  Diagnostic,
+  GitHub,
+  GitHubArtifact,
+  GitHubCodeSearchResult,
+  GitHubComment,
+  GitHubFile,
+  GitHubGist,
+  GitHubIssue,
+  GitHubIssueUpdateOptions,
+  GitHubLabel,
+  GitHubOptions,
+  GitHubPaginationOptions,
+  GitHubPullRequest,
+  GitHubRef,
+  GitHubRelease,
+  GitHubWorkflow,
+  GitHubWorkflowJob,
+  GitHubWorkflowRun,
+  GitHubWorkflowRunStatus,
+  PromptScript,
+  WorkspaceFile,
+} from "./types.js";
+import { Octokit } from "@octokit/rest";
+import { throttling } from "@octokit/plugin-throttling";
+import { paginateRest } from "@octokit/plugin-paginate-rest";
+import { tryReadJSON } from "./fs.js";
+
 const dbg = genaiscriptDebug("github");
 
 export interface GithubConnectionInfo {
@@ -657,13 +689,10 @@ export class GitHubClient implements GitHub {
 
   async api() {
     if (!this._client) {
+      // eslint-disable-next-line no-async-promise-executor
       this._client = new Promise(async (resolve) => {
         const conn = await this.connection();
         const { token, apiUrl } = conn;
-        const { Octokit } = await import("@octokit/rest");
-        const { throttling } = await import("@octokit/plugin-throttling");
-        const { paginateRest } = await import("@octokit/plugin-paginate-rest");
-        //const { retry } = await import("@octokit/plugin-retry")
         const OctokitWithPlugins = Octokit.plugin(paginateRest).plugin(throttling);
         //                    .plugin(retry)
         const res = new OctokitWithPlugins({
@@ -688,7 +717,7 @@ export class GitHubClient implements GitHub {
               }
               return false;
             },
-            onSecondaryRateLimit: (retryAfter: number, options: any, octokit: Octokit) => {
+            onSecondaryRateLimit: (_retryAfter: number, options: any, octokit: Octokit) => {
               octokit.log.warn(
                 `SecondaryRateLimit detected for request ${options.method} ${options.url}`,
               );
@@ -755,7 +784,7 @@ export class GitHubClient implements GitHub {
         ref: `heads/${branchName}`,
       });
       return existing.data;
-    } catch (e) {
+    } catch {
       dbg(`ref not found`);
       return undefined;
     }
@@ -995,7 +1024,7 @@ export class GitHubClient implements GitHub {
       gist_id,
       owner,
     });
-    const { files, id, description, created_at, ...rest } = data;
+    const { files, id, description, created_at } = data;
     if (Object.values(files || {}).some((f) => f.encoding !== "utf-8" && f.encoding != "base64")) {
       dbg(`unsupported encoding for gist files`);
       return undefined;
@@ -1154,7 +1183,7 @@ export class GitHubClient implements GitHub {
   ): Promise<GitHubComment[]> {
     const { client, owner, repo } = await this.api();
     dbg(`listing comments for issue number: ${issue_number}`);
-    const { reactions, count = GITHUB_REST_PAGE_DEFAULT, ...rest } = options ?? {};
+    const { count = GITHUB_REST_PAGE_DEFAULT, ...rest } = options ?? {};
     const ite = client.paginate.iterator(client.rest.issues.listComments, {
       owner,
       repo,
@@ -1305,7 +1334,7 @@ export class GitHubClient implements GitHub {
     // Get the jobs for the specified workflow run
     dbg(`listing jobs for workflow run ID: ${run_id}`);
     const { client, owner, repo } = await this.api();
-    const { filter, count = GITHUB_REST_PAGE_DEFAULT, ...rest } = options ?? {};
+    const { filter, count = GITHUB_REST_PAGE_DEFAULT } = options ?? {};
     const ite = client.paginate.iterator(client.rest.actions.listJobsForWorkflowRun, {
       owner,
       repo,
@@ -1412,7 +1441,7 @@ export class GitHubClient implements GitHub {
     const { client, owner, repo } = await this.api();
     dbg(`searching code with query: ${query}`);
     const q = query + `+repo:${owner}/${repo}`;
-    const { count = GITHUB_REST_PAGE_DEFAULT, ...rest } = options ?? {};
+    const { count = GITHUB_REST_PAGE_DEFAULT } = options ?? {};
     const ite = client.paginate.iterator(client.rest.search.code, {
       q,
       ...(options ?? {}),
@@ -1443,7 +1472,7 @@ export class GitHubClient implements GitHub {
   async listWorkflows(options?: GitHubPaginationOptions): Promise<GitHubWorkflow[]> {
     const { client, owner, repo } = await this.api();
     dbg(`listing workflows for repository`);
-    const { count = GITHUB_REST_PAGE_DEFAULT, ...rest } = options ?? {};
+    const { count = GITHUB_REST_PAGE_DEFAULT } = options ?? {};
     const ite = client.paginate.iterator(client.rest.actions.listRepoWorkflows, {
       owner,
       repo,
@@ -1461,7 +1490,7 @@ export class GitHubClient implements GitHub {
   async listBranches(options?: GitHubPaginationOptions): Promise<string[]> {
     dbg(`listing branches for repository`);
     const { client, owner, repo } = await this.api();
-    const { count = GITHUB_REST_PAGE_DEFAULT, ...rest } = options ?? {};
+    const { count = GITHUB_REST_PAGE_DEFAULT } = options ?? {};
     const ite = client.paginate.iterator(client.rest.repos.listBranches, {
       owner,
       repo,

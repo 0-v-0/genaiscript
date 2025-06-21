@@ -1,7 +1,12 @@
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { genaiscriptDebug } from "./debug";
-import { TraceOptions } from "./trace";
-import { logWarn } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { genaiscriptDebug } from "./debug.js";
+import { TraceOptions } from "./trace.js";
+import { logWarn } from "./util.js";
+import type { Z3Solver } from "./types.js";
+import z3 from "z3-solver";
 
 const dbg = genaiscriptDebug("z3");
 
@@ -10,7 +15,6 @@ let _z3: Promise<ReturnType<(typeof import("z3-solver"))["init"]>> = undefined;
 async function importZ3(): Promise<ReturnType<(typeof import("z3-solver"))["init"]>> {
   try {
     dbg(`importing z3-solver`);
-    const z3 = await import("z3-solver");
     dbg(`initializing`);
     const res = await z3.init();
     dbg(`initialized`);
@@ -40,7 +44,7 @@ async function importZ3(): Promise<ReturnType<(typeof import("z3-solver"))["init
 export async function loadZ3Client(
   options?: TraceOptions & CancellationOptions,
 ): Promise<Z3Solver> {
-  const { trace, cancellationToken } = options || {};
+  const { cancellationToken } = options || {};
   const z3p = await (_z3 || (_z3 = importZ3()));
   checkCancelled(cancellationToken);
   if (!z3p) {
@@ -71,7 +75,6 @@ export async function loadZ3Client(
     Z3.global_param_set("timeout", String(timeout));
 
     let output = "";
-    let error = "";
 
     try {
       output = (await Z3.eval_smtlib2_string(ctx, input)) ?? "";

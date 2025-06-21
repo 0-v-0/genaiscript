@@ -1,16 +1,20 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module provides functions for parsing and validating prompt scripts
  * within a project. It includes a Checker class for validation of various
  * data types and formats.
  */
 
-import { GENAI_ANY_REGEX, PROMPTY_REGEX } from "./constants";
-import { host } from "./host";
-import { JSON5TryParse } from "./json5";
-import { humanize } from "./inflection";
-import { promptyParse, promptyToGenAIScript } from "./prompty";
-import { metadataValidate } from "./metadata";
-import { deleteUndefinedValues } from "./cleaners";
+import { GENAI_ANY_REGEX, PROMPTY_REGEX } from "./constants.js";
+import { host } from "./host.js";
+import { JSON5TryParse } from "./json5.js";
+import { humanize } from "./inflection.js";
+import { promptyParse, promptyToGenAIScript } from "./prompty.js";
+import { metadataValidate } from "./metadata.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import type { PromptArgs, PromptScript } from "./types.js";
 
 /**
  * Extracts a template ID from the given filename by removing specific extensions

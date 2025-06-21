@@ -1,22 +1,34 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This file contains the GitClient class, which provides methods to interact with Git repositories.
 // It includes functionality to find modified files, execute Git commands, and manage branches.
 
 import { uniq } from "es-toolkit";
-import { GENAISCRIPTIGNORE, GIT_DIFF_MAX_TOKENS, GIT_IGNORE_GENAI } from "./constants";
-import { llmifyDiff } from "./llmdiff";
-import { resolveFileContents } from "./file";
-import { tryReadText, tryStat } from "./fs";
-import { runtimeHost } from "./host";
-import { shellParse, shellQuote } from "./shell";
-import { arrayify, ellipse, logVerbose } from "./util";
-import { approximateTokens } from "./tokens";
+import { GENAISCRIPTIGNORE, GIT_DIFF_MAX_TOKENS, GIT_IGNORE_GENAI } from "./constants.js";
+import { llmifyDiff } from "./llmdiff.js";
+import { resolveFileContents } from "./file.js";
+import { tryReadText, tryStat } from "./fs.js";
+import { runtimeHost } from "./host.js";
+import { shellParse, shellQuote } from "./shell.js";
+import { arrayify } from "./cleaners.js";
+import { ellipse, logVerbose } from "./util.js";
+import { approximateTokens } from "./tokens.js";
 import { underscore } from "inflection";
 import { rm } from "node:fs/promises";
-import { packageResolveInstall } from "./packagemanagers";
-import { normalizeInt } from "./cleaners";
-import { dotGenaiscriptPath } from "./workdir";
-import { join } from "node:path";
-import { genaiscriptDebug } from "./debug";
+import { packageResolveInstall } from "./packagemanagers.js";
+import { normalizeInt } from "./cleaners.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { genaiscriptDebug } from "./debug.js";
+import type {
+  ElementOrArray,
+  Git,
+  GitCommit,
+  OptionsOrString,
+  ShellOptions,
+  WorkspaceFile,
+} from "./types.js";
+
 const dbg = genaiscriptDebug("git");
 
 async function checkDirectoryExists(directory: string): Promise<boolean> {

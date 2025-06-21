@@ -1,19 +1,21 @@
-import { resolveBufferLike } from "./bufferlike";
-import { CHANGE, MCP_RESOURCE_PROTOCOL, RESOURCE_CHANGE } from "./constants";
-import debug from "debug";
-import { fileTypeFromBuffer } from "./filetype";
-import { TraceOptions } from "./trace";
-import { hash } from "./crypto";
-import { resolveFileContent } from "./file";
-import { redactSecrets } from "./secretscanner";
-const dbg = debug("genaiscript:resource");
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
-export interface ResourceReference {
-  uri: string; // Unique identifier for the resource
-  name: string; // Human-readable name
-  description?: string; // Optional description
-  mimeType?: string; // Optional MIME type
-}
+import { resolveBufferLike } from "./bufferlike.js";
+import { CHANGE, MCP_RESOURCE_PROTOCOL, RESOURCE_CHANGE } from "./constants.js";
+import debug from "debug";
+import { fileTypeFromBuffer } from "./filetype.js";
+import { TraceOptions } from "./trace.js";
+import { hash } from "./crypto.js";
+import { resolveFileContent } from "./file.js";
+import { redactSecrets } from "./secretscanner.js";
+const dbg = debug("genaiscript:resource");
+import type {
+  BufferLike,
+  ResourceReference,
+  SecretDetectionOptions,
+  WorkspaceFile,
+} from "./types.js";
 
 export interface ResourceContent {
   uri: string; // The URI of the resource

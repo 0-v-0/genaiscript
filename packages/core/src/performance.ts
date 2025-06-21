@@ -1,5 +1,8 @@
-import { performance, PerformanceObserver } from "perf_hooks";
-import { logVerbose, toStringList } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { performance, PerformanceObserver } from "node:perf_hooks";
+import { logVerbose, toStringList } from "./util.js";
 import prettyMilliseconds from "pretty-ms";
 
 /**

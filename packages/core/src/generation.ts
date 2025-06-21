@@ -1,8 +1,19 @@
-// Import necessary modules and interfaces
-import type { CancellationToken } from "./cancellation";
-import type { ChatCompletionsOptions } from "./chattypes";
-import { MarkdownTrace } from "./trace";
-import { GenerationStats } from "./usage";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { CancellationToken } from "./cancellation.js";
+import type { ChatCompletionsOptions } from "./chattypes.js";
+import { MarkdownTrace } from "./trace.js";
+import { GenerationStats } from "./usage.js";
+import type {
+  ContentSafetyOptions,
+  EmbeddingsModelOptions,
+  MetadataOptions,
+  ModelOptions,
+  PromptParameters,
+  ScriptRuntimeOptions,
+  WorkspaceFile,
+} from "./types.js";
 
 // Represents a code fragment with associated files
 export interface Fragment {

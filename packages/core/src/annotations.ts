@@ -1,12 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module provides functions to parse and convert annotations from
  * TypeScript, GitHub Actions, and Azure DevOps. It supports the transformation
  * of annotations into different formats for integration with CI/CD tools.
  */
 
-import { deleteUndefinedValues } from "./cleaners";
-import { EMOJI_FAIL, EMOJI_WARNING } from "./constants";
-import { unfence } from "./unwrappers";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { EMOJI_FAIL, EMOJI_WARNING } from "./constants.js";
+import { unfence } from "./unwrappers.js";
+import type { Diagnostic } from "./types.js";
 
 // Regular expression for matching GitHub Actions annotations.
 // Example: ::error file=foo.js,line=10,endLine=11::Something went wrong.

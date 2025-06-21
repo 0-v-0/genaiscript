@@ -1,7 +1,9 @@
-import { normalizeFloat, trimTrailingSlash } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { normalizeFloat, trimTrailingSlash } from "./cleaners.js";
 import {
   ANTHROPIC_API_BASE,
-  AZURE_OPENAI_API_VERSION,
   GITHUB_MODELS_BASE,
   LITELLM_API_BASE,
   LLAMAFILE_API_BASE,
@@ -50,16 +52,20 @@ import {
   GITHUB_TOKENS,
   MODEL_PROVIDER_DOCKER_MODEL_RUNNER,
   DOCKER_MODEL_RUNNER_API_BASE,
-} from "./constants";
-import { runtimeHost } from "./host";
-import { parseModelIdentifier } from "./models";
-import { AzureCredentialsType, LanguageModelConfiguration, OpenAIAPIType } from "./server/messages";
-import { arrayify, ellipse } from "./util";
+} from "./constants.js";
+import { runtimeHost } from "./host.js";
+import { parseModelIdentifier } from "./models.js";
+import {
+  AzureCredentialsType,
+  LanguageModelConfiguration,
+  OpenAIAPIType,
+} from "./server/messages.js";
+import { arrayify } from "./cleaners.js";
 import { URL } from "node:url";
-import { uriTryParse } from "./url";
-import { TraceOptions } from "./trace";
-import { CancellationOptions } from "./cancellation";
-import { genaiscriptDebug } from "./debug";
+import { uriTryParse } from "./url.js";
+import { TraceOptions } from "./trace.js";
+import { CancellationOptions } from "./cancellation.js";
+import { genaiscriptDebug } from "./debug.js";
 const dbg = genaiscriptDebug("config:env");
 
 /**
@@ -190,7 +196,7 @@ export async function parseTokenFromEnv(
     dbg(`processing ${MODEL_PROVIDER_OPENAI}`);
     const token = env.OPENAI_API_KEY ?? "";
     let base = env.OPENAI_API_BASE;
-    let type = (env.OPENAI_API_TYPE as OpenAIAPIType) || "openai";
+    const type = (env.OPENAI_API_TYPE as OpenAIAPIType) || "openai";
     const version = env.OPENAI_API_VERSION || parseAzureVersionFromUrl(base);
     if (
       type !== "azure" &&

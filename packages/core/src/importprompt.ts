@@ -1,11 +1,24 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:importprompt");
 
-import { host } from "./host";
-import { logError } from "./util";
-import { TraceOptions } from "./trace";
+import { host } from "./host.js";
+import { logError } from "./util.js";
+import { TraceOptions } from "./trace.js";
 import { pathToFileURL } from "node:url";
-import { mark } from "./performance";
+import { mark } from "./performance.js";
+import { getModulePaths } from "./pathUtils.js";
+import type { Awaitable, PromptContext, PromptScript } from "./types.js";
+import { tsImport, register } from "tsx/esm/api";
+
+const { __filename } =
+  typeof module !== "undefined" && module.filename
+    ? getModulePaths(module)
+    : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      getModulePaths(import.meta);
 
 /**
  * Dynamically imports a JavaScript module from a specified file.
@@ -37,15 +50,13 @@ export async function importFile<T = void>(
     const modulePath = pathToFileURL(
       host.path.isAbsolute(filename) ? filename : host.path.join(host.projectFolder(), filename),
     ).toString();
-    const parentURL =
-      import.meta.url ?? pathToFileURL(__filename ?? host.projectFolder()).toString();
+    const parentURL = pathToFileURL(__filename).toString();
 
     dbg(`importing module from path: ${modulePath}`);
-    const onImport = (file: string) => {
+    const onImport = (_file: string) => {
       // trace?.itemValue("📦 import", fileURLToPath(file))
     };
     onImport(modulePath);
-    const { tsImport, register } = await import("tsx/esm/api");
     unregister = register({ onImport });
     const module = await tsImport(modulePath, {
       parentURL,

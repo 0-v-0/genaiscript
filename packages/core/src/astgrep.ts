@@ -1,12 +1,29 @@
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { CancelError, errorMessage } from "./error";
-import { resolveFileContent } from "./file";
-import { host } from "./host";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { CancelError, errorMessage } from "./error.js";
+import { resolveFileContent } from "./file.js";
+import { host } from "./host.js";
 import { uniq } from "es-toolkit";
-import { readText, writeText } from "./fs";
+import { readText, writeText } from "./fs.js";
 import { extname } from "node:path";
-import { diffFindChunk, diffResolve } from "./diff";
-import { genaiscriptDebug } from "./debug";
+import { diffFindChunk, diffResolve } from "./diff.js";
+import { genaiscriptDebug } from "./debug.js";
+import type {
+  ElementOrArray,
+  Sg,
+  SgLang,
+  SgMatcher,
+  SgNode,
+  SgRoot,
+  SgEdit,
+  SgChangeSet,
+  SgSearchOptions,
+  WorkspaceFile,
+} from "./types.js";
+import { Lang, findInFiles, parseAsync, registerDynamicLanguage } from "@ast-grep/napi";
+
 const dbg = genaiscriptDebug("astgrep");
 const dbgLang = dbg.extend("lang");
 
@@ -93,7 +110,7 @@ export async function astGrepFindFiles(
 
   dbg(`search %O`, matcher);
   if (diffFiles?.length) dbg(`diff files: ${diffFiles.length}`);
-  const { findInFiles } = await import("@ast-grep/napi");
+
   checkCancelled(cancellationToken);
 
   let paths = await host.findFiles(glob, options);
@@ -119,6 +136,7 @@ export async function astGrepFindFiles(
   }
 
   let matches: SgNode[] = [];
+  // eslint-disable-next-line no-async-promise-executor
   const p = new Promise<number>(async (resolve, reject) => {
     let i = 0;
     let n: number = undefined;
@@ -234,7 +252,6 @@ export async function astGrepParse(
   } // binary file
 
   dbg(`parsing file: ${filename}`);
-  const { parseAsync } = await import("@ast-grep/napi");
   const lang = await resolveLang(options?.lang, filename);
   if (!lang) {
     return undefined;
@@ -246,12 +263,10 @@ export async function astGrepParse(
 }
 
 async function resolveLang(lang: SgLang | Record<string, SgLang>, filename?: string) {
-  const { Lang } = await import("@ast-grep/napi");
-
   const norm = (l: string) => l.toLowerCase().replace(/^\./, "");
 
   // pre-compiled with ast-grep
-  const builtins: any = {
+  const builtins: Record<string, string> = {
     html: Lang.Html,
     htm: Lang.Html,
     cjs: Lang.JavaScript,
@@ -267,7 +282,7 @@ async function resolveLang(lang: SgLang | Record<string, SgLang>, filename?: str
     css: Lang.Css,
   };
 
-  const dynamics: any = {
+  const dynamics: Record<string, string> = {
     h: "c",
     c: "c",
     cpp: "cpp",
@@ -323,7 +338,6 @@ const loadedDynamicLanguages = new Set<string>();
 async function loadDynamicLanguage(langName: string) {
   if (!loadedDynamicLanguages.has(langName)) {
     dbgLang(`loading language: ${langName}`);
-    const { registerDynamicLanguage } = await import("@ast-grep/napi");
     try {
       const dynamicLang = (await import(`@ast-grep/lang-${langName}`)).default;
       registerDynamicLanguage({ [langName]: dynamicLang });

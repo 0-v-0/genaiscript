@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { parse, evaluate } from "groq-js";
 /**
  * Loads and applies a GROQ query transformation to the input dataset.

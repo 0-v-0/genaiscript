@@ -1,22 +1,26 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:workspace");
 
-import { copyFile, mkdir, writeFile } from "fs/promises";
-import { DOT_ENV_REGEX } from "./constants";
-import { CSVTryParse } from "./csv";
-import { dataTryParse } from "./data";
-import { NotSupportedError, errorMessage } from "./error";
-import { resolveFileContent, toWorkspaceFile } from "./file";
-import { appendText, readText, tryStat, writeText } from "./fs";
-import { host } from "./host";
-import { INITryParse } from "./ini";
-import { JSON5TryParse } from "./json5";
-import { arrayify } from "./util";
-import { XMLTryParse } from "./xml";
-import { YAMLTryParse } from "./yaml";
-import { dirname } from "path";
-import { createCache } from "./cache";
-import { tryValidateJSONWithSchema } from "./schema";
+import { copyFile, mkdir, writeFile } from "node:fs/promises";
+import { DOT_ENV_REGEX } from "./constants.js";
+import { CSVTryParse } from "./csv.js";
+import { dataTryParse } from "./data.js";
+import { NotSupportedError, errorMessage } from "./error.js";
+import { resolveFileContent, toWorkspaceFile } from "./file.js";
+import { appendText, readText, tryStat, writeText } from "./fs.js";
+import { host } from "./host.js";
+import { INITryParse } from "./ini.js";
+import { JSON5TryParse } from "./json5.js";
+import { arrayify } from "./cleaners.js";
+import { XMLTryParse } from "./xml.js";
+import { YAMLTryParse } from "./yaml.js";
+import { dirname } from "node:path";
+import { createCache } from "./cache.js";
+import { tryValidateJSONWithSchema } from "./schema.js";
+import type { WorkspaceFileSystem } from "./types.js";
 
 /**
  * Creates a file system interface for interacting with workspace files.

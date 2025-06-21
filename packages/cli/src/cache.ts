@@ -1,7 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { join } from "node:path";
-import { dotGenaiscriptPath } from "../../core/src/workdir";
-import { emptyDir } from "fs-extra";
-import { sanitizeFilename } from "../../core/src/sanitize";
+import { dotGenaiscriptPath, sanitizeFilename } from "@genaiscript/core";
+import { rmDir } from "@genaiscript/core";
 
 /**
  * This module provides a function to clear a specified cache directory.
@@ -28,5 +30,5 @@ export async function cacheClear(name: string) {
   console.log(`removing ${dir}`);
 
   // Clear the contents of the directory asynchronously.
-  await emptyDir(dir);
+  await rmDir(dir);
 }

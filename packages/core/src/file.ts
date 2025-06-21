@@ -1,20 +1,23 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module provides functions to handle file content resolution, rendering,
  * and data URI conversion. It includes support for various file formats like
  * PDF, DOCX, XLSX, and CSV.
  */
-import { DOCXTryParse } from "./docx";
-import { readText, tryStat } from "./fs";
-import { lookupMime } from "./mime";
-import { isBinaryMimeType } from "./binary";
-import { createFetch } from "./fetch";
-import { fileTypeFromBuffer } from "./filetype";
-import { fromBase64, toBase64 } from "./base64";
-import { host } from "./host";
-import { TraceOptions } from "./trace";
-import { parsePdf } from "./pdf";
-import { XLSXParse } from "./xlsx";
-import { dataToMarkdownTable, CSVTryParse } from "./csv";
+import { DOCXTryParse } from "./docx.js";
+import { readText, tryStat } from "./fs.js";
+import { lookupMime } from "./mime.js";
+import { isBinaryMimeType } from "./binary.js";
+import { createFetch } from "./fetch.js";
+import { fileTypeFromBuffer } from "./filetype.js";
+import { fromBase64, toBase64 } from "./base64.js";
+import { host } from "./host.js";
+import { TraceOptions } from "./trace.js";
+import { parsePdf } from "./pdf.js";
+import { XLSXParse } from "./xlsx.js";
+import { dataToMarkdownTable, CSVTryParse } from "./csv.js";
 import {
   CSV_REGEX,
   DOCX_MIME_TYPE,
@@ -24,12 +27,14 @@ import {
   PDF_REGEX,
   XLSX_MIME_TYPE,
   XLSX_REGEX,
-} from "./constants";
-import { tidyData } from "./tidy";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { prettyBytes } from "./pretty";
-import { tryResolveResource } from "./resources";
-import { genaiscriptDebug } from "./debug";
+} from "./constants.js";
+import { tidyData } from "./tidy.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { prettyBytes } from "./pretty.js";
+import { tryResolveResource } from "./resources.js";
+import { genaiscriptDebug } from "./debug.js";
+import type { DataFilter, WorkspaceFile, WorkbookSheet } from "./types.js";
+
 const dbg = genaiscriptDebug("file");
 
 /**

@@ -1,54 +1,72 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This module provides functionality to test prompt scripts, including running,
 // listing, and viewing results. It handles configuration setup, execution logic,
 // and result processing.
 
-import { buildProject } from "./build";
-import { readFile, writeFile, appendFile } from "node:fs/promises";
+import { PROMPTFOO_VERSION } from "@genaiscript/runtime";
+import { delay } from "es-toolkit";
+import { rmDir, tryStat } from "@genaiscript/core";
 import { execa } from "execa";
+import { appendFile, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
-import { emptyDir, exists } from "fs-extra";
-import { PROMPTFOO_VERSION } from "./version";
 import {
+  CORE_VERSION,
+  EMOJI_FAIL,
+  EMOJI_SUCCESS,
+  FILES_NOT_FOUND_ERROR_CODE,
+  GENAI_ANY_REGEX,
+  GENAISCRIPT_FOLDER,
   PROMPTFOO_CACHE_PATH,
   PROMPTFOO_CONFIG_DIR,
-  FILES_NOT_FOUND_ERROR_CODE,
-  GENAISCRIPT_FOLDER,
-  GENAI_ANY_REGEX,
-  EMOJI_SUCCESS,
-  EMOJI_FAIL,
-  TEST_RUNS_DIR_NAME,
   PROMPTFOO_REMOTE_API_PORT,
-} from "../../core/src/constants";
-import { promptFooDriver } from "../../core/src/default_prompts";
-import { serializeError } from "../../core/src/error";
-import { runtimeHost } from "../../core/src/host";
-import { JSON5TryParse } from "../../core/src/json5";
-import { MarkdownTrace } from "../../core/src/trace";
-import { logInfo, logVerbose, toStringList } from "../../core/src/util";
-import { YAMLStringify } from "../../core/src/yaml";
-import {
-  PromptScriptTestRunOptions,
-  PromptScriptTestRunResponse,
-  PromptScriptTestResult,
-} from "../../core/src/server/messages";
-import { generatePromptFooConfiguration } from "../../core/src/promptfoo";
-import { delay } from "es-toolkit";
-import { resolveModelConnectionInfo } from "../../core/src/models";
-import { filterScripts } from "../../core/src/ast";
-import { link } from "../../core/src/mkmd";
-import { applyModelOptions } from "../../core/src/modelalias";
-import { arrayify, normalizeFloat, normalizeInt } from "../../core/src/cleaners";
-import { ChatCompletionReasoningEffort } from "../../core/src/chattypes";
-import { CancellationOptions, checkCancelled } from "../../core/src/cancellation";
-import { CORE_VERSION } from "../../core/src/version";
-import {
+  TEST_RUNS_DIR_NAME,
+  JSON5TryParse,
+  MarkdownTrace,
+  YAMLStringify,
+  applyModelOptions,
+  arrayify,
+  checkCancelled,
+  dotGenaiscriptPath,
+  ensureDir,
+  filterScripts,
+  generatePromptFooConfiguration,
   headersToMarkdownTableHead,
   headersToMarkdownTableSeperator,
+  link,
+  logInfo,
+  logVerbose,
+  normalizeFloat,
+  normalizeInt,
   objectToMarkdownTableRow,
-} from "../../core/src/csv";
-import { roundWithPrecision } from "../../core/src/precision";
-import { ensureDir } from "../../core/src/fs";
-import { dotGenaiscriptPath } from "../../core/src/workdir";
+  promptFooDriver,
+  resolveModelConnectionInfo,
+  roundWithPrecision,
+  runtimeHost,
+  serializeError,
+  toStringList,
+  getModulePaths,
+} from "@genaiscript/core";
+import type {
+  ChatCompletionReasoningEffort,
+  CancellationOptions,
+  ModelAliasesOptions,
+  ModelOptions,
+  PromptScript,
+  PromptScriptTestResult,
+  PromptScriptTestRunOptions,
+  PromptScriptTestRunResponse,
+  SerializedError,
+} from "@genaiscript/core";
+import { buildProject } from "@genaiscript/core";
+
+const { __filename } =
+  typeof module !== "undefined" && module.filename
+    ? getModulePaths(module)
+    : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      getModulePaths(import.meta);
 
 /**
  * Parses model specifications from a string and returns a ModelOptions object.
@@ -140,7 +158,7 @@ export async function runPromptScriptTests(
   const runStart = new Date();
   logInfo(`writing tests to ${out}`);
 
-  if (options?.removeOut) await emptyDir(out);
+  if (options?.removeOut) await rmDir(out);
   await ensureDir(out);
   await writeFile(provider, promptFooDriver);
 
@@ -205,7 +223,7 @@ npx --yes genaiscript@${CORE_VERSION} test view
     configurations.push({ script, configuration: fn });
   }
 
-  let stats = {
+  const stats = {
     prompt: 0,
     completion: 0,
     total: 0,
@@ -258,7 +276,7 @@ npx --yes genaiscript@${CORE_VERSION} test view
       status = e.errno ?? -1;
       error = serializeError(e);
     }
-    if (await exists(outJson)) value = JSON5TryParse(await readFile(outJson, "utf8"));
+    if (await tryStat(outJson)) value = JSON5TryParse(await readFile(outJson, "utf8"));
     const ok = status === 0;
     stats.prompt += value?.results?.stats?.tokenUsage?.prompt || 0;
     stats.completion += value?.results?.stats?.tokenUsage?.completion || 0;

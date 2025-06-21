@@ -1,5 +1,8 @@
-import { ellipse, logError, logInfo, logVerbose } from "./util";
-import { host } from "./host";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { ellipse, logError, logInfo, logVerbose } from "./util.js";
+import { host } from "./host.js";
 import {
   AZURE_AI_INFERENCE_VERSION,
   AZURE_OPENAI_API_VERSION,
@@ -15,8 +18,8 @@ import {
   TOOL_ID,
   TOOL_NAME,
   TOOL_URL,
-} from "./constants";
-import { approximateTokens } from "./tokens";
+} from "./constants.js";
+import { approximateTokens } from "./tokens.js";
 import {
   ChatCompletionHandler,
   CreateImageRequest,
@@ -26,11 +29,11 @@ import {
   CreateTranscriptionRequest,
   LanguageModel,
   ListModelsFunction,
-} from "./chat";
-import { RequestError, errorMessage, isCancelError, serializeError } from "./error";
-import { createFetch } from "./fetch";
-import { parseModelIdentifier } from "./models";
-import { JSON5TryParse } from "./json5";
+} from "./chat.js";
+import { RequestError, errorMessage, isCancelError, serializeError } from "./error.js";
+import { createFetch } from "./fetch.js";
+import { parseModelIdentifier } from "./models.js";
+import { JSON5TryParse } from "./json5.js";
 import {
   ChatCompletionToolCall,
   ChatCompletionResponse,
@@ -45,20 +48,26 @@ import {
   EmbeddingCreateParams,
   EmbeddingResult,
   ImageGenerationResponse,
-} from "./chattypes";
-import { resolveTokenEncoder } from "./encoders";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { INITryParse } from "./ini";
-import { serializeChunkChoiceToLogProbs } from "./logprob";
-import { TraceOptions } from "./trace";
-import { LanguageModelConfiguration } from "./server/messages";
+} from "./chattypes.js";
+import { resolveTokenEncoder } from "./encoders.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { INITryParse } from "./ini.js";
+import { serializeChunkChoiceToLogProbs } from "./logprob.js";
+import { TraceOptions } from "./trace.js";
+import { LanguageModelConfiguration } from "./server/messages.js";
 import prettyBytes from "pretty-bytes";
-import { deleteUndefinedValues, isEmptyString, normalizeInt, trimTrailingSlash } from "./cleaners";
-import { fromBase64 } from "./base64";
-import debug from "debug";
-import { traceFetchPost } from "./fetchtext";
-import { providerFeatures } from "./features";
-import { genaiscriptDebug } from "./debug";
+import {
+  deleteUndefinedValues,
+  isEmptyString,
+  normalizeInt,
+  trimTrailingSlash,
+} from "./cleaners.js";
+import { fromBase64 } from "./base64.js";
+import { traceFetchPost } from "./fetchtext.js";
+import { providerFeatures } from "./features.js";
+import { genaiscriptDebug } from "./debug.js";
+import type { RetryOptions, TranscriptionResult } from "./types.js";
+
 const dbg = genaiscriptDebug("openai");
 const dbgMessages = dbg.extend("msg");
 dbgMessages.enabled = false;
@@ -302,7 +311,7 @@ export const OpenAIChatCompletion: ChatCompletionHandler = async (req, cfg, opti
   let usage: ChatCompletionUsage;
   let error: SerializedError;
   let responseModel: string;
-  let lbs: ChatCompletionTokenLogprob[] = [];
+  const lbs: ChatCompletionTokenLogprob[] = [];
 
   let reasoning = false;
 

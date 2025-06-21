@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module provides functionality for estimating costs and tracking usage statistics
  * related to chat completions, including generating detailed reports and logs.
@@ -8,10 +11,10 @@ import {
   ChatCompletionResponse,
   ChatCompletionUsage,
   CreateChatCompletionRequest,
-} from "./chattypes";
-import { MarkdownTrace } from "./trace";
-import { logVerbose, toStringList } from "./util";
-import { parseModelIdentifier } from "./models";
+} from "./chattypes.js";
+import { MarkdownTrace } from "./trace.js";
+import { logVerbose, toStringList } from "./util.js";
+import { parseModelIdentifier } from "./models.js";
 import {
   BOX_RIGHT,
   BOX_UP_AND_RIGHT,
@@ -19,10 +22,10 @@ import {
   CHAR_FLOPPY_DISK,
   CHAR_UP_DOWN_ARROWS,
   MODEL_PRICINGS,
-} from "./constants";
-import { prettyCost, prettyTokensPerSecond, prettyDuration, prettyTokens } from "./pretty";
-import { genaiscriptDebug } from "./debug";
-import { ImageGenerationUsage } from "./chat";
+} from "./constants.js";
+import { prettyCost, prettyTokensPerSecond, prettyDuration, prettyTokens } from "./pretty.js";
+import { genaiscriptDebug } from "./debug.js";
+import { ImageGenerationUsage } from "./chat.js";
 const dbg = genaiscriptDebug("usage");
 
 /**

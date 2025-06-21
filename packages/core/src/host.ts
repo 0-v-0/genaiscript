@@ -1,19 +1,45 @@
-import { CancellationOptions, CancellationToken } from "./cancellation";
-import { LanguageModel } from "./chat";
-import { Progress } from "./progress";
-import { MarkdownTrace, TraceOptions } from "./trace";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CancellationOptions, CancellationToken } from "./cancellation.js";
+import { LanguageModel } from "./chat.js";
+import { Progress } from "./progress.js";
+import { MarkdownTrace, TraceOptions } from "./trace.js";
 import {
   AzureCredentialsType,
   LanguageModelConfiguration,
   LogLevel,
   Project,
   ResponseStatus,
-} from "./server/messages";
-import { HostConfiguration } from "./hostconfiguration";
-import { LOG } from "./constants";
+} from "./server/messages.js";
+import { HostConfiguration } from "./hostconfiguration.js";
+import { LOG } from "./constants.js";
 import type { TokenCredential } from "@azure/identity";
-import { McpClientManager } from "./mcpclient";
-import { ResourceManager } from "./mcpresource";
+import { McpClientManager } from "./mcpclient.js";
+import { ResourceManager } from "./mcpresource.js";
+import type {
+  BrowserPage,
+  BrowseSessionOptions,
+  ContainerHost,
+  ContainerOptions,
+  ContentSafety,
+  ContentSafetyProvider,
+  ModelOptions,
+  Path,
+  PythonRuntime,
+  PythonRuntimeOptions,
+  SerializedError,
+  ShellOutput,
+  ShellSelectChoice,
+  ShellSelectOptions,
+  ShellInputOptions,
+  ShellConfirmOptions,
+  ShellOptions,
+  WorkspaceFile,
+  WorkspaceFileSystem,
+  WorkspaceFileWithScore,
+  VectorSearchOptions,
+} from "./types.js";
 
 export class LogEvent extends Event {
   static Name = "log";

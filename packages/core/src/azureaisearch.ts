@@ -1,15 +1,20 @@
-import { CancellationOptions, checkCancelled, toSignal } from "../../core/src/cancellation";
-import { EmbeddingFunction, WorkspaceFileIndexCreator } from "../../core/src/chat";
-import { arrayify } from "../../core/src/cleaners";
-import { runtimeHost } from "../../core/src/host";
-import { TraceOptions } from "../../core/src/trace";
-import { logVerbose } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CancellationOptions, checkCancelled, toSignal } from "./cancellation.js";
+import { EmbeddingFunction, WorkspaceFileIndexCreator } from "./chat.js";
+import { arrayify } from "./cleaners.js";
+import { runtimeHost } from "./host.js";
+import { TraceOptions } from "./trace.js";
+import { logVerbose } from "./util.js";
 import type { TokenCredential, KeyCredential } from "@azure/core-auth";
-import { resolveFileContent } from "./file";
-import { hash } from "./crypto";
-import { LanguageModelConfiguration } from "./server/messages";
-import { chunk } from "./encoders";
-import { genaiscriptDebug } from "./debug";
+import { resolveFileContent } from "./file.js";
+import { hash } from "./crypto.js";
+import { LanguageModelConfiguration } from "./server/messages.js";
+import { chunk } from "./encoders.js";
+import { genaiscriptDebug } from "./debug.js";
+import { SearchClient, SearchIndexClient, AzureKeyCredential } from "@azure/search-documents";
+
 const dbg = genaiscriptDebug("azureaisearch");
 
 const HASH_LENGTH = 64;
@@ -29,9 +34,6 @@ export const azureAISearchIndex: WorkspaceFileIndexCreator = async (
     vectorSize = 1536,
   } = options || {};
   const abortSignal = toSignal(cancellationToken);
-  const { SearchClient, SearchIndexClient, AzureKeyCredential } = await import(
-    "@azure/search-documents"
-  );
 
   const endPoint = process.env.AZURE_AI_SEARCH_ENDPOINT;
   if (!endPoint) {

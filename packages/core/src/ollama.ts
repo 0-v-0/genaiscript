@@ -1,12 +1,14 @@
-// Import necessary modules and types for handling chat completions and model management
-import { LanguageModel, ListModelsFunction, PullModelFunction } from "./chat";
-import { MODEL_PROVIDER_OLLAMA, TOOL_ID } from "./constants";
-import { serializeError } from "./error";
-import { createFetch, iterateBody } from "./fetch";
-import { OpenAIChatCompletion, OpenAIEmbedder } from "./openai";
-import { logError, logVerbose } from "./util";
-import { JSONLTryParse } from "./jsonl";
-import { stderr } from "./stdio";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { LanguageModel, ListModelsFunction, PullModelFunction } from "./chat.js";
+import { MODEL_PROVIDER_OLLAMA, TOOL_ID } from "./constants.js";
+import { serializeError } from "./error.js";
+import { createFetch, iterateBody } from "./fetch.js";
+import { OpenAIChatCompletion, OpenAIEmbedder } from "./openai.js";
+import { logError, logVerbose } from "./util.js";
+import { JSONLTryParse } from "./jsonl.js";
+import { stderr } from "./stdio.js";
 
 /**
  * Lists available models for the Ollama language model configuration.
@@ -77,7 +79,6 @@ const pullModel: PullModelFunction = async (cfg, options) => {
       logVerbose(resPull.statusText);
       return { ok: false, status: resPull.status };
     }
-    let lastStatus = "";
     for await (const chunk of iterateBody(resPull, { cancellationToken })) {
       const cs = JSONLTryParse(chunk) as {
         status?: string;

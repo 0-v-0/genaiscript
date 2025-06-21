@@ -1,15 +1,18 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { serializeError } from "serialize-error";
-import { CancellationOptions, toSignal } from "./cancellation";
-import { CreateTranscriptionRequest, LanguageModel } from "./chat";
-import { MODEL_PROVIDER_WHISPERASR } from "./constants";
-import { traceFetchPost } from "./fetchtext";
-import { getConfigHeaders } from "./openai";
-import { LanguageModelConfiguration } from "./server/messages";
-import { TraceOptions } from "./trace";
-import { logVerbose, logError } from "./util";
-import { prettyBytes } from "./pretty";
-import { genaiscriptDebug } from "./debug";
-import { isCancelError } from "./error";
+import { CancellationOptions, toSignal } from "./cancellation.js";
+import { CreateTranscriptionRequest, LanguageModel } from "./chat.js";
+import { MODEL_PROVIDER_WHISPERASR } from "./constants.js";
+import { traceFetchPost } from "./fetchtext.js";
+import { getConfigHeaders } from "./openai.js";
+import { LanguageModelConfiguration } from "./server/messages.js";
+import { TraceOptions } from "./trace.js";
+import { logVerbose, logError } from "./util.js";
+import { prettyBytes } from "./pretty.js";
+import { genaiscriptDebug } from "./debug.js";
+import { isCancelError } from "./error.js";
 const dbg = genaiscriptDebug("whisperasr");
 
 async function WhisperASRTranscribe(

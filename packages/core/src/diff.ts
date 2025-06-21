@@ -1,9 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import parseDiff from "parse-diff";
-import { arrayify, isEmptyString } from "./cleaners";
+import { arrayify, isEmptyString } from "./cleaners.js";
 import debug from "debug";
-import { errorMessage } from "./error";
+import { errorMessage } from "./error.js";
 import { createTwoFilesPatch } from "diff";
 import { resolve } from "node:path";
+import type { DiffChunk, DiffFile, ElementOrArray, WorkspaceFile } from "./types.js";
+
 const dbg = debug("genaiscript:diff");
 
 /**

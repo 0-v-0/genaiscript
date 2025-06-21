@@ -1,9 +1,10 @@
-// Import necessary utilities and constants
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   CSV_REGEX,
   HTTPS_REGEX,
   JSON5_REGEX,
-  MJS_REGEX,
   MJTS_REGEX,
   MODEL_PROVIDER_AZURE_OPENAI,
   MODEL_PROVIDER_AZURE_SERVERLESS_OPENAI,
@@ -14,18 +15,27 @@ import {
   TEST_CSV_ENTRY_SEPARATOR,
   XML_REGEX,
   YAML_REGEX,
-} from "./constants";
-import { arrayify, logWarn } from "./util";
-import { runtimeHost } from "./host";
-import { ModelConnectionInfo, parseModelIdentifier } from "./models";
-import { deleteEmptyValues, deleteUndefinedValues } from "./cleaners";
-import testSchema from "../../../docs/public/schemas/tests.json";
-import { validateJSONWithSchema } from "./schema";
-import { MarkdownTrace, TraceOptions } from "./trace";
-import { CancellationOptions } from "./cancellation";
+} from "./constants.js";
+import { logWarn } from "./util.js";
+import { arrayify } from "./cleaners.js";
+import { runtimeHost } from "./host.js";
+import { ModelConnectionInfo, parseModelIdentifier } from "./models.js";
+import { deleteEmptyValues, deleteUndefinedValues } from "./cleaners.js";
+import testSchema from "./testschema.js";
+import { validateJSONWithSchema } from "./schema.js";
+import { MarkdownTrace, TraceOptions } from "./trace.js";
+import { CancellationOptions } from "./cancellation.js";
 import { uniq } from "es-toolkit";
-import { dedent } from "./indent";
-import { importFile } from "./importprompt";
+import { dedent } from "./indent.js";
+import { importFile } from "./importprompt.js";
+import type {
+  ModelAliasesOptions,
+  ModelOptions,
+  PromptRedteam,
+  PromptScript,
+  PromptTest,
+  WorkspaceFile,
+} from "./types.js";
 
 /**
  * Convert GenAIScript connection info into prompt foo configuration

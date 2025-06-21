@@ -1,10 +1,13 @@
-// Import necessary constants and functions from other modules
-import { EMOJI_FAIL, EMOJI_SUCCESS, EMOJI_UNDEFINED } from "./constants";
-import { JSON5TryParse } from "./json5";
-import { removeLineNumbers } from "./liner";
-import { unquote } from "./unwrappers";
-import { arrayify } from "./util";
-import { YAMLTryParse } from "./yaml";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { EMOJI_FAIL, EMOJI_SUCCESS, EMOJI_UNDEFINED } from "./constants.js";
+import { JSON5TryParse } from "./json5.js";
+import { removeLineNumbers } from "./liner.js";
+import { unquote } from "./unwrappers.js";
+import { arrayify } from "./cleaners.js";
+import { YAMLTryParse } from "./yaml.js";
+import type { Fenced } from "./types.js";
 
 // Regular expression for detecting the start of a code fence
 const promptFenceStartRx = /^(?<fence>`{3,})(?<language>[^=:]+)?(\s+(?<args>.*))?$/m;

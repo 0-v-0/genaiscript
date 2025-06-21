@@ -1,7 +1,10 @@
-import { genaiscriptDebug } from "./debug";
-import { runtimeHost } from "./host";
-import { TraceOptions } from "./trace";
-import { logWarn } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { genaiscriptDebug } from "./debug.js";
+import { runtimeHost } from "./host.js";
+import { TraceOptions } from "./trace.js";
+import { logWarn } from "./util.js";
 const dbg = genaiscriptDebug("secrets");
 
 const cachedSecretScanners: Record<string, RegExp> = {};

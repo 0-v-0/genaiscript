@@ -1,8 +1,11 @@
-// Import necessary modules and types
-import { CACHE_FORMAT_VERSION, CACHE_SHA_LENGTH, CHANGE } from "./constants";
-import { hash } from "./crypto";
-import type { CacheEntry } from "./cache";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { CACHE_FORMAT_VERSION, CACHE_SHA_LENGTH, CHANGE } from "./constants.js";
+import { hash } from "./crypto.js";
+import type { CacheEntry } from "./cache.js";
 import debug, { Debugger } from "debug";
+import type { WorkspaceFileCache } from "./types.js";
 
 /**
  * A cache class that manages entries stored in JSONL format.

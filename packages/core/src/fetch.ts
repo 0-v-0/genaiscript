@@ -1,21 +1,26 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import wrapFetch from "fetch-retry";
-import { TraceOptions } from "./trace";
+import { TraceOptions } from "./trace.js";
 import {
   FETCH_RETRY_DEFAULT,
   FETCH_RETRY_DEFAULT_DEFAULT,
   FETCH_RETRY_GROWTH_FACTOR,
   FETCH_RETRY_MAX_DELAY_DEFAULT,
   FETCH_RETRY_ON_DEFAULT,
-} from "./constants";
-import { errorMessage } from "./error";
-import { logVerbose } from "./util";
-import { CancellationOptions, CancellationToken } from "./cancellation";
-import { resolveHttpProxyAgent } from "./proxy";
-import { host } from "./host";
-import { renderWithPrecision } from "./precision";
+} from "./constants.js";
+import { errorMessage } from "./error.js";
+import { logVerbose } from "./util.js";
+import { CancellationOptions } from "./cancellation.js";
+import { resolveHttpProxyAgent } from "./proxy.js";
+import { host } from "./host.js";
+import { renderWithPrecision } from "./precision.js";
 import crossFetch from "cross-fetch";
 import debug from "debug";
-import { prettyStrings } from "./pretty";
+import { prettyStrings } from "./pretty.js";
+import type { FetchOptions, RetryOptions } from "./types.js";
+
 const dbg = debug("genaiscript:fetch");
 
 export type FetchType = (

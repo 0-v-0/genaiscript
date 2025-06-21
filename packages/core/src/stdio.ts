@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export let stdout: NodeJS.WriteStream = process.stdout;
-export let stderr: NodeJS.WriteStream = process.stderr;
+export const stderr: NodeJS.WriteStream = process.stderr;
 
 /**
  * Overrides the standard output stream with the standard error stream.

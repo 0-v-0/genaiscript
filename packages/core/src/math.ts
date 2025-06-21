@@ -1,5 +1,8 @@
-// Importing TraceOptions from the local "trace" module
-import { TraceOptions } from "./trace";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { TraceOptions } from "./trace.js";
+import { evaluate } from "mathjs";
 
 /**
  * Asynchronously evaluates a mathematical expression.
@@ -24,9 +27,6 @@ export async function MathTryEvaluate(
   try {
     // Return defaultValue if expression is empty
     if (!expr) return defaultValue;
-
-    // Dynamically import the 'evaluate' function from 'mathjs'
-    const { evaluate } = await import("mathjs");
 
     // Evaluate the expression and return the result
     const res = evaluate(expr, scope);

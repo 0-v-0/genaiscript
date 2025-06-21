@@ -1,10 +1,13 @@
-import { MODEL_PROVIDER_GITHUB } from "./constants";
-import { createFetch } from "./fetch";
-import { LanguageModel, ListModelsFunction } from "./chat";
-import { OpenAIChatCompletion, OpenAIEmbedder } from "./openai";
-import { serializeError } from "./error";
-import { genaiscriptDebug } from "./debug";
-import { deleteUndefinedValues } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { MODEL_PROVIDER_GITHUB } from "./constants.js";
+import { createFetch } from "./fetch.js";
+import { LanguageModel, ListModelsFunction } from "./chat.js";
+import { OpenAIChatCompletion, OpenAIEmbedder } from "./openai.js";
+import { serializeError } from "./error.js";
+import { genaiscriptDebug } from "./debug.js";
+import { deleteUndefinedValues } from "./cleaners.js";
 const dbg = genaiscriptDebug("github");
 
 interface GitHubMarketplaceModel {

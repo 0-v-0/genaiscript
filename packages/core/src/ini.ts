@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This module provides functions to parse and stringify INI formatted strings,
 // with error handling and utility support for cleaning up the input content.
 
@@ -5,11 +8,11 @@
 import { parse, stringify } from "ini";
 
 // Import a utility function to log errors
-import { logError } from "./util";
+import { logError } from "./util.js";
 
 // Import a custom function to clean up INI content by removing any fencing
-import { unfence } from "./unwrappers";
-import { filenameOrFileToContent } from "./unwrappers";
+import { unfence } from "./unwrappers.js";
+import { filenameOrFileToContent } from "./unwrappers.js";
 
 /**
  * Parses an INI formatted string after cleaning it by removing fencing and resolving file content.

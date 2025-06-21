@@ -1,8 +1,11 @@
-import { GENAISCRIPT_FOLDER, HTTPS_REGEX } from "./constants";
-import { isCancelError, serializeError } from "./error";
-import { host } from "./host";
-import { YAMLStringify } from "./yaml";
-import { arrayify as arrayify_ } from "./cleaners";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { HTTPS_REGEX } from "./constants.js";
+import { isCancelError, serializeError } from "./error.js";
+import { host } from "./host.js";
+import { YAMLStringify } from "./yaml.js";
+import type { SerializedError } from "./types.js";
 
 /**
  * Compares two strings lexicographically.
@@ -17,8 +20,6 @@ export function strcmp(a: string, b: string) {
   if (a < b) return -1;
   else return 1;
 }
-
-export const arrayify = arrayify_;
 
 /**
  * Converts an array-like object into an array.
@@ -52,30 +53,6 @@ export function toStringList(...token: string[]) {
  */
 export function collapseEmptyLines(text: string) {
   return text?.replace(/(\r?\n){2,}/g, "\n\n");
-}
-
-/**
- * Asserts that a condition is true. If the condition is false, logs an error
- * message, optionally logs additional debug information, triggers a debugger
- * statement, and throws an error.
- *
- * @param cond - The condition to evaluate. If false, the assertion will fail.
- * @param msg - The error message to display when the assertion fails. Defaults to "Assertion failed".
- * @param debugData - Optional additional data to log for debugging purposes.
- * @throws Will throw an error if the condition is false.
- */
-export function assert(
-  cond: boolean,
-  msg = "Assertion failed",
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  debugData?: any,
-) {
-  if (!cond) {
-    if (debugData) console.error(msg || `assertion failed`, debugData);
-    // eslint-disable-next-line no-debugger
-    debugger;
-    throw new Error(msg);
-  }
 }
 
 /**

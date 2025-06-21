@@ -1,7 +1,11 @@
-import { createCache } from "./cache";
-import type { ChatCompletionResponse, CreateChatCompletionRequest } from "./chattypes";
-import { CHAT_CACHE } from "./constants";
-import type { LanguageModelConfiguration } from "./server/messages";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { createCache } from "./cache.js";
+import type { ChatCompletionResponse, CreateChatCompletionRequest } from "./chattypes.js";
+import { CHAT_CACHE } from "./constants.js";
+import type { WorkspaceFileCache } from "./types.js";
+import type { LanguageModelConfiguration } from "./server/messages.js";
 
 // Define the type for a cache key, which combines chat completion request
 // with additional model options, excluding "token" and "source" from the language model configuration.

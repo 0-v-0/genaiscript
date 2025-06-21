@@ -23,23 +23,24 @@ jobs:
               with:
                   submodules: "recursive"
                   fetch-depth: 0
+            - uses: pnpm/action-setup@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: "22"
-                  cache: yarn
-            - run: yarn install --frozen-lockfile
+                  cache: pnpm
+            - run: pnpm install --frozen-lockfile
             - name: compile
-              run: yarn compile:action
+              run: pnpm build:cli
             - name: generate dummy result
               working-directory: packages/sample
               run: mkdir -p temp && touch temp/commit-tests.txt
             - name: select llm tests to run
-              run: node packages/cli/built/genaiscript.cjs run test-commit --out-trace $GITHUB_STEP_SUMMARY -p github
+              run: node packages/cli/dist/src/index.js run test-commit --out-trace $GITHUB_STEP_SUMMARY -p github
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: run llm tests
               working-directory: packages/sample
-              run: xargs -r -a temp/commit-tests.txt node ../cli/built/genaiscript.cjs test --out-summary $GITHUB_STEP_SUMMARY --test-delay 10 -p github
+              run: xargs -r -a temp/commit-tests.txt node ../cli/dist/src/index.js test --out-summary $GITHUB_STEP_SUMMARY --test-delay 10 -p github
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}

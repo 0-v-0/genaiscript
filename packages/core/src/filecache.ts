@@ -1,17 +1,21 @@
-import { resolveBufferLikeAndExt } from "./bufferlike";
-import { hash } from "./crypto";
-import { TraceOptions } from "./trace";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { resolveBufferLikeAndExt } from "./bufferlike.js";
+import { hash } from "./crypto.js";
+import { TraceOptions } from "./trace.js";
 import { basename, dirname, join, relative } from "node:path";
-import { stat, writeFile } from "fs/promises";
-import { ensureDir } from "fs-extra";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { dotGenaiscriptPath } from "./workdir";
-import { prettyBytes } from "./pretty";
-import debug from "debug";
-import { FILE_HASH_LENGTH, HTTPS_REGEX } from "./constants";
-import { tryStat } from "./fs";
-import { filenameOrFileToFilename } from "./unwrappers";
-import { genaiscriptDebug } from "./debug";
+import { writeFile } from "node:fs/promises";
+import { ensureDir } from "./fs.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { prettyBytes } from "./pretty.js";
+import { FILE_HASH_LENGTH, HTTPS_REGEX } from "./constants.js";
+import { tryStat } from "./fs.js";
+import { filenameOrFileToFilename } from "./unwrappers.js";
+import { genaiscriptDebug } from "./debug.js";
+import type { BufferLike } from "./types.js";
+
 const dbg = genaiscriptDebug("cache");
 
 /**

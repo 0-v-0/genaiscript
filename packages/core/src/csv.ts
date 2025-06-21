@@ -1,12 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This module provides functions for parsing and converting CSV data,
 // including error handling and conversion to Markdown table format.
 
 import { parse } from "csv-parse/sync";
-import { TraceOptions } from "./trace";
+import { TraceOptions } from "./trace.js";
 import { stringify } from "csv-stringify/sync";
-import { arrayify } from "./util";
+import { arrayify } from "./cleaners.js";
 import { chunk } from "es-toolkit";
-import { filenameOrFileToContent } from "./unwrappers";
+import { filenameOrFileToContent } from "./unwrappers.js";
+import type { CSVStringifyOptions, ElementOrArray, WorkspaceFile } from "./types.js";
 
 /**
  * Parses a CSV string or file into an array of objects.

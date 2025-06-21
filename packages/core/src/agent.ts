@@ -1,11 +1,16 @@
-import { createCache } from "./cache";
-import { AGENT_MEMORY_CACHE_NAME, AGENT_MEMORY_FLEX_TOKENS, TOKEN_NO_ANSWER } from "./constants";
-import { errorMessage } from "./error";
-import { GenerationOptions } from "./generation";
-import { HTMLEscape } from "./htmlescape";
-import { prettifyMarkdown } from "./markdown";
-import { TraceOptions } from "./trace";
-import { ellipse } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { createCache } from "./cache.js";
+import { AGENT_MEMORY_CACHE_NAME, AGENT_MEMORY_FLEX_TOKENS, TOKEN_NO_ANSWER } from "./constants.js";
+import { errorMessage } from "./error.js";
+import { GenerationOptions } from "./generation.js";
+import { HTMLEscape } from "./htmlescape.js";
+import { prettifyMarkdown } from "./markdown.js";
+import { TraceOptions } from "./trace.js";
+import { ellipse } from "./util.js";
+import type { ChatGenerationContext, WorkspaceFileCache } from "./types.js";
+
 import debug from "debug";
 const dbg = debug("agent:memory");
 
@@ -45,7 +50,7 @@ export async function agentQueryMemory(
   cache: AgentMemoryCache,
   ctx: ChatGenerationContext,
   query: string,
-  options: Required<TraceOptions>,
+  _options: Required<TraceOptions>,
 ) {
   if (!query) return undefined;
 

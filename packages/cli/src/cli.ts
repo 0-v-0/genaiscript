@@ -1,15 +1,43 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * CLI entry point for the GenAIScript tool, providing various commands and options
  * for interacting with scripts, parsing files, testing, and managing cache.
  */
-import { NodeHost } from "./nodehost"; // Handles node environment setup
-import { Command, Option, program } from "commander"; // Command-line argument parsing library
-import { isQuiet, setQuiet } from "../../core/src/quiet"; // Logging utilities
-import { startServer } from "./server"; // Function to start server
-import { NODE_MIN_VERSION, PROMPTFOO_VERSION } from "./version"; // Version constants
-import { runScriptWithExitCode } from "./run"; // Execute scripts with exit code
-import { retrievalFuzz, retrievalIndex, retrievalSearch } from "./retrieval"; // Retrieval functions
-import { helpAll } from "./help"; // Display help for all commands
+import { NODE_MIN_VERSION, PROMPTFOO_VERSION, NodeHost } from "@genaiscript/runtime";
+import { Command, Option, program } from "commander";
+import {
+  CORE_VERSION,
+  DEBUG_CATEGORIES,
+  DEBUG_SCRIPT_CATEGORY,
+  GITHUB_REPO,
+  MODEL_PROVIDERS,
+  OPENAI_MAX_RETRY_COUNT,
+  OPENAI_MAX_RETRY_DELAY,
+  OPENAI_RETRY_DEFAULT_DEFAULT,
+  RUNTIME_ERROR_CODE,
+  SERVER_PORT,
+  TOOL_ID,
+  TOOL_NAME,
+  UNHANDLED_ERROR_CODE,
+  GitClient,
+  errorMessage,
+  genaiscriptDebug,
+  isQuiet,
+  isRequestError,
+  logPerformance,
+  logVerbose,
+  semverSatisfies,
+  serializeError,
+  setConsoleColors,
+  setQuiet,
+} from "@genaiscript/core";
+import type { RequestError } from "@genaiscript/core";
+import { startServer } from "./server.js";
+import { runScriptWithExitCode } from "./run.js";
+import { retrievalFuzz, retrievalIndex, retrievalSearch } from "./retrieval.js";
+import { helpAll } from "./help.js";
 import {
   jsonl2json,
   parseAnyToJSON,
@@ -23,45 +51,25 @@ import {
   parseTokenize,
   parseTokens,
   prompty2genaiscript,
-} from "./parse"; // Parsing functions
-import { compileScript, createScript, fixScripts, listScripts, scriptInfo } from "./scripts"; // Script utilities
-import { envInfo, modelAliasesInfo, modelList, scriptModelInfo, systemInfo } from "./info"; // Information utilities
-import { scriptTestList, scriptTestsView, scriptsTest } from "./test"; // Test functions
-import { cacheClear } from "./cache"; // Cache management
-import "node:console"; // Importing console for side effects
-import {
-  UNHANDLED_ERROR_CODE,
-  RUNTIME_ERROR_CODE,
-  TOOL_ID,
-  TOOL_NAME,
-  SERVER_PORT,
-  OPENAI_MAX_RETRY_DELAY,
-  OPENAI_RETRY_DEFAULT_DEFAULT,
-  OPENAI_MAX_RETRY_COUNT,
-  MODEL_PROVIDERS,
-  DEBUG_SCRIPT_CATEGORY,
-} from "../../core/src/constants"; // Core constants
-import { errorMessage, isRequestError, RequestError, serializeError } from "../../core/src/error"; // Error handling utilities
-import { CORE_VERSION, GITHUB_REPO } from "../../core/src/version"; // Core version and repository info
-import { logVerbose } from "../../core/src/util"; // Utility logging
-import { semverSatisfies } from "../../core/src/semver"; // Semantic version checking
-import { convertFiles } from "./convert";
-import { extractAudio, extractVideoFrames, probeVideo } from "./video";
-import { configure } from "./configure";
-import { logPerformance } from "../../core/src/performance";
-import { setConsoleColors } from "../../core/src/consolecolor";
-import { listRuns } from "./runs";
-import { startMcpServer } from "./mcpserver";
-import { error } from "./log";
-import { DEBUG_CATEGORIES } from "../../core/src/dbg";
-import { startOpenAPIServer } from "./openapi";
-import { actionConfigure } from "./action";
+} from "./parse.js";
+import { createScript, fixScripts, listScripts, scriptInfo } from "./scripts.js";
+import { envInfo, modelAliasesInfo, modelList, scriptModelInfo, systemInfo } from "./info.js";
+import { scriptTestList, scriptTestsView, scriptsTest } from "./test.js";
+import { cacheClear } from "./cache.js";
+import "node:console";
+import { convertFiles } from "./convert.js";
+import { extractAudio, extractVideoFrames, probeVideo } from "./video.js";
+import { configure } from "./configure.js";
+import { listRuns } from "./runs.js";
+import { startMcpServer } from "./mcpserver.js";
+import { error } from "./log.js";
+import { startOpenAPIServer } from "./openapi.js";
+import { actionConfigure } from "./action.js";
 import { resolve } from "node:path";
 import debug from "debug";
-import { genaiscriptDebug } from "../../core/src/debug";
-import { githubActionConfigure } from "./githubaction";
+import { githubActionConfigure } from "./githubaction.js";
 import { uniq } from "es-toolkit";
-import { GitClient } from "../../core/src/git";
+import { compileScript } from "./typescript.js";
 const dbg = genaiscriptDebug("cli");
 
 /**
@@ -90,14 +98,13 @@ export async function cli() {
   }
 
   program.hook("preAction", async (cmd) => {
-    let {
+    let { cwd }: { cwd: string } = cmd.opts();
+    const {
       env,
-      cwd,
       include,
       githubWorkspace,
     }: {
       env: string[];
-      cwd: string;
       include: string;
       githubWorkspace: boolean;
     } = cmd.opts(); // Get environment options from command
@@ -413,7 +420,7 @@ export async function cli() {
 
   // Define 'retrieval' command group for RAG support
   const retrieval = program.command("retrieval").description("RAG support");
-  const index = retrieval
+  retrieval
     .command("index")
     .arguments("<name> <files...>")
     .description("Index files for vector search")

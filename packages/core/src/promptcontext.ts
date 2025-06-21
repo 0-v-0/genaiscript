@@ -1,38 +1,44 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // This file defines the creation of a prompt context, which includes various services
 // like file operations, web search, fuzzy search, vector search, and more.
 // The context is essential for executing prompts within a project environment.
 import debug from "debug";
-import { arrayify, assert } from "./util";
-import { runtimeHost } from "./host";
-import { MarkdownTrace } from "./trace";
-import { createParsers } from "./parsers";
-import { bingSearch, tavilySearch } from "./websearch";
-import { RunPromptContextNode, createChatGenerationContext } from "./runpromptcontext";
-import { GenerationOptions } from "./generation";
-import { fuzzSearch } from "./fuzzsearch";
-import { grepSearch } from "./grep";
-import { resolveFileContents, toWorkspaceFile } from "./file";
-import { vectorCreateIndex, vectorSearch } from "./vectorsearch";
-import { Project } from "./server/messages";
-import { shellParse } from "./shell";
-import { PLimitPromiseQueue } from "./concurrency";
-import { proxifyEnvVars } from "./vars";
-import { HTMLEscape } from "./htmlescape";
-import { hash } from "./crypto";
-import { resolveModelConnectionInfo } from "./models";
-import { DOCS_WEB_SEARCH_URL, VECTOR_INDEX_HASH_LENGTH } from "./constants";
-import { fetch } from "./fetch";
-import { fetchText } from "./fetchtext";
-import { fileWriteCached } from "./filecache";
+import { assert } from "./assert.js";
+import { arrayify } from "./cleaners.js";
+import { runtimeHost } from "./host.js";
+import { MarkdownTrace } from "./trace.js";
+import { createParsers } from "./parsers.js";
+import { bingSearch, tavilySearch } from "./websearch.js";
+import { RunPromptContextNode, createChatGenerationContext } from "./runpromptcontext.js";
+import { GenerationOptions } from "./generation.js";
+import { fuzzSearch } from "./fuzzsearch.js";
+import { grepSearch } from "./grep.js";
+import { resolveFileContents, toWorkspaceFile } from "./file.js";
+import { vectorCreateIndex, vectorSearch } from "./vectorsearch.js";
+import { Project } from "./server/messages.js";
+import { shellParse } from "./shell.js";
+import { PLimitPromiseQueue } from "./concurrency.js";
+import { proxifyEnvVars } from "./vars.js";
+import { HTMLEscape } from "./htmlescape.js";
+import { hash } from "./crypto.js";
+import { resolveModelConnectionInfo } from "./models.js";
+import { DOCS_WEB_SEARCH_URL, VECTOR_INDEX_HASH_LENGTH } from "./constants.js";
+import { fetch } from "./fetch.js";
+import { fetchText } from "./fetchtext.js";
+import { fileWriteCached } from "./filecache.js";
 import { join } from "node:path";
-import { createMicrosoftTeamsChannelClient } from "./teams";
-import { dotGenaiscriptPath } from "./workdir";
-import { astGrepCreateChangeSet, astGrepFindFiles, astGrepParse } from "./astgrep";
-import { createCache } from "./cache";
-import { loadZ3Client } from "./z3";
-import { genaiscriptDebug } from "./debug";
-import { resolveLanguageModelConfigurations } from "./config";
-import { deleteUndefinedValues } from "./cleaners";
+import { createMicrosoftTeamsChannelClient } from "./teams.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { astGrepCreateChangeSet, astGrepFindFiles, astGrepParse } from "./astgrep.js";
+import { createCache } from "./cache.js";
+import { loadZ3Client } from "./z3.js";
+import { genaiscriptDebug } from "./debug.js";
+import { resolveLanguageModelConfigurations } from "./config.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import type { ExpansionVariables, PromptContext } from "./types.js";
+
 const dbg = genaiscriptDebug("promptcontext");
 
 /**
@@ -260,10 +266,13 @@ export async function createPromptContext(
           trace,
         },
       );
-      return {
+      const res = {
         provider: configuration?.provider,
         model: configuration?.model,
+        modelId: modelId,
       } satisfies LanguageModelReference;
+      dbg(`model: %O`, res);
+      return res;
     },
     resolveLanguageModelProvider: async (id, options) => {
       if (!id) throw new Error("provider id is required");

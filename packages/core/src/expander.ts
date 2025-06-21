@@ -1,29 +1,42 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:expander");
 
-import { resolveScript } from "./ast";
-import { assert } from "./util";
-import { MarkdownTrace } from "./trace";
-import { errorMessage, isCancelError, NotSupportedError } from "./error";
-import { JS_REGEX, MAX_TOOL_CALLS, PROMPTY_REGEX } from "./constants";
-import { finalizeMessages, PromptImage, PromptPrediction, renderPromptNode } from "./promptdom";
-import { createPromptContext } from "./promptcontext";
-import { evalPrompt } from "./evalprompt";
-import { addToolDefinitionsMessage, appendSystemMessage } from "./chat";
-import { importPrompt } from "./importprompt";
-import { runtimeHost } from "./host";
-import { addFallbackToolSystems, resolveSystems } from "./systems";
-import { GenerationOptions } from "./generation";
-import { ChatCompletionMessageParam, ChatCompletionReasoningEffort } from "./chattypes";
-import { GenerationStatus, Project } from "./server/messages";
-import { dispose } from "./dispose";
-import { normalizeFloat, normalizeInt } from "./cleaners";
-import { mergeEnvVarsWithSystem } from "./vars";
-import { installGlobalPromptContext } from "./globals";
-import { mark } from "./performance";
-import { nodeIsPackageTypeModule } from "./nodepackage";
-import { parseModelIdentifier } from "./models";
-import { metadataMerge } from "./metadata";
+import { resolveScript } from "./ast.js";
+import { assert } from "./assert.js";
+import { MarkdownTrace } from "./trace.js";
+import { errorMessage, isCancelError, NotSupportedError } from "./error.js";
+import { JS_REGEX, MAX_TOOL_CALLS, PROMPTY_REGEX } from "./constants.js";
+import { finalizeMessages, PromptImage, PromptPrediction, renderPromptNode } from "./promptdom.js";
+import { createPromptContext } from "./promptcontext.js";
+import { evalPrompt } from "./evalprompt.js";
+import { addToolDefinitionsMessage, appendSystemMessage } from "./chat.js";
+import { importPrompt } from "./importprompt.js";
+import { runtimeHost } from "./host.js";
+import { addFallbackToolSystems, resolveSystems } from "./systems.js";
+import { GenerationOptions } from "./generation.js";
+import { ChatCompletionMessageParam, ChatCompletionReasoningEffort } from "./chattypes.js";
+import { GenerationStatus, Project } from "./server/messages.js";
+import { dispose } from "./dispose.js";
+import { normalizeFloat, normalizeInt } from "./cleaners.js";
+import { mergeEnvVarsWithSystem } from "./vars.js";
+import { installGlobalPromptContext } from "./globals.js";
+import { mark } from "./performance.js";
+import { nodeIsPackageTypeModule } from "./nodepackage.js";
+import { parseModelIdentifier } from "./models.js";
+import { metadataMerge } from "./metadata.js";
+import type {
+  ChatParticipant,
+  ExpansionVariables,
+  FileMergeHandler,
+  FileOutput,
+  JSONSchema,
+  PromptOutputProcessorHandler,
+  PromptScript,
+  ToolCallback,
+} from "./types.js";
 
 /**
  * Executes a prompt expansion process based on the provided prompt script, variables, and options.

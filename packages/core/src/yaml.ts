@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module provides utility functions to parse and stringify YAML content.
  * It includes functions to safely parse YAML strings with error handling,
@@ -5,8 +8,9 @@
  */
 
 import { parse, stringify } from "yaml";
-import { filenameOrFileToContent } from "./unwrappers";
-import { dedent } from "./indent";
+import { filenameOrFileToContent } from "./unwrappers.js";
+import { dedent } from "./indent.js";
+import type { WorkspaceFile, YAML } from "./types.js";
 
 /**
  * Safely attempts to parse a YAML string into a JavaScript object.

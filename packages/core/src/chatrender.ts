@@ -1,4 +1,6 @@
-// Import statements for various message parameters used in chat rendering.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import type {
   ChatCompletionAssistantMessageParam,
   ChatCompletionMessageParam,
@@ -6,16 +8,22 @@ import type {
   ChatCompletionTool,
   ChatCompletionToolMessageParam,
   ChatCompletionUserMessageParam,
-} from "./chattypes";
-import { collapseNewlines } from "./cleaners";
+} from "./chattypes.js";
+import { collapseNewlines } from "./cleaners.js";
+import type {
+  JSONSchema,
+  PromptParametersSchema,
+  PromptTemplateResponseType,
+  ShellOutput,
+} from "./types.js";
 
 // Import utility functions for JSON5 parsing, markdown formatting, and YAML stringification.
-import { JSONLLMTryParse } from "./json5";
-import { details, fenceMD } from "./mkmd";
+import { JSONLLMTryParse } from "./json5.js";
+import { details, fenceMD } from "./mkmd.js";
 import { stringify as YAMLStringify } from "yaml";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { unthink } from "./think";
-import { unfence } from "./unwrappers";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { unthink } from "./think.js";
+import { unfence } from "./unwrappers.js";
 
 export interface ChatRenderOptions extends CancellationOptions {
   textLang?: "markdown" | "text" | "json" | "raw";

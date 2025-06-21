@@ -1,7 +1,12 @@
-import { genaiscriptDebug } from "./debug";
-import { installWindow } from "./dom";
-import { errorMessage } from "./error";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { genaiscriptDebug } from "./debug.js";
+import { installWindow } from "./dom.js";
+import { errorMessage } from "./error.js";
 import type { Mermaid } from "mermaid";
+import mermaid from "mermaid";
+
 const dbg = genaiscriptDebug("mermaid");
 
 let _mermaid: Promise<Mermaid>;
@@ -10,7 +15,6 @@ async function importMermaid() {
 
   await installWindow();
   dbg(`importing`);
-  const mermaid = (await import("mermaid")).default;
   mermaid.initialize({ startOnLoad: false });
   return mermaid;
 }

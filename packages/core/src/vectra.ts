@@ -1,19 +1,22 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * This module provides functionality for creating embeddings using OpenAI's API
  * and performing vector search on documents.
  */
 
-import type { EmbeddingsModel, EmbeddingsResponse } from "./vectra/types";
-import { LocalDocumentIndex } from "./vectra/LocalDocumentIndex";
-import { LanguageModelConfiguration } from "./server/messages";
-import { logVerbose } from "./util";
-import { TraceOptions } from "./trace";
-import { CancellationOptions, checkCancelled } from "./cancellation";
-import { arrayify } from "./cleaners";
-import { resolveFileContent } from "./file";
-import { EmbeddingFunction, WorkspaceFileIndexCreator } from "./chat";
-import { dotGenaiscriptPath } from "./workdir";
-import { resolveTokenEncoder } from "./encoders";
+import type { EmbeddingsModel, EmbeddingsResponse } from "./vectra/types.js";
+import { LocalDocumentIndex } from "./vectra/LocalDocumentIndex.js";
+import { LanguageModelConfiguration } from "./server/messages.js";
+import { logVerbose } from "./util.js";
+import { TraceOptions } from "./trace.js";
+import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import { arrayify } from "./cleaners.js";
+import { resolveFileContent } from "./file.js";
+import { EmbeddingFunction, WorkspaceFileIndexCreator } from "./chat.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { resolveTokenEncoder } from "./encoders.js";
 
 /**
  * Class for creating embeddings using the OpenAI API.

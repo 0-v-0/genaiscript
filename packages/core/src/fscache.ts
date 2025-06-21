@@ -1,15 +1,20 @@
-// Import necessary modules and types
-import { host } from "./host";
-import { writeText } from "./fs";
-import { dotGenaiscriptPath } from "./workdir";
-import { basename, join } from "node:path";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { tryReadJSON, writeText } from "./fs.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { join } from "node:path";
 import debug, { Debugger } from "debug";
-import { errorMessage } from "./error";
-import { tryReadJSON } from "./fs";
+import { errorMessage } from "./error.js";
 import { rm, readdir } from "fs/promises";
-import { CACHE_FORMAT_VERSION, CACHE_SHA_LENGTH, FILE_READ_CONCURRENCY_DEFAULT } from "./constants";
-import { hash } from "./crypto";
+import {
+  CACHE_FORMAT_VERSION,
+  CACHE_SHA_LENGTH,
+  FILE_READ_CONCURRENCY_DEFAULT,
+} from "./constants.js";
+import { hash } from "./crypto.js";
 import pLimit from "p-limit";
+import type { WorkspaceFileCache } from "./types.js";
 
 /**
  * A cache class stores each entry as a separate file in a directory.

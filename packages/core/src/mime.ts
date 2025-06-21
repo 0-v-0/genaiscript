@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Import the 'lookup' function from the 'mime-types' library and rename it to 'mimeTypesLookup'
 import mime from "mime";
-import { JAVASCRIPT_MIME_TYPE } from "./constants";
+import { JAVASCRIPT_MIME_TYPE } from "./constants.js";
 
 // Define constant MIME types for specific programming languages
 export const FSTAR_MIME_TYPE = "text/x-fstar";

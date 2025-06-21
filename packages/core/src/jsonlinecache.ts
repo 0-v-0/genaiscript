@@ -1,10 +1,12 @@
-// Import necessary modules and types
-import { appendJSONL, JSONLTryParse, writeJSONL } from "./jsonl";
-import { host } from "./host";
-import { tryReadText } from "./fs";
-import { dotGenaiscriptPath } from "./workdir";
-import { CacheEntry } from "./cache";
-import { MemoryCache } from "./memcache";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { appendJSONL, JSONLTryParse, writeJSONL } from "./jsonl.js";
+import { host } from "./host.js";
+import { tryReadText } from "./fs.js";
+import { dotGenaiscriptPath } from "./workdir.js";
+import { CacheEntry } from "./cache.js";
+import { MemoryCache } from "./memcache.js";
 
 /**
  * A cache class that manages entries stored in JSONL format.

@@ -1,10 +1,12 @@
-import type { ChatCompletionsProgressReport } from "../chattypes";
-import { CLOSE, MESSAGE } from "../constants";
-import { randomHex } from "../crypto";
-import { errorMessage } from "../error";
-import { generateId } from "../id";
-import { MarkdownTrace } from "../trace";
-import { logError } from "../util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { ChatCompletionsProgressReport } from "../chattypes.js";
+import { CLOSE, MESSAGE } from "../constants.js";
+import { errorMessage } from "../error.js";
+import { generateId } from "../id.js";
+import { MarkdownTrace } from "../trace.js";
+import { logError } from "../util.js";
 import type {
   PromptScriptTestRun,
   PromptScriptTestRunOptions,
@@ -16,8 +18,9 @@ import type {
   ChatChunk,
   ChatStart,
   GenerationResult,
-} from "./messages";
-import { WebSocketClient } from "./wsclient";
+} from "./messages.js";
+import { WebSocketClient } from "./wsclient.js";
+import type { PromptScript } from "../types.js";
 
 export type LanguageModelChatRequest = (
   request: ChatStart,

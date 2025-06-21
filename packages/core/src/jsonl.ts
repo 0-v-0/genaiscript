@@ -1,6 +1,9 @@
-import { host } from "./host";
-import { JSON5TryParse } from "./json5";
-import { concatBuffers, logVerbose, logWarn } from "./util";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { host } from "./host.js";
+import { JSON5TryParse } from "./json5.js";
+import { concatBuffers } from "./util.js";
 
 function tryReadFile(fn: string) {
   return host.readFile(fn).then<Uint8Array>(

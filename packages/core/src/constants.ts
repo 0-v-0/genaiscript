@@ -1,4 +1,9 @@
-import CONFIGURATION_DATA from "./llms.json";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import CONFIGURATION_DATA from "./llmsdata.js";
+import type { FenceFormat } from "./types.js";
+
 export const CHANGE = "change";
 export const RESOURCE_CHANGE = "resourceChange";
 export const TRACE_CHUNK = "traceChunk";
@@ -35,7 +40,6 @@ export const DOCS_URL = "https://microsoft.github.io/genaiscript";
 export const TOOL_URL = DOCS_URL;
 export const TOOL_ID = "genaiscript";
 export const GENAISCRIPT_FOLDER = "." + TOOL_ID;
-export const CLI_JS = TOOL_ID + ".cjs";
 export const GENAI_SRC = "genaisrc";
 export const GENAI_JS_EXT = ".genai.js";
 export const GENAI_MJS_EXT = ".genai.mjs";

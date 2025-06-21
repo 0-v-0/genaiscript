@@ -1,8 +1,12 @@
-import { ChatCompletionContentPart, ChatCompletionMessageParam } from "./chattypes";
-import { splitMarkdown } from "./frontmatter";
-import { YAMLParse } from "./yaml";
-import { deleteUndefinedValues } from "./cleaners";
-import { JSON5Stringify } from "./json5";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { ChatCompletionContentPart, ChatCompletionMessageParam } from "./chattypes.js";
+import { splitMarkdown } from "./frontmatter.js";
+import { YAMLParse } from "./yaml.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import { JSON5Stringify } from "./json5.js";
+import type { JSONSchemaSimpleType, PromptyDocument } from "./types.js";
 
 function promptyFrontmatterToMeta(frontmatter: PromptyFrontmatter): PromptArgs {
   const {

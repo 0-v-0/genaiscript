@@ -20,15 +20,16 @@ jobs:
                   submodules: "recursive"
                   fetch-depth: 10
                   ref: dev
+            - uses: pnpm/action-setup@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: "22"
-                  cache: yarn
-            - run: yarn install --frozen-lockfile
+                  cache: pnpm
+            - run: pnpm install --frozen-lockfile
             - name: compile
-              run: yarn compile
+              run: pnpm compile
             - name: generate blog post
-              run: yarn genai:blog-post -p github --out-trace $GITHUB_STEP_SUMMARY
+              run: pnpm genai:blog-post -p github --out-trace $GITHUB_STEP_SUMMARY
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - uses: stefanzweifel/git-auto-commit-action@v5

@@ -1,20 +1,22 @@
-import { genaiscriptDebug } from "./debug";
-import { resolveGlobal } from "./global";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { genaiscriptDebug } from "./debug.js";
+import { JSDOM } from "jsdom";
+import createDOMPurify from "dompurify";
+
 const dbg = genaiscriptDebug("dom");
 
 export async function installWindow() {
-  const glb = resolveGlobal(); // Get the global context
+  const glb = globalThis as any; // Get the global context
   if (glb.window) return;
 
   dbg(`installing window`);
-  const { JSDOM } = await import("jsdom");
-  const createDOMPurify = (await import("dompurify")).default;
 
   const { window } = new JSDOM("<!DOCTYPE html>");
-  const DOMPurify = createDOMPurify(window);
+  const DOMPurify = createDOMPurify(window as any);
   glb.window = window;
   glb.DOMPurify = DOMPurify;
-  glb.Element = window.Element;
 
   // mermaid workaround
   createDOMPurify.addHook = DOMPurify.addHook.bind(DOMPurify);

@@ -1,9 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // cspell: disable
 /// <reference path="./html-escaper.d.ts" />
-import type { ChatCompletionChunkChoice, ChatCompletionTokenLogprob } from "./chattypes";
+import type { ChatCompletionChunkChoice, ChatCompletionTokenLogprob } from "./chattypes.js";
 import { escape } from "html-escaper";
-import { roundWithPrecision } from "./precision";
-import { deleteUndefinedValues } from "./cleaners";
+import { roundWithPrecision } from "./precision.js";
+import { deleteUndefinedValues } from "./cleaners.js";
+import type { Logprob } from "./types.js";
 
 /**
  * Serializes a log probability object into a standardized format.

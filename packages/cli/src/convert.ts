@@ -1,36 +1,43 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import type { PromptScriptRunOptions, WorkspaceFile } from "@genaiscript/core";
 import {
   FILES_NOT_FOUND_ERROR_CODE,
   GENAI_ANY_REGEX,
   HTTPS_REGEX,
   JSON5_REGEX,
+  OUTPUT_FILENAME,
   TRACE_FILENAME,
   YAML_REGEX,
-  OUTPUT_FILENAME,
-} from "../../core/src/constants";
-import { filePathOrUrlToWorkspaceFile, tryReadText } from "../../core/src/fs";
-import { host } from "../../core/src/host";
-import { MarkdownTrace } from "../../core/src/trace";
-import { logError, logInfo, logVerbose } from "../../core/src/util";
-import { buildProject } from "./build";
-import { run } from "./api";
-import { writeText } from "../../core/src/fs";
-import { PromptScriptRunOptions } from "./main";
-import { PLimitPromiseQueue } from "../../core/src/concurrency";
+  GenerationStats,
+  MarkdownTrace,
+  PLimitPromiseQueue,
+  YAMLStringify,
+  applyModelOptions,
+  ensureDotGenaiscriptPath,
+  filePathOrUrlToWorkspaceFile,
+  getConvertDir,
+  hash,
+  host,
+  link,
+  logError,
+  logInfo,
+  logVerbose,
+  measure,
+  normalizeInt,
+  toSignal,
+  tracePromptResult,
+  tryReadText,
+  unfence,
+  writeText,
+} from "@genaiscript/core";
+import { buildProject } from "@genaiscript/core";
+import { run } from "@genaiscript/api";
 import { createPatch } from "diff";
-import { unfence } from "../../core/src/unwrappers";
-import { applyModelOptions } from "../../core/src/modelalias";
-import { setupTraceWriting } from "./trace";
-import { tracePromptResult } from "../../core/src/chat";
+import { setupTraceWriting } from "@genaiscript/core";
 import { dirname, join } from "node:path";
-import { link } from "../../core/src/mkmd";
-import { hash } from "../../core/src/crypto";
-import { createCancellationController } from "./cancel";
-import { toSignal } from "../../core/src/cancellation";
-import { normalizeInt } from "../../core/src/cleaners";
-import { YAMLStringify } from "../../core/src/yaml";
-import { ensureDotGenaiscriptPath, getConvertDir } from "../../core/src/workdir";
-import { GenerationStats } from "../../core/src/usage";
-import { measure } from "../../core/src/performance";
+import { createCancellationController } from "@genaiscript/core";
 
 /**
  * Converts a set of files based on a specified script, applying transformations and generating output files.
@@ -84,7 +91,7 @@ export async function convertFiles(
   );
   const outTraceDir = dirname(outTraceFilename);
 
-  const fail = (msg: string, exitCode: number, url?: string) => {
+  const fail = (msg: string, _exitCode: number, _url?: string) => {
     throw new Error(msg);
   };
   const { resolve } = host.path;

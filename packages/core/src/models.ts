@@ -1,17 +1,20 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:models");
 
 import { uniq } from "es-toolkit";
-import { LARGE_MODEL_ID } from "./constants";
-import { errorMessage } from "./error";
-import { host, ModelConfiguration, runtimeHost } from "./host";
-import { MarkdownTrace, TraceOptions } from "./trace";
-import { arrayify, assert, logVerbose, toStringList } from "./util";
-import { CancellationOptions } from "./cancellation";
-import { LanguageModelConfiguration } from "./server/messages";
-import { roundWithPrecision } from "./precision";
-import { logModelAliases } from "./modelalias";
-import { ChatCompletionReasoningEffort } from "./chattypes";
+import { errorMessage } from "./error.js";
+import { host, ModelConfiguration, runtimeHost } from "./host.js";
+import { MarkdownTrace, TraceOptions } from "./trace.js";
+import { arrayify } from "./cleaners.js";
+import { toStringList } from "./util.js";
+import { CancellationOptions } from "./cancellation.js";
+import { LanguageModelConfiguration } from "./server/messages.js";
+import { roundWithPrecision } from "./precision.js";
+import { ChatCompletionReasoningEffort } from "./chattypes.js";
+import type { ModelConnectionOptions, ModelOptions } from "./types.js";
 
 export interface ParsedModelType {
   provider: string;
@@ -202,7 +205,7 @@ export function resolveModelAlias(model: string): ModelConfiguration {
     source: "script",
   };
   while (modelAliases[res.model]) {
-    let next = modelAliases[res.model];
+    const next = modelAliases[res.model];
     dbg(`alias ${res.model} -> ${next.model}`);
     if (seen.includes(next.model))
       throw new Error(`Circular model alias: ${next.model}, seen ${[...seen].join(",")}`);

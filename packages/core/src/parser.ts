@@ -1,16 +1,19 @@
-// Importing utility functions and constants from other files
-import { logVerbose, logWarn, strcmp } from "./util"; // String comparison function
-import { parsePromptScript } from "./template"; // Function to parse scripts
-import { readText } from "./fs"; // Function to read text from a file
-import { GENAI_ANYTS_REGEX } from "./constants"; // Constants for MIME types and prefixes
-import { Project } from "./server/messages";
-import { resolveSystems } from "./systems";
-import { resolveScriptParametersSchema } from "./vars";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { logVerbose, logWarn, strcmp } from "./util.js"; // String comparison function
+import { parsePromptScript } from "./template.js"; // Function to parse scripts
+import { readText } from "./fs.js"; // Function to read text from a file
+import { GENAI_ANYTS_REGEX } from "./constants.js"; // Constants for MIME types and prefixes
+import { Project } from "./server/messages.js";
+import { resolveSystems } from "./systems.js";
+import { resolveScriptParametersSchema } from "./vars.js";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import { readdir } from "node:fs/promises";
 import { uniq } from "es-toolkit";
-import { genaiscriptDebug } from "./debug";
+import { genaiscriptDebug } from "./debug.js";
+import type { CharPosition, PromptScript } from "./types.js";
+
 const dbg = genaiscriptDebug("parser");
 
 /**
@@ -33,11 +36,9 @@ export function stringToPos(str: string): CharPosition {
  * @param options - Contains an array of script file paths to process.
  * @returns Project - The project with processed templates and diagnostics.
  */
-export async function parseProject(options: { scriptFiles: string[] }) {
-  const { scriptFiles } = options;
-  const genaisrcDir = resolve(
-    join(dirname(dirname(__filename ?? fileURLToPath(import.meta.url))), "genaisrc"),
-  ); // ignore esbuild warning
+export async function parseProject(options: { installDir: string; scriptFiles: string[] }) {
+  const { installDir, scriptFiles } = options;
+  const genaisrcDir = resolve(installDir, "genaisrc"); // ignore esbuild warning
   dbg(`genaisrc: %s`, genaisrcDir);
   const prj: Project = {
     systemDir: genaisrcDir,

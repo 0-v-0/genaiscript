@@ -1,27 +1,42 @@
-import { logVerbose, logWarn } from "../../core/src/util";
-import { CHANGE, RESOURCE_CHANGE, TOOL_ID } from "../../core/src/constants";
-import { CORE_VERSION } from "../../core/src/version";
-import { ScriptFilterOptions } from "../../core/src/ast";
-import { run } from "./api";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import {
+  CHANGE,
+  CORE_VERSION,
+  RESOURCE_CHANGE,
+  TOOL_ID,
+  ensureDotGenaiscriptPath,
+  errorMessage,
+  logVerbose,
+  logWarn,
+  runtimeHost,
+  setConsoleColors,
+  splitMarkdownTextImageParts,
+} from "@genaiscript/core";
+import type {
+  JSONSchemaObject,
+  Resource,
+  ResourceContents,
+  ScriptFilterOptions,
+} from "@genaiscript/core";
+import { run } from "@genaiscript/api";
 import {
   ListResourcesRequestSchema,
   ListResourceTemplatesRequestSchema,
   ReadResourceRequestSchema,
-  type CallToolResult,
-  type ListToolsResult,
-  type ListResourcesResult,
-  type ListResourceTemplatesResult,
-  type ReadResourceResult,
 } from "@modelcontextprotocol/sdk/types.js";
-import { errorMessage } from "../../core/src/error";
-import { setConsoleColors } from "../../core/src/consolecolor";
-import { startProjectWatcher } from "./watch";
-import { applyRemoteOptions, RemoteOptions } from "./remote";
-import { runtimeHost } from "../../core/src/host";
-import { Resource, ResourceContents } from "../../core/src/mcpresource";
+import type {
+  CallToolResult,
+  ListResourceTemplatesResult,
+  ListResourcesResult,
+  ListToolsResult,
+  ReadResourceResult,
+} from "@modelcontextprotocol/sdk/types.js";
+import { applyRemoteOptions } from "./remote.js";
+import type { RemoteOptions } from "./remote.js";
+import { startProjectWatcher } from "./watch.js";
 import debug from "debug";
-import { splitMarkdownTextImageParts } from "../../core/src/markdown";
-import { ensureDotGenaiscriptPath } from "../../core/src/workdir";
 const dbg = debug("genaiscript:mcp:server");
 
 /**
@@ -75,7 +90,7 @@ export async function startMcpServer(
     logVerbose(`mcp server: tools changed`);
     await server.sendToolListChanged();
   });
-  server.setRequestHandler(ListToolsRequestSchema, async (req) => {
+  server.setRequestHandler(ListToolsRequestSchema, async () => {
     dbg(`fetching scripts from watcher`);
     const scripts = await watcher.scripts();
     const tools = scripts
@@ -115,7 +130,7 @@ export async function startMcpServer(
       const { files, ...vars } = args || {};
       dbg(`executing tool: ${name} with files: ${files} and vars: ${JSON.stringify(vars)}`);
       const res = await run(name, files as string[], {
-        vars: vars as Record<string, any>,
+        vars: vars as Record<string, string | number | boolean | object>,
         runTrace: false,
         outputTrace: false,
       });
@@ -146,7 +161,7 @@ export async function startMcpServer(
       } satisfies CallToolResult;
     }
   });
-  server.setRequestHandler(ListResourcesRequestSchema, async (req) => {
+  server.setRequestHandler(ListResourcesRequestSchema, async () => {
     dbg(`list resources`);
     const resources = await runtimeHost.resources.resources();
     dbg(`found ${resources.length} resources`);

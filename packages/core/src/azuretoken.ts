@@ -1,18 +1,31 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import debug from "debug";
 const dbg = debug("genaiscript:azuretoken");
 
-import { AZURE_TOKEN_EXPIRATION } from "../../core/src/constants";
+import { AZURE_TOKEN_EXPIRATION } from "./constants.js";
 import {
   AuthenticationToken,
   AzureTokenResolver,
   isAzureTokenExpired,
   runtimeHost,
-} from "../../core/src/host";
-import { logError, logVerbose } from "../../core/src/util";
+} from "./host.js";
+import { logError } from "./util.js";
 import type { TokenCredential } from "@azure/identity";
-import { serializeError } from "../../core/src/error";
-import { CancellationOptions, CancellationToken, toSignal } from "../../core/src/cancellation";
-import { AzureCredentialsType } from "../../core/src/server/messages";
+import { serializeError } from "./error.js";
+import { CancellationOptions, CancellationToken, toSignal } from "./cancellation.js";
+import { AzureCredentialsType } from "./server/messages.js";
+import {
+  AzureCliCredential,
+  AzureDeveloperCliCredential,
+  AzurePowerShellCredential,
+  ChainedTokenCredential,
+  DefaultAzureCredential,
+  EnvironmentCredential,
+  ManagedIdentityCredential,
+  WorkloadIdentityCredential,
+} from "@azure/identity";
 
 /**
  * This module provides functions to handle Azure authentication tokens,
@@ -33,19 +46,6 @@ async function createAzureToken(
   credentialsType: AzureCredentialsType,
   cancellationToken?: CancellationToken,
 ): Promise<AuthenticationToken> {
-  // Dynamically import DefaultAzureCredential from the Azure SDK
-  dbg("dynamically importing Azure SDK credentials");
-  const {
-    DefaultAzureCredential,
-    EnvironmentCredential,
-    AzureCliCredential,
-    ManagedIdentityCredential,
-    AzurePowerShellCredential,
-    AzureDeveloperCliCredential,
-    WorkloadIdentityCredential,
-    ChainedTokenCredential,
-  } = await import("@azure/identity");
-
   let credential: TokenCredential;
   switch (credentialsType) {
     case "cli":
@@ -116,7 +116,7 @@ async function createAzureToken(
 
 class AzureTokenResolverImpl implements AzureTokenResolver {
   _token: AuthenticationToken;
-  _error: any;
+  _error: SerializedError;
   _resolver: Promise<{ token?: AuthenticationToken; error?: SerializedError }>;
 
   constructor(
