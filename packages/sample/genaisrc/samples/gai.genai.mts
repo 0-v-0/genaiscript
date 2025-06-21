@@ -19,8 +19,9 @@ script({
     },
   },
   system: ["system", "system.assistant", "system.annotations", "system.files"],
-  flexTokens: 30000,
+  flexTokens: 10000,
   cache: "gai",
+  model: "small",
   tools: ["agent_fs", "agent_github", "agent_git"],
 });
 const { dbg, output, vars } = env;
