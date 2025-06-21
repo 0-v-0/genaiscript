@@ -209,15 +209,14 @@ async function apiRunPromptScriptTests(
 
   const runId = randomHex(6);
   const out = options.out || getTestDir(runId);
-  let outSummary = options.outSummary ? resolve(options.outSummary) : undefined;
   const testDelay = normalizeInt(options?.testDelay);
   //const maxConcurrency = normalizeInt(options?.maxConcurrency);
   const runStart = new Date();
-  logInfo(`writing tests to ${out}`);
-
+  logVerbose(`out: ${out}`);
   if (options?.removeOut) await rmDir(out);
   await ensureDir(out);
 
+  let outSummary = options.outSummary ? resolve(options.outSummary) : undefined;
   if (!outSummary) {
     outSummary = dotGenaiscriptPath(
       TEST_RUNS_DIR_NAME,
