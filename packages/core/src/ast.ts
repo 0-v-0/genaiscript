@@ -3,7 +3,7 @@
 
 /// <reference path="./types/prompt_template.d.ts" />
 // Import necessary regular expressions for file type detection and host utilities
-import { GENAI_ANYJS_REGEX, GENAI_ANYTS_REGEX, PROMPTY_REGEX } from "./constants.js";
+import { GENAI_ANYJS_REGEX, GENAI_ANYTS_REGEX } from "./constants.js";
 import { Project } from "./server/messages.js";
 import { arrayify } from "./cleaners.js";
 import { tagFilter } from "./tags.js";
@@ -58,7 +58,7 @@ export const eofPosition: CharPosition = [0x3fffffff, 0]; // End of file positio
 
 /**
  * Collects and organizes templates by their directory, identifying the presence of JavaScript or TypeScript files in each directory.
- * Excludes templates without filenames or those matching PROMPTY_REGEX.
+ * Excludes templates without filenames.
  * @param prj - The project containing the scripts to analyze.
  * @returns An array of directory objects with their names and flags indicating JavaScript and TypeScript file presence.
  */
@@ -71,7 +71,7 @@ export function collectFolders(
   const folders: Record<string, { dirname: string; js?: boolean; ts?: boolean }> = {};
   for (const t of Object.values(prj.scripts).filter(
     // must have a filename and not prompty
-    (t) => t.filename && !PROMPTY_REGEX.test(t.filename),
+    (t) => t.filename,
   )) {
     const dir = dirname(t.filename); // Get directory name from the filename
     if (!force && resolve(dir) === systemDir) continue;

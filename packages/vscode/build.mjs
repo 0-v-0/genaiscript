@@ -11,7 +11,7 @@ const config = {
     outfile: "dist/extension.js",
     sourcemap: true,
     metafile: true,
-    external: ["vscode", "pdfjs-dist", "@napi-rs/canvas", "@genaiscript/core", "@genaiscript/runtime"],
+    external: ["vscode", "pdfjs-dist", "@napi-rs/canvas", "@genaiscript/api", "@genaiscript/core", "@genaiscript/runtime"],
 }
 
 const result = await esbuild.build(config)

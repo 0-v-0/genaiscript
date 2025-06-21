@@ -1,5 +1,5 @@
 {
-  "name": "@genaiscript/vscode",
+  "name": "genaiscript-vscode",
   "publisher": "genaiscript",
   "homepage": "https://microsoft.github.io/genaiscript/",
   "author": {
@@ -7,7 +7,7 @@
   },
   "displayName": "GenAIScript Insiders",
   "description": "Generative AI Scripting.",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "type": "module",
   "icon": "icon.png",
   "engines": {
@@ -239,7 +239,7 @@
       "editor/title/run": [
         {
           "command": "genaiscript.fragment.prompt",
-          "when": "!inDebugMode && resourceFilename =~ /.*\\.((genai\\.(js|mjs|mts))|prompty)$/",
+          "when": "!inDebugMode && resourceFilename =~ /.*\\.(genai\\.(js|mjs|mts))$/",
           "group": "genaiscript@1"
         },
         {
@@ -310,7 +310,7 @@
       "explorer/context": [
         {
           "command": "genaiscript.fragment.prompt",
-          "when": "explorerViewletVisible && !inDebugMode && !(resourceFilename =~ /\\.genai\\.(js|mjs|mts|prompty)$/)",
+          "when": "explorerViewletVisible && !inDebugMode && !(resourceFilename =~ /\\.genai\\.(js|mjs|mts)$/)",
           "group": "genaiscript@1"
         }
       ]
@@ -493,11 +493,11 @@
     "build:icons": "node updatefonts.mjs",
     "generate-manifest": "vsce generate-manifest -i genaiscript.vsix -o genaiscript.manifest",
     "lint": "eslint src --ext ts",
-    "package": "vsce package --dependencies --out genaiscript.vsix --yarn",
+    "package": "vsce package --dependencies --out genaiscript.vsix",
     "postpackage": "zx postpackage.mjs",
     "prepackage": "zx prepackage.mjs",
     "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ../sample",
-    "typecheck": "tsc -p .",
+    "prebuild": "tsc -p .",
     "vis:network": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.network.html --template network",
     "vis:sunburst": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.sunburst.html --template sunburst",
     "vis:treemap": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.treemap.html",
@@ -506,21 +506,19 @@
   },
   "dependencies": {
     "@genaiscript/core": "workspace:*",
+    "@genaiscript/api": "workspace:*",
     "@genaiscript/runtime": "workspace:*",
-    "@vscode/vsce": "^3.4.2",
-    "assert": "^2.1.0",
-    "es-toolkit": "catalog:",
-    "esbuild": "^0.25.5",
     "markdown-it": "^14.1.0",
     "markdown-it-github-alerts": "0.2.0",
-    "process": "^0.11.10",
     "vscode-uri": "^3.1.0",
-    "websocket-polyfill": "0.0.3",
-    "zx": "^8.5.4"
+    "websocket-polyfill": "0.0.3"
   },
   "devDependencies": {
+    "esbuild": "^0.25.5",
+    "@vscode/vsce": "^3.4.2",
     "@types/markdown-it": "^14.1.2",
     "@types/vscode": "^1.98.0",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "zx": "^8.5.4"
   }
 }

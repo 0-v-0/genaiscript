@@ -1,7 +1,7 @@
 script({
     system: ["system"],
     temperature: 0.5,
-    model: "github:gpt-4.1"
+    model: "github:openai/gpt-4o"
 })
 
 const product = env.vars.product || "GenAIScript"
@@ -33,13 +33,13 @@ const commits = (
 )
     .map(({ message }) => message)
     .join("\n")
-console.debug(commits)
+console.debug(commits.slice(0, 50) + "...")
 const diff = await git.diff({
     base: tag,
     head: "HEAD",
     excludedPaths,
 })
-console.debug(diff)
+console.debug(diff.slice(0, 1000) + "...")
 
 const commitsName = def("COMMITS", commits, {
     ignoreEmpty: true,

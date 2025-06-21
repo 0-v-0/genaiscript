@@ -7,11 +7,10 @@
  * data types and formats.
  */
 
-import { GENAI_ANY_REGEX, PROMPTY_REGEX } from "./constants.js";
+import { GENAI_ANY_REGEX } from "./constants.js";
 import { host } from "./host.js";
 import { JSON5TryParse } from "./json5.js";
 import { humanize } from "./inflection.js";
-import { promptyParse, promptyToGenAIScript } from "./prompty.js";
 import { metadataValidate } from "./metadata.js";
 import { deleteUndefinedValues } from "./cleaners.js";
 import type { PromptArgs, PromptScript } from "./types.js";
@@ -97,14 +96,6 @@ async function parsePromptTemplateCore(filename: string, content: string) {
  * @returns The parsed PromptScript or undefined in case of errors.
  */
 export async function parsePromptScript(filename: string, content: string) {
-  let text: string = undefined;
-  if (PROMPTY_REGEX.test(filename)) {
-    text = content;
-    const doc = await promptyParse(filename, content);
-    content = await promptyToGenAIScript(doc);
-  }
-
   const script = await parsePromptTemplateCore(filename, content);
-  if (text) script.text = text;
   return script;
 }

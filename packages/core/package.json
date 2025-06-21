@@ -1,6 +1,7 @@
 {
   "name": "@genaiscript/core",
-  "version": "2.0.0",
+  "private": false,
+  "version": "2.0.3",
   "license": "MIT",
   "type": "module",
   "repository": "github:microsoft/genaiscript",

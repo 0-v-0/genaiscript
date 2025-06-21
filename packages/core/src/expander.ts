@@ -8,7 +8,7 @@ import { resolveScript } from "./ast.js";
 import { assert } from "./assert.js";
 import { MarkdownTrace } from "./trace.js";
 import { errorMessage, isCancelError, NotSupportedError } from "./error.js";
-import { JS_REGEX, MAX_TOOL_CALLS, PROMPTY_REGEX } from "./constants.js";
+import { JS_REGEX, MAX_TOOL_CALLS } from "./constants.js";
 import { finalizeMessages, PromptImage, PromptPrediction, renderPromptNode } from "./promptdom.js";
 import { createPromptContext } from "./promptcontext.js";
 import { evalPrompt } from "./evalprompt.js";
@@ -84,7 +84,7 @@ export async function callExpander(
   // package.json { type: "module" }
   const isModule = await nodeIsPackageTypeModule();
   try {
-    if (r.filename && (isModule || !JS_REGEX.test(r.filename)) && !PROMPTY_REGEX.test(r.filename))
+    if (r.filename && (isModule || !JS_REGEX.test(r.filename)))
       await importPrompt(ctx, r, { logCb, trace });
     else {
       await evalPrompt(ctx, r, {
