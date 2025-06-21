@@ -497,7 +497,7 @@
         "postpackage": "zx postpackage.mjs",
         "prepackage": "zx prepackage.mjs",
         "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ../sample",
-        "typecheck": "tsc -p .",
+        "prebuild": "tsc -p .",
         "vis:network": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.network.html --template network",
         "vis:sunburst": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.sunburst.html --template sunburst",
         "vis:treemap": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.treemap.html",
