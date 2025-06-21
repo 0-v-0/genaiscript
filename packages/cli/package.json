@@ -47,7 +47,7 @@
     "diff": "^7.0.0",
     "dotenv": "^16.5.0",
     "es-toolkit": "catalog:",
-    "execa": "^9.6.0",
+    "execa": "catalog:",
     "fastify": "^5.3.3",
     "inflection": "catalog:",
     "openai": "^4.103.0",

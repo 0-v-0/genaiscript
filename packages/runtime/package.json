@@ -16,7 +16,7 @@
     "@inquirer/prompts": "^7.5.3",
     "dockerode": "^4.0.7",
     "es-toolkit": "catalog:",
-    "execa": "^9.6.0",
+    "execa": "catalog:",
     "glob": "^11.0.3",
     "memorystream": "^0.3.1",
     "playwright": "^1.53.0",
