@@ -7,7 +7,7 @@ console.log(`version: ${version}`);
 const packages = await glob([
   "packages/*/package.json",
   "docs/package.json",
-  "examples/package.json",
+  "examples/action/package.json",
   "slides/package.json",
 ]);
 for (const pkgp of packages) {
