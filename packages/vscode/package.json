@@ -508,20 +508,17 @@
         "@genaiscript/core": "workspace:*",
         "@genaiscript/api": "workspace:*",
         "@genaiscript/runtime": "workspace:*",
-        "@vscode/vsce": "^3.4.2",
-        "assert": "^2.1.0",
-        "es-toolkit": "catalog:",
-        "esbuild": "^0.25.5",
         "markdown-it": "^14.1.0",
         "markdown-it-github-alerts": "0.2.0",
-        "process": "^0.11.10",
         "vscode-uri": "^3.1.0",
-        "websocket-polyfill": "0.0.3",
-        "zx": "^8.5.4"
+        "websocket-polyfill": "0.0.3"
     },
     "devDependencies": {
+        "esbuild": "^0.25.5",
+        "@vscode/vsce": "^3.4.2",
         "@types/markdown-it": "^14.1.2",
         "@types/vscode": "^1.98.0",
-        "typescript": "catalog:"
+        "typescript": "catalog:",
+        "zx": "^8.5.4"
     }
 }
