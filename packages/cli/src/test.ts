@@ -284,9 +284,7 @@ async function apiRunPromptScriptTests(
       runTrace: false,
       outputTrace: false,
     });
-    const { status, error, usage } = res || { error: { message: "run failed" }, status: "error" };
-    logVerbose(`  status: ${status}`);
-    if (error) logWarn(error.message);
+    const { status, usage } = res || { error: { message: "run failed" }, status: "error" };
 
     const ok = status === "success";
     stats.prompt += usage?.prompt || 0;
