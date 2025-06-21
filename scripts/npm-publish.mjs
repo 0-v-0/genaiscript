@@ -8,6 +8,6 @@ const cwd = process.cwd()
 for(const d of ["core", "api", "runtime", "cli"]) {
     console.log(`publishing ${d}`)
     cd(`packages/${d}`)
-    await $`npm publish --access public --otp ${otp}`
+    await $`pnpm publish --access public --otp ${otp} --publish-branch dev --no-git-checks`
     cd(cwd)
 }
