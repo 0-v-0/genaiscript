@@ -8,12 +8,14 @@
 import { PROMPTFOO_VERSION } from "@genaiscript/runtime";
 import { delay } from "es-toolkit";
 import {
+  dataTryParse,
   genaiscriptDebug,
   generateId,
   getTestDir,
   logWarn,
   randomHex,
   rmDir,
+  toWorkspaceFile,
   tryStat,
 } from "@genaiscript/core";
 import { execa } from "execa";
@@ -69,6 +71,7 @@ import type {
   SerializedError,
   PromptTest,
   PromptScriptRunOptions,
+  ElementOrArray,
 } from "@genaiscript/core";
 import { run } from "@genaiscript/api";
 const dbg = genaiscriptDebug("cli:test");
@@ -154,6 +157,27 @@ export async function runPromptScriptTests(
   return await apiRunPromptScriptTests(ids, options);
 }
 
+async function resolveTests(script: PromptScript): Promise<PromptTest[]> {
+  const tests = arrayify(script.tests || []);
+  const res: PromptTest[] = [];
+  for (const test of tests) {
+    if (typeof test === "string") {
+      dbg(`resolving tests: %s`, test);
+      const data = arrayify(
+        (await dataTryParse(toWorkspaceFile(test))) as ElementOrArray<PromptTest>,
+      );
+      if (data?.length) {
+        dbg(`imported %d tests`, data.length);
+        res.push(...data);
+      }
+    } else {
+      res.push(test);
+    }
+  }
+  dbg(`resolved %d tests`, res.length);
+  return res;
+}
+
 async function apiRunPromptScriptTests(
   ids: string[],
   options: PromptScriptTestRunOptions & {
@@ -210,21 +234,15 @@ async function apiRunPromptScriptTests(
   const configurations: TestConfiguration[] = [];
   for (const script of scripts) {
     checkCancelled(cancellationToken);
-    const { info: chatInfo } = await resolveModelConnectionInfo(script, {
-      model: runtimeHost.modelAliases.large.model,
-    });
-    if (chatInfo.error) throw new Error(chatInfo.error);
-    let { info: embeddingsInfo } = await resolveModelConnectionInfo(script, {
-      model: runtimeHost.modelAliases.embeddings.model,
-    });
-    if (embeddingsInfo?.error) embeddingsInfo = undefined;
     const testModels = arrayify(script.testModels).map((m) =>
       typeof m === "string" ? parseModelSpec(m) : m,
     );
-    const models = testModels?.length ? testModels : optionsModels?.slice(0);
-    const tests = arrayify(script.tests) as PromptTest[];
-    for (const test of tests) {
-      for (const model of models) {
+    dbg(`test models: %o`, testModels);
+    const models = arrayify(testModels?.length ? testModels : optionsModels?.slice(0));
+    dbg(`models: %o`, models);
+    const tests = await resolveTests(script);
+    for (const model of models) {
+      for (const test of tests) {
         const options: Partial<PromptScriptRunOptions> = {
           out: join(out, `${generateId}.trace.json`),
           ...model,
@@ -241,6 +259,7 @@ async function apiRunPromptScriptTests(
   };
   const headers = ["status", "script", "prompt", "completion", "total", "duration", "url"];
   if (outSummary) {
+    await ensureDir(dirname(outSummary));
     await appendFile(
       outSummary,
       [headersToMarkdownTableHead(headers), headersToMarkdownTableSeparator(headers)].join(""),
