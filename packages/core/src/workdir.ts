@@ -74,6 +74,14 @@ export function getRunDir(scriptId: string, runId: string) {
   return out;
 }
 
+export function getTestDir(runId: string) {
+  dbg(`test: %s`, runId);
+  const name = createDatedFolder(runId);
+  const out = dotGenaiscriptPath("tests", name);
+  dbg("test dir: %s", out);
+  return out;
+}
+
 /**
  * Generates a directory path for storing converted files.
  *
