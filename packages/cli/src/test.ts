@@ -74,7 +74,9 @@ import type {
   ElementOrArray,
 } from "@genaiscript/core";
 import { run } from "@genaiscript/api";
-const dbg = genaiscriptDebug("cli:test");
+const dbg = genaiscriptDebug("test");
+const dbgConfig = genaiscriptDebug("test:config");
+const dbgRun = genaiscriptDebug("test:run");
 
 const { __filename } =
   typeof module !== "undefined" && module.filename
@@ -162,19 +164,19 @@ async function resolveTests(script: PromptScript): Promise<PromptTest[]> {
   const res: PromptTest[] = [];
   for (const test of tests) {
     if (typeof test === "string") {
-      dbg(`resolving tests: %s`, test);
+      dbgConfig(`resolving tests: %s`, test);
       const data = arrayify(
         (await dataTryParse(toWorkspaceFile(test))) as ElementOrArray<PromptTest>,
       );
       if (data?.length) {
-        dbg(`imported %d tests`, data.length);
+        dbgConfig(`imported %d tests`, data.length);
         res.push(...data);
       }
     } else {
       res.push(test);
     }
   }
-  dbg(`resolved %d tests`, res.length);
+  dbgConfig(`resolved %d tests`, res.length);
   return res;
 }
 
@@ -226,6 +228,7 @@ async function apiRunPromptScriptTests(
 
   // Prepare test configurations for each script
   const optionsModels = Object.freeze(options.models?.map(parseModelSpec));
+  dbg(`options models: %o`, optionsModels);
   type TestConfiguration = {
     script: PromptScript;
     test: PromptTest;
@@ -233,24 +236,27 @@ async function apiRunPromptScriptTests(
   };
   const configurations: TestConfiguration[] = [];
   for (const script of scripts) {
+    dbgConfig(`script: %s`, script.id);
     checkCancelled(cancellationToken);
     const testModels = arrayify(script.testModels).map((m) =>
       typeof m === "string" ? parseModelSpec(m) : m,
     );
-    dbg(`test models: %o`, testModels);
+    if (testModels.length) dbgConfig(`test models: %o`, testModels);
     const models = arrayify(testModels?.length ? testModels : optionsModels?.slice(0));
-    dbg(`models: %o`, models);
+    if (models.length) dbgConfig(`models: %o`, models);
     const tests = await resolveTests(script);
     for (const model of models) {
       for (const test of tests) {
         const options: Partial<PromptScriptRunOptions> = {
-          out: join(out, `${generateId}.trace.json`),
+          out: join(out, `${generateId()}.trace.json`),
           ...model,
         };
         configurations.push({ script, test, options });
       }
     }
   }
+
+  dbg(`configurations: %d`, configurations.length);
 
   const stats = {
     prompt: 0,
@@ -259,6 +265,7 @@ async function apiRunPromptScriptTests(
   };
   const headers = ["status", "script", "prompt", "completion", "total", "duration", "url"];
   if (outSummary) {
+    dbg(`summary: %s`, outSummary);
     await ensureDir(dirname(outSummary));
     await appendFile(
       outSummary,
@@ -270,12 +277,12 @@ async function apiRunPromptScriptTests(
     checkCancelled(cancellationToken);
     const { script, options, test } = config;
     logInfo(`test ${script.id} (${results.length + 1}/${configurations.length})`);
-    dbg(`options: %O`, options);
+    dbgRun(`options: %O`, options);
     const { files = [] } = test;
     const res = await run(script.id, files, {
       ...options,
     });
-    const { status, error, usage } = res;
+    const { status, error, usage } = res || { error: { message: "run failed" }, status: "error" };
     logVerbose(`  status: ${status}`);
     if (error) logWarn(error.message);
 
