@@ -176,7 +176,6 @@ async function resolveTests(script: PromptScript): Promise<PromptTest[]> {
       res.push(test);
     }
   }
-  dbgConfig(`resolved %d tests`, res.length);
   return res;
 }
 
@@ -236,15 +235,16 @@ async function apiRunPromptScriptTests(
   };
   const configurations: TestConfiguration[] = [];
   for (const script of scripts) {
-    dbgConfig(`script: %s`, script.id);
+    dbg(`script: %s`, script.id);
     checkCancelled(cancellationToken);
     const testModels = arrayify(script.testModels).map((m) =>
       typeof m === "string" ? parseModelSpec(m) : m,
     );
     if (testModels.length) dbgConfig(`test models: %o`, testModels);
     const models = arrayify(testModels?.length ? testModels : optionsModels?.slice(0));
-    if (models.length) dbgConfig(`models: %o`, models);
+    if (!models.length) models.push({});
     const tests = await resolveTests(script);
+    dbg(`tests: %d, models: %d`, tests.length, models.length);
     for (const model of models) {
       for (const test of tests) {
         const options: Partial<PromptScriptRunOptions> = {
@@ -281,6 +281,8 @@ async function apiRunPromptScriptTests(
     const { files = [] } = test;
     const res = await run(script.id, files, {
       ...options,
+      runTrace: false,
+      outputTrace: false,
     });
     const { status, error, usage } = res || { error: { message: "run failed" }, status: "error" };
     logVerbose(`  status: ${status}`);
@@ -302,7 +304,7 @@ async function apiRunPromptScriptTests(
       };
       await appendFile(outSummary, objectToMarkdownTableRow(row, headers, { skipEscape: true }));
     }
-    results.push({ ok, ...res });
+    results.push({ ok, res, config });
 
     if (testDelay > 0) {
       logVerbose(`  waiting ${testDelay}s`);
@@ -336,8 +338,13 @@ async function apiRunPromptScriptTests(
   return {
     ok,
     status: ok ? 0 : -1,
-    value: [],
-    error: results.find((r) => r.error)?.error,
+    value: results.map(({ ok, res, config }) => ({
+      ok,
+      error: res.error,
+      status: res.status === "success" ? 0 : -1,
+      script: config.script.id,
+    })),
+    error: results.find((r) => r.res.error)?.res.error,
   };
 }
 
