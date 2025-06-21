@@ -1,13 +1,13 @@
-import { fileTree } from "@genaiscript/runtime"
+import { fileTree } from "@genaiscript/runtime";
 
 script({
-    description: "Generate a llms.txt file for a project",
-    model: "long",
-    responseType: "markdown",
-    tools: "fs_read_file",
-})
+  description: "Generate a llms.txt file for a project",
+  model: "long",
+  responseType: "markdown",
+  tools: "fs_read_file",
+});
 
-def("FILES", await fileTree("genaisrc/**"))
+def("FILES", await fileTree("genaisrc/**"));
 
 $`# **Prompt**  
 
@@ -67,4 +67,4 @@ markdown
 ### **Additional Notes:**  
 - Use **descriptive yet succinct** wording to ensure clarity without excessive detail.  
 
-`
+`;

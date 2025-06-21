@@ -91,7 +91,7 @@ export async function createPythonRuntime(
   dbg(`creating runtime`);
   const sha = await hash({ cache, version: true, pyodide: version });
   const installDir = dirname(moduleResolve("pyodide"));
-  const packageCacheDir = dotGenaiscriptPath("cache", "python", sha)
+  const packageCacheDir = dotGenaiscriptPath("cache", "python", sha);
   dbg("package cache dir: %s", packageCacheDir);
   dbg("install dir: %s", installDir);
   const pyodide = await loadPyodide(

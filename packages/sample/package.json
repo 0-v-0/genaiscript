@@ -4,10 +4,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "cwd": "pwd",
-    "go": "node ../cli/built/main.js src/sample.ts",
-    "token": "mkdir -p .genaiscript/tmp; (if test -e /dev/clipboard; then cat /dev/clipboard ; else pbpaste ; fi) > .genaiscript/tmp/request.txt",
-    "typecheck": "tsc -p src",
+    "format:check": "prettier --config ../../.prettierrc.json --ignore-path ../../.prettierignore --check  \"genaisrc/**/*.{ts,cts,mts,mjs}\" \"*.{js,cjs,mjs,json,mjs}\" ",
+    "format:fix": "prettier --config ../../.prettierrc.json  --ignore-path ../../.prettierignore  --write \"genaisrc/**/*.{ts,cts,mts,mjs}\" \"*.{js,cjs,mjs,json,mjs}\" ",
     "test": "vitest --run",
     "run:script": "node --trace-deprecation ../cli/dist/src/index.js run",
     "test:scripts": "node ../cli/dist/src/index.js test -rmo",

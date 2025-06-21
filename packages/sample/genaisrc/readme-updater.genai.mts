@@ -1,11 +1,11 @@
 script({
-    description: "Maintenance script for the README that imports information from the documentation and samples to make it more attractive to users.",
-    tools: ["fs"],
-})
+  description:
+    "Maintenance script for the README that imports information from the documentation and samples to make it more attractive to users.",
+  tools: ["fs"],
+});
 
-def("README", { filename: "README.md" })
-def("FEATURES", { filename: "docs/src/content/docs/index.mdx" })
-
+def("README", { filename: "README.md" });
+def("FEATURES", { filename: "docs/src/content/docs/index.mdx" });
 
 $`You are an expert open source maintainer.
 
@@ -38,6 +38,6 @@ Update the README file of the project
 - github repository: https://github.com/microsoft/genaiscript
 - the package.json contains helpful scripts, the project uses pnpm and is codespace ready
 
-`
+`;
 
-defFileOutput("README.md")
+defFileOutput("README.md");

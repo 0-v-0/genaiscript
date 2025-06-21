@@ -194,7 +194,7 @@ export * from "./yaml.js";
 export * from "./z3.js";
 export * from "./zip.js";
 export * from "./zod.js";
-export * from "./testhost.js"
+export * from "./testhost.js";
 export * from "./build.js";
 export * from "./sarif.js";
 export * from "./tracefile.js";
