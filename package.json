@@ -104,7 +104,6 @@
     "github": {
       "release": true,
       "releaseName": "v${version}",
-      "draft": true,
       "releaseNotes": "node packages/cli/dist/src/index.js run git-release-notes --cache --cache-name releases --no-run-trace --no-output-trace"
     }
   },
