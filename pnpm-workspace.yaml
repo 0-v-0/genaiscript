@@ -25,3 +25,4 @@ onlyBuiltDependencies:
   - '@ast-grep/lang-python'
   - '@lvce-editor/ripgrep'
   - 'sharp'
+  - '@vscode/vsce-sign'
