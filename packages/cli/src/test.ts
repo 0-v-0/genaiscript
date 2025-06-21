@@ -7,7 +7,15 @@
 
 import { PROMPTFOO_VERSION } from "@genaiscript/runtime";
 import { delay } from "es-toolkit";
-import { rmDir, tryStat } from "@genaiscript/core";
+import {
+  genaiscriptDebug,
+  generateId,
+  getTestDir,
+  logWarn,
+  randomHex,
+  rmDir,
+  tryStat,
+} from "@genaiscript/core";
 import { execa } from "execa";
 import { appendFile, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
@@ -33,7 +41,7 @@ import {
   filterScripts,
   generatePromptFooConfiguration,
   headersToMarkdownTableHead,
-  headersToMarkdownTableSeperator,
+  headersToMarkdownTableSeparator,
   link,
   logInfo,
   logVerbose,
@@ -47,6 +55,7 @@ import {
   serializeError,
   toStringList,
   getModulePaths,
+  buildProject,
 } from "@genaiscript/core";
 import type {
   ChatCompletionReasoningEffort,
@@ -58,8 +67,11 @@ import type {
   PromptScriptTestRunOptions,
   PromptScriptTestRunResponse,
   SerializedError,
+  PromptTest,
+  PromptScriptRunOptions,
 } from "@genaiscript/core";
-import { buildProject } from "@genaiscript/core";
+import { run } from "@genaiscript/api";
+const dbg = genaiscriptDebug("cli:test");
 
 const { __filename } =
   typeof module !== "undefined" && module.filename
@@ -134,6 +146,191 @@ export async function runPromptScriptTests(
     testDelay?: string;
     maxConcurrency?: string;
     testTimeout?: string;
+    promptfoo?: boolean;
+  } & CancellationOptions,
+): Promise<PromptScriptTestRunResponse> {
+  const { promptfoo } = options || {};
+  if (promptfoo) return await promptFooRunPromptScriptTests(ids, options);
+  return await apiRunPromptScriptTests(ids, options);
+}
+
+async function apiRunPromptScriptTests(
+  ids: string[],
+  options: PromptScriptTestRunOptions & {
+    out?: string;
+    cli?: string;
+    removeOut?: boolean;
+    cache?: boolean;
+    verbose?: boolean;
+    write?: boolean;
+    redteam?: boolean;
+    promptfooVersion?: string;
+    outSummary?: string;
+    testDelay?: string;
+    maxConcurrency?: string;
+    testTimeout?: string;
+    promptfoo?: boolean;
+  } & CancellationOptions,
+): Promise<PromptScriptTestRunResponse> {
+  applyModelOptions(options, "cli");
+  const { cancellationToken } = options || {};
+  const scripts = await listTests({ ids, ...(options || {}) });
+  if (!scripts.length)
+    return {
+      ok: false,
+      status: FILES_NOT_FOUND_ERROR_CODE,
+      error: serializeError(new Error("no tests found")),
+    };
+
+  const runId = randomHex(6);
+  const out = options.out || getTestDir(runId);
+  let outSummary = options.outSummary ? resolve(options.outSummary) : undefined;
+  const testDelay = normalizeInt(options?.testDelay);
+  //const maxConcurrency = normalizeInt(options?.maxConcurrency);
+  const runStart = new Date();
+  logInfo(`writing tests to ${out}`);
+
+  if (options?.removeOut) await rmDir(out);
+  await ensureDir(out);
+
+  if (!outSummary) {
+    outSummary = dotGenaiscriptPath(
+      TEST_RUNS_DIR_NAME,
+      `${new Date().toISOString().replace(/[:.]/g, "-")}.trace.md`,
+    );
+  }
+
+  // Prepare test configurations for each script
+  const optionsModels = Object.freeze(options.models?.map(parseModelSpec));
+  type TestConfiguration = {
+    script: PromptScript;
+    test: PromptTest;
+    options: Partial<PromptScriptRunOptions>;
+  };
+  const configurations: TestConfiguration[] = [];
+  for (const script of scripts) {
+    checkCancelled(cancellationToken);
+    const { info: chatInfo } = await resolveModelConnectionInfo(script, {
+      model: runtimeHost.modelAliases.large.model,
+    });
+    if (chatInfo.error) throw new Error(chatInfo.error);
+    let { info: embeddingsInfo } = await resolveModelConnectionInfo(script, {
+      model: runtimeHost.modelAliases.embeddings.model,
+    });
+    if (embeddingsInfo?.error) embeddingsInfo = undefined;
+    const testModels = arrayify(script.testModels).map((m) =>
+      typeof m === "string" ? parseModelSpec(m) : m,
+    );
+    const models = testModels?.length ? testModels : optionsModels?.slice(0);
+    const tests = arrayify(script.tests) as PromptTest[];
+    for (const test of tests) {
+      for (const model of models) {
+        const options: Partial<PromptScriptRunOptions> = {
+          out: join(out, `${generateId}.trace.json`),
+          ...model,
+        };
+        configurations.push({ script, test, options });
+      }
+    }
+  }
+
+  const stats = {
+    prompt: 0,
+    completion: 0,
+    total: 0,
+  };
+  const headers = ["status", "script", "prompt", "completion", "total", "duration", "url"];
+  if (outSummary) {
+    await appendFile(
+      outSummary,
+      [headersToMarkdownTableHead(headers), headersToMarkdownTableSeparator(headers)].join(""),
+    );
+  }
+  const results = [];
+  for (const config of configurations) {
+    checkCancelled(cancellationToken);
+    const { script, options, test } = config;
+    logInfo(`test ${script.id} (${results.length + 1}/${configurations.length})`);
+    dbg(`options: %O`, options);
+    const { files = [] } = test;
+    const res = await run(script.id, files, {
+      ...options,
+    });
+    const { status, error, usage } = res;
+    logVerbose(`  status: ${status}`);
+    if (error) logWarn(error.message);
+
+    const ok = status === "success";
+    stats.prompt += usage?.prompt || 0;
+    stats.completion += usage?.completion || 0;
+    stats.total += usage?.total || 0;
+    if (outSummary) {
+      const row = {
+        ok,
+        status: ok ? EMOJI_SUCCESS : EMOJI_FAIL,
+        script: script.id,
+        prompt: usage?.prompt,
+        completion: usage?.completion,
+        total: usage?.total,
+        duration: usage?.duration,
+      };
+      await appendFile(outSummary, objectToMarkdownTableRow(row, headers, { skipEscape: true }));
+    }
+    results.push({ ok, ...res });
+
+    if (testDelay > 0) {
+      logVerbose(`  waiting ${testDelay}s`);
+      await delay(testDelay * 1000);
+    }
+  }
+  const runEnd = new Date();
+
+  if (outSummary) {
+    await appendFile(
+      outSummary,
+      [
+        objectToMarkdownTableRow(
+          {
+            status: results.filter((r) => r.ok).length,
+            prompt: stats.prompt,
+            completion: stats.completion,
+            total: stats.total,
+            duration: roundWithPrecision((runEnd.getTime() - runStart.getTime()) / 1000, 1),
+          },
+          headers,
+          { skipEscape: true },
+        ),
+        "\n\n",
+        `- end: ${runEnd.toISOString()}\n`,
+      ].join(""),
+    );
+  }
+  if (outSummary) logVerbose(`trace: ${outSummary}`);
+  const ok = results.every((r) => !!r.ok);
+  return {
+    ok,
+    status: ok ? 0 : -1,
+    value: [],
+    error: results.find((r) => r.error)?.error,
+  };
+}
+
+async function promptFooRunPromptScriptTests(
+  ids: string[],
+  options: PromptScriptTestRunOptions & {
+    out?: string;
+    cli?: string;
+    removeOut?: boolean;
+    cache?: boolean;
+    verbose?: boolean;
+    write?: boolean;
+    redteam?: boolean;
+    promptfooVersion?: string;
+    outSummary?: string;
+    testDelay?: string;
+    maxConcurrency?: string;
+    testTimeout?: string;
+    promptfoo?: boolean;
   } & CancellationOptions,
 ): Promise<PromptScriptTestRunResponse> {
   applyModelOptions(options, "cli");
@@ -232,7 +429,7 @@ npx --yes genaiscript@${CORE_VERSION} test view
   if (outSummary) {
     await appendFile(
       outSummary,
-      [headersToMarkdownTableHead(headers), headersToMarkdownTableSeperator(headers)].join(""),
+      [headersToMarkdownTableHead(headers), headersToMarkdownTableSeparator(headers)].join(""),
     );
   }
   const promptFooVersion = options.promptfooVersion || PROMPTFOO_VERSION;
@@ -349,7 +546,11 @@ npx --yes genaiscript@${CORE_VERSION} test view
  * @param options - Options to filter the test scripts by IDs or groups.
  * @returns A Promise resolving to an array of filtered scripts.
  */
-async function listTests(options: { ids?: string[]; groups?: string[]; redteam?: boolean }) {
+async function listTests(options: {
+  ids?: string[];
+  groups?: string[];
+  redteam?: boolean;
+}): Promise<PromptScript[]> {
   const prj = await buildProject();
   const scripts = filterScripts(prj.scripts, {
     ...(options || {}),

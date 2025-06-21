@@ -115,7 +115,7 @@ export function dataToMarkdownTable(csv: object[], options?: { headers?: Element
   if (headers.length === 0) headers.push(...Object.keys(csv[0])); // Use object keys as headers if not provided
   const res: string[] = [
     headersToMarkdownTableHead(headers), // Create Markdown separator row
-    headersToMarkdownTableSeperator(headers),
+    headersToMarkdownTableSeparator(headers),
     ...csv.map((row) => objectToMarkdownTableRow(row, headers)),
   ];
   return res.join(""); // Join rows with newline
@@ -127,7 +127,7 @@ export function dataToMarkdownTable(csv: object[], options?: { headers?: Element
  * @param headers - Array of column headers used to determine the number of separator cells in the row.
  * @returns A string representing the Markdown table separator row.
  */
-export function headersToMarkdownTableSeperator(headers: string[]) {
+export function headersToMarkdownTableSeparator(headers: string[]) {
   return `|${headers.map(() => "-").join("|")}|\n`;
 }
 
