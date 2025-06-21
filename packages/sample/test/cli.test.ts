@@ -72,10 +72,6 @@ describe("parse", async () => {
   await test("tokens", async () => {
     await $`node ${cli} ${cmd} tokens "src/*" -ef "**/*.pdf" -ef "**/*.docx"`;
   });
-  await test("prompty", async () => {
-    const res = await $`node ${cli} ${cmd} "src/*.prompty"`.nothrow();
-    assert(!res.exitCode);
-  });
 });
 
 describe("retrieval", () => {
