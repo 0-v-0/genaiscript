@@ -11,7 +11,7 @@ import { filterGitIgnore } from "@genaiscript/core";
 import { setHost, Host } from "@genaiscript/core";
 import { TraceOptions } from "@genaiscript/core";
 import { arrayify } from "@genaiscript/core";
-import { uniq } from "@genaiscript/runtime";
+import { uniq } from "es-toolkit";
 import { CancellationOptions } from "@genaiscript/core";
 import { LanguageModelConfiguration, LogLevel } from "@genaiscript/core";
 

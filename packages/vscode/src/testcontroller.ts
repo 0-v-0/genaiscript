@@ -3,22 +3,10 @@
 
 import * as vscode from "vscode";
 import { ExtensionState } from "./state.js";
-import { PROMPTFOO_VERSION } from "@genaiscript/runtime";
-import {
-  TOOL_ID,
-  CHANGE,
-  EMOJI_SUCCESS,
-  EMOJI_FAIL,
-  PROMPTFOO_REMOTE_API_PORT,
-  PROMPTFOO_CACHE_PATH,
-  PROMPTFOO_CONFIG_DIR,
-  ICON_LOGO_NAME,
-  PromptScript,
-} from "@genaiscript/core";
+import { TOOL_ID, CHANGE, EMOJI_SUCCESS, EMOJI_FAIL, PromptScript } from "@genaiscript/core";
 
 import { errorMessage } from "@genaiscript/core";
 import { arrayify } from "@genaiscript/core";
-import { deleteUndefinedValues } from "@genaiscript/core";
 
 export async function activateTestController(state: ExtensionState) {
   const { context, host } = state;
@@ -99,7 +87,6 @@ export async function activateTestController(state: ExtensionState) {
         return;
       }
 
-      const serverUrl = await startTestViewer();
       const client = await state.host.server.client();
       await client.init();
       try {
@@ -113,7 +100,7 @@ export async function activateTestController(state: ExtensionState) {
           const res = await client.runTest(script);
           for (const r of res.value || []) {
             run.appendOutput(
-              `${r.ok ? EMOJI_SUCCESS : EMOJI_FAIL} ${r.script} ${errorMessage(r.error) || ""} ${serverUrl}/eval?evalId=${encodeURIComponent(r.value?.evalId)}`,
+              `${r.ok ? EMOJI_SUCCESS : EMOJI_FAIL} ${r.script} ${errorMessage(r.error) || ""}`,
               undefined,
               test,
             );
@@ -137,27 +124,4 @@ export async function activateTestController(state: ExtensionState) {
     ctrl.items.add(file);
     return file;
   }
-}
-
-async function startTestViewer() {
-  const name = "Promptfoo View";
-  const port = PROMPTFOO_REMOTE_API_PORT;
-  const serverUrl = `http://127.0.0.1:${port}`;
-  if (!vscode.window.terminals.find((t) => t.name === name)) {
-    // show results
-    const terminal = vscode.window.createTerminal({
-      name,
-      isTransient: true,
-      env: deleteUndefinedValues({
-        PROMPTFOO_CACHE_PATH,
-        PROMPTFOO_CONFIG_DIR,
-        PROMPTFOO_DISABLE_TELEMETRY: "1",
-        PROMPTFOO_DISABLE_UPDATE: "1",
-      }),
-      iconPath: new vscode.ThemeIcon(ICON_LOGO_NAME),
-    });
-    const promptfooVersion = PROMPTFOO_VERSION;
-    terminal.sendText(`npx --yes promptfoo@${promptfooVersion} view --port ${port} --no`);
-  }
-  return serverUrl;
 }

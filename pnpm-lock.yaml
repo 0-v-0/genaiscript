@@ -772,15 +772,12 @@ importers:
 
   packages/vscode:
     dependencies:
-      '@genaiscript/api':
-        specifier: workspace:*
-        version: link:../api
       '@genaiscript/core':
         specifier: workspace:*
         version: link:../core
-      '@genaiscript/runtime':
-        specifier: workspace:*
-        version: link:../runtime
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.39.3
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
