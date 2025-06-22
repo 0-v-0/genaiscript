@@ -11,7 +11,7 @@ import type { HTMLToMarkdownOptions, HTMLToTextOptions } from "./types.js"; // I
 import { tabletojson } from "tabletojson";
 import { convert as convertToText } from "html-to-text"; // Import the convert function from html-to-text library
 import Turndown from "turndown"; // Import Turndown library for HTML to Markdown conversion
-import GFMPlugin from "turndown-plugin-gfm";
+import * as GFMPlugin from "turndown-plugin-gfm";
 
 /**
  * Converts HTML tables to JSON objects.

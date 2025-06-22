@@ -488,11 +488,15 @@
     ]
   },
   "scripts": {
-    "build": "pnpm build:extension",
-    "build:extension": "node build.mjs",
+    "build": "npm run clean && pnpm build:extension",
+    "build:extension": "tsc -p . && rollup -c rollup.config.mjs 2>&1",
     "build:icons": "node updatefonts.mjs",
+    "clean": "rimraf dist",
+    "format:check": "prettier --config ../../.prettierrc.json --ignore-path ../../.prettierignore --check  \"src/**/*.{ts,cts,mts}\" \"*.{js,cjs,mjs,json}\" ",
+    "format:fix": "prettier --config ../../.prettierrc.json  --ignore-path ../../.prettierignore  --write \"src/**/*.{ts,cts,mts}\" \"*.{js,cjs,mjs,json}\" ",
     "generate-manifest": "vsce generate-manifest -i genaiscript.vsix -o genaiscript.manifest",
-    "lint": "eslint src --ext ts",
+    "lint:check": "eslint src test",
+    "lint:fix": "eslint src test --fix --fix-type [problem,suggestion]",
     "package": "vsce package --dependencies --out genaiscript.vsix",
     "postpackage": "zx postpackage.mjs",
     "prepackage": "zx prepackage.mjs",
@@ -505,19 +509,28 @@
     "vscode:update-dts": "npx @vscode/dts dev && mv vscode.*.d.ts src/"
   },
   "dependencies": {
-    "@genaiscript/core": "workspace:*",
     "@genaiscript/api": "workspace:*",
+    "@genaiscript/core": "workspace:*",
     "@genaiscript/runtime": "workspace:*",
     "markdown-it": "^14.1.0",
     "markdown-it-github-alerts": "0.2.0",
+    "tslib": "catalog:",
     "vscode-uri": "^3.1.0",
     "websocket-polyfill": "0.0.3"
   },
   "devDependencies": {
-    "esbuild": "^0.25.5",
-    "@vscode/vsce": "^3.4.2",
+    "@eslint/js": "catalog:",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@types/markdown-it": "^14.1.2",
     "@types/vscode": "^1.98.0",
+    "@vscode/vsce": "^3.4.2",
+    "esbuild": "^0.25.5",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "rollup": "^4.44.0",
     "typescript": "catalog:",
     "zx": "^8.5.4"
   }
