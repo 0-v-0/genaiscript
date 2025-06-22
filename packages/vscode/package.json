@@ -48,7 +48,7 @@
     "workspaceContains:**/*.genai.{js,mjs,mts}",
     "onNotebook:genaiscript"
   ],
-  "main": "./built/extension.js",
+  "main": "dist/bundle/extension.js",
   "bugs": {
     "url": "https://github.com/microsoft/genaiscript/issues"
   },
@@ -497,10 +497,9 @@
     "generate-manifest": "vsce generate-manifest -i genaiscript.vsix -o genaiscript.manifest",
     "lint:check": "eslint src test",
     "lint:fix": "eslint src test --fix --fix-type [problem,suggestion]",
-    "package": "vsce package --dependencies --out genaiscript.vsix",
+    "package": "vsce package --no-dependencies --out genaiscript.vsix",
     "postpackage": "zx postpackage.mjs",
     "prepackage": "zx prepackage.mjs",
-    "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ../sample",
     "prebuild": "tsc -p .",
     "vis:network": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.network.html --template network",
     "vis:sunburst": "npx --yes esbuild-visualizer --metadata esbuild.meta.json --filename esbuild.sunburst.html --template sunburst",
@@ -513,7 +512,6 @@
     "es-toolkit": "catalog:",
     "markdown-it": "^14.1.0",
     "markdown-it-github-alerts": "0.2.0",
-    "tslib": "catalog:",
     "vscode-uri": "^3.1.0",
     "websocket-polyfill": "0.0.3"
   },
@@ -530,6 +528,7 @@
     "prettier": "catalog:",
     "rimraf": "catalog:",
     "rollup": "^4.44.0",
+    "tslib": "catalog:",
     "typescript": "catalog:",
     "zx": "^8.5.4"
   }
