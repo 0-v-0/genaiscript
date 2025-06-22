@@ -4,7 +4,12 @@
 import { parentPort, workerData } from "node:worker_threads";
 import { delay } from "es-toolkit";
 import { NodeHost } from "@genaiscript/runtime";
-import { RESOURCE_CHANGE, overrideStdoutWithStdErr, runtimeHost } from "@genaiscript/core";
+import {
+  RESOURCE_CHANGE,
+  installGlobals,
+  overrideStdoutWithStdErr,
+  runtimeHost,
+} from "@genaiscript/core";
 import type { Resource } from "@genaiscript/core";
 import { runScriptInternal } from "./run.js";
 
@@ -25,6 +30,7 @@ import { runScriptInternal } from "./run.js";
  */
 export async function worker() {
   overrideStdoutWithStdErr();
+  installGlobals();
   const { type, ...data } = workerData as {
     type: string;
   };
@@ -59,4 +65,4 @@ export async function worker() {
   }
 }
 
-worker()
+worker();

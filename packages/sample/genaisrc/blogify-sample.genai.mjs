@@ -1,19 +1,19 @@
 script({
-    files: "packages/sample/genaisrc/readme-updater.genai.mts",
-    system: ["system", "system.assistant", "system.files"],
-    tools: ["fs"],
-    model: "large",
-    temperature: 0.8,
-})
+  files: "packages/sample/genaisrc/readme-updater.genai.mts",
+  system: ["system", "system.assistant", "system.files"],
+  tools: ["fs"],
+  model: "large",
+  temperature: 0.8,
+});
 
-const today = new Date()
-const yyyy = today.getFullYear()
-const mm = String(today.getMonth() + 1).padStart(2, "0")
-const dd = String(today.getDate()).padStart(2, "0")
-const formattedDate = `${yyyy}-${mm}-${dd}`
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, "0");
+const dd = String(today.getDate()).padStart(2, "0");
+const formattedDate = `${yyyy}-${mm}-${dd}`;
 
-def("FILE", env.files)
-defFileOutput("docs/src/content/docs/blog/drafts/*.mdx", "generated blog posts")
+def("FILE", env.files);
+defFileOutput("docs/src/content/docs/blog/drafts/*.mdx", "generated blog posts");
 
 $`Create a blog post file that explains the GenAIScript source code in FILE.
 
@@ -69,4 +69,4 @@ $`Create a blog post file that explains the GenAIScript source code in FILE.
 Render the output as a markdown file using
 the FILE formats. Make sure the output code section as 5 back ticks.
 
-`
+`;

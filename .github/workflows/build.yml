@@ -34,6 +34,8 @@ jobs:
               run: pnpm run test:system
             - name: core tests
               run: pnpm run test:core
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: compile tests
               run: pnpm run test:compile
               continue-on-error: true

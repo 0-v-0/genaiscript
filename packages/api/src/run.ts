@@ -101,6 +101,7 @@ import {
   parseOptionsVars,
   rmDir,
   tryStat,
+  createGitIgnorer,
 } from "@genaiscript/core";
 
 const dbg = genaiscriptDebug("run");
@@ -178,6 +179,7 @@ export async function runScriptInternal(
   dbg(`run id: `, runId);
   const runDir = options.out || getRunDir(scriptId, runId);
   dbg(`run dir: `, runDir);
+  dbg(`files: %O`, files);
   const cancellationToken = options.cancellationToken;
   const {
     trace = new MarkdownTrace({ cancellationToken, dir: runDir }),
@@ -235,7 +237,8 @@ export async function runScriptInternal(
     return { exitCode, result };
   };
 
-  logInfo(`genaiscript: ${scriptId} (run: ${runId})`);
+  logInfo(`genaiscript: ${scriptId}`);
+  dbg(`run id: %s`, runId);
   dbg(`ci: %s`, isCI);
 
   // manage out folder
@@ -293,6 +296,7 @@ export async function runScriptInternal(
   }
   const applyGitIgnore = options.ignoreGitIgnore !== true && script.ignoreGitIgnore !== true;
   dbg(`apply gitignore: ${applyGitIgnore}`);
+  const ignorer = applyGitIgnore ? await createGitIgnorer() : undefined;
   const resolvedFiles = new Set<string>();
   // move exclusions to excludedFiles
   excludedFiles.push(
@@ -301,12 +305,17 @@ export async function runScriptInternal(
       .map((f) => f.replace(NEGATIVE_GLOB_REGEX, "")),
   );
   files = files.filter((f) => !NEGATIVE_GLOB_REGEX.test(f));
+  dbg(`files (remaining): %O`, files);
   for (let arg of files) {
     checkCancelled(cancellationToken);
     dbg(`resolving ${arg}`);
     const stat = await host.statFile(arg);
     if (stat?.type === "file") {
       dbg(`file found %s`, arg);
+      if (ignorer?.([arg])?.length) {
+        dbg(`ignored by gitignore`);
+        continue;
+      }
       resolvedFiles.add(filePathOrUrlToWorkspaceFile(arg));
       continue;
     }
@@ -347,7 +356,10 @@ export async function runScriptInternal(
   if (excludedFiles.length) {
     for (const arg of excludedFiles) {
       const ffs = await host.findFiles(arg);
-      for (const f of ffs) resolvedFiles.delete(filePathOrUrlToWorkspaceFile(f));
+      for (const f of ffs) {
+        dbg(`removing excluded file %s`, f);
+        resolvedFiles.delete(filePathOrUrlToWorkspaceFile(f));
+      }
     }
   }
 
@@ -435,7 +447,7 @@ export async function runScriptInternal(
     workspaceFiles,
   };
   dbg(
-    `files %O\n workspace files %O`,
+    `files: %O\n workspace files: %O`,
     fragment.files,
     fragment.workspaceFiles.map((f) => f.filename),
   );
@@ -500,6 +512,7 @@ export async function runScriptInternal(
       topLogprobs,
       fenceFormat,
       runDir,
+      applyGitIgnore,      
       cliInfo: options.cli
         ? {
             files,

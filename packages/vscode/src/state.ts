@@ -25,7 +25,7 @@ import { MarkdownTrace } from "@genaiscript/core";
 import { logInfo, groupBy, logVerbose } from "@genaiscript/core";
 import { GenerationResult } from "@genaiscript/core";
 import { randomHex } from "@genaiscript/core";
-import { delay } from "es-toolkit";
+import { delay } from "@genaiscript/runtime";
 import { Fragment } from "@genaiscript/core";
 import { createWebview } from "./webview.js";
 import { isEmptyString } from "@genaiscript/core";

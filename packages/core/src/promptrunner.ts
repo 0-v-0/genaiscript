@@ -31,6 +31,8 @@ import { unthink } from "./think.js";
 import { deleteUndefinedValues } from "./cleaners.js";
 import { DEBUG_SCRIPT_CATEGORY } from "./constants.js";
 import type { PromptScript } from "./types.js";
+import { genaiscriptDebug } from "./debug.js";
+const dbg = genaiscriptDebug("env");
 
 // Asynchronously resolve expansion variables needed for a template
 /**
@@ -50,7 +52,7 @@ async function resolveExpansionVars(
   output: OutputTrace,
   options: GenerationOptions,
 ): Promise<ExpansionVariables> {
-  const { vars, runDir, runId } = options;
+  const { vars, runDir, runId, applyGitIgnore } = options;
   const root = runtimeHost.projectFolder();
 
   assert(!!vars);
@@ -59,17 +61,19 @@ async function resolveExpansionVars(
 
   const files: WorkspaceFile[] = [];
   const templateFiles = arrayify(template.files);
+  dbg(`template files: %O`, templateFiles);
   const referenceFiles = fragment.files.slice(0);
   const workspaceFiles = fragment.workspaceFiles?.slice(0) || [];
   const filenames = await expandFiles(
     referenceFiles.length || workspaceFiles.length ? referenceFiles : templateFiles,
     {
-      applyGitIgnore: false,
+      applyGitIgnore,
       accept: template.accept,
     },
   );
   for (let filename of filenames) {
     filename = relativePath(root, filename);
+    dbg(`filenames: %O`, filenames);
 
     // Skip if file already in the list
     if (files.find((lk) => lk.filename === filename)) continue;
