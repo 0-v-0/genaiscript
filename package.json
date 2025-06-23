@@ -45,7 +45,7 @@
     "genai:technical": "cd docs && pnpm genai:technical",
     "genai:test": "node packages/cli/dist/src/index.js run test-gen",
     "genai:tweetify": "node packages/cli/dist/src/index.js run tweetify",
-    "install:playwright": "pnpm playwright install --with-deps",
+    "install:playwright": "pnpm playwright install --with-deps chromium",
     "lint:check": "turbo lint:check",
     "lint:fix": "turbo lint:fix",
     "ollama": "pnpm ollama:stop && pnpm ollama:start",

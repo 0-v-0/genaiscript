@@ -307,7 +307,7 @@ RUN npm ci
 ${
   playwright
     ? dedent`# Install playwright dependencies
-RUN npx --yes playwright install --with-deps
+RUN npx --yes playwright install --with-deps chromium
 
 `
     : ""
