@@ -871,7 +871,7 @@ export async function OpenAIEmbedder(
       body: JSON.stringify(body),
     };
     // traceFetchPost(trace, url, freq.headers, body)
-    logVerbose(`${type}: embedding ${ellipse(input, 44)} with ${provider}:${model}`);
+    logVerbose(`${provider}: embedding ${ellipse(input, 44)} with ${model}`);
     const fetch = await createFetch(options);
     checkCancelled(cancellationToken);
     const res = await fetch(url, freq);
