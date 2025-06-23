@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as vscode from "vscode";
-import { ExtensionState } from "./state.js";
+import { ExtensionState } from "./state";
 import {
   RECONNECT,
   OPEN,
@@ -13,19 +13,18 @@ import {
   CHANGE,
   SERVER_LOCALHOST,
   MIN_NODE_VERSION_MAJOR,
-} from "@genaiscript/core";
-import { ServerManager, host } from "@genaiscript/core";
-import { assert, logError, logInfo, logVerbose } from "@genaiscript/core";
-import { VsCodeClient } from "@genaiscript/core";
-import { CORE_VERSION } from "@genaiscript/core";
-import { createChatModelRunner, isLanguageModelsAvailable } from "./lmaccess.js";
-import { semverParse, semverSatisfies } from "@genaiscript/core";
-import { resolveCli } from "./config.js";
-import { deleteUndefinedValues } from "@genaiscript/core";
-import { findRandomOpenPort } from "@genaiscript/core";
-import { packageResolveExecute } from "@genaiscript/core";
-import { shellQuote } from "@genaiscript/core";
-import { log } from "node:console";
+} from "../../core/src/constants";
+import { createChatModelRunner, isLanguageModelsAvailable } from "./lmaccess";
+import { semverParse, semverSatisfies } from "../../core/src/semver";
+import { resolveCli } from "./config";
+import { deleteUndefinedValues } from "../../core/src/cleaners";
+import { ServerManager, host } from "../../core/src/host";
+import { packageResolveExecute } from "../../core/src/packagemanagers";
+import { VsCodeClient } from "../../core/src/server/client";
+import { shellQuote } from "../../core/src/shell";
+import { logError, logInfo, logVerbose } from "../../core/src/util";
+import { CORE_VERSION } from "../../core/src/version";
+import { findRandomOpenPort } from "../../core/src/net";
 
 export class TerminalServerManager extends EventTarget implements ServerManager {
   private _terminal: vscode.Terminal;
@@ -115,7 +114,7 @@ export class TerminalServerManager extends EventTarget implements ServerManager 
   }
 
   private async startClient(): Promise<VsCodeClient> {
-    assert(!this._client);
+    if (this._client) throw new Error("client already started");
     await this.allocatePort();
     const url = this.url;
     const authority = (await vscode.env.asExternalUri(vscode.Uri.parse(this.authority))).toString();
@@ -241,7 +240,7 @@ export class TerminalServerManager extends EventTarget implements ServerManager 
     });
 
     async function checkNodeCommand(terminal: vscode.Terminal): Promise<boolean> {
-      assert(!!terminal, "terminal not started");
+      if (!terminal) throw new Error("terminal not started");
       // Log all data written to the terminal for a command
       const command = terminal.shellIntegration.executeCommand("node -v");
       let output = "";
