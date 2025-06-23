@@ -63,3 +63,8 @@ pnpm-lock.yaml
 genaiscript*.tgz
 
 *.bak
+
+
+# START Ruler Generated Files
+.github/copilot-instructions.md
+# END Ruler Generated Files
