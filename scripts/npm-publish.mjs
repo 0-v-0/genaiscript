@@ -10,7 +10,9 @@ for (const d of ["core", "api", "runtime", "cli"]) {
   cd(`packages/${d}`);
   const res =
     await $`pnpm publish --access public --otp ${otp} --publish-branch dev --no-git-checks`.nothrow();
-  if (res.exitCode !== 0) otp = await question("Please enter your npm 2FA code: ");
-  await $`pnpm publish --access public --otp ${otp} --publish-branch dev --no-git-checks`;
+  if (res.exitCode !== 0) {
+    otp = await question("Please enter your npm 2FA code: ");
+    await $`pnpm publish --access public --otp ${otp} --publish-branch dev --no-git-checks`;
+  }
   cd(cwd);
 }
