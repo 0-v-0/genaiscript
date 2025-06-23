@@ -65,7 +65,7 @@ export async function activateChatParticipant(state: ExtensionState) {
         md(`This is the current model alias mapping:\n`);
         for (const chatModel of chatModels) {
           md(
-            `- \`${languageChatModels[chatModel.id] || "---"}\` > \`${chatModel.id}\`, ${chatModel.name}, max ${chatModel.maxInputTokens}\n`,
+            `- \`${languageChatModels[chatModel.id] || "---"}\` > \`${chatModel.id}\`, ${chatModel.name}, max ${chatModel.maxInputTokens}t\n`,
           );
         }
         return;
