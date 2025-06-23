@@ -13,6 +13,7 @@ import {
   CHANGE,
   SERVER_LOCALHOST,
   MIN_NODE_VERSION_MAJOR,
+  VSCODE_STARTUP_TIMEOUT,
 } from "../../core/src/constants";
 import { createChatModelRunner, isLanguageModelsAvailable } from "./lmaccess";
 import { semverParse, semverSatisfies } from "../../core/src/semver";
@@ -29,6 +30,7 @@ import { findRandomOpenPort } from "../../core/src/net";
 export class TerminalServerManager extends EventTarget implements ServerManager {
   private _terminal: vscode.Terminal;
   private _terminalStartAttempts = 0;
+  private _terminalStartWatcher: unknown; // timer
   private _port: number;
   private _startClientPromise: Promise<VsCodeClient>;
   private _client: VsCodeClient;
@@ -41,6 +43,8 @@ export class TerminalServerManager extends EventTarget implements ServerManager 
   private set status(value: "stopped" | "stopping" | "starting" | "running") {
     if (this._status !== value) {
       this._status = value;
+      if (value === "starting") this.startTerminalStartWatcher();
+      else this.clearTerminalStartWatcher();
       this.dispatchChange();
     }
   }
@@ -155,6 +159,30 @@ export class TerminalServerManager extends EventTarget implements ServerManager 
     await this.start();
     this._startClientPromise = undefined;
     return this._client;
+  }
+
+  private clearTerminalStartWatcher() {
+    if (this._terminalStartWatcher) {
+      clearTimeout(this._terminalStartWatcher as any);
+      this._terminalStartWatcher = undefined;
+    }
+  }
+
+  private startTerminalStartWatcher() {
+    this.clearTerminalStartWatcher();
+    this._terminalStartWatcher = setTimeout(() => {
+      this.clearTerminalStartWatcher();
+      if (this._terminal && this.status === "starting") this.showStartupInformation();
+    }, VSCODE_STARTUP_TIMEOUT);
+  }
+
+  private async showStartupInformation() {
+    const cmd = "Show Terminal";
+    const res = await vscode.window.showInformationMessage(
+      `${TOOL_NAME} - Server starting. This might take a while on the first run.`,
+      cmd,
+    );
+    if (res === cmd) this._terminal?.show(true);
   }
 
   async start() {
@@ -286,10 +314,11 @@ export class TerminalServerManager extends EventTarget implements ServerManager 
     this._terminal = undefined;
     this._client = undefined;
     this._startClientPromise = undefined;
+    this.clearTerminalStartWatcher();
     if (!this.state.diagnostics) t?.dispose();
   }
 
-  dispose(): any {
+  dispose() {
     this.close();
   }
 }
