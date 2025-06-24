@@ -163,6 +163,7 @@ export class TerminalServerManager extends EventTarget implements ServerManager 
 
   private clearTerminalStartWatcher() {
     if (this._terminalStartWatcher) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       clearTimeout(this._terminalStartWatcher as any);
       this._terminalStartWatcher = undefined;
     }

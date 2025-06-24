@@ -17,7 +17,6 @@ import { convertAnnotationsToItems } from "../../core/src/annotations";
 import { patchCachedImages } from "../../core/src/filecache";
 import { deleteUndefinedValues } from "../../core/src/cleaners";
 
-
 export async function activateChatParticipant(state: ExtensionState) {
   const { context } = state;
   const { subscriptions } = context;
@@ -47,7 +46,8 @@ export async function activateChatParticipant(state: ExtensionState) {
       response: vscode.ChatResponseStream,
       token: vscode.CancellationToken,
     ) => {
-      let { command, prompt, references, model } = request;
+      const { command, references, model } = request;
+      let { prompt } = request;
 
       const md = (t: string, ...enabledCommands: string[]) => {
         const ms = new vscode.MarkdownString(t + "\n", true);

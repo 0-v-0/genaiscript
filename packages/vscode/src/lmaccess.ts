@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
 import { ExtensionState } from "./state";
 import type { ChatCompletionMessageParam } from "../../core/src/chattypes";
@@ -65,7 +64,10 @@ async function messagesToChatMessages(messages: ChatCompletionMessageParam[]) {
       case "assistant":
         if (
           Array.isArray(m.content) &&
-          m.content.some((c: any) => typeof c === "object" && "type" in c && c.type === "image_url")
+          m.content.some(
+            (c: ChatCompletionMessageParam["content"][0]) =>
+              typeof c === "object" && "type" in c && c.type === "image_url",
+          )
         )
           throw new Error("Vision model not supported");
         res.push(
@@ -109,9 +111,7 @@ export function createChatModelRunner(state: ExtensionState): LanguageModelChatR
         token,
       );
 
-      let text = "";
       for await (const fragment of request.text) {
-        text += fragment;
         onChunk({
           chunk: fragment,
           tokens: await chatModel.countTokens(fragment),

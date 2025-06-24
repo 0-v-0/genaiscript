@@ -5,8 +5,8 @@ import * as vscode from "vscode";
 import { TOOL_NAME } from "../../core/src/constants";
 import { errorMessage } from "../../core/src/error";
 
-export function registerCommand(id: string, command: (...args: any[]) => Thenable<void>) {
-  return vscode.commands.registerCommand(id, async function (...args: any[]) {
+export function registerCommand(id: string, command: (...args: unknown[]) => Thenable<void>) {
+  return vscode.commands.registerCommand(id, async function (...args: unknown[]) {
     try {
       await command(...args);
     } catch (e) {

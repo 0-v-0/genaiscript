@@ -60,7 +60,7 @@ interface NotebookFrontMatter {
   smallModel?: string;
   visionModel?: string;
   provider?: ModelProviderType;
-  vars?: Record<string, any>;
+  vars?: PromptParameters;
   files?: string | string[];
 }
 
@@ -120,7 +120,7 @@ function activateNotebookExecutor(state: ExtensionState) {
         const fragment: Fragment = {
           files: arrayify(files),
         };
-        const parameters = { ...heap, ...vars };
+        const parameters: PromptParameters = { ...heap, ...vars };
         await state.requestAI({
           scriptId: template.id,
           label: "Executing cell",
@@ -206,7 +206,7 @@ function activateNotebookSerializer(state: ExtensionState) {
   const deserializeNotebook: (
     data: Uint8Array,
     token: vscode.CancellationToken,
-  ) => vscode.NotebookData = (data, token) => {
+  ) => vscode.NotebookData = (data) => {
     const decoder = new TextDecoder();
     const content = decoder.decode(data);
     const cellRawData = parseMarkdown(content);
@@ -243,10 +243,7 @@ function activateNotebookSerializer(state: ExtensionState) {
       NOTEBOOK_TYPE,
       {
         deserializeNotebook,
-        serializeNotebook: function (
-          data: vscode.NotebookData,
-          token: vscode.CancellationToken,
-        ): Uint8Array {
+        serializeNotebook: function (data: vscode.NotebookData): Uint8Array {
           const encoder = new TextEncoder();
           const decoder = new TextDecoder();
           const { cells } = data;

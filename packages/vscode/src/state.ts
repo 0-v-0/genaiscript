@@ -62,7 +62,7 @@ export interface AIRequestSnapshotKey {
 }
 export interface AIRequestSnapshot {
   response?: Partial<GenerationResult>;
-  error?: any;
+  error?: unknown;
   trace?: string;
 }
 
@@ -75,13 +75,14 @@ export interface AIRequest {
   request?: Promise<Partial<GenerationResult>>;
   response?: Partial<GenerationResult>;
   computing?: boolean;
-  error?: any;
+  error?: unknown;
   progress?: ChatCompletionsProgressReport;
   editsApplied?: boolean; // null = waiting, false, true
 }
 
 export function snapshotAIRequest(r: AIRequest): AIRequestSnapshot {
   const { response, error, creationTime, trace } = r;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { env, ...responseWithoutVars } = response || {};
   const snapshot = structuredClone({
     creationTime,

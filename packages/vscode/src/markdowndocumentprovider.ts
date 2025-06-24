@@ -54,10 +54,7 @@ class MarkdownTextDocumentContentProvider implements vscode.TextDocumentContentP
     return renderTraceTree(node, 3);
   }
 
-  async provideTextDocumentContent(
-    uri: vscode.Uri,
-    token: vscode.CancellationToken,
-  ): Promise<string> {
+  async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
     const aiRequest = this.state.aiRequest;
     const computing = !!aiRequest?.computing;
     const res = aiRequest?.response;

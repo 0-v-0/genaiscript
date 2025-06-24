@@ -25,7 +25,7 @@ export async function checkDirectoryExists(
     const file = filePath ? vscode.Uri.joinPath(folderOrFile, filePath) : folderOrFile;
     const stat = await vscode.workspace.fs.stat(file);
     return stat.type === vscode.FileType.Directory;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -38,7 +38,7 @@ export async function checkFileExists(
     const file = filePath ? vscode.Uri.joinPath(folderOrFile, filePath) : folderOrFile;
     const stat = await vscode.workspace.fs.stat(file);
     return stat.type === vscode.FileType.File;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -83,7 +83,7 @@ export async function readFileJSON<T>(
   const src = await readFileText(folder, filePath);
   try {
     return JSON5TryParse(src);
-  } catch (e) {
+  } catch {
     return undefined;
   }
 }

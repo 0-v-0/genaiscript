@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -431,4 +432,3 @@ export async function fileTree(
       .join("");
   }
 }
-

@@ -113,7 +113,7 @@ export function commandButtons(state: ExtensionState) {
 
 export function commandButtonsMarkdown(state: ExtensionState, sep = " | ") {
   const res = commandButtons(state)
-    .map(({ label, description, cmd }) => `[${label}](command:${cmd})`)
+    .map(({ label, cmd }) => `[${label}](command:${cmd})`)
     .join(sep);
   return res;
 }

@@ -34,9 +34,13 @@ class PromptTreeDataProvider implements vscode.TreeDataProvider<PromptTreeNode> 
         filename,
         title,
         description = "",
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         system = [],
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         text,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         defTools,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         jsSource,
         ...rest
       } = element;

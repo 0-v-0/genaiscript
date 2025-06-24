@@ -16,7 +16,8 @@ import { TraceOptions } from "../../core/src/trace";
 import { LanguageModelConfiguration, LogLevel } from "../../core/src/server/messages";
 
 export class VSCodeHost extends EventTarget implements Host {
-  userState: any = {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  userState: Record<string, any> = {};
   readonly path = createNodePath();
   readonly server: TerminalServerManager;
   constructor(readonly state: ExtensionState) {
@@ -100,7 +101,7 @@ export class VSCodeHost extends EventTarget implements Host {
                 ? "symlink"
                 : undefined,
       };
-    } catch (e) {
+    } catch {
       return undefined;
     }
   }
