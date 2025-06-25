@@ -8,6 +8,11 @@ import {
   GENAI_ANY_REGEX,
   GENAI_SRC,
   GitHubClient,
+  MODEL_PROVIDERS,
+  MODEL_PROVIDER_AZURE_AI_INFERENCE,
+  MODEL_PROVIDER_AZURE_OPENAI,
+  MODEL_PROVIDER_GITHUB,
+  MODEL_PROVIDER_OPENAI,
   YAMLStringify,
   YAMLTryParse,
   createScript as coreCreateScript,
@@ -200,6 +205,14 @@ export async function actionConfigure(
     properties: {},
     required: [],
   };
+  const providers = MODEL_PROVIDERS.filter(({ id }) =>
+    [
+      MODEL_PROVIDER_GITHUB,
+      MODEL_PROVIDER_OPENAI,
+      MODEL_PROVIDER_AZURE_OPENAI,
+      MODEL_PROVIDER_AZURE_AI_INFERENCE,
+    ].includes(id),
+  ).filter(({ env }) => env);
   const inputs: Record<string, GitHubActionFieldType> = deleteUndefinedValues({
     ...Object.fromEntries(
       Object.entries(scriptSchema.properties).map(([key, value]) => {
@@ -220,23 +233,32 @@ export async function actionConfigure(
             description: `Files to process, separated by semi columns (;). ${accept || ""}`,
             required: false,
           },
-    github_token: {
-      description:
-        "GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions).",
-      required: true,
-    },
-    github_issue:
-      issue || pullRequest
-        ? {
-            description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments (https://microsoft.github.io/genaiscript/reference/scripts/github/).`,
-          }
-        : undefined,
     debug: {
       description:
         "Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).",
       required: false,
     },
+    github_issue:
+      issue || pullRequest
+        ? {
+            description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments (https://microsoft.github.io/genaiscript/reference/scripts/github/).`,
+            default: issue
+              ? "${{ github.event.issue.number }}"
+              : "${{ github.event.pull_request.number }}",
+            required: false,
+          }
+        : undefined,
   });
+  for (const provider of providers) {
+    for (const [key, value] of Object.entries(provider.env)) {
+      inputs[key.toLowerCase()] = deleteUndefinedValues({
+        description:
+          value.description || provider.url || `Configuration for ${provider.id} provider.`,
+        required: false,
+        default: value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`,
+      }) satisfies GitHubActionFieldType;
+    }
+  }
   let outputs: Record<string, GitHubActionFieldType> = deleteUndefinedValues({
     text: {
       description: "The generated text output.",

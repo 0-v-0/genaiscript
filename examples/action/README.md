@@ -5,8 +5,15 @@
 ## Inputs
 
 - `files`: Files to process, separated by semi columns (;). 
-- `github_token`: GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions). (required)
 - `debug`: Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).
+- `openai_api_key`: OpenAI API key (default: `${{ secrets.OPENAI_API_KEY }}`)
+- `openai_api_base`: OpenAI API base URL (default: `${{ vars.OPENAI_API_BASE }}`)
+- `azure_openai_api_endpoint`: Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint. (default: `${{ vars.AZURE_OPENAI_API_ENDPOINT }}`)
+- `azure_openai_api_key`: Azure OpenAI API key. **You do NOT need this if you are using Microsoft Entra ID. (default: `${{ secrets.AZURE_OPENAI_API_KEY }}`)
+- `azure_openai_subscription_id`: Azure OpenAI subscription ID to list available deployments (Microsoft Entra only). (default: `${{ vars.AZURE_OPENAI_SUBSCRIPTION_ID }}`)
+- `azure_openai_api_version`: Azure OpenAI API version. (default: `${{ vars.AZURE_OPENAI_API_VERSION }}`)
+- `azure_openai_api_credentials`: Azure OpenAI API credentials type. Leave as 'default' unless you have a special Azure setup. (default: `${{ vars.AZURE_OPENAI_API_CREDENTIALS }}`)
+- `github_token`: GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions). (default: `${{ secrets.GITHUB_TOKEN }}`)
 
 ## Outputs
 
@@ -19,7 +26,7 @@ Add the following to your step in your workflow file:
 ```yaml
 uses: microsoft/genaiscript@main
 with:
-  github_token: ${{ secrets.GITHUB_TOKEN }}
+
 ```
 
 ## Example
@@ -45,7 +52,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: microsoft/genaiscript@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+
 ```
 
 ## Development
