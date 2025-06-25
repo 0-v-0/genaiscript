@@ -21,7 +21,7 @@ It provides a simple interface to leverage the power of LLMs for classification 
 
 ## Usage
 
-`classify` is defined in the [GenAIScript runtime](/genaiscript/reference/scripts/runtime) and needs to be imported. It takes the text to classify, a set of labels (and options for the LLM)
+`classify` is defined in the [GenAIScript runtime](/genaiscript/reference/runtime) and needs to be imported. It takes the text to classify, a set of labels (and options for the LLM)
 and returns the label provided by the LLM.
 
 ```js

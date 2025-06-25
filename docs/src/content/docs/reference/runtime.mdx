@@ -1,15 +1,41 @@
 ---
 title: Runtime
+description: GenAIScript runtime files
 sidebar:
-  order: 1.2
-description: Learn how to run GenAIScript scripts in a Node.JS environment, including configuration
+  order: 80
+keywords: runtime, GenAIScript, JavaScript, TypeScript
+hero:
+  image:
+    alt: A simple, flat 2D illustration depicts an open package box with basic
+      digital script symbols, small code blocks, and algorithm icons rising from
+      it. Stylized arrows represent data flow around the box. The art uses five
+      solid corporate colors in an 8-bit, geometric, pixelated style. The image
+      is 128x128 pixels, transparent background, no text, no people, and no
+      shading.
+    file: ./runtime.png
 ---
 
-Scripts using the `.genai.mts` (or any `.genai.*` extension) are meant to be run through the [command line interfanece](/genaiscript/reference/cli).
+import { PackageManagers } from "starlight-package-managers";
 
-This page describes how to use the runtime in a Node.JS script without using the CLI.
+The GenAIScript runtime provides additional helpers and allows to use the runtime in any Node.JS application.
 
-## Import and configuration
+In order to use the runtime, you will need to install GenAIScript
+in your project.
+
+<PackageManagers pkg="genaiscript" dev />
+
+## Importing the runtime
+
+The runtime is available as a module. You can import it
+using the following code:
+
+```js
+import { cast } from "@genaiscript/runtime";
+```
+
+## Initialization
+
+If you are using GenAIScript without the CLI or Visual Studio Code extension, you need to initialize the runtime before using any global types or functions.
 
 ```js
 import { initialize } from "@genaiscript/runtime";
@@ -21,3 +47,10 @@ await initialize();
 ## globals
 
 The runtime installs global parsers and inline prompt types. However, the global `$`, `def`, etc... is not available, online inline prompts.
+
+## Helpers
+
+- [cast](/genaiscript/reference/scripts/cast), cast any data to structured outputs
+- [classify](/genaiscript/reference/scripts/classify), classify text
+- [makeItBetter](/genaiscript/guides/make-it-better), tell the LLM to improve its result
+- [pipeline](/genaiscript/guides/transformers-js), access to HuggingFace transformers
