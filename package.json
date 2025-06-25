@@ -10,10 +10,10 @@
   "type": "module",
   "scripts": {
     "az:login": "az login --scope api://trapi/.default",
-    "build": "turbo build",
+    "build": "pnpm run build:ruler && turbo build",
     "build:cli": "pnpm --filter=!docs --filter=!genaiscript-vscode --filter=!@genaiscript/web build",
     "build:ci": "pnpm --filter=!docs build",
-    "build:ruler": "ruler apply --mcp-overwrite --agents copilot --verbose",
+    "build:ruler": "ruler apply --mcp-overwrite --verbose",
     "clean": "git prune && git gc && rm -Rf slides/node_modules && rm -Rf docs/dist && rm -Rf docs/distasw && rm -Rf docs/node_modules && rm -Rf .genaiscript && rm -Rf packages/sample/.genaiscript && git checkout -- .",
     "cli": "node packages/cli/dist/src/index.js",
     "commit": "pnpm pretty && pnpm build && pnpm test:core && pnpm gcm",
