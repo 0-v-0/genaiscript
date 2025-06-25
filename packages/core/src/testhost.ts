@@ -37,6 +37,19 @@ import { ResourceManager } from "./mcpresource.js";
 import { execSync } from "node:child_process";
 import { shellQuote } from "./shell.js";
 import { genaiscriptDebug } from "./debug.js";
+import type {
+  WorkspaceFileSystem,
+  ContentSafety,
+  BrowseSessionOptions,
+  BrowserPage,
+  ShellOptions,
+  ShellOutput,
+  ContainerOptions,
+  ContainerHost,
+  PythonRuntimeOptions,
+  PythonRuntime,
+  Path,
+} from "./types.js";
 const dbg = genaiscriptDebug("host:test");
 
 // Class representing a test host for runtime, implementing the RuntimeHost interface
