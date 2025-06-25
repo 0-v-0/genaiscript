@@ -6,6 +6,7 @@ import {
   CORE_VERSION,
   RESOURCE_CHANGE,
   TOOL_ID,
+  deleteUndefinedValues,
   ensureDotGenaiscriptPath,
   errorMessage,
   logVerbose,
@@ -13,6 +14,7 @@ import {
   runtimeHost,
   setConsoleColors,
   splitMarkdownTextImageParts,
+  toStrictJSONSchema,
 } from "@genaiscript/core";
 import type {
   JSONSchemaObject,
@@ -95,11 +97,20 @@ export async function startMcpServer(
     const scripts = await watcher.scripts();
     const tools = scripts
       .map((script) => {
-        const { id, title, description, inputSchema, accept, annotations = {} } = script;
+        const {
+          id,
+          title,
+          description,
+          inputSchema,
+          accept,
+          annotations = {},
+          responseSchema,
+        } = script;
         const scriptSchema = (inputSchema?.properties.script as JSONSchemaObject) || {
           type: "object",
           properties: {},
         };
+        const outputSchema = responseSchema ? toStrictJSONSchema(responseSchema) : undefined;
         if (accept !== "none")
           scriptSchema.properties.files = {
             type: "array",
@@ -109,15 +120,16 @@ export async function startMcpServer(
             },
           };
         if (!description) logWarn(`script ${id} has no description`);
-        return {
+        return deleteUndefinedValues({
           name: id,
           description,
           inputSchema: scriptSchema as ListToolsResult["tools"][0]["inputSchema"],
+          outputSchema,
           annotations: {
             ...annotations,
             title,
           },
-        } satisfies ListToolsResult["tools"][0];
+        }) satisfies ListToolsResult["tools"][0];
       })
       .filter((t) => !!t);
     dbg(`returning tool list with ${tools.length} tools`);

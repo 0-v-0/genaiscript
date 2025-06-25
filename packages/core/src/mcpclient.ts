@@ -163,7 +163,6 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
             ({
               name: t.name,
               description: t.description,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               inputSchema: patchInputSchema(t.inputSchema),
             }) satisfies McpToolReference,
         );
