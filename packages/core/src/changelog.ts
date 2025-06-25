@@ -51,13 +51,13 @@ export function parseChangeLogs(source: string): ChangeLog[] {
     }
 
     // each back ticks
-    if (/^[\`\.]{3,}/.test(lines[0])) {
+    if (/^[`.]{3,}/.test(lines[0])) {
       lines.shift();
       continue;
     }
 
     // Parse the ChangeLog header line.
-    let m = /^ChangeLog:\s*(?<index>\d+)@(?<file>.*)\s*$/i.exec(lines[0]);
+    let m = /^ChangeLog:\s{0,128}(?<index>\d+)@(?<file>.*)\s{0,128}$/i.exec(lines[0]);
     if (!m) throw new Error("missing ChangeLog header in |" + lines[0] + "|");
     const changelog: ChangeLog = {
       index: parseInt(m.groups.index),

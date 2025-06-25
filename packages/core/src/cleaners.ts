@@ -160,7 +160,7 @@ export function ensureHeadSlash(s: string) {
  * @returns The normalized variable name as a string.
  */
 export function normalizeVarKey(key: string) {
-  return key.toLowerCase().replace(/[^a-z0-9\.]/g, "");
+  return key.toLowerCase().replace(/[^a-z0-9.]/g, "");
 }
 
 /**

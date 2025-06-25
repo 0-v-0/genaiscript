@@ -66,7 +66,7 @@ import { applyRemoteOptions, RemoteOptions } from "./remote.js";
 import * as http from "node:http";
 import { startProjectWatcher } from "./watch.js";
 import { extname, join, resolve } from "node:path";
-import { readFile } from "node:fs/promises";
+import { readFile, realpath } from "node:fs/promises";
 import { tryStat } from "@genaiscript/core";
 import { collectRuns } from "./runs.js";
 import { openaiApiChatCompletions, openaiApiModels } from "./openaiapi.js";
@@ -600,6 +600,7 @@ export async function startServer(
 
   const runRx = /^\/api\/runs\/(?<runId>[A-Za-z0-9_\-]{12,256})$/;
   const imageRx = /^\/\.genaiscript\/(images|runs\/.*?)\/[a-z0-9]{12,128}\.(png|jpg|jpeg|gif|svg)$/;
+  const ROOT = process.cwd();
 
   // Create an HTTP server to handle basic requests.
   const httpServer = http.createServer(async (req, res) => {
@@ -691,8 +692,9 @@ window.vscodeWebviewPlaygroundNonce = ${JSON.stringify(nonce)};
       const stream = createReadStream(filePath);
       stream.pipe(res);
     } else if (method === "GET" && imageRx.test(route)) {
-      const filePath = join(process.cwd(), route);
       try {
+        const filePath = await realpath(resolve(ROOT, route));
+        if (!filePath.startsWith(ROOT)) throw new Error(`invalid path ${filePath}`);
         const stream = createReadStream(filePath);
         res.setHeader("Content-Type", "image/" + extname(route));
         res.statusCode = 200;
