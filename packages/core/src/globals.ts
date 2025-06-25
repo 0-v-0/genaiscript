@@ -14,7 +14,7 @@ import { HTMLTablesToJSON, HTMLToMarkdown, HTMLToText } from "./html.js";
 import { CancelError } from "./error.js";
 import { GitHubClient } from "./githubclient.js";
 import { GitClient } from "./git.js";
-import { estimateTokens, truncateTextToTokens } from "./tokens.js";
+import { approximateTokens, estimateTokens, truncateTextToTokens } from "./tokens.js";
 import { chunk, resolveTokenEncoder } from "./encoders.js";
 import { JSON5Stringify, JSON5TryParse } from "./json5.js";
 import { JSONSchemaInfer } from "./schema.js";
@@ -150,6 +150,7 @@ export function installGlobals() {
     resolve: resolveTokenEncoder,
     count: async (text, options) => {
       const { encode: encoder } = await resolveTokenEncoder(options?.model);
+      if (options?.approximate) return approximateTokens(text, { encoder });
       const c = await estimateTokens(text, encoder);
       return c;
     },

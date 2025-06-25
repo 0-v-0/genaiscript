@@ -64,6 +64,7 @@ import type {
   WorkspaceFile,
 } from "./types.js";
 import { Octokit } from "@octokit/rest";
+import type { Octokit as OctokitCore } from "@octokit/core";
 import { throttling } from "@octokit/plugin-throttling";
 import { paginateRest } from "@octokit/plugin-paginate-rest";
 import { tryReadJSON } from "./fs.js";
@@ -704,7 +705,7 @@ export class GitHubClient implements GitHub {
             onRateLimit: (
               retryAfter: number,
               options: any,
-              octokit: Octokit,
+              octokit: OctokitCore,
               retryCount: number,
             ) => {
               octokit.log.warn(
@@ -717,7 +718,7 @@ export class GitHubClient implements GitHub {
               }
               return false;
             },
-            onSecondaryRateLimit: (_retryAfter: number, options: any, octokit: Octokit) => {
+            onSecondaryRateLimit: (_retryAfter: number, options: any, octokit: OctokitCore) => {
               octokit.log.warn(
                 `SecondaryRateLimit detected for request ${options.method} ${options.url}`,
               );

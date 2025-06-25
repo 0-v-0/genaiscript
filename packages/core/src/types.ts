@@ -2646,7 +2646,7 @@ export interface Tokenizers {
    * @param model
    * @param text
    */
-  count(text: string, options?: { model?: ModelType }): Promise<number>;
+  count(text: string, options?: { model?: ModelType, approximate?: boolean }): Promise<number>;
 
   /**
    * Truncates the text to a given number of tokens, approximation.
