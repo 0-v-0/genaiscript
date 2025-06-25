@@ -22,16 +22,7 @@ The GenAIScript runtime provides additional helpers and allows to use the runtim
 In order to use the runtime, you will need to install GenAIScript
 in your project.
 
-<PackageManagers pkg="genaiscript" dev />
-
-## Importing the runtime
-
-The runtime is available as a module. You can import it
-using the following code:
-
-```js
-import { cast } from "@genaiscript/runtime";
-```
+<PackageManagers pkg="@genaiscript/runtime" dev />
 
 ## Initialization
 
@@ -40,11 +31,19 @@ If you are using GenAIScript without the CLI or Visual Studio Code extension, yo
 ```js
 import { initialize } from "@genaiscript/runtime";
 
-// runs this before using any global ty\pes
+// runs this before using any global types
 await initialize();
 ```
 
-## globals
+## Importing the runtime
+
+The runtime is available as a module. You can import it using the following code:
+
+```js
+import { cast } from "@genaiscript/runtime";
+```
+
+## Globals
 
 The runtime installs global parsers and inline prompt types. However, the global `$`, `def`, etc... is not available, online inline prompts.
 
