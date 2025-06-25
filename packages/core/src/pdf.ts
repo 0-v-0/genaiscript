@@ -24,7 +24,6 @@ import { genaiscriptDebug } from "./debug.js";
 import type { Canvas } from "@napi-rs/canvas";
 import { pathToFileURL } from "node:url";
 import type { ParsePDFOptions, PDFPage, PDFPageImage, WorkspaceFile } from "./types.js";
-import canvas from "@napi-rs/canvas";
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
 import { moduleResolve } from "./pathUtils.js";
 
@@ -116,6 +115,7 @@ async function tryImportCanvas() {
 
   try {
     dbg(`initializing pdf canvas`);
+    const canvas = await import("@napi-rs/canvas");
     const createCanvas = (w: number, h: number) => canvas.createCanvas(w, h);
     const glob = resolveGlobal();
     glob.ImageData ??= canvas.ImageData;

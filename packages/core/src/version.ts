@@ -57,7 +57,7 @@ export const VSCODE_CLI_VERSION = CORE_VERSION;
  */
 export const GITHUB_REPO = packageJson.repository;
 export const PDFJS_DIST_VERSION = packageJson.dependencies?.["pdfjs-dist"];
-export const RIPGREP_DIST_VERSION = packageJson.dependencies?.["@lvce-editor/ripgrep"];
+export const RIPGREP_DIST_VERSION = packageJson.optionalDependencies?.["@lvce-editor/ripgrep"];
 
 /**
  * Usage example (ESM):

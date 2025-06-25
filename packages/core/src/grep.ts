@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -12,14 +13,13 @@ import { filterGitIgnore } from "./gitignore.js";
 import { genaiscriptDebug } from "./debug.js";
 import { tryStat } from "./fs.js";
 import { CancellationOptions, checkCancelled } from "./cancellation.js";
-import { rgPath } from "@lvce-editor/ripgrep";
 import type { WorkspaceFile, WorkspaceGrepOptions } from "./types.js";
 
 const dbg = genaiscriptDebug("grep");
 
-async function importRipGrep(options?: TraceOptions) {
-  const { trace } = options || {};
+async function importRipGrep() {
   try {
+    const { rgPath } = await import("@lvce-editor/ripgrep");
     dbg(`rg: %s`, rgPath);
     const rgStat = await tryStat(rgPath);
     if (!rgStat?.isFile())
@@ -27,7 +27,6 @@ async function importRipGrep(options?: TraceOptions) {
     return rgPath;
   } catch (e) {
     dbg(`%O`, e);
-    trace?.error(`failed to ripgrep`, e);
     throw e;
   }
 }

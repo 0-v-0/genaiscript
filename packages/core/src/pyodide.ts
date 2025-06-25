@@ -10,7 +10,6 @@ import { dedent } from "./indent.js";
 import { PLimitPromiseQueue } from "./concurrency.js";
 import { stderr } from "./stdio.js";
 import type { PythonProxy, PythonRuntime, PythonRuntimeOptions } from "./types.js";
-import { loadPyodide, version } from "pyodide";
 import { moduleResolve } from "./pathUtils.js";
 import { genaiscriptDebug } from "./debug.js";
 import { dirname } from "node:path";
@@ -19,6 +18,7 @@ const dbg = genaiscriptDebug("pyodide");
 class PyProxy implements PythonProxy {
   constructor(
     readonly runtime: PyodideInterface,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly proxy: any,
   ) {}
 
@@ -32,6 +32,7 @@ class PyProxy implements PythonProxy {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toJs(res: any) {
   return typeof res?.toJs === "function" ? res.toJs() : res;
 }
@@ -61,7 +62,7 @@ class PyodideRuntime implements PythonRuntime {
     });
   }
 
-  async run(code: string): Promise<any> {
+  async run(code: string): Promise<unknown> {
     return await this.queue.add(async () => {
       const d = dedent(code);
       dbg(`running code: %s`, d);
@@ -89,6 +90,7 @@ export async function createPythonRuntime(
 ): Promise<PythonRuntime> {
   const { cache } = options ?? {};
   dbg(`creating runtime`);
+  const { loadPyodide, version } = await import("pyodide");
   const sha = await hash({ cache, version: true, pyodide: version });
   const installDir = dirname(moduleResolve("pyodide"));
   const packageCacheDir = dotGenaiscriptPath("cache", "python", sha);
