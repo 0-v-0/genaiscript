@@ -4694,6 +4694,11 @@ interface McpServerConfig extends ContentSafetyOptions {
   options?: DefToolOptions;
 
   /**
+   * Do not prepend client identifier with the tool id.
+   */
+  disableToolIdMangling?: boolean;
+
+  /**
    * A list of allowed tools and their specifications. This filtering is applied
    * before computing the sha signature.
    */
@@ -5871,10 +5876,16 @@ interface McpClient extends AsyncDisposable {
    * Pings the server
    */
   ping(): Promise<void>;
+
   /**
    * List all available MCP tools
    */
   listTools(): Promise<McpToolReference[]>;
+
+  /**
+   * Returns a list of tools that can be used in a chat session
+   */
+  listToolCallbacks(): Promise<ToolCallback[]>;
 
   /**
    * List resources available in the server
@@ -5891,6 +5902,7 @@ interface McpClient extends AsyncDisposable {
    * @param name Call the MCP tool
    * @param args
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   callTool(name: string, args: Record<string, any>): Promise<McpServerToolResult>;
 
   /**

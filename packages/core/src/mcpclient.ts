@@ -25,26 +25,30 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 const dbg = genaiscriptDebug("mcp:client");
 
-export interface McpClientProxy extends McpClient {
-  listToolCallbacks(): Promise<ToolCallback[]>;
-}
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toolResultContentToText(res: any) {
-  const content = res.content as (TextContent | ImageContent | EmbeddedResource)[];
-  let text = arrayify(content)
-    ?.map((c) => {
-      switch (c.type) {
-        case "text":
-          return c.text || "";
-        case "image":
-          return c.data;
-        case "resource":
-          return c.resource?.uri || "";
-        default:
-          return c;
-      }
-    })
-    .join("\n");
+  let text: string;
+  if (typeof res?.text === "string") text = res.text;
+  else {
+    const content = res.content as string | (TextContent | ImageContent | EmbeddedResource)[];
+    if (typeof content === "string") text = content;
+    else
+      text = arrayify(content)
+        ?.map((c) => {
+          switch (c.type) {
+            case "text":
+              return c.text || "";
+            case "image":
+              return c.data;
+            case "resource":
+              return c.resource?.uri || "";
+            default:
+              return c;
+          }
+        })
+        .join("\n");
+  }
+  text = text || "";
   if (res.isError) {
     dbg(`tool error: ${text}`);
     text = `Tool Error:\n${text}`;
@@ -56,16 +60,26 @@ function resolveMcpEnv(_env: Record<string, string>) {
   if (!_env) return _env;
   const res = structuredClone(_env);
   Object.entries(res)
-    .filter(([k, v]) => v === "")
-    .forEach(([key, value]) => {
+    .filter(([, v]) => v === "")
+    .forEach(([key]) => {
       dbg(`filling env var: %s`, key);
       res[key] = process.env[key] || "";
     });
   return res;
 }
 
+function patchInputSchema(inputSchema: any): any {
+  const res = structuredClone(inputSchema);
+  delete res["$schema"];
+  if (res.type === "object") {
+    if (!res.properties) res.properties = {};
+    if (!res.required) res.required = [];
+  }
+  return res;
+}
+
 export class McpClientManager extends EventTarget implements AsyncDisposable {
-  private _clients: McpClientProxy[] = [];
+  private _clients: McpClient[] = [];
   constructor() {
     super();
   }
@@ -73,7 +87,7 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
   async startMcpServer(
     serverConfig: McpServerConfig,
     options: Required<TraceOptions> & CancellationOptions,
-  ): Promise<McpClientProxy> {
+  ): Promise<McpClient> {
     const { cancellationToken } = options || {};
     logVerbose(`mcp: starting ` + serverConfig.id);
     const signal = toSignal(cancellationToken);
@@ -86,6 +100,7 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
       tools: _toolsConfig,
       generator,
       intent,
+      disableToolIdMangling,
       env: unresolvedEnv,
       ...rest
     } = serverConfig;
@@ -137,11 +152,12 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
             ({
               name: t.name,
               description: t.description,
-              inputSchema: t.inputSchema as any,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              inputSchema: patchInputSchema(t.inputSchema),
             }) satisfies McpToolReference,
         );
       };
-      const listToolCallbacks: McpClientProxy["listToolCallbacks"] = async () => {
+      const listToolCallbacks: McpClient["listToolCallbacks"] = async () => {
         // list tools
         dbgc(`listing tools`);
         let { tools: toolDefinitions } = await client.listTools(
@@ -205,13 +221,16 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
           } satisfies DefToolOptions;
           return {
             spec: {
-              name: `${id}_${name}`,
+              name: disableToolIdMangling ? name : `${id}_${name}`,
               description,
-              parameters: inputSchema as any,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              parameters: patchInputSchema(inputSchema),
             },
             options: toolOptions,
             generator,
-            impl: async (args: any) => {
+            impl: async (args) => {
+              dbgc(`calling tool callback %s`, id);
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { context, ...restArgs } = args;
               const res = await client.callTool(
                 {
@@ -224,13 +243,7 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
                   onprogress: progress(`tool call ${name} `),
                 },
               );
-              const text =
-                res?.text ||
-                (res?.content as { text?: string }[])
-                  ?.map((c) => c?.text)
-                  .filter(Boolean)
-                  .join("\n") ||
-                "";
+              const text = toolResultContentToText(res);
               return text;
             },
           } satisfies ToolCallback;
@@ -251,7 +264,8 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
             content: content.text
               ? String(content.text)
               : content.blob
-                ? Buffer.from(content.blob as any).toString("base64")
+                ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  Buffer.from(content.blob as any).toString("base64")
                 : undefined,
             encoding: content.blob ? "base64" : undefined,
             filename: content.uri,
@@ -260,16 +274,19 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
         );
       };
       const listResources: McpClient["listResources"] = async () => {
+        dbgc(`listing resources`);
         const { resources } = await client.listResources(
           {},
           { signal, onprogress: progress("list resources") },
         );
-        return resources.map((r) => ({
+        const res = resources.map((r) => ({
           name: r.name,
           description: r.description,
           uri: r.uri,
           mimeType: r.mimeType,
         }));
+        dbgc(`resources: %O`, res);
+        return res;
       };
 
       const dispose = async () => {
@@ -291,12 +308,14 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
       };
 
       const callTool: McpClient["callTool"] = async (toolId, args) => {
+        dbgc(`calling tool %s`, toolId);
         const responseSchema: JSONSchema = undefined;
         const callRes = await client.callTool(
           {
             name: toolId,
             arguments: args,
           },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           responseSchema as any,
           {
             signal,
@@ -320,7 +339,7 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
         readResource,
         dispose,
         [Symbol.asyncDispose]: dispose,
-      } satisfies McpClientProxy);
+      } satisfies McpClient);
       this._clients.push(res);
       return res;
     } finally {
@@ -328,7 +347,7 @@ export class McpClientManager extends EventTarget implements AsyncDisposable {
     }
   }
 
-  get clients(): McpClientProxy[] {
+  get clients(): McpClient[] {
     return this._clients.slice(0);
   }
 
