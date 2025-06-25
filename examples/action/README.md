@@ -7,12 +7,16 @@
 - `files`: Files to process, separated by semi columns (;). 
 - `debug`: Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).
 - `openai_api_key`: OpenAI API key (default: `${{ secrets.OPENAI_API_KEY }}`)
-- `openai_api_base`: OpenAI API base URL (default: `${{ vars.OPENAI_API_BASE }}`)
-- `azure_openai_api_endpoint`: Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint. (default: `${{ vars.AZURE_OPENAI_API_ENDPOINT }}`)
+- `openai_api_base`: OpenAI API base URL (default: `${{ env.OPENAI_API_BASE }}`)
+- `azure_openai_api_endpoint`: Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint. (default: `${{ env.AZURE_OPENAI_API_ENDPOINT }}`)
 - `azure_openai_api_key`: Azure OpenAI API key. **You do NOT need this if you are using Microsoft Entra ID. (default: `${{ secrets.AZURE_OPENAI_API_KEY }}`)
-- `azure_openai_subscription_id`: Azure OpenAI subscription ID to list available deployments (Microsoft Entra only). (default: `${{ vars.AZURE_OPENAI_SUBSCRIPTION_ID }}`)
-- `azure_openai_api_version`: Azure OpenAI API version. (default: `${{ vars.AZURE_OPENAI_API_VERSION }}`)
-- `azure_openai_api_credentials`: Azure OpenAI API credentials type. Leave as 'default' unless you have a special Azure setup. (default: `${{ vars.AZURE_OPENAI_API_CREDENTIALS }}`)
+- `azure_openai_subscription_id`: Azure OpenAI subscription ID to list available deployments (Microsoft Entra only). (default: `${{ env.AZURE_OPENAI_SUBSCRIPTION_ID }}`)
+- `azure_openai_api_version`: Azure OpenAI API version. (default: `${{ env.AZURE_OPENAI_API_VERSION }}`)
+- `azure_openai_api_credentials`: Azure OpenAI API credentials type. Leave as 'default' unless you have a special Azure setup. (default: `${{ env.AZURE_OPENAI_API_CREDENTIALS }}`)
+- `azure_ai_inference_api_key`: Azure AI Inference key (default: `${{ secrets.AZURE_AI_INFERENCE_API_KEY }}`)
+- `azure_ai_inference_api_endpoint`: Azure Serverless OpenAI endpoint (default: `${{ env.AZURE_AI_INFERENCE_API_ENDPOINT }}`)
+- `azure_ai_inference_api_version`: Azure Serverless OpenAI API version (default: `${{ env.AZURE_AI_INFERENCE_API_VERSION }}`)
+- `azure_ai_inference_api_credentials`: Azure Serverless OpenAI API credentials type (default: `${{ env.AZURE_AI_INFERENCE_API_CREDENTIALS }}`)
 - `github_token`: GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions). (default: `${{ secrets.GITHUB_TOKEN }}`)
 
 ## Outputs
