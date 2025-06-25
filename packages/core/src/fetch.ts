@@ -13,15 +13,15 @@ import {
 import { errorMessage } from "./error.js";
 import { logVerbose } from "./util.js";
 import { CancellationOptions } from "./cancellation.js";
-import { resolveHttpProxyAgent } from "./proxy.js";
+import { resolveHttpsProxyAgent } from "./proxy.js";
 import { host } from "./host.js";
 import { renderWithPrecision } from "./precision.js";
 import crossFetch from "cross-fetch";
-import debug from "debug";
 import { prettyStrings } from "./pretty.js";
 import type { FetchOptions, RetryOptions } from "./types.js";
+import { genaiscriptDebug } from "./debug.js";
 
-const dbg = debug("genaiscript:fetch");
+const dbg = genaiscriptDebug("fetch");
 
 /**
  * Parses the retry-after header value.
@@ -51,7 +51,7 @@ export function parseRetryAfter(retryAfterHeader: string): number | null {
         const delaySeconds = Math.max(0, Math.ceil(delayMs / 1000));
         return delaySeconds;
       }
-    } catch(e) {
+    } catch (e) {
       dbg(`failed to parse retry-after header as date: %s`, errorMessage(e));
     }
   }
@@ -84,6 +84,7 @@ export type FetchType = (
 export async function createFetch(
   options?: TraceOptions & CancellationOptions & RetryOptions,
 ): Promise<FetchType> {
+  options = options || {};
   const {
     retries = FETCH_RETRY_DEFAULT,
     retryOn = FETCH_RETRY_ON_DEFAULT,
@@ -91,24 +92,30 @@ export async function createFetch(
     retryDelay = FETCH_RETRY_DEFAULT_DEFAULT,
     maxDelay = FETCH_RETRY_MAX_DELAY_DEFAULT,
     cancellationToken,
-  } = options || {};
+  } = options;
 
+  dbg(`create fetch`);
   // We create a proxy based on Node.js environment variables.
-  const agent = await resolveHttpProxyAgent();
+  const agent = await resolveHttpsProxyAgent();
 
   // We enrich crossFetch with the proxy.
   const crossFetchWithProxy: typeof fetch = agent
-    ? (url, options) => crossFetch(url, { ...(options || {}), dispatcher: agent } as any)
+    ? (url, options) => crossFetch(url, { ...options, agent } as RequestInit)
     : crossFetch;
+
+  const loggingFetch: typeof fetch = (url, options) => {
+    dbg(`fetch: %s %s`, options?.method || "GET", url);
+    return crossFetchWithProxy(url, options);
+  };
 
   // Return the default fetch if no retry status codes are specified
   if (!retryOn?.length) {
     dbg("no retry logic applied, using crossFetchWithProxy directly");
-    return crossFetchWithProxy;
+    return loggingFetch;
   }
 
   // Create a fetch function with retry logic
-  const fetchRetry = wrapFetch(crossFetchWithProxy, {
+  const fetchRetry = wrapFetch(loggingFetch, {
     retryOn,
     retries,
     retryDelay: (attempt, error, response) => {
