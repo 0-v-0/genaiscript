@@ -38,7 +38,8 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: compile tests
               run: pnpm run test:compile
-              continue-on-error: true
+            - name: runtime tests
+              run: pnpm run test:runtime
             - name: unit tests
               run: pnpm run test:samples
               env:

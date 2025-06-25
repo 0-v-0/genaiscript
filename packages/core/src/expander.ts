@@ -25,7 +25,6 @@ import { mergeEnvVarsWithSystem } from "./vars.js";
 import { installGlobalPromptContext } from "./globals.js";
 import { mark } from "./performance.js";
 import { nodeIsPackageTypeModule } from "./nodepackage.js";
-import { parseModelIdentifier } from "./models.js";
 import { metadataMerge } from "./metadata.js";
 import type {
   ChatParticipant,
@@ -53,14 +52,14 @@ export async function callExpander(
   prj: Project,
   r: PromptScript,
   ev: ExpansionVariables,
-  trace: MarkdownTrace,
   options: GenerationOptions,
   installGlobally: boolean,
 ) {
   mark("prompt.expand.main");
   assert(!!options.model);
+  const trace = options.trace;
   const modelId = r.model ?? options.model;
-  const ctx = await createPromptContext(prj, ev, trace, options, modelId);
+  const ctx = await createPromptContext(prj, ev, options, modelId);
   if (installGlobally) installGlobalPromptContext(ctx);
 
   let status: GenerationStatus = undefined;
@@ -121,7 +120,7 @@ export async function callExpander(
     disposables = mcps;
     prediction = pred;
     if (errors?.length) {
-      for (const error of errors) trace.error(``, error);
+      if (trace) for (const error of errors) trace?.error(``, error);
       status = "error";
       statusText = errors.map((e) => errorMessage(e)).join("\n");
     } else {
@@ -132,9 +131,9 @@ export async function callExpander(
     statusText = errorMessage(e);
     if (isCancelError(e)) {
       status = "cancelled";
-      trace.note(statusText);
+      trace?.note(statusText);
     } else {
-      trace.error(undefined, e);
+      trace?.error(undefined, e);
     }
   }
 
@@ -156,8 +155,8 @@ export async function callExpander(
 }
 
 function traceEnv(model: string, trace: MarkdownTrace, env: Partial<ExpansionVariables>) {
-  trace.startDetails("🏡 env");
-  trace.files(env.files, {
+  trace?.startDetails("🏡 env");
+  trace?.files(env.files, {
     title: "💾 files",
     model,
     skipIfEmpty: true,
@@ -166,17 +165,17 @@ function traceEnv(model: string, trace: MarkdownTrace, env: Partial<ExpansionVar
   });
   const vars = Object.entries(env.vars || {});
   if (vars.length) {
-    trace.startDetails("🧮 vars");
+    trace?.startDetails("🧮 vars");
     for (const [k, v] of vars) {
-      trace.itemValue(k, v);
+      trace?.itemValue(k, v);
     }
-    trace.endDetails();
+    trace?.endDetails();
   }
   const secrets = Object.keys(env.secrets || {});
   if (secrets.length) {
-    trace.itemValue(`🔐 secrets`, secrets.join(", "));
+    trace?.itemValue(`🔐 secrets`, secrets.join(", "));
   }
-  trace.endDetails();
+  trace?.endDetails();
 }
 
 /**
@@ -255,24 +254,23 @@ export async function expandTemplate(
   let topLogprobs = Math.max(options.topLogprobs || 0, template.topLogprobs || 0);
 
   // finalize options
-  const { provider } = parseModelIdentifier(model);
   env.meta.model = model;
   Object.freeze(env.meta);
 
-  trace.startDetails("💾 script", { expanded: true });
+  trace?.startDetails("💾 script", { expanded: true });
 
   traceEnv(model, trace, env);
 
-  trace.startDetails("🧬 prompt", { expanded: true });
-  trace.detailsFenced("💻 script source", template.jsSource, "js");
+  trace?.startDetails("🧬 prompt", { expanded: true });
+  trace?.detailsFenced("💻 script source", template.jsSource, "js");
 
   const prompt = await callExpander(
     prj,
     template,
     env,
-    trace,
     {
       ...options,
+      trace,
       maxTokens,
       maxToolCalls,
       flexTokens,
@@ -297,8 +295,8 @@ export async function expandTemplate(
   const prediction = prompt.prediction;
   const disposables = prompt.disposables.slice(0);
 
-  if (prompt.logs?.length) trace.details("📝 console.log", prompt.logs);
-  trace.endDetails();
+  if (prompt.logs?.length) trace?.details("📝 console.log", prompt.logs);
+  trace?.endDetails();
 
   if (cancellationToken?.isCancellationRequested || status === "cancelled") {
     await dispose(disposables, { trace });
@@ -321,7 +319,7 @@ export async function expandTemplate(
 
   const addSystemMessage = (content: string) => {
     appendSystemMessage(messages, content);
-    trace.fence(content, "markdown");
+    trace?.fence(content, "markdown");
   };
 
   const systems = resolveSystems(prj, template, tools);
@@ -337,7 +335,7 @@ export async function expandTemplate(
   }
 
   try {
-    trace.startDetails("👾 systems");
+    trace?.startDetails("👾 systems");
     for (let i = 0; i < systems.length; ++i) {
       if (cancellationToken?.isCancellationRequested) {
         await dispose(disposables, { trace });
@@ -353,13 +351,12 @@ export async function expandTemplate(
       const system = resolveScript(prj, systemId);
       if (!system) throw new Error(`system template ${systemId.id} not found`);
 
-      trace.startDetails(`👾 ${system.id}`);
+      trace?.startDetails(`👾 ${system.id}`);
       const sysr = await callExpander(
         prj,
         system,
         mergeEnvVarsWithSystem(env, systemId),
-        trace,
-        options,
+        { ...options, trace },
         false,
       );
 
@@ -371,7 +368,7 @@ export async function expandTemplate(
       if (sysr.chatParticipants) chatParticipants.push(...sysr.chatParticipants);
       if (sysr.fileOutputs) fileOutputs.push(...sysr.fileOutputs);
       if (sysr.disposables?.length) disposables.push(...sysr.disposables);
-      if (sysr.logs?.length) trace.details("📝 console.log", sysr.logs);
+      if (sysr.logs?.length) trace?.details("📝 console.log", sysr.logs);
       for (const smsg of sysr.messages) {
         if (smsg.role === "user" && typeof smsg.content === "string") {
           addSystemMessage(smsg.content);
@@ -379,8 +376,8 @@ export async function expandTemplate(
       }
       logprobs = logprobs || system.logprobs;
       topLogprobs = Math.max(topLogprobs, system.topLogprobs || 0);
-      trace.detailsFenced("💻 script source", system.jsSource, "js");
-      trace.endDetails();
+      trace?.detailsFenced("💻 script source", system.jsSource, "js");
+      trace?.endDetails();
 
       if (sysr.status !== "success") {
         await dispose(disposables, options);
@@ -392,7 +389,7 @@ export async function expandTemplate(
       }
     }
   } finally {
-    trace.endDetails();
+    trace?.endDetails();
   }
 
   if (options.fallbackTools) {
@@ -405,7 +402,7 @@ export async function expandTemplate(
     trace,
   });
 
-  trace.endDetails();
+  trace?.endDetails();
 
   return {
     cache,

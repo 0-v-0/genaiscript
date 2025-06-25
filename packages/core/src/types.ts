@@ -2978,12 +2978,6 @@ export interface Parsers {
   unzip(file: WorkspaceFile, options?: ParseZipOptions): Promise<WorkspaceFile[]>;
 
   /**
-   * Estimates the number of tokens in the content.
-   * @param content content to tokenize
-   */
-  tokens(content: string | WorkspaceFile): number;
-
-  /**
    * Parses fenced code sections in a markdown text
    */
   fences(content: string | WorkspaceFile): Fenced[];
@@ -3092,20 +3086,22 @@ export interface Parsers {
   prompty(file: WorkspaceFile): Promise<PromptyDocument>;
 }
 
-export interface YAML {
+export interface YAMLObject {
   /**
    * Parses a YAML string into a JavaScript object using JSON5.
    */
-  (strings: TemplateStringsArray, ...values: any[]): any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (strings: TemplateStringsArray, ...values: unknown[]): any;
 
   /**
    * Converts an object to its YAML representation
    * @param obj
    */
-  stringify(obj: any): string;
+  stringify(obj: unknown): string;
   /**
    * Parses a YAML string to object
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parse(text: string | WorkspaceFile): any;
 }
 
@@ -3228,7 +3224,7 @@ export type DiffChangeType = "normal" | "add" | "del";
 
 export type DiffChange = DiffNormalChange | DiffAddChange | DiffDeleteChange;
 
-export interface DIFF {
+export interface DIFFObject {
   /**
    * Parses a diff string into a structured object
    * @param input
@@ -3264,7 +3260,7 @@ export interface DIFF {
   ): string;
 }
 
-export interface XML {
+export interface XMLObject {
   /**
    * Parses an XML payload to an object
    * @param text
@@ -3312,7 +3308,7 @@ export interface HTMLToMarkdownOptions {
   disableGfm?: boolean;
 }
 
-export interface HTML {
+export interface HTMLObject {
   /**
    * Converts all HTML tables to JSON.
    * @param html
@@ -4087,7 +4083,7 @@ export interface GitHub {
   client(owner: string, repo: string): GitHub;
 }
 
-export interface MD {
+export interface MDObject {
   /**
    * Parses front matter from markdown
    * @param text
@@ -4133,7 +4129,7 @@ export interface MD {
 
 export interface GitHubAIDisclaimerOptions extends Record<string, unknown> {}
 
-export interface JSONL {
+export interface JSONLObject {
   /**
    * Parses a JSONL string to an array of objects
    * @param text
@@ -4146,7 +4142,7 @@ export interface JSONL {
   stringify(objs: any[]): string;
 }
 
-export interface INI {
+export interface INIObject {
   /**
    * Parses a .ini file
    * @param text
@@ -4160,7 +4156,7 @@ export interface INI {
   stringify(value: any): string;
 }
 
-export interface JSON5 {
+export interface JSON5Object {
   /**
    * Parses a JSON/YAML/XML string to an object
    * @param text
@@ -4182,7 +4178,7 @@ export interface CSVStringifyOptions {
 /**
  * Interface representing CSV operations.
  */
-export interface CSV {
+export interface CSVObject {
   /**
    * Parses a CSV string to an array of objects.
    *
@@ -4943,6 +4939,10 @@ export interface ChatGenerationContext extends ChatTurnGenerationContext {
     prompt: string,
     options?: ImageGenerationOptions,
   ): Promise<{ image: WorkspaceFile; revisedPrompt?: string }>;
+}
+
+export interface ChatGenerationContextOptions {
+  ctx?: ChatGenerationContext;
 }
 
 export interface GenerationOutput {
@@ -6340,12 +6340,20 @@ export interface PromptContext extends ChatGenerationContext {
   script(options: PromptArgs): void;
   system(options: PromptSystemArgs): void;
   path: Path;
-  parsers: Parsers;
   retrieval: Retrieval;
-  /**
-   * @deprecated Use `workspace` instead
-   */
-  fs: WorkspaceFileSystem;
   workspace: WorkspaceFileSystem;
   host: PromptHost;
 }
+
+export type RuntimePromptContext = Pick<
+  PromptContext,
+  | "host"
+  | "env"
+  | "workspace"
+  | "retrieval"
+  | "prompt"
+  | "runPrompt"
+  | "generateImage"
+  | "transcribe"
+  | "speak"
+>;

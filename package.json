@@ -94,6 +94,8 @@
     "test:scripts": "cd packages/sample/ && pnpm test:scripts",
     "test:scripts:view": "cd packages/sample/ && pnpm test:scripts:view",
     "test:system": "cd packages/core && node ../cli/dist/src/index.js scripts compile",
+    "test:runtime": "cd packages/runtime && pnpm run test",
+    "tsx": "tsx",
     "typecheck": "echo skipped",
     "typecheck:web": "pnpm --filter=@genaiscript/web run typecheck",
     "whisper": "pnpm whisper:stop && pnpm whisper:start",
@@ -108,7 +110,7 @@
     }
   },
   "devDependencies": {
-    "@inquirer/prompts": "^7.5.3",
+    "@inquirer/prompts": "catalog:",
     "@intellectronica/ruler": "^0.2.3",
     "@modelcontextprotocol/inspector": "^0.14.3",
     "npm-check-updates": "^18.0.1",
@@ -117,6 +119,7 @@
     "prettier": "catalog:",
     "prettier-plugin-curly": "^0.3.2",
     "tailwindcss": "^4.1.10",
+    "tsx": "catalog:",
     "turbo": "^2.5.4",
     "zx": "catalog:"
   }
