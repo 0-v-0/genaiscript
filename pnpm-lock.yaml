@@ -436,9 +436,6 @@ importers:
       merge-descriptors:
         specifier: ^2.0.0
         version: 2.0.0
-      mermaid:
-        specifier: ^11.7.0
-        version: 11.7.0
       mime:
         specifier: ^4.0.7
         version: 4.0.7
@@ -475,9 +472,6 @@ importers:
       parse-diff:
         specifier: ^0.11.1
         version: 0.11.1
-      pdfjs-dist:
-        specifier: 5.2.133
-        version: 5.2.133
       pretty-bytes:
         specifier: ^7.0.0
         version: 7.0.0
@@ -627,6 +621,12 @@ importers:
       '@lvce-editor/ripgrep':
         specifier: ^1.6.0
         version: 1.6.0
+      mermaid:
+        specifier: ^11.7.0
+        version: 11.7.0
+      pdfjs-dist:
+        specifier: 5.2.133
+        version: 5.2.133
       pyodide:
         specifier: ^0.27.7
         version: 0.27.7(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -870,10 +870,25 @@ importers:
         version: 8.6.0
 
   packages/web:
-    dependencies:
+    devDependencies:
       '@daiji256/rehype-mathml':
         specifier: ^1.2.1
         version: 1.2.1
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.29.0
+      '@types/marked':
+        specifier: ^6.0.0
+        version: 6.0.0
+      '@types/react':
+        specifier: ^19.1.6
+        version: 19.1.6
+      '@types/react-dom':
+        specifier: ^19.1.5
+        version: 19.1.5(@types/react@19.1.6)
+      '@vitest/coverage-istanbul':
+        specifier: 'catalog:'
+        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.19.4)(yaml@2.8.0))
       '@vscode-elements/elements':
         specifier: 1.16.0
         version: 1.16.0
@@ -892,6 +907,21 @@ importers:
       es-toolkit:
         specifier: 'catalog:'
         version: 1.39.3
+      esbuild:
+        specifier: ^0.25.5
+        version: 0.25.5
+      eslint:
+        specifier: 'catalog:'
+        version: 9.29.0
+      eslint-plugin-jsx-a11y:
+        specifier: ^6.10.2
+        version: 6.10.2(eslint@9.29.0)
+      eslint-plugin-react:
+        specifier: ^7.37.5
+        version: 7.37.5(eslint@9.29.0)
+      eslint-plugin-react-hooks:
+        specifier: ^5.2.0
+        version: 5.2.0(eslint@9.29.0)
       html-escaper:
         specifier: 3.0.3
         version: 3.0.3
@@ -904,6 +934,9 @@ importers:
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
+      prettier:
+        specifier: 'catalog:'
+        version: 3.6.0
       pretty-bytes:
         specifier: ^7.0.0
         version: 7.0.0
@@ -946,46 +979,6 @@ importers:
       remark-mermaid:
         specifier: ^0.2.0
         version: 0.2.0(mermaid.cli@0.3.6(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      victory:
-        specifier: ^37.3.6
-        version: 37.3.6(react@19.1.0)
-      yaml:
-        specifier: ^2.8.0
-        version: 2.8.0
-    devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.29.0
-      '@types/marked':
-        specifier: ^6.0.0
-        version: 6.0.0
-      '@types/react':
-        specifier: ^19.1.6
-        version: 19.1.6
-      '@types/react-dom':
-        specifier: ^19.1.5
-        version: 19.1.5(@types/react@19.1.6)
-      '@vitest/coverage-istanbul':
-        specifier: 'catalog:'
-        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.19.4)(yaml@2.8.0))
-      esbuild:
-        specifier: ^0.25.5
-        version: 0.25.5
-      eslint:
-        specifier: 'catalog:'
-        version: 9.29.0
-      eslint-plugin-jsx-a11y:
-        specifier: ^6.10.2
-        version: 6.10.2(eslint@9.29.0)
-      eslint-plugin-react:
-        specifier: ^7.37.5
-        version: 7.37.5(eslint@9.29.0)
-      eslint-plugin-react-hooks:
-        specifier: ^5.2.0
-        version: 5.2.0(eslint@9.29.0)
-      prettier:
-        specifier: 'catalog:'
-        version: 3.6.0
       rimraf:
         specifier: 'catalog:'
         version: 6.0.1
@@ -995,9 +988,15 @@ importers:
       typescript-eslint:
         specifier: 'catalog:'
         version: 8.34.1(eslint@9.29.0)(typescript@5.8.3)
+      victory:
+        specifier: ^37.3.6
+        version: 37.3.6(react@19.1.0)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.19.4)(yaml@2.8.0)
+      yaml:
+        specifier: ^2.8.0
+        version: 2.8.0
 
 packages:
 
@@ -18167,6 +18166,7 @@ snapshots:
   pdfjs-dist@5.2.133:
     optionalDependencies:
       '@napi-rs/canvas': 0.1.70
+    optional: true
 
   peberminta@0.9.0: {}
 

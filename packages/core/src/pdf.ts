@@ -24,7 +24,6 @@ import { genaiscriptDebug } from "./debug.js";
 import type { Canvas } from "@napi-rs/canvas";
 import { pathToFileURL } from "node:url";
 import type { ParsePDFOptions, PDFPage, PDFPageImage, WorkspaceFile } from "./types.js";
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
 import { moduleResolve } from "./pathUtils.js";
 
 const dbg = genaiscriptDebug("pdf");
@@ -40,6 +39,7 @@ let standardFontDataUrl: string;
 async function tryImportPdfjs() {
   installPromiseWithResolversShim(); // Ensure Promise.withResolvers is available
 
+  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
   let workerSrc = moduleResolve("pdfjs-dist/build/pdf.worker.min.mjs");
   dbg(`workerSrc: %s`, workerSrc);
 

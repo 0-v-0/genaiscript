@@ -14,7 +14,7 @@
     "serve": "serve -n .",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
+  "devDependencies": {
     "@daiji256/rehype-mathml": "^1.2.1",
     "@vscode-elements/elements": "1.16.0",
     "@vscode-elements/webview-playground": "1.6.0",
@@ -41,9 +41,7 @@
     "remark-math": "^6.0.0",
     "remark-mermaid": "^0.2.0",
     "victory": "^37.3.6",
-    "yaml": "^2.8.0"
-  },
-  "devDependencies": {
+    "yaml": "^2.8.0",
     "@eslint/js": "catalog:",
     "@types/marked": "^6.0.0",
     "@types/react": "^19.1.6",
