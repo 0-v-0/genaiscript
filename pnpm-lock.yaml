@@ -337,6 +337,9 @@ importers:
       '@napi-rs/canvas':
         specifier: ^0.1.70
         version: 0.1.70
+      '@octokit/core':
+        specifier: ^7.0.2
+        version: 7.0.2
       '@octokit/plugin-paginate-rest':
         specifier: ^13.1.0
         version: 13.1.0(@octokit/core@7.0.2)

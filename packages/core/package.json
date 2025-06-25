@@ -62,6 +62,7 @@
     "@lvce-editor/ripgrep": "^1.6.0",
     "@modelcontextprotocol/sdk": "^1.13.1",
     "@napi-rs/canvas": "^0.1.70",
+    "@octokit/core": "^7.0.2",
     "@octokit/plugin-paginate-rest": "^13.1.0",
     "@octokit/plugin-retry": "^8.0.1",
     "@octokit/plugin-throttling": "^11.0.1",
