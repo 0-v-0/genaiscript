@@ -26,6 +26,7 @@
     "disk:check": "du -h --max-depth=2 | sort -hr | head -n 10",
     "docs": "cd docs && pnpm run dev",
     "install:ffmpeg": "sudo apt-get update && sudo apt-get install ffmpeg -y",
+    "install:uv": "curl -LsSf https://astral.sh/uv/install.sh | sh",
     "devproxy:install": "sudo bash -c \"$(curl -sL https://aka.ms/devproxy/setup.sh)\"",
     "devproxy:start": "cd packages/sample && devproxy",
     "devproxy:test": "curl -ikx http://127.0.0.1:8000 https://raw.githubusercontent.com/microsoft/genaiscript/refs/heads/main/SUPPORT.md",

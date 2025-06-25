@@ -4681,7 +4681,7 @@ export interface McpServerConfig extends ContentSafetyOptions {
   /**
    * The executable to run to start the server.
    */
-  command: OptionsOrString<"npx" | "uv" | "dotnet" | "docker" | "cargo">;
+  command: OptionsOrString<"npx" | "uv" | "uvx" | "dotnet" | "docker" | "cargo">;
   /**
    * Command line arguments to pass to the executable.
    */
