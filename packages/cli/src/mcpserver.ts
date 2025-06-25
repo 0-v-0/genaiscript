@@ -17,6 +17,7 @@ import {
   toStrictJSONSchema,
 } from "@genaiscript/core";
 import type {
+  GenerationResult,
   JSONSchemaObject,
   Resource,
   ResourceContents,
@@ -141,15 +142,15 @@ export async function startMcpServer(
     try {
       const { files, ...vars } = args || {};
       dbg(`executing tool: ${name} with files: ${files} and vars: ${JSON.stringify(vars)}`);
-      const res = await run(name, files as string[], {
+      const res: Partial<GenerationResult> = (await run(name, files as string[], {
         vars: vars as Record<string, string | number | boolean | object>,
         runTrace: false,
         outputTrace: false,
-      });
+      })) || { status: "error", error: { message: "run failed" } };
       dbg(`res: %s`, res.status);
       if (res.error) dbg(`error: %O`, res.error);
       const isError = res.status !== "success" || !!res.error;
-      const text = res?.error?.message || res.text || "";
+      const text = res?.error?.message || (res.json ? JSON.stringify(res.json) : res.text) || "";
       dbg(`inlining images`);
       const parts = await splitMarkdownTextImageParts(text, {
         dir: res.env.runDir,
