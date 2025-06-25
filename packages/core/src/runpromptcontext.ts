@@ -27,6 +27,7 @@ import {
   toDefRefName,
   resolveFenceFormat,
   createFileImageNodes,
+  createMcpClient,
 } from "./promptdom.js";
 import { MarkdownTrace } from "./trace.js";
 import { GenerationOptions } from "./generation.js";
@@ -141,6 +142,7 @@ import type {
   WorkspaceFile,
   WriteTextOptions,
   JSONSchema,
+  McpClient,
 } from "./types.js";
 
 const dbg = genaiscriptDebug("prompt:context");
@@ -457,7 +459,7 @@ export function createChatGenerationContext(
   };
 
   const defTool: (
-    name: string | ToolCallback | McpServersConfig,
+    name: string | ToolCallback | McpServersConfig | McpClient,
     description: string | DefToolOptions,
     parameters?: PromptParametersSchema | JSONSchemaObject,
     fn?: ChatFunctionHandler,
@@ -484,14 +486,15 @@ export function createChatGenerationContext(
           ctx,
         ),
       );
+    } else if (typeof name === "object" && (name as McpClient).config) {
+      const client = name as McpClient;
+      appendChild(node, createMcpClient(client));
     } else if (typeof name === "object") {
       dbg(`mcp: %o`, Object.keys(name));
       for (const kv of Object.entries(name)) {
         const [id, def] = kv;
-        if ((def as McpServerConfig).command) {
-          const serverConfig = def as McpServerConfig;
-          appendChild(node, createMcpServer(id, serverConfig, defOptions, ctx));
-        }
+        const serverConfig = def as McpServerConfig;
+        appendChild(node, createMcpServer(id, serverConfig, defOptions, ctx));
       }
     }
   };

@@ -2646,7 +2646,7 @@ export interface Tokenizers {
    * @param model
    * @param text
    */
-  count(text: string, options?: { model?: ModelType, approximate?: boolean }): Promise<number>;
+  count(text: string, options?: { model?: ModelType; approximate?: boolean }): Promise<number>;
 
   /**
    * Truncates the text to a given number of tokens, approximation.
@@ -4908,7 +4908,10 @@ export interface SpeechResult {
 export interface ChatGenerationContext extends ChatTurnGenerationContext {
   env: ExpansionVariables;
   defSchema(name: string, schema: JSONSchema | ZodTypeLike, options?: DefSchemaOptions): string;
-  defTool(tool: Omit<ToolCallback, "generator"> | McpServersConfig, options?: DefToolOptions): void;
+  defTool(
+    tool: Omit<ToolCallback, "generator"> | McpServersConfig | McpClient,
+    options?: DefToolOptions,
+  ): void;
   defTool(
     name: string,
     description: string,

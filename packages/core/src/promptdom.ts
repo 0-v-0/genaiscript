@@ -82,6 +82,7 @@ import type {
   ZodTypeLike,
   ContentSafety,
   TokenEncoder,
+  McpClient,
 } from "./types.js";
 
 const dbg = debug("genaiscript:prompt:dom");
@@ -219,7 +220,8 @@ export interface PromptToolNode extends PromptNode {
 
 export interface PromptMcpServerNode extends PromptNode {
   type: "mcpServer";
-  config: McpServerConfig;
+  config?: McpServerConfig;
+  client?: McpClient;
 }
 
 // Interface for a file merge node.
@@ -643,6 +645,13 @@ export function createMcpServer(
   } satisfies PromptMcpServerNode;
 }
 
+export function createMcpClient(client: McpClient): PromptMcpServerNode {
+  return {
+    type: "mcpServer",
+    client,
+  };
+}
+
 // Function to check if data objects have the same keys and simple values.
 function haveSameKeysAndSimpleValues(data: object[]): boolean {
   if (data.length === 0) return true;
@@ -874,6 +883,7 @@ async function resolvePromptNode(
 
         for (const arg of args) {
           try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let ra: any = await arg;
             if (typeof ra === "function") ra = ra();
             ra = await ra;
@@ -1309,7 +1319,8 @@ export async function renderPromptNode(
   const outputProcessors: PromptOutputProcessorHandler[] = [];
   const chatParticipants: ChatParticipant[] = [];
   const fileOutputs: FileOutput[] = [];
-  const mcpServers: McpServerConfig[] = [];
+  const mcpServerConfigs: McpServerConfig[] = [];
+  const mcpClients: McpClient[] = [];
   const disposables: AsyncDisposable[] = [];
   let prediction: PromptPrediction;
 
@@ -1422,13 +1433,19 @@ ${trimNewlines(schemaText)}
       trace?.itemValue(`file output`, n.output.pattern);
     },
     mcpServer: (n) => {
-      mcpServers.push(n.config);
-      trace?.itemValue(`mcp server`, n.config.id);
+      if (n.config) {
+        mcpServerConfigs.push(n.config);
+        trace?.itemValue(`mcp server`, n.config.id);
+      }
+      if (n.client) {
+        mcpClients.push(n.client);
+        trace?.itemValue(`mcp client`, n.client.config.id);
+      }
     },
   });
 
-  if (mcpServers.length) {
-    for (const mcpServer of mcpServers) {
+  if (mcpServerConfigs.length) {
+    for (const mcpServer of mcpServerConfigs) {
       dbgMcp(`starting server ${mcpServer.id}`);
       const res = await runtimeHost.mcp.startMcpServer(mcpServer, {
         trace,
@@ -1442,6 +1459,19 @@ ${trimNewlines(schemaText)}
       tools.push(...mcpTools);
     }
   }
+
+  if (mcpClients.length) {
+    for (const mcpClient of mcpClients) {
+      dbgMcp(`using client ${mcpClient.config.id}`);
+      const mcpTools = await mcpClient.listToolCallbacks();
+      dbgMcp(
+        `tools %O`,
+        mcpTools?.map((t) => t.spec.name),
+      );
+      tools.push(...mcpTools);
+    }
+  }
+
   m();
 
   const res = Object.freeze<PromptNodeRender>({
