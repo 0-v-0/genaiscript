@@ -4,7 +4,7 @@
   "author": "microsoft",
   "license": "MIT",
   "dependencies": {
-    "genaiscript": "2.0.6"
+    "genaiscript": "2.0.7"
   },
   "scripts": {
     "upgrade": "npx -y npm-check-updates -u && npm install && npm run fix",
