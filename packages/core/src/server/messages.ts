@@ -156,12 +156,10 @@ export interface PromptScriptRunOptions {
   retryDelay: string;
   maxDelay: string;
   json: boolean;
-  yaml: boolean;
   outTrace: string;
   outOutput: string;
   outAnnotations: string;
   outChangelogs: string;
-  pullRequest: string;
   pullRequestComment: string | boolean;
   pullRequestDescription: string | boolean;
   pullRequestReviews: boolean;

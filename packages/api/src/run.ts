@@ -192,7 +192,7 @@ export async function runScriptInternal(
   let result: GenerationResult;
   let workspaceFiles = options.workspaceFiles || [];
   const excludedFiles = options.excludedFiles || [];
-  const stream = !options.json && !options.yaml;
+  const stream = !options.json;
   const retry = normalizeInt(options.retry) || 8;
   const retryDelay = normalizeInt(options.retryDelay) || 15000;
   const maxDelay = normalizeInt(options.maxDelay) || 180000;
@@ -201,7 +201,6 @@ export async function runScriptInternal(
   const outAnnotations = options.outAnnotations;
   const failOnErrors = options.failOnErrors;
   const outChangelogs = options.outChangelogs;
-  const pullRequest = normalizeInt(options.pullRequest);
   const pullRequestComment = options.pullRequestComment;
   const pullRequestDescription = options.pullRequestDescription;
   const pullRequestReviews = options.pullRequestReviews;
@@ -228,7 +227,7 @@ export async function runScriptInternal(
 
   assert(!!runDir);
 
-  if (options.json || options.yaml) overrideStdoutWithStdErr();
+  if (options.json) overrideStdoutWithStdErr();
   applyModelOptions(options, "cli");
 
   const fail = (msg: string, exitCode: number, url?: string) => {
@@ -454,7 +453,7 @@ export async function runScriptInternal(
   const vars = parseOptionsVars(options.vars, process.env);
   dbg(`vars: %o`, Object.keys(vars));
   const stats = new GenerationStats("");
-  const userState: Record<string, any> = {};
+  const userState: Record<string, unknown> = {};
   try {
     if (options.label) trace.heading(2, options.label);
     applyScriptModelAliases(script);
@@ -613,15 +612,11 @@ export async function runScriptInternal(
   if (options.json && result !== undefined)
     // needs to go to process.stdout
     stdout.write(JSON.stringify(result, null, 2));
-  if (options.yaml && result !== undefined)
-    // needs to go to process.stdout
-    stdout.write(YAMLStringify(result));
 
   let _ghInfo: GithubConnectionInfo = undefined;
   const resolveGitHubInfo = async () => {
     if (!_ghInfo)
       _ghInfo = await githubParseEnv(process.env, {
-        issue: pullRequest,
         resolveToken: true,
         resolveIssue: true,
         resolveCommit: true,
