@@ -12,6 +12,7 @@
         "unifiedjs.vscode-mdx",
         "usernamehw.errorlens",
         "goessner.mdmath",
-        "ms-azuretools.vscode-containers"
+        "ms-azuretools.vscode-containers",
+        "ms-vscode.vscode-js-profile-flame"
     ]
 }

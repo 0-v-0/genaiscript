@@ -17,7 +17,8 @@
                 "usernamehw.errorlens",
                 "goessner.mdmath",
                 "vsls-contrib.gistfs",
-                "ms-azuretools.vscode-containers"
+                "ms-azuretools.vscode-containers",
+                "ms-vscode.vscode-js-profile-flame"
             ]
         }
     },

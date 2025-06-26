@@ -32,7 +32,7 @@ import {
 
 import { logError } from "./util.js";
 import { resolveUndiciProxyAgent } from "./proxy.js";
-import { ProxyAgent } from "undici";
+import type { ProxyAgent } from "undici";
 import { MarkdownTrace } from "./trace.js";
 import { createFetch, FetchType } from "./fetch.js";
 import { JSONLLMTryParse } from "./json5.js";
