@@ -135,7 +135,7 @@ export function createWorkspaceFileSystem(): Omit<WorkspaceFileSystem, "grep" | 
     },
     readXML: async (f: string | Awaitable<WorkspaceFile>, options?: XMLParseOptions) => {
       const file = await fs.readText(f);
-      const res = XMLTryParse(file.content, options);
+      const res = await XMLTryParse(file.content, options);
       return tryValidateJSONWithSchema(res, options);
     },
     readCSV: async <T extends object>(

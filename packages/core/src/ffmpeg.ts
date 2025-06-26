@@ -17,7 +17,7 @@ import { writeFile, readFile } from "node:fs/promises";
 import { errorMessage, serializeError } from "./error.js";
 import { fromBase64 } from "./base64.js";
 import { fileTypeFromBuffer } from "./filetype.js";
-import { appendFile, readdir, stat } from "node:fs/promises";
+import { appendFile, readdir } from "node:fs/promises";
 import prettyBytes from "pretty-bytes";
 import { filenameOrFileToFilename } from "./unwrappers.js";
 import { roundWithPrecision } from "./precision.js";
@@ -37,7 +37,6 @@ import type {
   VideoProbeResult,
   WorkspaceFile,
 } from "./types.js";
-import cmd from "fluent-ffmpeg";
 
 const ffmpegLimit = pLimit(1);
 const WILD_CARD = "%06d";
@@ -53,6 +52,7 @@ interface FFmpegCommandResult {
 }
 
 async function ffmpegCommand(options?: { timeout?: number }) {
+  const cmd = (await import("fluent-ffmpeg")).default;
   return cmd(options);
 }
 
@@ -233,7 +233,7 @@ export class FFmepgClient implements Ffmpeg {
     }
     const res = await this.run(
       filename,
-      async (cmd, fopts) => {
+      async (cmd) => {
         cmd.noVideo();
         if (transcription) {
           // https://community.openai.com/t/whisper-api-increase-file-limit-25-mb/566754

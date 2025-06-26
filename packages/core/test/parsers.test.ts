@@ -8,6 +8,7 @@ import { readFile } from "fs/promises";
 import { resolve } from "path";
 import { TestHost } from "../src/testhost.js";
 import { writeFile } from "fs/promises";
+import { Parsers } from "../src/types.js";
 
 describe("parsers", async () => {
   let parsers: Parsers;
@@ -33,8 +34,8 @@ describe("parsers", async () => {
     assert.deepStrictEqual(result, { key: "value" });
   });
 
-  test("XML parser", () => {
-    const result = parsers.XML("<key>value</key>");
+  test("XML parser", async () => {
+    const result = await parsers.XML("<key>value</key>");
     assert.deepStrictEqual(result, { key: "value" });
   });
 

@@ -58,7 +58,7 @@ export async function dataTryParse(
     else if (TOML_REGEX.test(filename)) data = TOMLTryParse(content);
     else if (JSON5_REGEX.test(filename)) data = JSON5TryParse(content, { repair: true });
     else if (YAML_REGEX.test(filename)) data = YAMLTryParse(content);
-    else if (XML_REGEX.test(filename)) data = XMLTryParse(content, options);
+    else if (XML_REGEX.test(filename)) data = await XMLTryParse(content, options);
     else if (JSONL_REGEX.test(filename)) data = JSONLTryParse(content);
     else if (MD_REGEX.test(filename) || MDX_REGEX.test(filename))
       data = YAMLTryParse(splitMarkdown(content).frontmatter);

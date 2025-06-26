@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { XMLParser } from "fast-xml-parser";
 import { unfence } from "./unwrappers.js";
 import { filenameOrFileToContent } from "./unwrappers.js";
 import type { WorkspaceFile, XMLParseOptions } from "./types.js";
@@ -16,14 +15,14 @@ const dbg = genaiscriptDebug("xml");
  * @param options - Optional configuration for the XML parser
  * @returns The parsed XML object or defaultValue if an error occurs
  */
-export function XMLTryParse(
+export async function XMLTryParse(
   text: string | WorkspaceFile,
   defaultValue?: unknown,
   options?: XMLParseOptions,
 ) {
   try {
     // Try parsing the text and return the result or defaultValue
-    return XMLParse(text, options) ?? defaultValue;
+    return (await XMLParse(text, options)) ?? defaultValue;
   } catch (e) {
     // Return the default value if parsing fails
     dbg(`error: %s`, e?.message);
@@ -38,10 +37,12 @@ export function XMLTryParse(
  * @param options - Configuration options for the XML parser. These options are merged with the default parser settings.
  * @returns The parsed XML object.
  */
-export function XMLParse(text: string | WorkspaceFile, options?: XMLParseOptions) {
+export async function XMLParse(text: string | WorkspaceFile, options?: XMLParseOptions) {
   text = filenameOrFileToContent(text);
   // Remove specific markers from the XML string for cleaner processing
   const cleaned = unfence(text, "xml");
+
+  const { XMLParser } = await import("fast-xml-parser");
 
   // Create a new XMLParser instance with the specified options
   const parser = new XMLParser({

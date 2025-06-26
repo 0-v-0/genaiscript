@@ -94,10 +94,10 @@ export function createParsers(): Parsers {
         YAMLTryParse(filenameOrFileToContent(text), options?.defaultValue),
         options,
       ),
-    XML: (text, options) => {
+    XML: async (text, options) => {
       const { defaultValue, ...rest } = options || {};
       return tryValidateJSONWithSchema(
-        XMLTryParse(filenameOrFileToContent(text), defaultValue, rest),
+        await XMLTryParse(filenameOrFileToContent(text), defaultValue, rest),
         options,
       );
     },

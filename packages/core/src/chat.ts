@@ -54,7 +54,6 @@ import { resolveTokenEncoder } from "./encoders.js";
 import { approximateTokens, truncateTextToTokens } from "./tokens.js";
 import { computeFileEdits } from "./fileedits.js";
 import { HTMLEscape } from "./htmlescape.js";
-import { XMLTryParse } from "./xml.js";
 import {
   computePerplexity,
   computeStructuralUncertainty,
@@ -1419,7 +1418,7 @@ export function tracePromptResult(
   if (text) {
     const language = JSON5TryParse(text)
       ? "json"
-      : XMLTryParse(text)
+      : /^</.test(text)
         ? "xml"
         : /^(-|\*|#+|```)\s/im.test(text)
           ? "markdown"

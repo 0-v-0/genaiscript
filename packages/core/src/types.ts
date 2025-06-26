@@ -3265,7 +3265,7 @@ export interface XMLObject {
    * Parses an XML payload to an object
    * @param text
    */
-  parse(text: string | WorkspaceFile, options?: XMLParseOptions): any;
+  parse(text: string | WorkspaceFile, options?: XMLParseOptions): Promise<any>;
 }
 
 export interface JSONSchemaUtilities {

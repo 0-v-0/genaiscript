@@ -17,7 +17,6 @@ import { ensureDir } from "./fs.js";
 import { measure } from "./performance.js";
 import { dotGenaiscriptPath } from "./workdir.js";
 import type { DocxParseOptions, WorkspaceFile } from "./types.js";
-import { extractRawText, convertToHtml } from "mammoth";
 
 async function computeHashFolder(
   filename: string,
@@ -73,6 +72,8 @@ export async function DOCXTryParse(
   const m = measure("parsers.docx");
   try {
     const input = content ? { buffer: Buffer.from(content) } : { path: host.resolvePath(filename) };
+
+    const { extractRawText, convertToHtml } = await import("mammoth");
 
     let text: string;
     if (format === "html" || format === "markdown") {
