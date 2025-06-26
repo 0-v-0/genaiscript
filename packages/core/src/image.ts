@@ -34,7 +34,6 @@ import type {
   ImageGenerationOptions,
   ImageTransformOptions,
 } from "./types.js";
-import { Jimp, HorizontalAlign, VerticalAlign } from "jimp";
 
 const dbg = genaiscriptDebug("image");
 
@@ -72,6 +71,8 @@ async function prepare(
   }
 
   // Read the image using Jimp
+  const { Jimp, HorizontalAlign, VerticalAlign } = await import("jimp");
+
   const img = await Jimp.read(buffer);
   checkCancelled(cancellationToken);
   const { width, height } = img;

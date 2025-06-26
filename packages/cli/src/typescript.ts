@@ -13,7 +13,6 @@ import {
   runtimeHost,
   logVerbose,
 } from "@genaiscript/core";
-import * as ts from "typescript";
 const dbg = genaiscriptDebug("compile");
 
 /**
@@ -28,11 +27,15 @@ const dbg = genaiscriptDebug("compile");
 export async function compileScript(folders: string[]) {
   const project = await buildProject();
   await fixPromptDefinitions(project);
+
   const scriptFolders = collectFolders(project);
   const foldersToCompile = (folders?.length ? folders : scriptFolders.map((f) => f.dirname))
     .map((f) => scriptFolders.find((sf) => sf.dirname === f))
     .filter((f) => f);
 
+  if (!foldersToCompile.length) return;
+
+  const ts = await import("typescript");
   let errors = 0;
   for (const folder of foldersToCompile) {
     const { dirname, js, ts: isTypeScript } = folder;

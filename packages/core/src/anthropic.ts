@@ -11,8 +11,8 @@ import { parseModelIdentifier } from "./models.js";
 import { NotSupportedError, serializeError } from "./error.js";
 import { approximateTokens } from "./tokens.js";
 import { resolveTokenEncoder } from "./encoders.js";
-import Anthropic from "@anthropic-ai/sdk";
-import AnthropicBedrock from "@anthropic-ai/bedrock-sdk";
+import type Anthropic from "@anthropic-ai/sdk";
+import type AnthropicBedrock from "@anthropic-ai/bedrock-sdk";
 import {
   ChatCompletionResponse,
   ChatCompletionToolCall,
@@ -468,7 +468,7 @@ const completerFactory = (
       finishReason,
       usage,
       model,
-      toolCalls: toolCalls.filter((x) => x !== undefined),
+      toolCalls: toolCalls.filter(Boolean),
     } satisfies ChatCompletionResponse;
   };
   return completion;
@@ -476,11 +476,12 @@ const completerFactory = (
 
 const listModels: ListModelsFunction = async (cfg) => {
   try {
-    const anthropic = new Anthropic({
+    const AnthropicClass = (await import("@anthropic-ai/sdk")).default;
+    const anthropic: Anthropic = new AnthropicClass({
       baseURL: cfg.base,
       apiKey: cfg.token,
       fetch,
-    });
+    }) as any;
 
     // Parse and format the response into LanguageModelInfo objects
     const res = await anthropic.models.list({ limit: 999 });
@@ -503,7 +504,8 @@ const listModels: ListModelsFunction = async (cfg) => {
 
 export const AnthropicModel = Object.freeze<LanguageModel>({
   completer: completerFactory(async (trace, cfg, httpAgent, fetch) => {
-    const anthropic = new Anthropic({
+    const AnthropicClass = (await import("@anthropic-ai/sdk")).default;
+    const anthropic: Anthropic = new AnthropicClass({
       baseURL: cfg.base,
       apiKey: cfg.token,
       fetch,
@@ -511,7 +513,7 @@ export const AnthropicModel = Object.freeze<LanguageModel>({
         dispatcher: httpAgent,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as RequestInit as any,
-    });
+    }) as any;
     if (anthropic.baseURL) trace?.itemValue(`url`, `[${anthropic.baseURL}](${anthropic.baseURL})`);
     const messagesApi = anthropic.beta.messages;
     return messagesApi;
@@ -522,14 +524,15 @@ export const AnthropicModel = Object.freeze<LanguageModel>({
 
 export const AnthropicBedrockModel = Object.freeze<LanguageModel>({
   completer: completerFactory(async (trace, cfg, httpAgent, fetch) => {
-    const anthropic = new AnthropicBedrock({
+    const AnthropicBedrockClass = (await import("@anthropic-ai/bedrock-sdk")).default;
+    const anthropic: AnthropicBedrock = new AnthropicBedrockClass({
       baseURL: cfg.base,
       fetch,
       fetchOptions: {
         dispatcher: httpAgent,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as RequestInit as any,
-    });
+    }) as any;
     if (anthropic.baseURL) trace?.itemValue(`url`, `[${anthropic.baseURL}](${anthropic.baseURL})`);
     return anthropic.beta.messages;
   }),
