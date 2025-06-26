@@ -9,6 +9,7 @@
 ```
 
 - Generate TypeScript (esm, async/await) code when possible, not JavaScript.
+- Filenames should be lowercase, with no spaces or special characters.
 
 ## Building and testing
 
