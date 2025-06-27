@@ -1,0 +1,116 @@
+---
+title: v2.0 - A Node.JS library
+date: 2025-06-26
+authors:
+  - pelikhan
+  - genaiscript
+tags:
+  - release
+  - typescript
+  - architecture
+  - dev
+  - performance
+description: GenAIScript v2.0 introduces a major architectural refactoring with
+  proper TypeScript packages, unified types, pnpm migration, and improved
+  developer experience.
+cover:
+  alt: The image shows a network of geometric blocks connected by wires,
+    symbolizing a modular 2D server in retro 8-bit style. One block is marked
+    with a "runtime" symbol and another with a "CLI" symbol, each featuring
+    plug-in style ports. Flexible wire connections link a Node.js logo to these
+    blocks. Surrounding the central setup are minimalist icons that represent
+    code, packages, and script files. The design uses five bold corporate
+    colors, maintains flat and iconic visuals, and has a neutral, wordless
+    background.
+  image: ./v2.png
+excerpt: We've rolled out GenAIScript 2.0, featuring a modular and maintainable
+  runtime now accessible in any Node.js application, beyond just the CLI. This
+  shift involved significant backend refactoring, streamlining the integration
+  process for developers and expanding usage possibilities. The new
+  @genaiscript/runtime npm package isolates the core functionality, allowing
+  direct imports and straightforward initialization in projects. For those
+  building with the Node.js API, updating your imports ensures compatibility
+  with the latest structure. This release makes it easier to incorporate
+  GenAIScript into diverse workflows, whether through the CLI or embedded in
+  broader Node.js solutions.
+
+---
+
+import BlogNarration from "../../../components/BlogNarration.astro";
+
+<BlogNarration />
+
+We recently did a bunch of engineering work to refactor GenAIScript so that the runtime can be used in any Node.js
+application, not just the CLI. This is a major release and so it was time to call it `2.0`.
+
+**While this is a major release, your scripts should be mostly unaffected**. A lot of the changes are under the hood,
+however we did some breaking changes with the CLI and some APIs.
+
+> The v2.0 release is available in [npm](https://www.npmjs.com/package/genaiscript) and in Visual Studio Code.
+
+## "Major refactoring"
+
+[Matthew Podwysocki](https://www.linkedin.com/in/podwysocki/) ([@mattpodwysocki](https://github.com/mattpodwysocki)),
+recently approached us asking if he could contribute to the project.
+We suggested so small features but he quickly suggested **a major refactoring of the codebase to make it more modular and maintainable**.
+
+A bit of history is needed here: GenAIScript, as a research project, morphed into various things during its lifetime.
+It assumed that the scripts were running into some kind of augmented Node.JS runtime (setup by our CLI) which made it complicated
+to reuse the code in other contexts. In particular, you _always_ would have to run through the CLI to execute GenAIScript scripts.
+
+**Enter Matthew...** (drumroll) who took on the task of rewiring our build system and
+[refactoring the codebase](https://github.com/microsoft/genaiscript/pull/1594) to create consumable ESM/CommonJS npm packages from the GenAISScript.
+
+### `@genaiscript/runtime`
+
+The [@genaiscript/runtime](https://www.npmjs.com/package/@genaiscript/runtime) package is a consumable GenAIScript [runtime](/genaiscript/reference/runtime).
+It provides the core functionality needed to run GenAIScript scripts in any Node.js application, not just through the CLI.
+
+Formerly, we had a custom export `genaiscript/runtime` in the `genaiscript` package, but now we have a dedicated
+`@genaiscript/runtime` package that can be imported directly.
+
+To use in your project, import the package and initialize it. It will load the global parsers and the
+[inline prompt helpers](/genaiscript/reference/scripts/inline-prompts).
+
+```typescript
+import { initialize } from "@genaiscript/runtime";
+
+// runs this before using any global types
+await initialize();
+```
+
+The top level function to build the global prompt like `$`, `def` are not available
+using the runtime since only exist in the context of the CLI. Instead, you always start form an inline prompt.
+
+```typescript
+import { prompt, runPrompt } from "@genaiscript/runtime";
+
+const { text: recipe } = await prompt`write a recipe`;
+const { text: poem } = await runPrompt((ctx) => ctx.$`write a poem for this recipe: ${recipe}`);
+```
+
+### CLI or node.js runtime
+
+Another benefit of moving to proper node.js packages is that you can write library code using GenAIScript that be used
+in both the CLI and in a Node.js application.
+
+### `@genaiscript/api`
+
+The [@genaiscript/api](https://www.npmjs.com/package/@genaiscript/api)
+package provides the Node.JS runner to [run](/genaiscript/reference/api) with minimum runtime dependencies.
+
+### For API Users
+
+If you're using the Node.js API, update your imports:
+
+```typescript
+// Before v2.0
+import { run } from "genaiscript/api";
+
+// v2.0 and later
+import { run } from "@genaiscript/api";
+```
+
+## 📝 Acknowledgments
+
+Special thanks to [@matthew-podwysocki](https://github.com/matthew-podwysocki) for leading the pnpm migration and the TypeScript improvements.
