@@ -15,13 +15,13 @@ import { logVerbose } from "./util.js";
 import { CancellationOptions } from "./cancellation.js";
 import { resolveHttpsProxyAgent } from "./proxy.js";
 import { host } from "./host.js";
-import { renderWithPrecision } from "./precision.js";
 import crossFetch from "cross-fetch";
-import { prettyStrings } from "./pretty.js";
+import { prettyDuration, prettyStrings } from "./pretty.js";
 import type { FetchOptions, RetryOptions } from "./types.js";
 import { genaiscriptDebug } from "./debug.js";
 
 const dbg = genaiscriptDebug("fetch");
+const dbgr = dbg.extend("retry");
 
 /**
  * Parses the retry-after header value.
@@ -119,20 +119,22 @@ export async function createFetch(
     retryOn,
     retries,
     retryDelay: (attempt, error, response) => {
-      const code: string = (error as any)?.code as string;
-      dbg(`retry attempt: %d, error code: %s`, attempt, code);
+      const code: string = (error as { code?: string })?.code as string;
+      dbgr(`retry attempt: %d, error code: %s`, attempt, code);
       if (
         code === "ECONNRESET" ||
         code === "ENOTFOUND" ||
         cancellationToken?.isCancellationRequested
       ) {
-        dbg("fatal error or cancellation");
+        dbgr("fatal error or cancellation");
         // Return undefined for fatal errors or cancellations to stop retries
         return undefined;
       }
 
       const message = errorMessage(error);
       const status = statusToMessage(response);
+      dbgr(`message %s`, message);
+      dbgr(`status %s`, status);
 
       // Check for retry-after header and respect its value
       let delay: number;
@@ -140,35 +142,42 @@ export async function createFetch(
 
       if (response?.headers) {
         const retryAfterHeader =
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           response.headers.get?.("retry-after") || (response.headers as any)["retry-after"];
-
+        dbgr(`retry-after header: %s`, retryAfterHeader);
         if (retryAfterHeader) {
           const retryAfterSeconds = parseRetryAfter(retryAfterHeader);
-          if (retryAfterSeconds !== null) {
+          if (retryAfterSeconds) {
             delay = Math.min(maxDelay, retryAfterSeconds * 1000); // Convert to milliseconds
-            retryAfterInfo = ` (retry-after: ${retryAfterSeconds}s)`;
-            dbg(`using retry-after header value: ${retryAfterSeconds}s`);
+            retryAfterInfo = `retry-after: ${prettyDuration(retryAfterSeconds * 1000)}`;
+            dbgr(`using retry-after header value: %d seconds`, retryAfterSeconds);
           } else {
             // Fallback to exponential backoff if retry-after parsing failed
             delay =
               Math.min(maxDelay, Math.pow(FETCH_RETRY_GROWTH_FACTOR, attempt) * retryDelay) *
               (1 + Math.random() / 20);
+            dbgr(`using exponential backoff: %d`, delay);
           }
         } else {
           // No retry-after header, use exponential backoff
           delay =
             Math.min(maxDelay, Math.pow(FETCH_RETRY_GROWTH_FACTOR, attempt) * retryDelay) *
             (1 + Math.random() / 20);
+          dbgr(`no retry-after header, using exponential backoff: %d`, delay);
         }
       } else {
         // No response headers, use exponential backoff
         delay =
           Math.min(maxDelay, Math.pow(FETCH_RETRY_GROWTH_FACTOR, attempt) * retryDelay) *
           (1 + Math.random() / 20);
+        dbgr(`no response headers, using exponential backoff: %d`, delay);
       }
 
       const msg = prettyStrings(
-        `retry #${attempt + 1} in ${renderWithPrecision(Math.floor(delay) / 1000, 1)}s${retryAfterInfo}`,
+        `retry #${attempt + 1} in ${prettyDuration(delay)}`,
+        retryAfterInfo,
+        `max delay: ${prettyDuration(maxDelay)}s`,
+        `retry delay: ${prettyDuration(retryDelay)}s`,
         message,
         status,
       );
@@ -251,6 +260,7 @@ export async function* iterateBody(
       yield text;
     }
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for await (const value of r.body as any) {
       if (cancellationToken?.isCancellationRequested) {
         break;

@@ -136,7 +136,7 @@ export function relativePath(root: string, fn: string) {
   if (!fn || HTTPS_REGEX.test(fn)) return fn;
   const afn = host.path.resolve(fn);
   if (afn.startsWith(root)) {
-    return afn.slice(root.length).replace(/^[\/\\]+/, "");
+    return afn.slice(root.length).replace(/^[/\\]+/, "");
   }
   return fn;
 }
