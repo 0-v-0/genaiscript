@@ -66,7 +66,7 @@ Previously, accessing runtime functionality meant importing a custom export `gen
 
 <PackageManagers pkg="@genaiscript/runtime" />
 
-```typescript
+```typescript wrap
 import { initialize } from "@genaiscript/runtime";
 
 // Initialize before using any global types
@@ -77,7 +77,7 @@ The initialization process loads global parsers and [inline prompt helpers](/gen
 
 **Important architectural note:** Top-level prompt functions like `$` and `def` remain exclusive to the CLI context, as they depend on CLI-specific initialization. When using the runtime directly, you'll work with inline prompts instead:
 
-```typescript
+```typescript wrap
 import { prompt, runPrompt } from "@genaiscript/runtime";
 
 const { text: recipe } = await prompt`write a recipe`;
