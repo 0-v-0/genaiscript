@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { resolveFileBytes } from "./file.js";
-import { TraceOptions } from "./trace.js";
+import { resolveFileBytes } from "./filebytes.js";
+import type { TraceOptions } from "./trace.js";
 import { fileTypeFromBuffer } from "./filetype.js";
 import { extname } from "node:path";
 import { genaiscriptDebug } from "./debug.js";

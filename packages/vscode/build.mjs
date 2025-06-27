@@ -21,7 +21,7 @@ const config = {
     "@xmldom/xmldom",
     "toml",
     "turndown",
-    "undici"
+    "undici",
   ],
 };
 
