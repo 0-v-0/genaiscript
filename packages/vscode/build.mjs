@@ -19,7 +19,6 @@ const config = {
     "canvas",
     "sharp",
     "@xmldom/xmldom",
-    "toml",
     "turndown",
     "undici",
   ],
