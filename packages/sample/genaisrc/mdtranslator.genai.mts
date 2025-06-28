@@ -1,10 +1,10 @@
 import { hash } from "crypto";
-import { classify, mdast } from "@genaiscript/runtime";
+import { classify } from "@genaiscript/runtime";
+import { mdast } from "@genaiscript/plugin-mdast";
 import "mdast-util-mdxjs-esm";
 import type { Node, Text, Heading, Paragraph, PhrasingContent, Yaml } from "mdast";
-import { dirname, join, relative } from "path";
+import { basename, dirname, join, relative } from "path";
 import { URL } from "url";
-import { chunk } from "../../core/dist/esm/encoders.js";
 script({
   accept: ".md,.mdx",
   files: "src/rag/markdown.md",
@@ -162,7 +162,7 @@ export default async function main() {
           } else {
             // mark untranslated nodes with a unique identifier
             if (node.type === "text") {
-              if (!/\s*[.,:;<>\]\[{}\(\)]+\s*/.test(node.value) && !isUri(node.value)) {
+              if (!/\s*[.,:;<>\]\[{}\(\)…]+\s*/.test(node.value) && !isUri(node.value)) {
                 dbg(`text node: %s`, nhash);
                 // compress long hash into LLM friendly short hash
                 const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
@@ -386,9 +386,11 @@ export default async function main() {
             node.url = patchFn(node.url);
             return SKIP;
           } else if (node.type === "mdxjsEsm") {
-            const rx = /^import\s+(.*)\s+from\s+\"(\.\.\/.*)";?$/gm;
-            node.value = node.value.replace(rx, (m, i, p) => {
-              const r = `import ${i} from "${patchFn(p)}";`;
+            // path local imports
+            const rx = /^(import|\})\s*(.*)\s+from\s+\"(\.\.\/.*)";?$/gm;
+            node.value = node.value.replace(rx, (m, k, i, p) => {
+              const pp = patchFn(p);
+              const r = k === "}" ? `} from "${pp}";` : `import ${i} from "${pp}";`;
               dbg(`mdxjsEsm import: %s -> %s`, m, r);
               return r;
             });
@@ -417,6 +419,7 @@ export default async function main() {
             bad: `Translation is of low quality or has a different meaning from the original.`,
           },
           {
+            label: `judge translation ${to} ${basename(filename)}`,
             model: "large",
             explanations: true,
             systemSafety: false,
