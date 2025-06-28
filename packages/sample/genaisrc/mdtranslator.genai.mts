@@ -1,7 +1,7 @@
 import { hash } from "crypto";
 import { classify, mdast } from "@genaiscript/runtime";
 import type { Node, Text, Heading, Paragraph, PhrasingContent, Yaml } from "mdast";
-import { join } from "path";
+import { basename, dirname, join, relative } from "path";
 script({
   accept: ".md,.mdx",
   files: "src/rag/markdown.md",
@@ -80,119 +80,120 @@ export default async function main() {
       const { filename } = file;
       output.heading(3, `${filename}`);
 
-      const starlight = filename.startsWith(starlightDir);
-      const translationFn = starlight
-        ? filename.replace(starlightDir, join(starlightDir, to.toLowerCase()))
-        : path.changeext(filename, `.${to.toLowerCase()}.md`);
-      output.itemValue(`translation`, translationFn);
-      let content = file.content;
-      if (aiDisclaimer)
-        content += `\n\n<hr/>\n\nTranslated using AI. Please verify the content for accuracy.\n\n`;
-      dbgc(`md: %s`, content);
+      try {
+        const starlight = filename.startsWith(starlightDir);
+        const translationFn = starlight
+          ? filename.replace(starlightDir, join(starlightDir, to.toLowerCase()))
+          : path.changeext(filename, `.${to.toLowerCase()}.md`);
+        output.itemValue(`translation`, translationFn);
+        let content = file.content;
+        if (aiDisclaimer)
+          content += `\n\n<hr/>\n\nTranslated using AI. Please verify the content for accuracy.\n\n`;
+        dbgc(`md: %s`, content);
 
-      // parse to tree
-      const root = parse(content);
-      dbgt(`original %O`, root.children);
+        // parse to tree
+        const root = parse(content);
+        dbgt(`original %O`, root.children);
 
-      // collect original nodes nodes
-      const nodes: Record<string, NodeType> = {};
-      visitParents(root, nodeTypes, (node, ancestors) => {
-        const hash = hashNode(node, ancestors);
-        dbg(`node: %s -> %s`, node.type, hash);
-        nodes[hash] = node as NodeType;
-      });
+        // collect original nodes nodes
+        const nodes: Record<string, NodeType> = {};
+        visitParents(root, nodeTypes, (node, ancestors) => {
+          const hash = hashNode(node, ancestors);
+          dbg(`node: %s -> %s`, node.type, hash);
+          nodes[hash] = node as NodeType;
+        });
 
-      dbg(`nodes: %d`, Object.keys(nodes).length);
+        dbg(`nodes: %d`, Object.keys(nodes).length);
 
-      const llmHashes: Record<string, string> = {};
-      const llmHashTodos = new Set<string>();
+        const llmHashes: Record<string, string> = {};
+        const llmHashTodos = new Set<string>();
 
-      // apply translations and mark untranslated nodes with id
-      let translated = structuredClone(root);
-      visitParents(translated, nodeTypes, (node, ancestors) => {
-        const nhash = hashNode(node, ancestors);
-        const translation = translationCache[nhash];
-        if (translation) {
-          dbg(`translated: %s`, nhash);
-          Object.assign(node, translation);
-        } else {
-          // mark untranslated nodes with a unique identifier
-          if (node.type === "text") {
-            if (!/\s*[.,:;<>\]\[{}\(\)]+\s*/.test(node.value)) {
-              dbg(`text node: %s`, nhash);
-              // compress long hash into LLM friendly short hash
-              const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+        // apply translations and mark untranslated nodes with id
+        let translated = structuredClone(root);
+        visitParents(translated, nodeTypes, (node, ancestors) => {
+          const nhash = hashNode(node, ancestors);
+          const translation = translationCache[nhash];
+          if (translation) {
+            dbg(`translated: %s`, nhash);
+            Object.assign(node, translation);
+          } else {
+            // mark untranslated nodes with a unique identifier
+            if (node.type === "text") {
+              if (!/\s*[.,:;<>\]\[{}\(\)]+\s*/.test(node.value)) {
+                dbg(`text node: %s`, nhash);
+                // compress long hash into LLM friendly short hash
+                const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                llmHashes[llmHash] = nhash;
+                llmHashTodos.add(llmHash);
+                node.value = `┌${llmHash}┐${node.value}└${llmHash}┘`;
+              }
+            } else if (node.type === "paragraph" || node.type === "heading") {
+              dbg(`paragraph/heading node: %s`, nhash);
+              const llmHash = `P${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
               llmHashes[llmHash] = nhash;
               llmHashTodos.add(llmHash);
-              node.value = `┌${llmHash}┐${node.value}└${llmHash}┘`;
-            }
-          } else if (node.type === "paragraph" || node.type === "heading") {
-            dbg(`paragraph/heading node: %s`, nhash);
-            const llmHash = `P${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
-            llmHashes[llmHash] = nhash;
-            llmHashTodos.add(llmHash);
-            node.children.unshift({
-              type: "text",
-              value: `┌${llmHash}┐`,
-            } as Text);
-            node.children.push({
-              type: "text",
-              value: `└${llmHash}┘`,
-            });
-            return SKIP; // don't process children of paragraphs
-          } else if (node.type === "yaml") {
-            dbg(`yaml node: %s`, nhash);
-            const data = parsers.YAML(node.value);
-            if (data) {
-              if (typeof data.title === "string") {
-                const nhash = hashNode(data.title);
-                const tr = translationCache[nhash];
-                if (tr) data.title = tr;
-                else {
-                  const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
-                  llmHashes[llmHash] = nhash;
-                  llmHashTodos.add(llmHash);
-                  data.title = `┌${llmHash}┐${data.title}└${llmHash}┘`;
+              node.children.unshift({
+                type: "text",
+                value: `┌${llmHash}┐`,
+              } as Text);
+              node.children.push({
+                type: "text",
+                value: `└${llmHash}┘`,
+              });
+              return SKIP; // don't process children of paragraphs
+            } else if (node.type === "yaml") {
+              dbg(`yaml node: %s`, nhash);
+              const data = parsers.YAML(node.value);
+              if (data) {
+                if (typeof data.title === "string") {
+                  const nhash = hashNode(data.title);
+                  const tr = translationCache[nhash];
+                  if (tr) data.title = tr;
+                  else {
+                    const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                    llmHashes[llmHash] = nhash;
+                    llmHashTodos.add(llmHash);
+                    data.title = `┌${llmHash}┐${data.title}└${llmHash}┘`;
+                  }
                 }
-              }
-              if (typeof data.description === "string") {
-                const nhash = hashNode(data.description);
-                const tr = translationCache[nhash];
-                if (tr) data.title = tr;
-                else {
-                  const llmHash = `D${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
-                  llmHashes[llmHash] = nhash;
-                  llmHashTodos.add(llmHash);
-                  data.description = `┌${llmHash}┐${data.description}└${llmHash}┘`;
+                if (typeof data.description === "string") {
+                  const nhash = hashNode(data.description);
+                  const tr = translationCache[nhash];
+                  if (tr) data.title = tr;
+                  else {
+                    const llmHash = `D${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                    llmHashes[llmHash] = nhash;
+                    llmHashTodos.add(llmHash);
+                    data.description = `┌${llmHash}┐${data.description}└${llmHash}┘`;
+                  }
                 }
+                node.value = YAML.stringify(data);
+                return SKIP;
               }
-              node.value = YAML.stringify(data);
-              return SKIP;
+            } else {
+              dbg(`untranslated node type: %s`, node.type);
             }
-          } else {
-            dbg(`untranslated node type: %s`, node.type);
           }
-        }
-      });
+        });
 
-      dbgt(`translated %O`, translated.children);
-      let attempts = 0;
-      let lastLLmHashTodos = llmHashTodos.size + 1;
-      while (
-        llmHashTodos.size &&
-        llmHashTodos.size < lastLLmHashTodos &&
-        attempts++ < maxPromptPerFile
-      ) {
-        dbg(`todos: %o`, Array.from(llmHashTodos));
-        const contentMix = stringify(translated);
-        dbgc(`translatable content: %s`, contentMix);
+        dbgt(`translated %O`, translated.children);
+        let attempts = 0;
+        let lastLLmHashTodos = llmHashTodos.size + 1;
+        while (
+          llmHashTodos.size &&
+          llmHashTodos.size < lastLLmHashTodos &&
+          attempts++ < maxPromptPerFile
+        ) {
+          dbg(`todos: %o`, Array.from(llmHashTodos));
+          const contentMix = stringify(translated);
+          dbgc(`translatable content: %s`, contentMix);
 
-        // run prompt to generate translations
-        const { fences, error } = await runPrompt(
-          async (ctx) => {
-            const originalRef = ctx.def("ORIGINAL", file.content);
-            const translatedRef = ctx.def("TRANSLATED", contentMix);
-            ctx.$`You are an expert at translating technical documentation into ${lang} (${to}).
+          // run prompt to generate translations
+          const { fences, error } = await runPrompt(
+            async (ctx) => {
+              const originalRef = ctx.def("ORIGINAL", file.content);
+              const translatedRef = ctx.def("TRANSLATED", contentMix);
+              ctx.$`You are an expert at translating technical documentation into ${lang} (${to}).
       
       ## Task
       Your task is to translate a Markdown (GFM) document to ${lang} (${to}) while preserving the structure and formatting of the original document.
@@ -227,132 +228,146 @@ export default async function main() {
       translated content of text enclosed in HASH2 here
       \`\`\`
 
+      \`\`\`HASH3
+      translated content of text enclosed in HASH3 here
+      \`\`\`
+
       ## Instructions
 
       - Be extremely careful about the HASH names. They are unique identifiers for each node and should not be changed.
-      - Use code regions to respond with the translated content.
+      - Always use code regions to respond with the translated content. 
       - Do not translate the text outside of the HASH tags.
       - Do not change the structure of the document.
       - As much as possible, maintain the original formatting and structure of the document.
       - Do not translate inline code blocks, code blocks, or any other code-related content.
 
       `.role("system");
+            },
+            {
+              responseType: "text",
+              systemSafety: false,
+              system: [],
+              cache: true,
+              label: `translating ${filename} (${llmHashTodos.size} nodes)`,
+            },
+          );
+
+          if (error) {
+            output.error(`Error translating ${filename}: ${error.message}`);
+            break;
+          }
+
+          // collect translations
+          for (const fence of fences) {
+            const llmHash = fence.language;
+            if (llmHashTodos.has(llmHash)) {
+              llmHashTodos.delete(llmHash);
+              const hash = llmHashes[llmHash];
+              dbg(`translation: %s - %s`, llmHash, hash);
+              let chunkTranslated = fence.content.replace(/\r?\n$/, "").trim();
+              const node = nodes[hash];
+              dbg(`original node: %O`, node);
+              if (node?.type === "text" && /\s$/.test(node.value)) {
+                // preserve trailing space if original text had it
+                dbg(`patch trailing space for %s`, hash);
+                chunkTranslated += " ";
+              }
+              dbg(`content: %s`, chunkTranslated);
+              translationCache[hash] = chunkTranslated;
+            }
+          }
+
+          lastLLmHashTodos = llmHashTodos.size;
+        }
+
+        // apply translations
+        translated = structuredClone(root);
+        visitParents(translated, nodeTypes, (node, ancestors) => {
+          if (node.type === "yaml") {
+            const data = parsers.YAML(node.value);
+            if (data) {
+              if (starlight && data?.hero?.image?.file) {
+                data.hero.image.file = join(
+                  dirname(relative(filename, translationFn)),
+                  data.hero.image.file,
+                );
+                dbg(`yaml hero image: %s`, data.hero.image.file);
+              }
+              if (typeof data.title === "string") {
+                const nhash = hashNode(data.title);
+                const tr = translationCache[nhash];
+                dbg(`yaml title: %s -> %s`, nhash, tr);
+                if (tr) data.title = tr;
+              }
+              if (typeof data.description === "string") {
+                const nhash = hashNode(data.description);
+                const tr = translationCache[nhash];
+                dbg(`yaml description: %s -> %s`, nhash, tr);
+                if (tr) data.description = tr;
+              }
+              node.value = YAML.stringify(data);
+              return SKIP;
+            }
+          } else {
+            const hash = hashNode(node, ancestors);
+            const translation = translationCache[hash];
+            if (translation) {
+              if (node.type === "text") {
+                dbg(`translated text: %s -> %s`, hash, translation);
+                node.value = translation;
+              } else if (node.type === "paragraph" || node.type === "heading") {
+                dbg(`translated %s: %s -> %s`, node.type, hash, translation);
+                const newNodes = parse(translation).children as PhrasingContent[];
+                node.children.splice(0, node.children.length, ...newNodes);
+              } else {
+                dbg(`untranslated node type: %s`, node.type);
+              }
+            }
+          }
+        });
+
+        let contentTranslated = await stringify(translated);
+        output.diff(content, contentTranslated);
+        if (content === contentTranslated) {
+          output.warn(`Unable to translate anything, skipping file.`);
+          continue;
+        }
+
+        // judge quality is good enough
+        const res = await classify(
+          (ctx) => {
+            ctx.$`You are an expert at judging the quality of translations. 
+          Your task is to determine the quality of the translation of a Markdown document from English to ${lang} (${to}).
+          The original document is in ${ctx.def("ORIGINAL", content)}, and the translated document is provided as a variable named ${ctx.def("TRANSLATED", contentTranslated)}.`.role(
+              "system",
+            );
           },
           {
-            responseType: "text",
+            ok: `Translation is faithful to the original document and conveys the same meaning. Translation uses proper ${lang}.`,
+            bad: `Translation is of low quality or poor usage of ${lang}.`,
+          },
+          {
+            explanations: true,
             systemSafety: false,
-            system: [],
-            cache: true,
-            label: `translating ${filename} (${llmHashTodos.size} nodes)`,
           },
         );
 
-        if (error) {
-          output.error(`Error translating ${filename}: ${error.message}`);
-          break;
+        if (res.label !== "ok") {
+          output.error(`Translation quality is low. Skipping file.`);
+          output.fence(res.answer);
+          continue;
         }
 
-        // collect translations
-        for (const fence of fences) {
-          const llmHash = fence.language;
-          if (llmHashTodos.has(llmHash)) {
-            llmHashTodos.delete(llmHash);
-            const hash = llmHashes[llmHash];
-            dbg(`translation: %s - %s`, llmHash, hash);
-            let chunkTranslated = fence.content.replace(/\r?\n$/, "").trim();
-            const node = nodes[hash];
-            dbg(`original node: %O`, node);
-            if (node?.type === "text" && /\s$/.test(node.value)) {
-              // preserve trailing space if original text had it
-              dbg(`patch trailing space for %s`, hash);
-              chunkTranslated += " ";
-            }
-            dbg(`content: %s`, chunkTranslated);
-            translationCache[hash] = chunkTranslated;
-          }
-        }
+        // apply translations and save
+        dbgc(`translated: %s`, contentTranslated);
+        dbg(`writing translation to %s`, translationFn);
 
-        lastLLmHashTodos = llmHashTodos.size;
+        await workspace.writeText(translationFn, contentTranslated);
+      } catch (error) {
+        output.error(error);
+        break;
       }
-
-      // apply translations
-      translated = structuredClone(root);
-      visitParents(translated, nodeTypes, (node, ancestors) => {
-        if (node.type === "yaml") {
-          const data = parsers.YAML(node.value);
-          if (data) {
-            if (typeof data.title === "string") {
-              const nhash = hashNode(data.title);
-              const tr = translationCache[nhash];
-              dbg(`yaml title: %s -> %s`, nhash, tr);
-              if (tr) data.title = tr;
-            }
-            if (typeof data.description === "string") {
-              const nhash = hashNode(data.description);
-              const tr = translationCache[nhash];
-              dbg(`yaml description: %s -> %s`, nhash, tr);
-              if (tr) data.description = tr;
-            }
-            node.value = YAML.stringify(data);
-            return SKIP;
-          }
-        } else {
-          const hash = hashNode(node, ancestors);
-          const translation = translationCache[hash];
-          if (translation) {
-            if (node.type === "text") {
-              dbg(`translated text: %s -> %s`, hash, translation);
-              node.value = translation;
-            } else if (node.type === "paragraph" || node.type === "heading") {
-              dbg(`translated %s: %s -> %s`, node.type, hash, translation);
-              const newNodes = parse(translation).children as PhrasingContent[];
-              node.children.splice(0, node.children.length, ...newNodes);
-            } else {
-              dbg(`untranslated node type: %s`, node.type);
-            }
-          }
-        }
-      });
-
-      let contentTranslated = await stringify(translated);
-      output.diff(content, contentTranslated);
-      if (content === contentTranslated) {
-        output.warn(`Unable to translate anything, skipping file.`);
-        continue;
-      }
-
-      // judge quality is good enough
-      const res = await classify(
-        (ctx) => {
-          ctx.$`You are an expert at judging the quality of translations. 
-          Your task is to determine the quality of the translation of a Markdown document from English to ${lang} (${to}).
-          The original document is in ${ctx.def("ORIGINAL", content)}, and the translated document is provided as a variable named ${ctx.def("TRANSLATED", contentTranslated)}.`.role(
-            "system",
-          );
-        },
-        {
-          ok: `Translation is faithful to the original document and conveys the same meaning. Translation uses proper ${lang}.`,
-          bad: `Translation is of low quality or poor usage of ${lang}.`,
-        },
-        {
-          explanations: true,
-          systemSafety: false,
-        },
-      );
-
-      if (res.label !== "ok") {
-        output.error(`Translation quality is low. Skipping file.`);
-        output.fence(res.answer);
-        continue;
-      }
-
-      // apply translations and save
-      dbgc(`translated: %s`, contentTranslated);
-      dbg(`writing translation to %s`, translationFn);
-
-      await workspace.writeText(translationFn, contentTranslated);
     }
-
     await workspace.writeText(cacheFn, JSON.stringify(translationCache, null, 2));
   }
 }
