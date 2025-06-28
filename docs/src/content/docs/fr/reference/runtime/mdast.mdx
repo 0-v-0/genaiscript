@@ -1,21 +1,22 @@
 ---
-title: Markdown AST
-description: Use the mdast helpers to parse and manipulate Markdown documents
+title: AST Markdown
+description: Utilisez les assistants mdast pour analyser et manipuler des documents Markdown
 sidebar:
   order: 80
+
 ---
 
 import { PackageManagers } from "starlight-package-managers";
 
-Ces assistants d'exécution offrent une interface conviviale autour de l’écosystème [remark](https://github.com/remarkjs/remark), [mdast](https://github.com/syntax-tree/mdast), [unified](https://github.com/syntax-tree/unist) pour parser et manipuler des documents Markdown.
+Ces aides d’exécution fournissent une interface conviviale autour de l’écosystème [remark](https://github.com/remarkjs/remark), [mdast](https://github.com/syntax-tree/mdast), [unified](https://github.com/syntax-tree/unist) pour analyser et manipuler des documents Markdown.
 
-Pour bénéficier de l’auto-complétion des types, vous devez installer le paquet `@types/mdast` comme dépendance de développement.
+Pour bénéficier de l’auto-complétion des types, vous devrez installer le paquet `@types/mdast` comme dépendance de développement.
 
 <PackageManagers pkg="@types/mdast" dev />
 
-## Manipulation de Markdown
+## Manipulation du Markdown
 
-* charger les parseurs
+* charger les analyseurs
 
 ```typescript
 import { mdast } from "@genaiscript/runtime";
@@ -29,7 +30,7 @@ const { parse, visit, stringify } = await mdast();
 const root = parse("# Hello World");
 ```
 
-* parcourir l’arbre (voir la [documentation](https://unifiedjs.com/learn/recipe/tree-traversal/pnp))
+* parcourir l’arbre (voir [documentation](https://unifiedjs.com/learn/recipe/tree-traversal/pnp))
 
 ```typescript
 const updated = visit(root, `code`, (node) => {
@@ -45,4 +46,4 @@ const markdown = await stringify(updated);
 
 <hr />
 
-Traduit à l’aide d’une intelligence artificielle. Veuillez vérifier l’exactitude du contenu.
+Traduit par IA. Veuillez vérifier l’exactitude du contenu.

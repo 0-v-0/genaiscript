@@ -1,10 +1,21 @@
 {
-  "7FF4A579A373349036EF": "Ces assistants d'exécution offrent une interface conviviale autour de l’écosystème [remark](https://github.com/remarkjs/remark), [mdast](https://github.com/syntax-tree/mdast), [unified](https://github.com/syntax-tree/unist) pour parser et manipuler des documents Markdown.",
-  "B97AD2FDFF4E97817CD3": "Pour bénéficier de l’auto-complétion des types, vous devez installer le paquet `@types/mdast` comme dépendance de développement.",
-  "93ECBC1CC890D2DC0948": "Manipulation de Markdown",
-  "88EE574108F304F2E1E4": "charger les parseurs",
+  "7FF4A579A373349036EF": "Ces aides d’exécution fournissent une interface conviviale autour de l’écosystème [remark](https://github.com/remarkjs/remark), [mdast](https://github.com/syntax-tree/mdast), [unified](https://github.com/syntax-tree/unist) pour analyser et manipuler des documents Markdown.",
+  "B97AD2FDFF4E97817CD3": "Pour bénéficier de l’auto-complétion des types, vous devrez installer le paquet `@types/mdast` comme dépendance de développement.",
+  "93ECBC1CC890D2DC0948": "Manipulation du Markdown",
+  "88EE574108F304F2E1E4": "charger les analyseurs",
   "2B652AE7037011442E86": "analyser vers un arbre mdast",
-  "742232A1BD5BD5EEEEA4": "parcourir l’arbre (voir la [documentation](https://unifiedjs.com/learn/recipe/tree-traversal/pnp))",
+  "742232A1BD5BD5EEEEA4": "parcourir l’arbre (voir [documentation](https://unifiedjs.com/learn/recipe/tree-traversal/pnp))",
   "750B426709E8940B01A1": "sérialiser l’arbre en Markdown",
-  "F4636CADBC2A666FBFB7": "Traduit à l’aide d’une intelligence artificielle. Veuillez vérifier l’exactitude du contenu."
+  "F4636CADBC2A666FBFB7": "Traduit par IA. Veuillez vérifier l’exactitude du contenu.",
+  "79EF8B2E271C874BAA96": "AST Markdown",
+  "3526D43E3CA409573EEA": "Utilisez les assistants mdast pour analyser et manipuler des documents Markdown",
+  "7BCCEFB7560D860413A8": "Ces assistants d’exécution fournissent une interface conviviale autour de l’écosystème ",
+  "72A2D793C3933AC7B54F": "remark",
+  "FBBFCF9090E78B6ED0BD": "mdast",
+  "AB2B271B70D622C7C40F": "unified",
+  "EDCAC3B7B8A44DD6E9B9": "Manipulation de Markdown",
+  "DBE692B4EC10B9D69A77": "charger les parseurs",
+  "24DD3D375620BA2E27FE": "analyser en un arbre mdast",
+  "F1E1700040109CBC4AAE": "documentation",
+  "12FFE51BCC2B286B4C6B": "sérialisation de l’arbre en Markdown"
 }

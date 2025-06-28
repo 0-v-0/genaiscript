@@ -1,6 +1,6 @@
 import { hash } from "crypto";
 import { classify, mdast } from "@genaiscript/runtime";
-import type { Node, Text, Heading, Paragraph, PhrasingContent } from "mdast";
+import type { Node, Text, Heading, Paragraph, PhrasingContent, Yaml } from "mdast";
 import { join } from "path";
 script({
   accept: ".md,.mdx",
@@ -25,14 +25,14 @@ script({
 });
 
 const HASH_LENGTH = 20;
-function hashNode(node: Node, ancestors: Node[]): string {
+function hashNode(node: Node | string, ancestors?: Node[]): string {
   const chunkHash = hash("sha-256", JSON.stringify(node));
   return chunkHash.slice(0, HASH_LENGTH).toUpperCase();
 }
 const maxPromptPerFile = 5;
-const nodeTypes = ["text", "paragraph", "heading"];
+const nodeTypes = ["text", "paragraph", "heading", "yaml"];
 const starlightDir = "docs/src/content/docs";
-type NodeType = Text | Paragraph | Heading;
+type NodeType = Text | Paragraph | Heading | Yaml;
 const langs = {
   fr: "French",
 };
@@ -98,8 +98,11 @@ export default async function main() {
       const nodes: Record<string, NodeType> = {};
       visitParents(root, nodeTypes, (node, ancestors) => {
         const hash = hashNode(node, ancestors);
+        dbg(`node: %s -> %s`, node.type, hash);
         nodes[hash] = node as NodeType;
       });
+
+      dbg(`nodes: %d`, Object.keys(nodes).length);
 
       const llmHashes: Record<string, string> = {};
       const llmHashTodos = new Set<string>();
@@ -107,26 +110,27 @@ export default async function main() {
       // apply translations and mark untranslated nodes with id
       let translated = structuredClone(root);
       visitParents(translated, nodeTypes, (node, ancestors) => {
-        const hash = hashNode(node, ancestors);
-        const translation = translationCache[hash];
+        const nhash = hashNode(node, ancestors);
+        const translation = translationCache[nhash];
         if (translation) {
-          dbg(`translated: %s`, hash);
+          dbg(`translated: %s`, nhash);
           Object.assign(node, translation);
         } else {
-          // compress long hash into LLM friendly short hash
-          const llmHash = `ID${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
-          llmHashes[llmHash] = hash;
-          llmHashTodos.add(llmHash);
-
           // mark untranslated nodes with a unique identifier
           if (node.type === "text") {
-            if (/\s*[.,:;]\s*/.test(node.value)) {
-              delete llmHashes[llmHash]; // don't translate empty text nodes
-              llmHashTodos.delete(llmHash);
-              dbg(`skipping empty text node: %s`, hash);
+            if (!/\s*[.,:;<>\]\[{}\(\)]+\s*/.test(node.value)) {
+              dbg(`text node: %s`, nhash);
+              // compress long hash into LLM friendly short hash
+              const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+              llmHashes[llmHash] = nhash;
+              llmHashTodos.add(llmHash);
+              node.value = `┌${llmHash}┐${node.value}└${llmHash}┘`;
             }
-            node.value = `┌${llmHash}┐${node.value}└${llmHash}┘`;
           } else if (node.type === "paragraph" || node.type === "heading") {
+            dbg(`paragraph/heading node: %s`, nhash);
+            const llmHash = `P${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+            llmHashes[llmHash] = nhash;
+            llmHashTodos.add(llmHash);
             node.children.unshift({
               type: "text",
               value: `┌${llmHash}┐`,
@@ -136,21 +140,50 @@ export default async function main() {
               value: `└${llmHash}┘`,
             });
             return SKIP; // don't process children of paragraphs
+          } else if (node.type === "yaml") {
+            dbg(`yaml node: %s`, nhash);
+            const data = parsers.YAML(node.value);
+            if (data) {
+              if (typeof data.title === "string") {
+                const nhash = hashNode(data.title);
+                const tr = translationCache[nhash];
+                if (tr) data.title = tr;
+                else {
+                  const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                  llmHashes[llmHash] = nhash;
+                  llmHashTodos.add(llmHash);
+                  data.title = `┌${llmHash}┐${data.title}└${llmHash}┘`;
+                }
+              }
+              if (typeof data.description === "string") {
+                const nhash = hashNode(data.description);
+                const tr = translationCache[nhash];
+                if (tr) data.title = tr;
+                else {
+                  const llmHash = `D${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                  llmHashes[llmHash] = nhash;
+                  llmHashTodos.add(llmHash);
+                  data.description = `┌${llmHash}┐${data.description}└${llmHash}┘`;
+                }
+              }
+              node.value = YAML.stringify(data);
+              return SKIP;
+            }
           } else {
             dbg(`untranslated node type: %s`, node.type);
           }
         }
       });
 
-      if (llmHashTodos.size === 0) {
-        output.resultItem(true, `No untranslated nodes found, skipping file.`);
-        continue;
-      }
-
       dbgt(`translated %O`, translated.children);
       let attempts = 0;
-      while (llmHashTodos.size && attempts++ < maxPromptPerFile) {
-        dbg(`todos: %O`, llmHashTodos);
+      let lastLLmHashTodos = llmHashTodos.size + 1;
+      while (
+        llmHashTodos.size &&
+        llmHashTodos.size < lastLLmHashTodos &&
+        attempts++ < maxPromptPerFile
+      ) {
+        dbg(`todos: %o`, Array.from(llmHashTodos));
         const contentMix = stringify(translated);
         dbgc(`translatable content: %s`, contentMix);
 
@@ -210,13 +243,13 @@ export default async function main() {
             systemSafety: false,
             system: [],
             cache: true,
-            label: `translating ${file.filename}`,
+            label: `translating ${filename} (${llmHashTodos.size} nodes)`,
           },
         );
 
         if (error) {
-          output.error(`Error translating ${file.filename}: ${error.message}`);
-          continue;
+          output.error(`Error translating ${filename}: ${error.message}`);
+          break;
         }
 
         // collect translations
@@ -229,7 +262,7 @@ export default async function main() {
             let chunkTranslated = fence.content.replace(/\r?\n$/, "").trim();
             const node = nodes[hash];
             dbg(`original node: %O`, node);
-            if (node.type === "text" && /\s$/.test(node.value)) {
+            if (node?.type === "text" && /\s$/.test(node.value)) {
               // preserve trailing space if original text had it
               dbg(`patch trailing space for %s`, hash);
               chunkTranslated += " ";
@@ -238,23 +271,45 @@ export default async function main() {
             translationCache[hash] = chunkTranslated;
           }
         }
+
+        lastLLmHashTodos = llmHashTodos.size;
       }
 
       // apply translations
       translated = structuredClone(root);
       visitParents(translated, nodeTypes, (node, ancestors) => {
-        const hash = hashNode(node, ancestors);
-        const translation = translationCache[hash];
-        if (translation) {
-          if (node.type === "text") {
-            dbg(`translated text: %s -> %s`, hash, translation);
-            node.value = translation;
-          } else if (node.type === "paragraph" || node.type === "heading") {
-            dbg(`translated %s: %s -> %s`, node.type, hash, translation);
-            const newNodes = parse(translation).children as PhrasingContent[];
-            node.children.splice(0, node.children.length, ...newNodes);
-          } else {
-            dbg(`untranslated node type: %s`, node.type);
+        if (node.type === "yaml") {
+          const data = parsers.YAML(node.value);
+          if (data) {
+            if (typeof data.title === "string") {
+              const nhash = hashNode(data.title);
+              const tr = translationCache[nhash];
+              dbg(`yaml title: %s -> %s`, nhash, tr);
+              if (tr) data.title = tr;
+            }
+            if (typeof data.description === "string") {
+              const nhash = hashNode(data.description);
+              const tr = translationCache[nhash];
+              dbg(`yaml description: %s -> %s`, nhash, tr);
+              if (tr) data.description = tr;
+            }
+            node.value = YAML.stringify(data);
+            return SKIP;
+          }
+        } else {
+          const hash = hashNode(node, ancestors);
+          const translation = translationCache[hash];
+          if (translation) {
+            if (node.type === "text") {
+              dbg(`translated text: %s -> %s`, hash, translation);
+              node.value = translation;
+            } else if (node.type === "paragraph" || node.type === "heading") {
+              dbg(`translated %s: %s -> %s`, node.type, hash, translation);
+              const newNodes = parse(translation).children as PhrasingContent[];
+              node.children.splice(0, node.children.length, ...newNodes);
+            } else {
+              dbg(`untranslated node type: %s`, node.type);
+            }
           }
         }
       });

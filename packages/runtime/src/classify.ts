@@ -95,9 +95,9 @@ ${entries.map(([id, descr]) => `- Label '${id}': ${descr}`).join("\n")}
 ${explanations ? "Provide a single short sentence justification for your choice." : ""}
 Output the label as a single word on the last line (do not emit "Label").
 
-`;
-      _.fence(
-        `- Label 'yes': funny
+## Example
+
+- Label 'yes': funny
 - Label 'no': not funny
 
 DATA:
@@ -107,9 +107,7 @@ Output:
 ${explanations ? "It's a classic joke but the ending does not relate to the start of the joke." : ""}
 no
 
-`,
-        { language: "example" },
-      );
+`.role("system");
       if (typeof text === "function") await text(_);
       else _.def("DATA", text);
     },
