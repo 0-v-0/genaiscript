@@ -1,7 +1,10 @@
 import { hash } from "crypto";
 import { classify, mdast } from "@genaiscript/runtime";
+import "mdast-util-mdxjs-esm";
 import type { Node, Text, Heading, Paragraph, PhrasingContent, Yaml } from "mdast";
-import { basename, dirname, join, relative } from "path";
+import { dirname, join, relative } from "path";
+import { URL } from "url";
+import { chunk } from "../../core/dist/esm/encoders.js";
 script({
   accept: ".md,.mdx",
   files: "src/rag/markdown.md",
@@ -25,16 +28,27 @@ script({
 });
 
 const HASH_LENGTH = 20;
-function hashNode(node: Node | string, ancestors?: Node[]): string {
-  const chunkHash = hash("sha-256", JSON.stringify(node));
-  return chunkHash.slice(0, HASH_LENGTH).toUpperCase();
-}
 const maxPromptPerFile = 5;
 const nodeTypes = ["text", "paragraph", "heading", "yaml"];
 const starlightDir = "docs/src/content/docs";
+const MARKER_START = "┌";
+const MARKER_END = "└";
 type NodeType = Text | Paragraph | Heading | Yaml;
 const langs = {
   fr: "French",
+};
+
+const isUri = (str: string): boolean => {
+  try {
+    new URL(str);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const hasMarker = (str: string): boolean => {
+  return str.includes(MARKER_START) || str.includes(MARKER_END);
 };
 
 export default async function main() {
@@ -53,7 +67,16 @@ export default async function main() {
     .filter(Boolean);
   const dbgc = host.logger(`script:md`);
   const dbgt = host.logger(`script:tree`);
-  const { parse, stringify, visitParents, SKIP } = await mdast();
+  const { visit, parse, stringify, visitParents, SKIP } = await mdast();
+
+  const hashNode = (node: Node | string, ancestors?: Node[]) => {
+    if (typeof node === "object") {
+      node = structuredClone(node);
+      visit(node, (node) => delete node.position);
+    }
+    const chunkHash = hash("sha-256", JSON.stringify(node));
+    return chunkHash.slice(0, HASH_LENGTH).toUpperCase();
+  };
 
   for (const to of tos) {
     let lang = langs[to];
@@ -67,13 +90,16 @@ export default async function main() {
       lang = res.text;
     }
     output.heading(2, `Translating Markdown files to ${lang} (${to})`);
-    const cacheFn = `docs/translations/${to.toLowerCase()}.json`;
-    dbg(`cache: %s`, cacheFn);
-    output.itemValue("cache", cacheFn);
+    const translationCacheFilename = `docs/translations/${to.toLowerCase()}.json`;
+    dbg(`cache: %s`, translationCacheFilename);
+    output.itemValue("cache", translationCacheFilename);
     // hash -> text translation
     const translationCache: Record<string, string> = force
       ? {}
-      : (await workspace.readJSON(cacheFn)) || {};
+      : (await workspace.readJSON(translationCacheFilename)) || {};
+    for (const [k, v] of Object.entries(translationCache)) {
+      if (hasMarker(v)) delete translationCache[k];
+    }
     dbgc(`translation cache: %O`, translationCache);
 
     for (const file of files) {
@@ -86,15 +112,32 @@ export default async function main() {
           ? filename.replace(starlightDir, join(starlightDir, to.toLowerCase()))
           : path.changeext(filename, `.${to.toLowerCase()}.md`);
         output.itemValue(`translation`, translationFn);
+
+        const patchFn = (fn: string) => {
+          if (/^\./.test(fn) && starlight) {
+            // given an local image path fn (like ./image.png) relative to the original file (filename),
+            // path it to the translation file (translationFn).
+            // Calculate the relative path from the translation file's directory to the original file's directory,
+            // then join it with the local image path to get the correct relative path for the translation
+            const originalDir = dirname(filename);
+            const translationDir = dirname(translationFn);
+            const relativeToOriginal = relative(translationDir, originalDir);
+            const r = join(relativeToOriginal, fn);
+            dbg(`patching %s -> %s`, fn, r);
+            return r;
+          }
+          return fn;
+        };
+
         let content = file.content;
         if (aiDisclaimer)
           content += `\n\n<hr/>\n\nTranslated using AI. Please verify the content for accuracy.\n\n`;
         dbgc(`md: %s`, content);
 
         // parse to tree
+        dbgc(`parsing %s`, filename);
         const root = parse(content);
         dbgt(`original %O`, root.children);
-
         // collect original nodes nodes
         const nodes: Record<string, NodeType> = {};
         visitParents(root, nodeTypes, (node, ancestors) => {
@@ -119,7 +162,7 @@ export default async function main() {
           } else {
             // mark untranslated nodes with a unique identifier
             if (node.type === "text") {
-              if (!/\s*[.,:;<>\]\[{}\(\)]+\s*/.test(node.value)) {
+              if (!/\s*[.,:;<>\]\[{}\(\)]+\s*/.test(node.value) && !isUri(node.value)) {
                 dbg(`text node: %s`, nhash);
                 // compress long hash into LLM friendly short hash
                 const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
@@ -240,6 +283,8 @@ export default async function main() {
       - Do not change the structure of the document.
       - As much as possible, maintain the original formatting and structure of the document.
       - Do not translate inline code blocks, code blocks, or any other code-related content.
+      - Use ' instead of ’
+      - Always make sure that the URLs are not modified by the translation.
 
       `.role("system");
             },
@@ -272,6 +317,9 @@ export default async function main() {
                 dbg(`patch trailing space for %s`, hash);
                 chunkTranslated += " ";
               }
+              chunkTranslated = chunkTranslated
+                .replace(/┌[A-Z]\d{3,5}┐/g, "")
+                .replace(/└[A-Z]\d{3,5}┘/g, "");
               dbg(`content: %s`, chunkTranslated);
               translationCache[hash] = chunkTranslated;
             }
@@ -282,15 +330,14 @@ export default async function main() {
 
         // apply translations
         translated = structuredClone(root);
+
+        // apply translations
         visitParents(translated, nodeTypes, (node, ancestors) => {
           if (node.type === "yaml") {
             const data = parsers.YAML(node.value);
             if (data) {
               if (starlight && data?.hero?.image?.file) {
-                data.hero.image.file = join(
-                  dirname(relative(filename, translationFn)),
-                  data.hero.image.file,
-                );
+                data.hero.image.file = patchFn(data.hero.image.file);
                 dbg(`yaml hero image: %s`, data.hero.image.file);
               }
               if (typeof data.title === "string") {
@@ -317,8 +364,15 @@ export default async function main() {
                 node.value = translation;
               } else if (node.type === "paragraph" || node.type === "heading") {
                 dbg(`translated %s: %s -> %s`, node.type, hash, translation);
-                const newNodes = parse(translation).children as PhrasingContent[];
-                node.children.splice(0, node.children.length, ...newNodes);
+                try {
+                  const newNodes = parse(translation).children as PhrasingContent[];
+                  node.children.splice(0, node.children.length, ...newNodes);
+                  return SKIP;
+                } catch (error) {
+                  output.error(`error parsing paragraph translation`, error);
+                  output.fence(node, "json");
+                  output.fence(translation);
+                }
               } else {
                 dbg(`untranslated node type: %s`, node.type);
               }
@@ -326,8 +380,24 @@ export default async function main() {
           }
         });
 
+        // patch images and esm imports
+        visit(translated, ["mdxjsEsm", "image"], (node) => {
+          if (node.type === "image") {
+            node.url = patchFn(node.url);
+            return SKIP;
+          } else if (node.type === "mdxjsEsm") {
+            const rx = /^import\s+(.*)\s+from\s+\"(\.\.\/.*)";?$/gm;
+            node.value = node.value.replace(rx, (m, i, p) => {
+              const r = `import ${i} from "${patchFn(p)}";`;
+              dbg(`mdxjsEsm import: %s -> %s`, m, r);
+              return r;
+            });
+            return SKIP;
+          }
+        });
+
+        dbgt(`stringifying %O`, translated.children);
         let contentTranslated = await stringify(translated);
-        output.diff(content, contentTranslated);
         if (content === contentTranslated) {
           output.warn(`Unable to translate anything, skipping file.`);
           continue;
@@ -343,17 +413,18 @@ export default async function main() {
             );
           },
           {
-            ok: `Translation is faithful to the original document and conveys the same meaning. Translation uses proper ${lang}.`,
-            bad: `Translation is of low quality or poor usage of ${lang}.`,
+            ok: `Translation is faithful to the original document and conveys the same meaning.`,
+            bad: `Translation is of low quality or has a different meaning from the original.`,
           },
           {
+            model: "large",
             explanations: true,
             systemSafety: false,
           },
         );
 
+        output.resultItem(res.label === "ok", `Translation quality: ${res.label}`);
         if (res.label !== "ok") {
-          output.error(`Translation quality is low. Skipping file.`);
           output.fence(res.answer);
           continue;
         }
@@ -363,11 +434,14 @@ export default async function main() {
         dbg(`writing translation to %s`, translationFn);
 
         await workspace.writeText(translationFn, contentTranslated);
+        await workspace.writeText(
+          translationCacheFilename,
+          JSON.stringify(translationCache, null, 2),
+        );
       } catch (error) {
         output.error(error);
         break;
       }
     }
-    await workspace.writeText(cacheFn, JSON.stringify(translationCache, null, 2));
   }
 }
