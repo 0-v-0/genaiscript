@@ -1,0 +1,19 @@
+---
+import Default from "@astrojs/starlight/components/MarkdownContent.astro";
+import { Aside } from "@astrojs/starlight/components";
+
+const { starlightRoute } = Astro.locals;
+const isLocalized = starlightRoute.lang !== "en";
+---
+
+{
+  isLocalized ? (
+    <Aside type="note" title="AI generated translation.">
+      This page was translated by a GenAIScript and LLM models. The translation should be pretty
+      good, please report any issues so we investigate and improve the translation script.
+    </Aside>
+  ) : null
+}
+<Default>
+  <slot />
+</Default>

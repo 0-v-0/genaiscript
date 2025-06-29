@@ -123,7 +123,7 @@ is at https://microsoft.github.io/genaiscript/reference/scripts.md
       ],
       components: {
         Head: "./src/components/Head.astro",
-        Header: "./src/components/Header.astro",        
+        MarkdownContent: "./src/components/MarkdownContent.astro",
         Footer: "./src/components/Footer.astro",
       },
       social: [
