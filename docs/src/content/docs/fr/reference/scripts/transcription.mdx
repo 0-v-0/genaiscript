@@ -29,14 +29,14 @@ Vous devez installer ffmpeg sur votre système. Si la variable d'environnement `
 
 ## Modèle
 
-Par défaut, l'API utilise l'[alias de modèle](/genaiscript/reference/scripts/model-aliases) `transcription` pour transcrire l'audio. Vous pouvez également spécifier un alias de modèle différent en utilisant l'option `model`.
+Par défaut, l'API utilise l'[alias de modèle](../../../reference/reference/scripts/model-aliases/) `transcription` pour transcrire l'audio. Vous pouvez également spécifier un alias de modèle différent en utilisant l'option `model`.
 
 ```js "openai:whisper-1" wrap
 const { text } = await transcribe("...", { model: "openai:whisper-1" })
 ```
 
 :::tip
-Vous pouvez utiliser le [service Web Whisper ASR](/genaiscript/configuration/whisperasr) pour exécuter Whisper localement ou dans un conteneur docker.
+Vous pouvez utiliser le [service Web Whisper ASR](../../../reference/configuration/whisperasr/) pour exécuter Whisper localement ou dans un conteneur docker.
 :::
 
 ## Segments

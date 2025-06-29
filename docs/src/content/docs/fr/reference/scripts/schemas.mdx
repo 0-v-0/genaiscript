@@ -151,7 +151,7 @@ $`Generate data using JSON compliant with ${schema}.`
 
 ### Support natif de zod
 
-Le [runtime GenAIScript](/genaiscript/reference/runtime) expose le module `z`.
+Le [runtime GenAIScript](../../../reference/reference/runtime/) expose le module `z`.
 
 Un type [Zod](https://zod.dev/) peut être passé dans `defSchema` et sera automatiquement converti en schéma JSON. GenAIScript exporte également l'objet `z` de Zod pour plus de commodité.
 
@@ -195,7 +195,7 @@ const schema = defSchema("CITY_SCHEMA", {...}, { format: "json" })
 ```
 
 :::tip[Lire la trace !]
-La trace vous permet de voir la source du schéma et le prompt rendu, et le [cli](/genaiscript/reference/cli) écrira aussi les fichiers TypeScript générés dans le dossier de sortie.
+La trace vous permet de voir la source du schéma et le prompt rendu, et le [cli](../../../reference/reference/cli/) écrira aussi les fichiers TypeScript générés dans le dossier de sortie.
 
 <details>
   <summary>schéma CITY\_SCHEMA</summary>

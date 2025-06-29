@@ -28,7 +28,7 @@ import { Tabs, TabItem } from "@astrojs/starlight/components"
 import { PackageManagers } from "starlight-package-managers"
 
 GenAIScript s'exécute dans un environnement Node.JS (légèrement modifié) où des variables globales supplémentaires ont été ajoutées.
-Cet environnement est configuré par le [cli](/genaiscript/reference/cli).
+Cet environnement est configuré par le [cli](../../../reference/reference/cli/).
 Par conséquent, pour exécuter un GenAIScript dans un processus Node.JS "vanilla", vous devrez utiliser
 **l’API `run` de Node.JS**. Cette API charge et exécute un script GenAIScript dans un thread worker séparé.
 
@@ -37,7 +37,7 @@ Cette page décrit comment importer et utiliser GenAIScript comme une API dans v
 ## Configuration
 
 En supposant que vous ayez ajouté le cli comme dépendance dans votre projet,
-vous pouvez importer le [cli](/genaiscript/reference/api) de la manière suivante :
+vous pouvez importer le [cli](../../../reference/reference/api/) de la manière suivante :
 
 <PackageManagers pkg="genaiscript" dev />
 
@@ -57,7 +57,7 @@ qui crée un [thread worker Node.JS](https://nodejs.org/api/worker_threads.html)
 
 ## `run`
 
-La fonction `run` encapsule la commande [cli run](/genaiscript/reference/cli/run).
+La fonction `run` encapsule la commande [cli run](../../../reference/reference/cli/run/).
 
 ```js wrap
 import { run } from "@genaiscript/api"

@@ -30,7 +30,7 @@ az login
 
 ## Lecture des blobs
 
-Ouvrez une connexion au Azure Blob Storage et obtenez un client pour le conteneur. Nous déconstruisons `account` et `container` de l'objet `env.vars` afin qu'ils puissent être définis via le [cli](/genaiscript/reference/cli).
+Ouvrez une connexion au Azure Blob Storage et obtenez un client pour le conteneur. Nous déconstruisons `account` et `container` de l'objet `env.vars` afin qu'ils puissent être définis via le [cli](../../reference/cli/).
 
 ```ts
 import { BlobServiceClient } from "@azure/storage-blob"
@@ -65,7 +65,7 @@ Le buffer `image` peut être passé dans `defImages` pour être utilisé dans l'
     defImages(image, { detail: "low" })
 ```
 
-Cependant, puisque les images peuvent être "lourdes", vous devrez très probablement utiliser des [prompts en ligne](/genaiscript/reference/scripts/inline-prompts) pour les diviser en requêtes plus petites. (Notez l'utilisation de `_.`)
+Cependant, puisque les images peuvent être "lourdes", vous devrez très probablement utiliser des [prompts en ligne](../../reference/scripts/inline-prompts/) pour les diviser en requêtes plus petites. (Notez l'utilisation de `_.`)
 
 ```ts 'await runPrompt(_ =>' '_.'
 for await (const blob of containerClient.listBlobsFlat()) {

@@ -18,7 +18,7 @@ import {
 
 Le fournisseur [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#chat-completions), `azure` utilise les variables d'environnement `AZURE_OPENAI_...`.
 Vous pouvez utiliser une identité managée (recommandée) ou une clé API pour vous authentifier auprès du service Azure OpenAI.
-Vous pouvez également utiliser un principal de service comme documenté dans [automation](/genaiscript/getting-started/automating-scripts).
+Vous pouvez également utiliser un principal de service comme documenté dans [automation](../../getting-started/automating-scripts/).
 
 ```js "azure:"
 script({ model: "azure:deployment-id" })
@@ -170,7 +170,7 @@ AZURE_OPENAI_TOKEN_SCOPES=...
 
 GenAIScript maintient une [version API par défaut](https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation) pour accéder à Azure OpenAI.
 
-* version actuelle : {AZURE_OPENAI_API_VERSION}
+* current version: {AZURE_OPENAI_API_VERSION}
 
 Vous pouvez remplacer cette valeur en utilisant la variable d'environnement `AZURE_OPENAI_API_VERSION`.
 

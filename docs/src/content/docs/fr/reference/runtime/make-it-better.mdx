@@ -8,7 +8,7 @@ description: Demandez au LLM d'améliorer votre code !
 
 Des résultats surprenants se produisent lorsque vous demandez à plusieurs reprises au LLM de « l'améliorer » (voir [article de blog](https://minimaxir.com/2025/01/write-better-code/)).
 
-Dans cet exemple, nous utilisons la fonction `makeItBetter` du [runtime GenAIScript](/genaiscript/reference/runtime)
+Dans cet exemple, nous utilisons la fonction `makeItBetter` du [runtime GenAIScript](../../../reference/reference/runtime/)
 pour réaliser exactement cela : demander au LLM de l'améliorer pendant quelques cycles.
 
 ## Explication du code
@@ -37,7 +37,7 @@ Cette ligne est une invite pour le modèle IA. Elle demande au système d'analys
 makeItBetter({ repeat: 2 })
 ```
 
-Cette ligne appelle la fonction `makeItBetter` avec une option pour répéter le processus d'amélioration deux fois. Elle enregistre un [participant de chat](/genaiscript/reference/scripts/chat-participants)
+Cette ligne appelle la fonction `makeItBetter` avec une option pour répéter le processus d'amélioration deux fois. Elle enregistre un [participant de chat](../../../reference/reference/scripts/chat-participants/)
 qui injecte des messages dans la boucle de conversation du chat.
 
 La fonction `makeItBetter` ressemble plus ou moins à ceci. Elle enregistre une fonction de rappel qui est appelée à chaque tour de chat.

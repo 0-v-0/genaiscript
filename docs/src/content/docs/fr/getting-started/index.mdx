@@ -1,9 +1,9 @@
 ---
-title: Getting Started
+title: Commencer
 sidebar:
   order: 0
-description: Start developing with the GenAIScript VS Code Extension to create
-  AI scripts efficiently.
+description: Commencez à développer avec l'extension GenAIScript pour VS Code
+  afin de créer des scripts IA efficacement.
 keywords:
   - AI Scripting Extension
   - VS Code AI
@@ -28,40 +28,40 @@ hero:
 import { YouTube } from 'astro-embed';
 import GenAIScriptCli from "../../../../components/GenAIScriptCli.astro";
 
-GenAIScript is a scripting language that integrates LLMs into the scripting process using a simplified JavaScript syntax.
-Supported by our VS Code GenAIScript extension, it allows users to create, debug, and automate LLM-based scripts.
+GenAIScript est un langage de script qui intègre les LLM dans le processus de script en utilisant une syntaxe JavaScript simplifiée.
+Pris en charge par notre extension VS Code GenAIScript, il permet aux utilisateurs de créer, déboguer et automatiser des scripts basés sur LLM.
 
 <YouTube id="https://youtu.be/ENunZe--7j0" posterQuality="high" />
 
-## Preamble
+## Préambule
 
-Before you start writing GenAIScripts, you will need to configure your environment to have access to a LLM.
-The [configuration](/genaiscript/getting-started/configuration) covers this topic in details as they are a lot of options to consider.
+Avant de commencer à écrire des GenAIScripts, vous devez configurer votre environnement pour avoir accès à un LLM.
+La [configuration](../../getting-started/configuration/) traite ce sujet en détail, car il y a de nombreuses options à considérer.
 
 :::tip
-If you are running GenAIScript from a [GitHub CodeSpaces](https://github.com/features/codespaces), you can skip the configuration step as the extension will automatically use [Modèles GitHub](/genaiscript/configuration/github).
+Si vous exécutez GenAIScript depuis un [GitHub CodeSpaces](https://github.com/features/codespaces), vous pouvez ignorer l'étape de configuration, car l'extension utilisera automatiquement les [modèles GitHub](../../configuration/github/).
 :::
 
-## Hello World
+## Bonjour le Monde
 
-A GenAIScript is a JavaScript program that builds an LLM which is then executed by the GenAIScript runtime.
-Let's start with a simple script that tells the LLM to generate a poem. In typical use, GenAIScript files
-have the naming convention `<scriptname>.genai.mjs` and are stored in the `genaisrc` directory
-in a repository. Let's call this script `poem.genai.mjs`.
+Un GenAIScript est un programme JavaScript qui construit un LLM, ensuite exécuté par le runtime de GenAIScript.
+Commençons avec un script simple qui demande au LLM de générer un poème. En utilisation typique, les fichiers GenAIScript
+ont comme convention de nommage `<scriptname>.genai.mjs` et sont stockés dans le répertoire `genaisrc`
+d’un dépôt. Appelons ce script `poem.genai.mjs`.
 
 ```js wrap title="poem.genai.mjs"
 $`Write a poem in code.`
 ```
 
-Le `$...` syntax is [template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
-that renders to a user message to the LLM prompt. In this example, it would be:
+La syntaxe `$...` est un [template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
+qui se traduit par un message utilisateur dans l’invite LLM. Dans cet exemple, ce serait :
 
 ```txt
 Write a poem in code.
 ```
 
-In practice, your script may also import [system scripts](/genaiscript/reference/scripts/system) (automatically or manually specified) that add more messages to the requests.
-So the final JSON payload sent to the LLM server might look more like this:
+En pratique, votre script peut également importer des [scripts système](../../reference/scripts/system/) (spécifiés automatiquement ou manuellement) qui ajoutent plus de messages aux requêtes.
+Ainsi, la charge utile JSON finale envoyée au serveur LLM pourrait ressembler à ceci :
 
 ```js
 {   ...
@@ -72,14 +72,13 @@ So the final JSON payload sent to the LLM server might look more like this:
 }
 ```
 
-GenAIScripts can be executed from the [ligne de commande](/genaiscript/reference/cli) or run with a right-click context
-menu selection inside Visual Studio Code. Because a GenAIScript is just JavaScript,
-the execution of a script follows the normal JavaScript evaluation rules.
-Once the script is executed, the generated messages are sent to the LLM server, and the response is processed by the GenAIScript runtime.
+Les GenAIScripts peuvent être exécutés depuis la [ligne de commande](../../reference/cli/) ou via une sélection du menu contextuel par clic droit à l'intérieur de Visual Studio Code. Étant donné qu'un GenAIScript est simplement du JavaScript,
+l'exécution d'un script suit les règles normales d'évaluation du JavaScript.
+Une fois le script exécuté, les messages générés sont envoyés au serveur LLM, et la réponse est traitée par le runtime de GenAIScript.
 
 <GenAIScriptCli args="run poem" />
 
-Here is an example output for this prompt (shortened) that got returned by OpenAI gpt-4o.
+Voici un exemple de sortie pour cette invite (abrégée) qui a été retournée par OpenAI gpt-4o.
 
 ````markdown
 ```python
@@ -91,25 +90,25 @@ def poem():
 ```
 ````
 
-GenAIScript supports extracting structured data and files from the LLM output as we will see later.
+GenAIScript prend en charge l'extraction de données structurées et de fichiers à partir de la sortie LLM, comme nous le verrons plus tard.
 
 :::note
-The CLI will scan you project for `*.genai.mjs/mts` files and you can use the filename without the extension to refer to them.
+L'interface CLI analysera votre projet pour les fichiers `*.genai.mjs/mts`, et vous pouvez utiliser le nom de fichier sans l'extension pour vous y référer.
 :::
 
 ## Variables
 
-GenAIScripts support a way to declare [prompt variables](/genaiscript/reference/scripts/context), which allow to include content into the prompt and to refer to it later in the script.
+GenAIScripts prennent en charge une manière de déclarer des [variables d’invite](../../reference/scripts/context/), permettant d’inclure du contenu dans l’invite et de s’y référer plus tard dans le script.
 
-Let's take a look at a `summarize` script that includes the content of a file and asks the LLM to summarize it.
+Examinons un script `summarize` qui inclut le contenu d’un fichier et demande au LLM de le résumer.
 
 ```js wrap title="summarize.genai.mjs"
 def("FILE", workspace.readText("some/relative/markdown.txt"))
 $`Summarize FILE in one sentence.`
 ```
 
-In this snippet, we use `workspace.readText` to read the content of a file (path relatie to workspace root)
-and we use `def` to include it in the prompt as a `prompt variable`. We then "referenced" this variable in the prompt.
+Dans cet extrait, nous utilisons `workspace.readText` pour lire le contenu d’un fichier (chemin relatif à la racine de l’espace de travail)
+et nous utilisons `def` pour l’inclure dans l’invite en tant que `variable d’invite`. Nous avons ensuite "référencé" cette variable dans l’invite.
 
 ````markdown wrap title="prompt"
 FILE:
@@ -123,20 +122,20 @@ Markdown is a lightweight markup language that you can use to add formatting ele
 Summarize FILE in one sentence.
 ````
 
-Le `def` function supports many configuration flags to control how the content is included in the prompt. For example, you can insert line numbers or limit the number of tokens.
+La fonction `def` prend en charge de nombreuses options de configuration pour contrôler comment le contenu est inclus dans l’invite. Par exemple, vous pouvez insérer des numéros de ligne ou limiter le nombre de tokens.
 
 ```js
 def("FILE", ..., { lineNumbers: true, maxTokens: 100 })
 ```
 
 :::note
-The variable name (FILE) matters! Make sure it represents the content of the variable or it might confuse the LLM.
+Le nom de la variable (FILE) est important ! Assurez-vous qu’il représente le contenu de la variable, sinon cela pourrait perturber le LLM.
 :::
 
-## Files parameters
+## Paramètres de fichiers
 
-GenAIScript are meant to work on a file or set of files. When you run a script in Visual Studio Code on a file or a folder, those files are passed to the script using the `env.files` variable. You can use this `env.files` to replace hard-coded paths and make your scripts
-more resuable.
+Les GenAIScripts sont conçus pour fonctionner sur un fichier ou un ensemble de fichiers. Lorsque vous exécutez un script dans Visual Studio Code sur un fichier ou un dossier, ces fichiers sont transmis au script à l’aide de la variable `env.files`. Vous pouvez utiliser ce `env.files` pour remplacer des chemins codés en dur et rendre vos scripts
+plus réutilisables.
 
 ```js wrap title="summarize.genai.mjs" "env.files"
 // summarize all files in the env.files array
@@ -144,15 +143,15 @@ def("FILE", env.files)
 $`Summarize FILE in one sentence.`
 ```
 
-And now apply it to a bunch of files
+Et maintenant, appliquez-le à plusieurs fichiers
 
 <GenAIScriptCli args="run summarize &#x22;**/*.md&#x22;" />
 
-## Processing outputs
+## Traitement des sorties
 
-GenAIScript processes the outputs of the LLM and extracts files, diagnostics and code sections when possible.
+GenAIScript traite les sorties du LLM et extrait les fichiers, diagnostics et sections de code lorsque cela est possible.
 
-Let's update the summarizer script to specify an output file pattern.
+Mettons à jour le script de synthèse pour spécifier un modèle de fichier de sortie.
 
 ```js wrap title="summarize.genai.mjs"
 // summarize all files in the env.files array
@@ -161,8 +160,8 @@ $`Summarize each FILE in one sentence.
   Save each generated summary to "<filename>.summary"`
 ```
 
-Given this input, the model returns a string, which
-the GenAIScript runtime interprets based on what the prompt requested from the model:
+Étant donné cette entrée, le modèle retourne une chaîne, que
+le runtime GenAIScript interprète en fonction de ce que l'invite demandait au modèle :
 
 ````markdown wrap
 File src/samples/markdown-small.txt.summary:
@@ -172,22 +171,22 @@ Markdown is a lightweight markup language created by John Gruber in 2004, known 
 ```
 ````
 
-Because the prompt requested that a file be written,
-the model has responded with content describing the contents of the file that should be created.
-In this case, the model has chosen to call that file `markdown-small.txt.summary`.
+Étant donné que l'invite a demandé qu’un fichier soit créé,
+le modèle a répondu avec un contenu décrivant le contenu du fichier qui devrait être créé.
+Dans ce cas, le modèle a choisi d’appeler ce fichier `markdown-small.txt.summary`.
 
-Our GenAIScript library parses the LLM output, interprets it, and in this case will
-create the file. If the script is invoked in VS Code, the
-file creation is exposed to the user via a [Refactoring Preview](https://code.visualstudio.com/docs/editor/refactoring#_refactor-preview) or directly saved to the file system.
+Notre bibliothèque GenAIScript analyse la sortie LLM, l’interprète et dans ce cas
+crée le fichier. Si le script est invoqué dans VS Code, la
+création de fichier est exposée à l’utilisateur via une [aperçu de refactoring](https://code.visualstudio.com/docs/editor/refactoring#_refactor-preview) ou directement enregistrée dans le système de fichiers.
 
-Of course, things can get more complex - with functions, schemas, ... -, but this is the basic flow of a GenAIScript script.
-If you're looking for an exhaustive list of prompting techniques, checkout [the prompt report](https://learnprompting.org/).
+Bien sûr, les choses peuvent devenir plus complexes - avec des fonctions, des schémas, etc. -, mais ceci est le flux de base d’un script GenAIScript.
+Si vous recherchez une liste exhaustive de techniques d'invites, consultez [le rapport sur les invites](https://learnprompting.org/).
 
-## Using tools
+## Utilisation des outils
 
-[Outils](/genaiscript/reference/scripts/tools) are a way to register JavaScript callbacks with the LLM, they can be used
-execute code, search the web, ... or read files!
-Here is an example of a script that uses the [`fs_read_file`](/genaiscript/reference/scripts/system#systemfs_read_file) tool to read a file and summarize it:
+[Les outils](../../reference/scripts/tools/) sont un moyen d’enregistrer des rappels JavaScript avec le LLM, ils peuvent être utilisés
+pour exécuter du code, rechercher sur le Web, ... ou lire des fichiers !
+Voici un exemple de script qui utilise l’outil [`fs_read_file`](../../reference/scripts/system#systemfs_read_file/) pour lire un fichier et le résumer :
 
 ```js wrap title="summarize.genai.mjs" 'tools: "fs_read_file"'
 script({ tools: "fs_read_file" })
@@ -199,7 +198,7 @@ $`
 `
 ```
 
-A possible trace looks like as follows.
+Une trace possible ressemble à ceci :
 
 <details style="margin-left: 1rem;" open>
   <summary>Trace</summary>
@@ -217,13 +216,13 @@ A possible trace looks like as follows.
   ````
 </details>
 
-As you can see we are not using the `def` function anymore, we expect the LLM to issue a call to the `fs_read_file` tool to read the file `markdown.md` so that it receives the content of that file.
+Comme vous pouvez le voir, nous n'utilisons plus la fonction `def`, nous attendons que le LLM émette un appel à l'outil `fs_read_file` pour lire le fichier `markdown.md` afin que son contenu soit reçu.
 
-Note that this approach is less deterministic than using `def` as the LLM might not call the tool. Moreover it uses more tokens as the LLM has to generate the code to call the tool. Nonetheless, it is a powerful way to interact with the LLM.
+Notez que cette approche est moins déterministe que l’utilisation de `def`, car le LLM pourrait ne pas appeler l’outil. De plus, elle utilise plus de tokens, car le LLM doit générer le code pour appeler l’outil. Néanmoins, c’est un moyen puissant d’interagir avec le LLM.
 
-## Using agents
+## Utilisation des agents
 
-You can add one more layer of indirection and use [agent\_fs](/genaiscript/reference/scripts/system#systemagent_fs), a file system [agent](/genaiscript/reference/scripts/agents), to read the file. The agent combines a call to an LLM, and a set of tools related to file system queries.
+Vous pouvez ajouter une couche d’indirection supplémentaire et utiliser [agent\_fs](../../reference/scripts/system#systemagent_fs/), un [agent](../../reference/scripts/agents/) du système de fichiers, pour lire le fichier. L'agent combine un appel au LLM et un ensemble d'outils liés aux requêtes système de fichiers.
 
 ```js wrap title="summarize.genai.mjs" "agent_fs" 'tools: "agent_fs"'
 script({ tools: "agent_fs" })
@@ -264,14 +263,14 @@ $`
 
 ## Étapes suivantes
 
-While GenAIScripts can be written with any IDE and run from the command line,
-users of the [extension in Visual Studio Code](/genaiscript/getting-started/installation)
-greatly benefit from the additional support for writing, debugging, and executing
-GenAIScript provided. We strongly recommend starting by installing the extension.
+Bien que les GenAIScripts puissent être écrits avec n’importe quel IDE et exécutés depuis la ligne de commande,
+les utilisateurs de l’[extension dans Visual Studio Code](../../getting-started/installation/)
+bénéficient grandement du support supplémentaire pour l’écriture, le débogage et l’exécution
+des GenAIScripts fourni. Nous recommandons vivement de commencer par installer l’extension.
 
 :::tip
-If you are looking for a runtime package of GenAIScript that can be used in an existing Node.JS project,
-read [runtime documentation](/genaiscript/reference/runtime).
+Si vous recherchez un package runtime GenAIScript pouvant être utilisé dans un projet Node.JS existant,
+lisez la [documentation runtime](../../reference/runtime/).
 :::
 
 <hr />

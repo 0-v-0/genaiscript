@@ -22,21 +22,21 @@ import weatherScriptSource from "../../../../../../../packages/sample/genaisrc/w
 import mathScriptSource from "../../../../../../../packages/sample/genaisrc/math-agent.genai.mjs?raw";
 import { YouTube } from "astro-embed"
 
-You can register **tools** (also known as **functions**) that the LLM may decide to call as part of assembling the answer.
-See [OpenAI functions](https://platform.openai.com/docs/guides/function-calling), [Ollama tools](https://ollama.com/blog/tool-support),
-or [Anthropic tool use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use).
+Vous pouvez enregistrer des **outils** (également appelés **fonctions**) que le LLM peut décider d'appeler dans le cadre de l'assemblage de la réponse.
+Voir [fonctions OpenAI](https://platform.openai.com/docs/guides/function-calling), [outils Ollama](https://ollama.com/blog/tool-support),
+ou [utilisation des outils Anthropic](https://docs.anthropic.com/en/docs/build-with-claude/tool-use).
 
-Not all LLM models support tools, in those cases, GenAIScript also support a fallback mechanism to implement tool call through system prompts (see [Fallback Tools](#fallbacktools)).
+Tous les modèles LLM ne supportent pas les outils. Dans ces cas, GenAIScript prend également en charge un mécanisme de secours pour implémenter l'appel d'outils via des invites système (voir [Fallback Tools](#fallbacktools)).
 
 <YouTube id="https://www.youtube.com/watch?v=E2oBlNK69-c" posterQuality="high" />
 
 ## `defTool`
 
-`defTool` is used to define a tool that can be called by the LLM.
-It takes a JSON schema to define the input and expects a string output.
-The parameters are defined using the [parameters schema](/genaiscript/reference/scripts/parameters).
+`defTool` est utilisé pour définir un outil qui peut être appelé par le LLM.
+Il prend un schéma JSON pour définir l'entrée et s'attend à une sortie sous forme de chaîne.
+Les paramètres sont définis en utilisant le [schéma des paramètres](../../../reference/reference/scripts/parameters/).
 
-**The LLM decides to call this tool on its own!**
+**Le LLM décide lui-même d'appeler cet outil !**
 
 ```js wrap
 defTool(
@@ -53,25 +53,25 @@ defTool(
 )
 ```
 
-In the example above, we define a tool called `current_weather`
-that takes a location as input and returns the weather.
+Dans l'exemple ci-dessus, nous définissons un outil appelé `current_weather`
+qui prend un lieu en entrée et retourne la météo.
 
-### Weather tool example
+### Exemple d'outil météo
 
-This example uses the `current_weather` tool to get the weather for Brussels.
+Cet exemple utilise l'outil `current_weather` pour obtenir la météo à Bruxelles.
 
 <Code code={weatherScriptSource} wrap={true} lang="js" title="weather.genai.mjs" />
 
-### Math tool example
+### Exemple d'outil mathématique
 
-This example uses the math expression evaluator
-to evaluate a math expression.
+Cet exemple utilise l'évaluateur d'expressions mathématiques
+pour évaluer une expression mathématique.
 
 <Code code={mathScriptSource} wrap={true} lang="js" title="math-agent.genai.mjs" />
 
-### Reusing tools in system scripts
+### Réutilisation des outils dans des scripts système
 
-You can define tools in a system script and include them in your main script as any other system script or tool.
+Vous pouvez définir des outils dans un script système et les inclure dans votre script principal comme n'importe quel autre script système ou outil.
 
 ```js wrap title="system.random.genai.mjs"
 system({ description: "Random tools" })
@@ -82,7 +82,7 @@ export default function (ctx: ChatGenerationContext) {
 }
 ```
 
-* Make sure to use `system` instead of `script` in the system script.
+* Assurez-vous d'utiliser `system` au lieu de `script` dans le script système.
 
 ```js wrap title="random-script.genai.mjs" 'tools: ["random"]'
 script({
@@ -92,10 +92,10 @@ script({
 $`Generate a random number.
 ```
 
-### Multiple instances of the same system script
+### Instances multiples du même script système
 
-You can include the same system script multiple times in a script
-with different parameters.
+Vous pouvez inclure plusieurs fois le même script système dans un script
+avec différents paramètres.
 
 ```js wrap
 script({
@@ -110,12 +110,12 @@ script({
 })
 ```
 
-## Model Context Protocol Tools
+## Outils du protocole Model Context
 
-[Model Context Provider](https://modelcontextprotocol.io/) (MCP) is an open protocol
-that enables seamless integration between LLM applications and external data sources and [tools](https://modelcontextprotocol.io/docs/concepts/tools).
+[Model Context Provider](https://modelcontextprotocol.io/) (MCP) est un protocole ouvert
+qui permet une intégration transparente entre les applications LLM et les sources de données et [outils](https://modelcontextprotocol.io/docs/concepts/tools) externes.
 
-You can leverage [MCP servers](https://github.com/modelcontextprotocol/servers) to provide tools to your LLM.
+Vous pouvez utiliser des [serveurs MCP](https://github.com/modelcontextprotocol/servers) pour fournir des outils à votre LLM.
 
 ```js
 defTool({
@@ -126,23 +126,23 @@ defTool({
 })
 ```
 
-See [Model Context Protocol Tools](/genaiscript/reference/scripts/mcp-tools) for more information.
+Voir [Outils du protocole Model Context](../../../reference/reference/scripts/mcp-tools/) pour plus d'informations.
 
-## Fallback Tool Support <a href="" id="fallbacktools" />
+## Prise en charge des outils de secours <a href="" id="fallbacktools" />
 
-Some LLM models do not have built-in model support.
-For those model, it is possible to enable tool support through system prompts. The performance may be lower than built-in tools, but it is still possible to use tools.
+Certains modèles LLM ne disposent pas de prise en charge intégrée des outils.
+Pour ces modèles, il est possible d'activer la prise en charge des outils via des invites système. Les performances peuvent être inférieures à celles des outils intégrés, mais il est toujours possible d'utiliser des outils.
 
-The tool support is implemented in [system.tool\_calls](/genaiscript/reference/scripts/system#systemtool_calls)
-and "teaches" the LLM how to call tools. When this mode is enabled, you will see
-the tool call tokens being responded by the LLM.
+La prise en charge des outils est mise en œuvre dans [system.tool\_calls](../../../reference/reference/scripts/system#systemtool_calls/)
+et "apprend" au LLM comment appeler des outils. Lorsque ce mode est activé, vous verrez
+les jetons d'appel d'outil auxquels répond le LLM.
 
-GenAIScript maintains a list of well-known models that do not support
-tools so it will happen automatically for those models.
+GenAIScript maintient une liste des modèles bien connus qui ne supportent pas
+les outils, de sorte que cela se produira automatiquement pour ces modèles.
 
-To enable this mode, you can either
+Pour activer ce mode, vous pouvez soit
 
-* ajoutez la `fallbackTools` option to the script
+* ajouter l'option `fallbackTools` au script
 
 ```js "fallbackTools: true"
 script({
@@ -150,22 +150,22 @@ script({
 })
 ```
 
-* or add the `--fallback-tools` flag to the CLI
+* ou ajouter le flag `--fallback-tools` à la CLI
 
 ```sh "--fallback-tools"
 npx genaiscript run ... --fallback-tools
 ```
 
 :::note
-The performance of this feature will vary greatly based on the LLM model you decide to use.
+La performance de cette fonctionnalité variera considérablement en fonction du modèle LLM que vous décidez d'utiliser.
 :::
 
-## Prompt Injection Detection
+## Détection d'injection d'invite
 
-A tool may retrieve data that contains prompt injection attacks. For example, a tool that fetches a URL may return a page that contains prompt injection attacks.
+Un outil peut récupérer des données contenant des attaques d'injection d'invite. Par exemple, un outil qui récupère une URL peut renvoyer une page contenant des attaques d'injection d'invite.
 
-To prevent this, you can enable the `detectPromptInjection` option. It will run your [content safety scanner](/genaiscript/reference/scripts/content-safety) services
-on the tool output and will erase the answer if an attack is detected.
+Pour éviter cela, vous pouvez activer l'option `detectPromptInjection`. Cela exécutera vos services [d'analyse de sécurité de contenu](../../../reference/reference/scripts/content-safety/)
+sur la sortie de l'outil et effacera la réponse si une attaque est détectée.
 
 ```js 'detectPromptInjection: "always"'
 defTool("fetch", "Fetch a URL", {
@@ -179,12 +179,12 @@ defTool("fetch", "Fetch a URL", {
 })
 ```
 
-## Output Intent validation
+## Validation de l'intention de sortie
 
-You can configure GenAIScript to execute a LLM-as-a-Judge validation of the tool result based on the description or a custom intent.
-The LLM-as-a-Judge will happen on every tool response using the `intent` model alias, which maps to `small` by default.
+Vous pouvez configurer GenAIScript pour exécuter une validation LLM-as-a-Judge du résultat de l'outil en fonction de la description ou d'une intention personnalisée.
+La validation LLM-as-a-Judge se produira sur chaque réponse de l'outil en utilisant l'alias de modèle `intent`, qui est mappé à `small` par défaut.
 
-Le `description` intent is a special value that gets expanded to the tool description.
+L'intention `description` est une valeur spéciale qui est développée à la description de l'outil.
 
 ```js 'intent: "description"''
 defTool(
@@ -200,11 +200,11 @@ defTool(
 )
 ```
 
-## Packaging as System scripts
+## Regroupement en scripts système
 
-To pick and choose which tools to include in a script,
-you can group them in system scripts. For example,
-the `current_weather` tool can be included the `system.current_weather.genai.mjs` script.
+Pour choisir quels outils inclure dans un script,
+vous pouvez les regrouper dans des scripts système. Par exemple,
+l'outil `current_weather` peut être inclus dans le script `system.current_weather.genai.mjs`.
 
 ```js wrap file="system.current_weather.genai.mjs" 'defTool("current_weather", ...)'
 script({
@@ -213,7 +213,7 @@ script({
 defTool("current_weather", ...)
 ```
 
-then use the tool id in the `tools` field.
+puis utilisez l'identifiant de l'outil dans le champ `tools`.
 
 ```js 'tools: ["current_weather"]'
 script({
@@ -222,12 +222,12 @@ script({
 })
 ```
 
-### Example
+### Exemple
 
-Let's illustrate how tools come together with a question answering script.
+Illustrons comment les outils se combinent avec un script de réponses aux questions.
 
-In the script below, we add the `retrieval_web_search` tool. This tool
-will call into `retrieval.webSearch` as needed.
+Dans le script ci-dessous, nous ajoutons l'outil `retrieval_web_search`. Cet outil
+appellera `retrieval.webSearch` si nécessaire.
 
 ```js file="answers.genai.mjs"
 script({
@@ -242,16 +242,16 @@ $`Answer the questions in FILES using a web search.
 - List a summary of the answers and the sources used to create the answers.
 ```
 
-We can then apply this script to the `questions.md` file below.
+Nous pouvons ensuite appliquer ce script au fichier `questions.md` ci-dessous.
 
 ```md file="questions.md"
 - What is the weather in Seattle?
 - What laws were voted in the USA congress last week?
 ```
 
-After the first request, the LLM requests to call the `web_search` for each questions.
-The web search answers are then added to the LLM message history and the request is made again.
-The second yields the final result which includes the web search results.
+Après la première requête, le LLM demande d'appeler le `web_search` pour chaque question.
+Les réponses de la recherche web sont ensuite ajoutées à l'historique des messages du LLM et la requête est faite à nouveau.
+La seconde donne le résultat final qui inclut les résultats de la recherche web.
 
 <BuiltinTools />
 

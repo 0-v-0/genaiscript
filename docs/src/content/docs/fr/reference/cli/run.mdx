@@ -175,7 +175,7 @@ npx genaiscript run <script> <files> --out-data data.jsonl
 npx genaiscript run <script> <files> --out-changelogs changelogs.txt
 ```
 
-## Pull Requests et Issues <a href="" id="pull-requests" />
+## Demandes de tirage et problèmes <a href="" id="pull-requests" />Le CLI peut mettre à jour la description et les commentaires d'une demande de tirage/problème lorsqu'il s'exécute dans une action GitHub ou un pipeline Azure DevOps.
 
 La CLI peut mettre à jour une description et des commentaires de pull request/issue lorsqu'elle est exécutée dans un GitHub Action ou un pipeline Azure DevOps.
 
@@ -231,9 +231,9 @@ npx genaiscript run ... --pull-request-comment
 
 Le paramètre `tag` est un identifiant unique utilisé pour différencier les descriptions générées par différentes exécutions. La valeur par défaut est l'identifiant du script.
 
-### Créez des commentaires de revue de pull request à partir de chaque [annotations](/genaiscript/reference/scripts/annotations)&#xA;([exemple](https://github.com/microsoft/genaiscript/pull/564#pullrequestreview-2151692644)).
+### `--pull-request-reviews` <a href="" id="pull-request-reviews" />Créer des commentaires de révision de demande de tirage à partir de chaque [annotation](../../../reference/reference/scripts/annotations/) ([exemple](https://github.com/microsoft/genaiscript/pull/564#pullrequestreview-2151692644)).
 
-Crée des commentaires de revue de pull request à partir de chaque [annotation](/genaiscript/reference/scripts/annotations) ([exemple](https://github.com/microsoft/genaiscript/pull/564#pullrequestreview-2151692644)).
+Crée des commentaires de revue de pull request à partir de chaque [annotation](../../../reference/reference/scripts/annotations/) ([exemple](https://github.com/microsoft/genaiscript/pull/564#pullrequestreview-2151692644)).
 
 ```sh
 npx genaiscript run ... --pull-request-reviews
@@ -241,7 +241,7 @@ npx genaiscript run ... --pull-request-reviews
 
 ## En savoir plus
 
-La liste complète des options est disponible dans la [référence CLI](/genaiscript/reference/cli/commands#run).
+La liste complète des options est disponible dans la [référence CLI](../../../reference/reference/cli/commands#run/).
 
 <hr />
 

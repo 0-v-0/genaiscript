@@ -22,7 +22,7 @@ Elle offre une interface simple pour exploiter la puissance des LLM afin d'extra
 
 ## Utilisation
 
-`cast` est défini dans le [runtime GenAIScript](/genaiscript/reference/runtime) et doit être importé. Il prend le texte non structuré (ou les fichiers), un schéma JSON
+`cast` est défini dans le [runtime GenAIScript](../../../reference/reference/runtime/) et doit être importé. Il prend le texte non structuré (ou les fichiers), un schéma JSON
 et retourne les données extraites (ou une erreur).
 
 ```js
@@ -65,7 +65,7 @@ const res = await cast(_ => {
 
 ## Modèle et autres options
 
-La fonction `cast` utilise par défaut l'[alias de modèle](/genaiscript/reference/scripts/model-aliases) `cast`.
+La fonction `cast` utilise par défaut l'[alias de modèle](../../../reference/reference/scripts/model-aliases/) `cast`.
 Vous pouvez modifier cet alias ou spécifier un autre modèle dans les options.
 
 ```js
@@ -74,7 +74,7 @@ const res = await cast("...", {
 })
 ```
 
-Les `options` sont transmises en interne à l’[invite en ligne](/genaiscript/reference/scripts/inline-prompts) et peuvent être utilisées pour modifier le comportement du LLM.
+Les `options` sont transmises en interne à l’[invite en ligne](../../../reference/reference/scripts/inline-prompts/) et peuvent être utilisées pour modifier le comportement du LLM.
 
 ## Remerciements
 

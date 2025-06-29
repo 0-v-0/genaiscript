@@ -34,7 +34,7 @@ Assurez-vous d'utiliser l'extension de fichier **`.mts`** - et non `.ts` -, qui 
 
 ## Importer des fichiers sources TypeScript
 
-Il est possible d’[importer](/genaiscript/reference/scripts/imports) des fichiers sources TypeScript.
+Il est possible d’[importer](../../../reference/reference/scripts/imports/) des fichiers sources TypeScript.
 
 ```js title="summarizer.mts"
 export function summarize(files: string[]) {

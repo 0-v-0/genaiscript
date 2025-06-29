@@ -9,7 +9,7 @@ keywords: containerization, docker, GCC, tool integration, secure execution
 
 ---
 
-Ce guide montre comment créer un [outil](/genaiscript/reference/scripts/tools) qui appelle un exécutable dans un [conteneur](/genaiscript/reference/scripts/container). C'est une méthode flexible et sécurisée pour exécuter des outils qui peuvent avoir des dépendances ou des préoccupations de sécurité.
+Ce guide montre comment créer un [outil](../../reference/scripts/tools/) qui appelle un exécutable dans un [conteneur](../../reference/scripts/container/). C'est une méthode flexible et sécurisée pour exécuter des outils qui peuvent avoir des dépendances ou des préoccupations de sécurité.
 
 Cela se fait généralement en créant un conteneur avec une image particulière (ici `gcc`).
 

@@ -14,7 +14,7 @@ Supposons que nous souhaitions planifier un voyage de week-end en utilisant un G
 nous aidera à organiser ce voyage en utilisant la recherche web pour découvrir des activités à faire et la météo prévue.
 
 :::note
-Vous aurez besoin d'une [clé API Bing Web Search](/genaiscript/reference/scripts/web-search) pour utiliser `webSearch`.
+Vous aurez besoin d'une [clé API Bing Web Search](../../reference/scripts/web-search/) pour utiliser `webSearch`.
 :::
 
 <Steps>
@@ -29,7 +29,7 @@ Vous aurez besoin d'une [clé API Bing Web Search](/genaiscript/reference/script
      })
      ```
 
-  3. Utilisez la fonction [`webSearch`](/genaiscript/reference/scripts/web-search/) pour
+  3. Utilisez la fonction [`webSearch`](../../reference/scripts/web-search/) pour
      chercher des informations sur la destination.
      Si vous n'en avez pas, vous pouvez rechercher les pages web manuellement et utiliser les URL directement
      dans l'appel à la fonction `host.fetchText`.
@@ -37,14 +37,14 @@ Vous aurez besoin d'une [clé API Bing Web Search](/genaiscript/reference/script
      const parkinfo = await retrieval.webSearch("mt rainier things to do")   
      ```
 
-  4. `webSearch` renvoie une liste d'URL. Utilisez [`fetchText`](/genaiscript/reference/scripts/fetch/)
+  4. `webSearch` renvoie une liste d'URL. Utilisez [`fetchText`](../../reference/scripts/fetch/)
      pour récupérer le contenu de la 1ère URL.
      ```js
      const parktext = await host.fetchText(parkinfo.webPages[0])
      ```
 
   5. `host.fetchText` retourne beaucoup de balises HTML de formatage, etc.
-     Utilisez [`runPrompt`](/genaiscript/reference/scripts/inline-prompts/)
+     Utilisez [`runPrompt`](../../reference/scripts/inline-prompts/)
      pour appeler le LLM afin de nettoyer ces balises et ne garder que le texte.
      ```js
      const cleanInfo = await runPrompt(_ => {

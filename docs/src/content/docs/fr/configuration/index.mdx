@@ -35,7 +35,7 @@ script({
 
 ### Modèles large, small, vision
 
-Vous pouvez également utiliser les [alias de modèle](/genaiscript/reference/scripts/model-aliases) `small`, `large`, `vision` pour utiliser les modèles petits, grands et activés pour la vision configurés par défaut.
+Vous pouvez également utiliser les [alias de modèle](../../reference/scripts/model-aliases/) `small`, `large`, `vision` pour utiliser les modèles petits, grands et activés pour la vision configurés par défaut.
 Les modèles larges correspondent généralement à la gamme de raisonnement gpt-4 d'OpenAI et peuvent être utilisés pour des tâches plus complexes.
 Les petits modèles sont dans la gamme gpt-4o-mini d'OpenAI, et sont utiles pour des tâches rapides et simples.
 
@@ -47,8 +47,8 @@ script({ model: "small" })
 script({ model: "large" })
 ```
 
-Les alias de modèles peuvent aussi être remplacés via la [commande cli run](/genaiscript/reference/cli/run),
-les variables d'environnement ou un fichier de configuration. [En savoir plus sur les alias de modèles](/genaiscript/reference/scripts/model-aliases).
+Les alias de modèles peuvent aussi être remplacés via la [commande cli run](../../reference/cli/run/),
+les variables d'environnement ou un fichier de configuration. [En savoir plus sur les alias de modèles](../../reference/scripts/model-aliases/).
 
 ```sh
 genaiscript run ... --model large_model_id --small-model small_model_id
@@ -155,7 +155,7 @@ npx genaiscript ... --env .env .env.debug
 GENAISCRIPT_ENV_FILE=".env.local" npx genaiscript ...
 ```
 
-* en spécifiant l'emplacement du fichier `.env` dans un [fichier de configuration](/genaiscript/reference/configuration-files).
+* en spécifiant l'emplacement du fichier `.env` dans un [fichier de configuration](../../reference/configuration-files/).
 
 ```json title="~/genaiscript.config.yaml"
 {
@@ -187,7 +187,7 @@ env:
 
 ## Commande `configure`
 
-La commande [configure](/genaiscript/reference/cli/configure) est une commande interactive pour configurer et valider les connexions LLM.
+La commande [configure](../../reference/cli/configure/) est une commande interactive pour configurer et valider les connexions LLM.
 
 ```sh
 npx genaiscript configure
@@ -273,7 +273,7 @@ HTTP_PROXY=http://proxy.example.com:8080
 
 ## Vérification de votre configuration
 
-Vous pouvez vérifier votre configuration en exécutant la commande `genaiscript info env` [command](/genaiscript/reference/cli).
+Vous pouvez vérifier votre configuration en exécutant la commande `genaiscript info env` [command](../../reference/cli/).
 Elle affichera les informations de configuration actuelles analysées par GenAIScript.
 
 ```sh

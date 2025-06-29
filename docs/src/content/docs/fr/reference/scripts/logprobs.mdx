@@ -1,0 +1,259 @@
+---
+title: LogProbs
+description: Apprenez à utiliser les logprobs pour diagnostiquer les
+  performances de vos scripts.
+sidebar:
+  order: 50
+hero:
+  image:
+    alt: A flat, minimalistic 8-bit computer screen shows a horizontal row of
+      colored blocks, each representing a language model token with colors
+      shifting from blue to red to indicate high to low probability. Next to
+      each main block are a few smaller differently colored blocks showing
+      alternate tokens with top log probability. The design uses only five
+      distinct colors and is simple, geometric, and corporate in style, with
+      sharp edges and no background or extra effects. There are no people, text,
+      shadows, gradients, or 3D elements.
+    file: ../../../reference/scripts/logprobs.png
+
+---
+
+`logprobs` est un mode où les modèles LLM retournent la probabilité de chaque jeton. `topLogProbs` retourne également une liste de jetons alternatifs et leurs probabilités logarithmiques. Cela peut être utile pour le débogage et pour comprendre le comportement du modèle.
+
+* Voir [OpenAI Logprobs](https://cookbook.openai.com/examples/using_logprobs)
+
+:::note
+La fonctionnalité `logprobs` n'est pas disponible dans tous les modèles ou chez tous les fournisseurs.
+:::
+
+## Logprobs
+
+Vous pouvez activer logprobs de la manière suivante :
+
+* Utilisez l'option `logprobs` lors de la commande d'exécution.
+
+```sh
+npx genaiscript run ... --logprobs
+```
+
+* Ajoutez l'option `logprobs` aux métadonnées du `script`.
+
+```js "logprobs: true"
+script({ logprobs: true, ...})
+```
+
+### Sortie colorée
+
+Quand `logprobs` est activé, le [cli](../../../reference/reference/cli/) colorera la sortie en fonction de la probabilité de chaque jeton. Une couleur bleue indique une probabilité élevée et une couleur rouge indique une probabilité faible.
+
+Voici un exemple de logprobs en action lors de l'exécution d'une commande de poème avec gpt-4o.
+
+***
+
+<span class="logprobs" title="97.7% (-0.02)" style="background: rgb(5, 0, 205); color: white; white-space: pre; font-family: monospace;">In</span>
+<span class="logprobs" title="85.29% (-0.16)" style="background: rgb(31, 0, 179); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="44.3% (-0.81)" style="background: rgb(117, 0, 93); color: white; white-space: pre; font-family: monospace;"> whisper</span>
+<span class="logprobs" title="81.76% (-0.2)" style="background: rgb(38, 0, 172); color: white; white-space: pre; font-family: monospace;"> of</span>
+<span class="logprobs" title="0.26% (-5.95)" style="background: rgb(209, 0, 1); color: white; white-space: pre; font-family: monospace;"> trees</span>
+<span class="logprobs" title="59.33% (-0.52)" style="background: rgb(85, 0, 125); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="29.64% (-1.22)" style="background: rgb(148, 0, 62); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="7.45% (-2.6)" style="background: rgb(194, 0, 16); color: white; white-space: pre; font-family: monospace;"> night</span>
+<span class="logprobs" title="17.83% (-1.72)" style="background: rgb(173, 0, 37); color: white; white-space: pre; font-family: monospace;"> softly</span>
+<span class="logprobs" title="5.07% (-2.98)" style="background: rgb(199, 0, 11); color: white; white-space: pre; font-family: monospace;"> speaks</span>
+<span class="logprobs" title="99.99% (-0.0001)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="99.85% (-0.002)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">  <br /></span>
+<span class="logprobs" title="2.93% (-3.53)" style="background: rgb(204, 0, 6); color: white; white-space: pre; font-family: monospace;">Where</span>
+<span class="logprobs" title="37.93% (-0.97)" style="background: rgb(130, 0, 80); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="92.55% (-0.08)" style="background: rgb(16, 0, 194); color: white; white-space: pre; font-family: monospace;"> moon</span>
+<span class="logprobs" title="44.93% (-0.8)" style="background: rgb(116, 0, 94); color: white; white-space: pre; font-family: monospace;">light</span>
+<span class="logprobs" title="2.67% (-3.62)" style="background: rgb(204, 0, 6); color: white; white-space: pre; font-family: monospace;"> we</span>
+<span class="logprobs" title="99.93% (-0.001)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">aves</span>
+<span class="logprobs" title="41.06% (-0.89)" style="background: rgb(124, 0, 86); color: white; white-space: pre; font-family: monospace;"> through</span>
+<span class="logprobs" title="66.47% (-0.41)" style="background: rgb(70, 0, 140); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="9.79% (-2.32)" style="background: rgb(189, 0, 21); color: white; white-space: pre; font-family: monospace;"> shadows</span>
+<span class="logprobs" title="89.55% (-0.11)" style="background: rgb(22, 0, 188); color: white; white-space: pre; font-family: monospace;"> it</span>
+<span class="logprobs" title="94.19% (-0.06)" style="background: rgb(12, 0, 198); color: white; white-space: pre; font-family: monospace;"> seeks</span>
+<span class="logprobs" title="98.88% (-0.01)" style="background: rgb(2, 0, 208); color: white; white-space: pre; font-family: monospace;">.</span>
+<span class="logprobs" title="99.98% (-0.0002)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">  <br /></span>
+<span class="logprobs" title="94.53% (-0.06)" style="background: rgb(11, 0, 199); color: white; white-space: pre; font-family: monospace;">Stars</span>
+<span class="logprobs" title="17.72% (-1.73)" style="background: rgb(173, 0, 37); color: white; white-space: pre; font-family: monospace;"> tw</span>
+<span class="logprobs" title="99.84% (-0.002)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">inkle</span>
+<span class="logprobs" title="29.51% (-1.22)" style="background: rgb(148, 0, 62); color: white; white-space: pre; font-family: monospace;"> above</span>
+<span class="logprobs" title="23.32% (-1.46)" style="background: rgb(161, 0, 49); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="38.94% (-0.94)" style="background: rgb(128, 0, 82); color: white; white-space: pre; font-family: monospace;"> like</span>
+<span class="logprobs" title="60.77% (-0.5)" style="background: rgb(82, 0, 128); color: white; white-space: pre; font-family: monospace;"> dreams</span>
+<span class="logprobs" title="0.65% (-5.04)" style="background: rgb(209, 0, 1); color: white; white-space: pre; font-family: monospace;"> far</span>
+<span class="logprobs" title="54.58% (-0.61)" style="background: rgb(95, 0, 115); color: white; white-space: pre; font-family: monospace;"> away</span>
+<span class="logprobs" title="99.98% (-0.0002)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="99.97% (-0.0003)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">  <br /></span>
+<span class="logprobs" title="2.97% (-3.52)" style="background: rgb(204, 0, 6); color: white; white-space: pre; font-family: monospace;">Painting</span>
+<span class="logprobs" title="92.42% (-0.08)" style="background: rgb(16, 0, 194); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="12.22% (-2.1)" style="background: rgb(184, 0, 26); color: white; white-space: pre; font-family: monospace;"> night</span>
+<span class="logprobs" title="79.99% (-0.22)" style="background: rgb(42, 0, 168); color: white; white-space: pre; font-family: monospace;"> with</span>
+<span class="logprobs" title="30.31% (-1.19)" style="background: rgb(146, 0, 64); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="9.13% (-2.39)" style="background: rgb(191, 0, 19); color: white; white-space: pre; font-family: monospace;"> dawn</span>
+<span class="logprobs" title="43.62% (-0.83)" style="background: rgb(118, 0, 92); color: white; white-space: pre; font-family: monospace;">'s</span>
+<span class="logprobs" title="75.24% (-0.28)" style="background: rgb(52, 0, 158); color: white; white-space: pre; font-family: monospace;"> gentle</span>
+<span class="logprobs" title="65.6% (-0.42)" style="background: rgb(72, 0, 138); color: white; white-space: pre; font-family: monospace;"> sway</span>
+<span class="logprobs" title="99.24% (-0.01)" style="background: rgb(2, 0, 208); color: white; white-space: pre; font-family: monospace;">.</span>
+<span class="logprobs" title="58.2% (-0.54)" style="background: rgb(88, 0, 122); color: white; white-space: pre; font-family: monospace;">  </span>
+
+***
+
+## Top logprobs
+
+Vous pouvez activer `top-logprobs` de la manière suivante :
+
+* Utilisez l'option `top-logprobs` lors de la commande d'exécution. Elle active également `logprobs`.
+
+```sh
+npx genaiscript run ... --top-logprobs 4
+```
+
+* Ajoutez l'option `topLogprobs` aux métadonnées du `script`.
+
+```js "logprobs: true"
+script({ topLogProbs: 4, ...})
+```
+
+### Sortie colorée
+
+Quand `top-logprobs` est activé, la fenêtre de console est colorée avec l'[entropie](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf) des jetons alternatifs.
+
+***
+
+<span class="logprobs" title="0.1" style="background: rgb(21, 0, 189); color: white; white-space: pre; font-family: monospace;">In</span>
+<span class="logprobs" title="0.4" style="background: rgb(83, 0, 127); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="0.93" style="background: rgb(196, 0, 14); color: white; white-space: pre; font-family: monospace;"> whisper</span>
+<span class="logprobs" title="0.43" style="background: rgb(91, 0, 119); color: white; white-space: pre; font-family: monospace;"> of</span>
+<span class="logprobs" title="0.6" style="background: rgb(126, 0, 84); color: white; white-space: pre; font-family: monospace;"> trees</span>
+<span class="logprobs" title="0.73" style="background: rgb(152, 0, 58); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="0.97" style="background: rgb(203, 0, 7); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="0.8" style="background: rgb(167, 0, 43); color: white; white-space: pre; font-family: monospace;"> night</span>
+<span class="logprobs" title="0.78" style="background: rgb(163, 0, 47); color: white; white-space: pre; font-family: monospace;"> softly</span>
+<span class="logprobs" title="0.87" style="background: rgb(183, 0, 27); color: white; white-space: pre; font-family: monospace;"> speaks</span>
+<span class="logprobs" title="0.001" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="0.01" style="background: rgb(2, 0, 208); color: white; white-space: pre; font-family: monospace;">  <br /></span>
+<span class="logprobs" title="0.87" style="background: rgb(183, 0, 27); color: white; white-space: pre; font-family: monospace;">Where</span>
+<span class="logprobs" title="0.86" style="background: rgb(180, 0, 30); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="0.25" style="background: rgb(53, 0, 157); color: white; white-space: pre; font-family: monospace;"> moon</span>
+<span class="logprobs" title="0.75" style="background: rgb(157, 0, 53); color: white; white-space: pre; font-family: monospace;">light</span>
+<span class="logprobs" title="0.39" style="background: rgb(82, 0, 128); color: white; white-space: pre; font-family: monospace;"> we</span>
+<span class="logprobs" title="0.01" style="background: rgb(1, 0, 209); color: white; white-space: pre; font-family: monospace;">aves</span>
+<span class="logprobs" title="0.93" style="background: rgb(196, 0, 14); color: white; white-space: pre; font-family: monospace;"> through</span>
+<span class="logprobs" title="0.57" style="background: rgb(119, 0, 91); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="0.68" style="background: rgb(143, 0, 67); color: white; white-space: pre; font-family: monospace;"> shadows</span>
+<span class="logprobs" title="0.32" style="background: rgb(68, 0, 142); color: white; white-space: pre; font-family: monospace;"> it</span>
+<span class="logprobs" title="0.18" style="background: rgb(38, 0, 172); color: white; white-space: pre; font-family: monospace;"> seeks</span>
+<span class="logprobs" title="0.06" style="background: rgb(12, 0, 198); color: white; white-space: pre; font-family: monospace;">.</span>
+<span class="logprobs" title="0.002" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">  <br /></span>
+<span class="logprobs" title="0.18" style="background: rgb(38, 0, 172); color: white; white-space: pre; font-family: monospace;">Stars</span>
+<span class="logprobs" title="0.75" style="background: rgb(157, 0, 53); color: white; white-space: pre; font-family: monospace;"> tw</span>
+<span class="logprobs" title="0.01" style="background: rgb(2, 0, 208); color: white; white-space: pre; font-family: monospace;">inkle</span>
+<span class="logprobs" title="0.98" style="background: rgb(206, 0, 4); color: white; white-space: pre; font-family: monospace;"> above</span>
+<span class="logprobs" title="0.78" style="background: rgb(163, 0, 47); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="0.94" style="background: rgb(197, 0, 13); color: white; white-space: pre; font-family: monospace;"> like</span>
+<span class="logprobs" title="0.71" style="background: rgb(149, 0, 61); color: white; white-space: pre; font-family: monospace;"> dreams</span>
+<span class="logprobs" title="0.77" style="background: rgb(161, 0, 49); color: white; white-space: pre; font-family: monospace;"> far</span>
+<span class="logprobs" title="0.69" style="background: rgb(144, 0, 66); color: white; white-space: pre; font-family: monospace;"> away</span>
+<span class="logprobs" title="0.002" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;">,</span>
+<span class="logprobs" title="0.003" style="background: rgb(1, 0, 209); color: white; white-space: pre; font-family: monospace;">  <br /></span>
+<span class="logprobs" title="0.37" style="background: rgb(77, 0, 133); color: white; white-space: pre; font-family: monospace;">Painting</span>
+<span class="logprobs" title="0.17" style="background: rgb(37, 0, 173); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="0.75" style="background: rgb(158, 0, 52); color: white; white-space: pre; font-family: monospace;"> night</span>
+<span class="logprobs" title="0.57" style="background: rgb(120, 0, 90); color: white; white-space: pre; font-family: monospace;"> with</span>
+<span class="logprobs" title="0.99" style="background: rgb(208, 0, 2); color: white; white-space: pre; font-family: monospace;"> the</span>
+<span class="logprobs" title="0.79" style="background: rgb(166, 0, 44); color: white; white-space: pre; font-family: monospace;"> dawn</span>
+<span class="logprobs" title="0.81" style="background: rgb(170, 0, 40); color: white; white-space: pre; font-family: monospace;">'s</span>
+<span class="logprobs" title="0.49" style="background: rgb(103, 0, 107); color: white; white-space: pre; font-family: monospace;"> gentle</span>
+<span class="logprobs" title="0.73" style="background: rgb(154, 0, 56); color: white; white-space: pre; font-family: monospace;"> sway</span>
+<span class="logprobs" title="0.04" style="background: rgb(9, 0, 201); color: white; white-space: pre; font-family: monospace;">.</span>
+<span class="logprobs" title="0.78" style="background: rgb(163, 0, 47); color: white; white-space: pre; font-family: monospace;">  </span>
+
+***
+
+### Jetons alternatifs
+
+La trace contient un rendu des jetons alternatifs avec une sortie colorée basée sur les logprobs.
+
+***
+
+Consultez l'exemple suivant dans le tableau pour illustrer la probabilité des jetons alternatifs.
+
+<table class="toplogprobs" style="display: inline-block; padding: 0; margin: 0; border: solid 1px grey; border-radius: 0.2rem;">
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="99.85% (-0.002)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="0.15% (-6.5)" style="background: rgb(210, 0, 0); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="0.002% (-11)" style="background: rgb(210, 0, 0); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+</table>
+
+<br />
+
+Extrait illustrant des suggestions de jetons alternatifs et leurs probabilités associées.
+
+<table class="toplogprobs" style="display: inline-block; padding: 0; margin: 0; border: solid 1px grey; border-radius: 0.2rem;">
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="99.98% (-0.0002)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="0.02% (-8.63)" style="background: rgb(210, 0, 0); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="0.002% (-11)" style="background: rgb(210, 0, 0); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+</table>
+
+<br />
+
+Les probabilités logarithmiques affichent les autres jetons possibles pour chaque segment d'un texte proposé.
+
+<table class="toplogprobs" style="display: inline-block; padding: 0; margin: 0; border: solid 1px grey; border-radius: 0.2rem;">
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="99.97% (-0.0003)" style="background: rgb(0, 0, 210); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="0.03% (-8.13)" style="background: rgb(210, 0, 0); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+
+  <tr>
+    <td style="border: none; padding: 0;">
+      <span class="logprobs" title="0.001% (-11.13)" style="background: rgb(210, 0, 0); color: white; white-space: pre; font-family: monospace;" />
+    </td>
+  </tr>
+</table>
+
+<br />
+
+Des exemples additionnels de tokens alternatifs sont affichés ci-dessous avec des probabilités logarithmiques.
+
+***
+
+<hr />
+
+Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

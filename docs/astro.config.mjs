@@ -122,7 +122,8 @@ is at https://microsoft.github.io/genaiscript/reference/scripts.md
         starlightLinksValidator({ errorOnRelativeLinks: false, }),
       ],
       components: {
-        Head: "./src/components/Head.astro",        
+        Head: "./src/components/Head.astro",
+        Header: "./src/components/Header.astro",        
         Footer: "./src/components/Footer.astro",
       },
       social: [

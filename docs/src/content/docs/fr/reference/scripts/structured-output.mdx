@@ -76,7 +76,7 @@ script({
 
 ### `json_schema`
 
-La sortie structurée est une fonctionnalité qui vous permet de générer des données structurées au format de données, par exemple avec un [schéma JSON](/genaiscript/reference/scripts/schemas). Ce mode est plus strict que `json_object`.
+La sortie structurée est une fonctionnalité qui vous permet de générer des données structurées au format de données, par exemple avec un [schéma JSON](../../../reference/reference/scripts/schemas/). Ce mode est plus strict que `json_object`.
 
 Pour activer ce mode, définissez `responseType` sur `json_schema` et fournissez un objet `responseSchema`.
 
@@ -101,7 +101,7 @@ Notez qu'il existe [plusieurs restrictions](https://platform.openai.com/docs/gui
 
 ## Schéma de réponse
 
-Vous pouvez spécifier un [schéma](/genaiscript/reference/scripts/schemas) via `responseSchema` qui activera automatiquement le mode de sortie structurée. La sortie sera validée contre ce schéma, et GenAIScript tentera de réparer la sortie si elle n'est pas valide. Le script échouera si la sortie ne correspond pas au schéma.
+Vous pouvez spécifier un [schéma](../../../reference/reference/scripts/schemas/) via `responseSchema` qui activera automatiquement le mode de sortie structurée. La sortie sera validée contre ce schéma, et GenAIScript tentera de réparer la sortie si elle n'est pas valide. Le script échouera si la sortie ne correspond pas au schéma.
 
 ```js "responseSchema"
 script({
@@ -119,15 +119,15 @@ script({
 
 ### Schémas en ligne
 
-Notez que cette section s'applique à la sortie entière d'une conversation. Vous pouvez également utiliser des [schémas en ligne](/genaiscript/reference/scripts/schemas) et utiliser un mix markdown/données que GenAIScript analysera.
+Notez que cette section s'applique à la sortie entière d'une conversation. Vous pouvez également utiliser des [schémas en ligne](../../../reference/reference/scripts/schemas/) et utiliser un mix markdown/données que GenAIScript analysera.
 
 ### Choix
 
-Si vous souhaitez créer un LLM-comme-juges et ne cherchez qu'à obtenir des sorties dans un ensemble de mots donné, vous pouvez aussi envisager d'utiliser des [choix](/genaiscript/reference/scripts/choices) pour augmenter la probabilité que le modèle génère les mots spécifiés.
+Si vous souhaitez créer un LLM-comme-juges et ne cherchez qu'à obtenir des sorties dans un ensemble de mots donné, vous pouvez aussi envisager d'utiliser des [choix](../../../reference/reference/scripts/choices/) pour augmenter la probabilité que le modèle génère les mots spécifiés.
 
 ## `cast`
 
-La fonction [cast](/genaiscript/reference/runtime/cast) est une [aide d'exécution GenAIScript](/genaiscript/reference/runtime) pour convertir du texte/images non structurés en données structurées.
+La fonction [cast](../../../reference/reference/runtime/cast/) est une [aide d'exécution GenAIScript](../../../reference/reference/runtime/) pour convertir du texte/images non structurés en données structurées.
 
 ```js "cast"
 import { cast } from "@genaiscript/runtime"

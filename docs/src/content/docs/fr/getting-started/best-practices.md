@@ -25,7 +25,7 @@ Si vous avez utilisé un chatbot basé sur un LLM, comme ChatGPT, vous connaisse
 
 ## Fournir au modèle le contexte dont il a besoin à partir des documents
 
-GenAIScript permet aux utilisateurs d'ajouter des documents à leurs invites. Cela permet au LLM d'avoir plus d'informations de fond liées à la tâche qu'on lui demande d'effectuer. Dans un GenAIScript, la commande JavaScript [`def`](/genaiscript/reference/scripts/context) donne au LLM le contenu d'un document et définit un nom qui peut être utilisé dans l'invite pour faire référence à ce document. Les formats de documents standard, comme [pdf](/genaiscript/reference/scripts/pdf) et [docx](/genaiscript/reference/scripts/docx) sont pris en charge, vous n'avez donc qu'à nommer les fichiers et nos bibliothèques extraieront automatiquement le texte. Vous pouvez paramétrer davantage le contexte d'entrée en utilisant [`env.files`](/genaiscript/reference/scripts/context).
+GenAIScript permet aux utilisateurs d'ajouter des documents à leurs invites. Cela permet au LLM d'avoir plus d'informations de fond liées à la tâche qu'on lui demande d'effectuer. Dans un GenAIScript, la commande JavaScript [`def`](../../reference/scripts/context/) donne au LLM le contenu d'un document et définit un nom qui peut être utilisé dans l'invite pour faire référence à ce document. Les formats de documents standard, comme [pdf](../../reference/scripts/pdf/) et [docx](../../reference/scripts/docx/) sont pris en charge, vous n'avez donc qu'à nommer les fichiers et nos bibliothèques extraieront automatiquement le texte. Vous pouvez paramétrer davantage le contexte d'entrée en utilisant [`env.files`](../../reference/scripts/context/).
 
 ## Concentrez un GenAIScript pour que le LLM fasse bien une seule chose
 
@@ -33,11 +33,11 @@ Supposons que je veuille utiliser un GenAIScript pour rédiger un livre blanc. P
 
 ## Utilisez la sortie d'un GenAIScript comme entrée pour un autre
 
-En combinant les deux points ci-dessus, vous pouvez créer une collection de scripts interconnectés qui accomplissent un objectif plus ambitieux. Selon votre niveau d'expertise, la combinaison peut être réalisée en utilisant l'interface en ligne de commande des scripts [CLI](/genaiscript/reference/cli) et en utilisant un logiciel traditionnel pour les connecter.
+En combinant les deux points ci-dessus, vous pouvez créer une collection de scripts interconnectés qui accomplissent un objectif plus ambitieux. Selon votre niveau d'expertise, la combinaison peut être réalisée en utilisant l'interface en ligne de commande des scripts [CLI](../../reference/cli/) et en utilisant un logiciel traditionnel pour les connecter.
 
 ## Utilisez le bon LLM ou autre modèle de base pour la tâche
 
-Il existe actuellement de nombreux choix différents de modèles d'IA. Nous expliquons comment connecter plusieurs d'entre eux avec GenAIScript dans [configuration](/genaiscript/getting-started/configuration). Ils varient en capacités et en coût, certains étant disponibles en open source et utilisables (avec le bon GPU) gratuitement. Consultez la documentation du LLM ou autre modèle spécifique que vous utilisez pour comprendre comment écrire des invites qui communiquent efficacement la tâche que vous voulez que l'IA accomplisse. Les paramètres varient entre les LLM, par exemple, la taille du contexte d'entrée autorisée, alors assurez-vous que le contenu que vous voulez transmettre au LLM tient dans la taille de sa fenêtre de contexte.
+Il existe actuellement de nombreux choix différents de modèles d'IA. Nous expliquons comment connecter plusieurs d'entre eux avec GenAIScript dans [configuration](../../getting-started/configuration/). Ils varient en capacités et en coût, certains étant disponibles en open source et utilisables (avec le bon GPU) gratuitement. Consultez la documentation du LLM ou autre modèle spécifique que vous utilisez pour comprendre comment écrire des invites qui communiquent efficacement la tâche que vous voulez que l'IA accomplisse. Les paramètres varient entre les LLM, par exemple, la taille du contexte d'entrée autorisée, alors assurez-vous que le contenu que vous voulez transmettre au LLM tient dans la taille de sa fenêtre de contexte.
 
 <hr />
 

@@ -23,11 +23,11 @@ import { Image } from "astro:assets"
 import { Code } from "@astrojs/starlight/components"
 import prDescribeSrc from "../../../../../../packages/sample/genaisrc/pr-describe.genai.mjs?raw";
 
-Une fois que vous avez un script qui vous convient, vous pouvez l'automatiser en utilisant l'[interface en ligne de commande](/genaiscript/reference/cli).
+Une fois que vous avez un script qui vous convient, vous pouvez l'automatiser en utilisant l'[interface en ligne de commande](../../reference/cli/).
 
 ## Exécution d'un script avec la CLI
 
-L'utilisation de base de la CLI est de [lancer](/genaiscript/reference/cli/run/) un script avec un nom d'outil et une liste de fichiers.
+L'utilisation de base de la CLI est de [lancer](../../reference/cli/run/) un script avec un nom d'outil et une liste de fichiers.
 
 ```sh wrap
 npx --yes genaiscript run <script_id> <...files>
@@ -52,9 +52,9 @@ npx --yes genaiscript run <script> <...files> --apply-edits
 ```
 
 :::caution
-Un LLM peut générer du code arbitraire qui peut être nuisible à votre système. Nous vous recommandons de réviser le code modifié avant de l'exécuter. Cela peut se faire via une branche séparée et une demande de tirage. Vous pouvez également utiliser un [conteneur](/genaiscript/reference/scripts/container) pour exécuter le script dans un environnement isolé.
+Un LLM peut générer du code arbitraire qui peut être nuisible à votre système. Nous vous recommandons de réviser le code modifié avant de l'exécuter. Cela peut se faire via une branche séparée et une demande de tirage. Vous pouvez également utiliser un [conteneur](../../reference/scripts/container/) pour exécuter le script dans un environnement isolé.
 
-Consultez la section [Sécurité et confiance](/genaiscript/reference/security-and-trust) pour plus d'informations.
+Consultez la section [Sécurité et confiance](../../reference/security-and-trust/) pour plus d'informations.
 :::
 
 ## Action GitHub
@@ -84,7 +84,7 @@ Les secrets et variables doivent correspondre au fichier `.env` de votre environ
 
 ### Exécution d'un script
 
-Utilisez la [CLI](/genaiscript/reference/cli/run/) pour exécuter le script dans une action GitHub.
+Utilisez la [CLI](../../reference/cli/run/) pour exécuter le script dans une action GitHub.
 
 * Assurez-vous de transmettre les secrets et variables au script pour permettre l'accès au LLM.
 * Utilisez l'option `--out <path>` pour stocker les résultats dans un répertoire afin de pouvoir les télécharger comme artefact.
@@ -190,7 +190,7 @@ Les étapes ci-dessous montrent comment configurer l'action de connexion Azure p
     </li>
 
     <li>
-      Mettez à jour chaque étape qui invoque la [CLI](/genaiscript/reference/cli) pour inclure la variable `AZURE_OPENAI_API_ENDPOINT`.
+      Mettez à jour chaque étape qui invoque la [CLI](../../reference/cli/) pour inclure la variable `AZURE_OPENAI_API_ENDPOINT`.
 
       ```yaml
       - name: run genai script
@@ -249,7 +249,7 @@ L'option `--pull-request-comment` ajoute la sortie du LLM en tant que commentair
 
 ### Commentaires de revue
 
-Utilisez l'option `--pull-request-reviews` pour convertir les [annotations](/genaiscript/reference/scripts/annotations) en commentaires de revue **sur le dernier commit** de la demande de tirage (voir [exemple](https://github.com/microsoft/genaiscript/pull/504#pullrequestreview-2093960791)).
+Utilisez l'option `--pull-request-reviews` pour convertir les [annotations](../../reference/scripts/annotations/) en commentaires de revue **sur le dernier commit** de la demande de tirage (voir [exemple](https://github.com/microsoft/genaiscript/pull/504#pullrequestreview-2093960791)).
 
 ```yaml "--pull-request-reviews"
 - run: npx --yes genaiscript run --pull-request-reviews

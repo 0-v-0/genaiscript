@@ -13,7 +13,7 @@ import { Code } from "@astrojs/starlight/components"
 import mathAgentSrc from "../../../../../../packages/sample/genaisrc/math-agent.genai.mjs?raw";
 import mathAgentSystemSrc from "../../../../../../packages/sample/genaisrc/math-agent-system.genai.js?raw";
 
-En utilisant les [outils (anciennement fonctions)](/genaiscript/reference/scripts/tools),
+En utilisant les [outils (anciennement fonctions)](../../reference/scripts/tools/),
 vous pouvez définir un agent intégré capable de prendre des décisions
 et d'effectuer un raisonnement basé sur les outils qui lui sont fournis.
 
@@ -57,7 +57,7 @@ defTool("sum", "Sum two numbers", { a: 1, b: 2 }, ({ a, b }) => `${a + b}`)
 
 ## Paramètres
 
-La question arithmétique peut être déclarée comme un [paramètre de script](/genaiscript/reference/scripts/variables) à utiliser dans le script de l'agent.
+La question arithmétique peut être déclarée comme un [paramètre de script](../../reference/scripts/variables/) à utiliser dans le script de l'agent.
 
 ```js "parameters"
 script({
@@ -185,7 +185,7 @@ $`Answer the following arithmetic question:
 
 ## Utilisation de `system.math`
 
-L'invite système [system.math](/genaiscript/reference/scripts/system#systemmath)
+L'invite système [system.math](../../reference/scripts/system#systemmath/)
 englobe le parseur et évaluateur d'expressions `parsers.math` et l'expose comme un outil.
 
 Cela simplifie le script de l'agent car il n'est plus nécessaire de définir des outils.

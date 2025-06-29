@@ -71,12 +71,12 @@ const { files } = await workspace.grep(rx, {
 })
 ```
 
-Le script utilise [workspace.grep](/genaiscript/reference/scripts/files#grep) pour trouver toutes les occurrences du motif regex dans les documents spécifiés.
+Le script utilise [workspace.grep](../../reference/scripts/files#grep/) pour trouver toutes les occurrences du motif regex dans les documents spécifiés.
 
 ## Génération du texte alternatif
 
-Pour chaque URL d'image trouvée, nous générons un texte alternatif en utilisant un [prompt inline](/genaiscript/reference/scripts/inline-prompts)
-et [defImages](/genaiscript/reference/scripts/images).
+Pour chaque URL d'image trouvée, nous générons un texte alternatif en utilisant un [prompt inline](../../reference/scripts/inline-prompts/)
+et [defImages](../../reference/scripts/images/).
 
 ```ts
 for (const file of files) {
@@ -183,14 +183,14 @@ jobs:
 Les mesures suivantes sont prises pour garantir la sécurité du contenu généré.
 
 * Ce script inclut des invites système pour empêcher les injections de prompt et la génération de contenu nuisible.
-  * [system.safety\_jailbreak](/genaiscript/reference/scripts/system#systemsafety_jailbreak)
-  * [system.safety\_harmful\_content](/genaiscript/reference/scripts/system#systemsafety_harmful_content)
+  * [system.safety\_jailbreak](../../reference/scripts/system#systemsafety_jailbreak/)
+  * [system.safety\_harmful\_content](../../reference/scripts/system#systemsafety_harmful_content/)
 * La description générée est sauvegardée dans un fichier à un chemin spécifique, ce qui permet une revue manuelle avant de valider les modifications.
 
 Des mesures supplémentaires pour renforcer la sécurité consisteraient à utiliser [un modèle avec un filtre de sécurité](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter?tabs=warning%2Cuser-prompt%2Cpython-new)
-ou à valider le message avec un [service de sécurité du contenu](/genaiscript/reference/scripts/content-safety).
+ou à valider le message avec un [service de sécurité du contenu](../../reference/scripts/content-safety/).
 
-Consultez la [Note de transparence](/genaiscript/reference/transparency-note/) pour plus d’informations sur la sécurité du contenu.
+Consultez la [Note de transparence](../../reference/transparency-note/) pour plus d’informations sur la sécurité du contenu.
 
 <hr />
 

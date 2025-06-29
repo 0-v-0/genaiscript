@@ -63,7 +63,7 @@ Voici quelques exemples de transformations où le LLM a correctement géré les 
 
 ## Recherche
 
-L'étape de recherche est réalisée avec [workspace.grep](/genaiscript/reference/scripts/files) qui permet de rechercher efficacement un motif dans des fichiers (c'est le même moteur de recherche qui alimente la recherche de Visual Studio Code).
+L'étape de recherche est réalisée avec [workspace.grep](../../reference/scripts/files/) qui permet de rechercher efficacement un motif dans des fichiers (c'est le même moteur de recherche qui alimente la recherche de Visual Studio Code).
 
 ```js "workspace.grep"
 const { pattern, globs } = env.vars
@@ -73,7 +73,7 @@ const { files } = await workspace.grep(patternRx, { globs })
 
 ## Calculer les transformations
 
-La seconde étape consiste à appliquer l'expression régulière au contenu du fichier et à pré-calculer la transformation LLM de chaque correspondance en utilisant un [prompt en ligne](/genaiscript/reference/scripts/inline-prompts).
+La seconde étape consiste à appliquer l'expression régulière au contenu du fichier et à pré-calculer la transformation LLM de chaque correspondance en utilisant un [prompt en ligne](../../reference/scripts/inline-prompts/).
 
 ```js
 const { transform } = env.vars

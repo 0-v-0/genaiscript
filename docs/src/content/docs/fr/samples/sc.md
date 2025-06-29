@@ -96,7 +96,7 @@ If you do not find any mistakes, respond <NO> and nothing else.
 }
 ```
 
-* Lancez le [CLI GenAIScript](/genaiscript/reference/cli/) pour ajouter les fichiers de définition de type et corriger les erreurs de syntaxe dans l’éditeur (optionnel).
+* Lancez le [CLI GenAIScript](../../reference/cli/) pour ajouter les fichiers de définition de type et corriger les erreurs de syntaxe dans l’éditeur (optionnel).
 
 ```bash
 npx --yes genaiscript script fix
@@ -210,13 +210,13 @@ jobs:
 Les mesures suivantes sont prises pour garantir la sécurité du contenu généré.
 
 * Ce script inclut des invites système pour empêcher les injections de prompt et la génération de contenu nuisible.
-  * [system.safety\_jailbreak](/genaiscript/reference/scripts/system#systemsafety_jailbreak)
-  * [system.safety\_harmful\_content](/genaiscript/reference/scripts/system#systemsafety_harmful_content)
+  * [system.safety\_jailbreak](../../reference/scripts/system#systemsafety_jailbreak/)
+  * [system.safety\_harmful\_content](../../reference/scripts/system#systemsafety_harmful_content/)
 
 Des mesures supplémentaires pour renforcer la sécurité consisteraient à utiliser [un modèle avec un filtre de sécurité](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter?tabs=warning%2Cuser-prompt%2Cpython-new)
-ou à valider le message avec un [service de sécurité du contenu](/genaiscript/reference/scripts/content-safety).
+ou à valider le message avec un [service de sécurité du contenu](../../reference/scripts/content-safety/).
 
-Consultez la [Note de transparence](/genaiscript/reference/transparency-note/) pour plus d’informations sur la sécurité du contenu.
+Consultez la [Note de transparence](../../reference/transparency-note/) pour plus d’informations sur la sécurité du contenu.
 
 <hr />
 

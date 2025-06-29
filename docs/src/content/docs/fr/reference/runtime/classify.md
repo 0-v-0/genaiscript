@@ -21,7 +21,7 @@ Elle fournit une interface simple pour exploiter la puissance des LLM pour les t
 
 ## Utilisation
 
-`classify` est défini dans le [runtime GenAIScript](/genaiscript/reference/runtime) et doit être importé. Il prend en entrée le texte à classer, un ensemble d'étiquettes (et des options pour le LLM)
+`classify` est défini dans le [runtime GenAIScript](../../../reference/reference/runtime/) et doit être importé. Il prend en entrée le texte à classer, un ensemble d'étiquettes (et des options pour le LLM)
 et renvoie l'étiquette fournie par le LLM.
 
 ```js
@@ -94,7 +94,7 @@ const res = await classify(
 
 ## Modèle et autres options
 
-La fonction `classify` utilise par défaut l'[alias de modèle](/genaiscript/reference/scripts/model-aliases) `classify`.
+La fonction `classify` utilise par défaut l'[alias de modèle](../../../reference/reference/scripts/model-aliases/) `classify`.
 Vous pouvez modifier cet alias ou spécifier un autre modèle dans les options.
 
 ```js
@@ -103,11 +103,11 @@ const res = await classify("...", {
 })
 ```
 
-Les `options` sont transmises en interne à l’[invite en ligne](/genaiscript/reference/scripts/inline-prompts) et peuvent être utilisées pour modifier le comportement du LLM.
+Les `options` sont transmises en interne à l’[invite en ligne](../../../reference/reference/scripts/inline-prompts/) et peuvent être utilisées pour modifier le comportement du LLM.
 
 ## Évaluation de la qualité de la classification
 
-GenAIScript renvoie la [logprob](/genaiscript/reference/scripts/logprobs) (et l'entropie) de l'étiquette de classification. Vous pouvez utiliser cette valeur pour évaluer la qualité du classement.
+GenAIScript renvoie la [logprob](../../../reference/reference/scripts/logprobs/) (et l'entropie) de l'étiquette de classification. Vous pouvez utiliser cette valeur pour évaluer la qualité du classement.
 
 Si l'étiquette a une probabilité élevée, cela signifie que c'est probablement une classification de bonne qualité. Une probabilité plus faible peut signifier que le LLM a hésité ou que d'autres étiquettes ont également été envisagées.
 

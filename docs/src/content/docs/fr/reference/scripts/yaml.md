@@ -44,7 +44,7 @@ const str = YAML.stringify(obj)
 
 ## `parsers`
 
-Les [parsers](/genaiscript/reference/scripts/parsers) fournissent également un analyseur tolérant pour YAML.
+Les [parsers](../../../reference/reference/scripts/parsers/) fournissent également un analyseur tolérant pour YAML.
 Il renvoie `undefined` pour les entrées invalides.
 
 ```js
@@ -53,7 +53,7 @@ const res = parsers.YAML("...")
 
 ## Schémas
 
-Les schémas JSON définis avec [defSchema](/genaiscript/reference/scripts/schemas) peuvent également être utilisés pour valider les données YAML.
+Les schémas JSON définis avec [defSchema](../../../reference/reference/scripts/schemas/) peuvent également être utilisés pour valider les données YAML.
 
 <hr />
 

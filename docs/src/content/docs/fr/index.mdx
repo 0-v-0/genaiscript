@@ -82,19 +82,19 @@ et extraira automatiquement le fichier `data.json`.
 
 <CardGrid stagger>
   <Card title="Install the extension or cli" icon="puzzle">
-    Installez l'[extension Visual Studio Code ou le CLI](/genaiscript/getting-started/installation/) pour commencer.
+    Installez l'[extension Visual Studio Code ou le CLI](../../getting-started/installation/) pour commencer.
   </Card>
 
   <Card title="Configure your LLMs" icon="setting">
-    Configurez les [secrets](/genaiscript/getting-started/configuration) pour accéder à vos LLMs.
+    Configurez les [secrets](../../getting-started/configuration/) pour accéder à vos LLMs.
   </Card>
 
   <Card title="Write your first script" icon="pencil">
-    Suivez [Getting Started](/genaiscript/getting-started/your-first-genai-script/) pour écrire votre premier script.
+    Suivez [Getting Started](../../getting-started/your-first-genai-script/) pour écrire votre premier script.
   </Card>
 
   <Card title="Read the docs" icon="open-book">
-    Apprenez-en davantage sur GenAIScript dans la [Référence Scripting](/genaiscript/reference/).
+    Apprenez-en davantage sur GenAIScript dans la [Référence Scripting](../../reference/).
   </Card>
 </CardGrid>
 
@@ -114,7 +114,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
 
 <CardGrid>
   <Card title="Stylized JavaScript" icon="seti:javascript">
-    Syntaxe minimale pour construire des prompts en utilisant [JavaScript](/genaiscript/reference/scripts/) ou [TypeScript](/genaiscript/reference/scripts/typescript).
+    Syntaxe minimale pour construire des prompts en utilisant [JavaScript](../../reference/scripts/) ou [TypeScript](../../reference/scripts/typescript/).
 
     ```js wrap
     $`Summarize ${env.files}. Today is ${new Date()}.`;
@@ -122,13 +122,13 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Fast Development Loop" icon="rocket">
-    Éditez, [Déboguez](/genaiscript/getting-started/debugging-scripts/), [Exécutez](/genaiscript/getting-started/running-scripts/), [Testez](/genaiscript/getting-started/testing-scripts/) vos scripts dans [Visual Studio Code](/genaiscript/getting-started/installation) ou avec une [console de commande](/genaiscript/getting-started/installation).
+    Éditez, [Déboguez](../../getting-started/debugging-scripts/), [Exécutez](../../getting-started/running-scripts/), [Testez](../../getting-started/testing-scripts/) vos scripts dans [Visual Studio Code](../../getting-started/installation/) ou avec une [console de commande](../../getting-started/installation/).
 
     <Image src={debuggerSrc} alt={debuggerAlt} loading="lazy" />
   </Card>
 
   <Card title="LLM Tools" icon="setting">
-    Enregistrez des fonctions JavaScript comme [outils LLM](/genaiscript/reference/scripts/tools/) (avec fallback pour les modèles qui ne supportent pas les outils).
+    Enregistrez des fonctions JavaScript comme [outils LLM](../../reference/scripts/tools/) (avec fallback pour les modèles qui ne supportent pas les outils).
 
     ```js wrap
     defTool("weather", "live weather",
@@ -140,7 +140,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="MCP Client" icon="setting">
-    Utilisez des [outils](https://modelcontextprotocol.io/docs/concepts/tools) exposés dans des [Serveurs de Fournisseurs de Contexte de Modèle](/genaiscript/reference/scripts/mcp-tools).
+    Utilisez des [outils](https://modelcontextprotocol.io/docs/concepts/tools) exposés dans des [Serveurs de Fournisseurs de Contexte de Modèle](../../reference/scripts/mcp-tools/).
 
     ```js wrap
     defTool({
@@ -153,7 +153,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="MCP Server" icon="setting">
-    Chaque script est un [Outil Fournisseur de Contexte de Modèle](/genaiscript/reference/scripts/mcp-server).
+    Chaque script est un [Outil Fournisseur de Contexte de Modèle](../../reference/scripts/mcp-server/).
 
     ```js wrap
     script({
@@ -166,7 +166,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="LLM Agents" icon="sun">
-    Combinez des [outils](/genaiscript/reference/scripts/tools) et des [prompts en ligne](/genaiscript/reference/scripts/inline-prompts/) dans un [agent](/genaiscript/reference/scripts/agents).
+    Combinez des [outils](../../reference/scripts/tools/) et des [prompts en ligne](../../reference/scripts/inline-prompts/) dans un [agent](../../reference/scripts/agents/).
 
     ```js wrap
     defAgent(
@@ -185,7 +185,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Reuse and Share Scripts" icon="star">
-    Les scripts sont des [fichiers](/genaiscript/reference/scripts/) ! Ils peuvent être versionnés, partagés, forkés, ...
+    Les scripts sont des [fichiers](../../reference/scripts/) ! Ils peuvent être versionnés, partagés, forkés, ...
 
     <FileTree>
       * genaisrc
@@ -195,7 +195,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Data Schemas" icon="list-format">
-    Définissez, validez, réparez des données en utilisant des [schémas](/genaiscript/reference/scripts/schemas).
+    Définissez, validez, réparez des données en utilisant des [schémas](../../reference/scripts/schemas/).
 
     ```js wrap
     const data = defSchema("MY_DATA",
@@ -205,7 +205,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Ingest text from PDFs, DOCX, ..." icon="seti:pdf">
-    Manipulez [des PDFs](/genaiscript/reference/scripts/pdf), [des DOCX](/genaiscript/reference/scripts/docx), ...
+    Manipulez [des PDFs](../../reference/scripts/pdf/), [des DOCX](../../reference/scripts/docx/), ...
 
     ```js wrap
     // automatically convert to text
@@ -216,7 +216,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Ingest tables from CSV, XLSX, .." icon="seti:pdf">
-    Manipulez des données tabulaires provenant de [CSV](/genaiscript/reference/scripts/csv), [XLSX](/genaiscript/reference/scripts/xlsx), ...
+    Manipulez des données tabulaires provenant de [CSV](../../reference/scripts/csv/), [XLSX](../../reference/scripts/xlsx/), ...
 
     ```js wrap
     // automatically convert to text
@@ -233,7 +233,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Speech To Text" icon="seti:microphone">
-    Transcrivez automatiquement des audios ou vidéos en utilisant [OpenAI](/genaiscript/configuration/openai) ou [d'autres solutions](/genaiscript/configuration/whisperasr).
+    Transcrivez automatiquement des audios ou vidéos en utilisant [OpenAI](../../configuration/openai/) ou [d'autres solutions](../../configuration/whisperasr/).
 
     ```js
     const transcript = await transcript("path/to/audio.mp3");
@@ -280,7 +280,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="File search" icon="document">
-    Effectuez des recherches Grep ou Fuzzy dans des [fichiers](/genaiscript/reference/scripts/files).
+    Effectuez des recherches Grep ou Fuzzy dans des [fichiers](../../reference/scripts/files/).
 
     ```js wrap
     const { files } = await workspace.grep(/[a-z][a-z0-9]+/, { globs: "*.md" });
@@ -288,7 +288,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Web search" icon="magnifier">
-    [Faites des recherches Web](/genaiscript/reference/scripts/web-search) en utilisant Bing ou Tavily.
+    [Faites des recherches Web](../../reference/scripts/web-search/) en utilisant Bing ou Tavily.
 
     ```js wrap
     const pages = await retrieval.webSearch("what are the latest news about AI?");
@@ -296,7 +296,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Browser automation" icon="approve-check-circle">
-    Naviguez et scrappez le web avec [Playwright](/genaiscript/reference/scripts/browser).
+    Naviguez et scrappez le web avec [Playwright](../../reference/scripts/browser/).
 
     ```js
     const page = await host.browse("https://...");
@@ -306,7 +306,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="RAG built-in" icon="magnifier">
-    [Recherche vectorielle intégrée](/genaiscript/reference/scripts/vector-search/) en utilisant une base de données locale ou [Azure AI Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search).
+    [Recherche vectorielle intégrée](../../reference/scripts/vector-search/) en utilisant une base de données locale ou [Azure AI Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search).
 
     ```js wrap
     const index = await retrieval.index("animals", { type: "azure_ai_search" });
@@ -316,7 +316,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Safety First!" icon="seti:lock">
-    GenAIScript offre des prompts systèmes intégrés pour une IA Responsable ainsi qu'un support de Validation de Sécurité de Contenu Azure pour valider la [sécurité du contenu](/genaiscript/reference/scripts/content-safety).
+    GenAIScript offre des prompts systèmes intégrés pour une IA Responsable ainsi qu'un support de Validation de Sécurité de Contenu Azure pour valider la [sécurité du contenu](../../reference/scripts/content-safety/).
 
     ```js wrap
     script({ ...,
@@ -330,7 +330,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="GitHub Models and GitHub Copilot" icon="github">
-    Exécutez des modèles via GitHub en utilisant [GitHub Models](/genaiscript/configuration/github) ou [GitHub Copilot](/genaiscript/configuration/github-copilot-chat).
+    Exécutez des modèles via GitHub en utilisant [GitHub Models](../../configuration/github/) ou [GitHub Copilot](../../configuration/github-copilot-chat/).
 
     ```js wrap
     script({ ..., model: "github:openai/gpt-4o" })
@@ -340,7 +340,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Azure AI Foundry, Google, Anthropic, Amazon, Alibaba, ..." icon="rocket">
-    Exécutez des modèles issus de [Azure AI Foundry](https://ai.azure.com/), [Google](https://aistudio.google.com/), [Anthropic](https://www.anthropic.com/), [Alibaba](https://www.alibaba.com/), et bien d'autres. Consultez [Configuration](/genaiscript/getting-started/configuration/).
+    Exécutez des modèles issus de [Azure AI Foundry](https://ai.azure.com/), [Google](https://aistudio.google.com/), [Anthropic](https://www.anthropic.com/), [Alibaba](https://www.alibaba.com/), et bien d'autres. Consultez [Configuration](../../getting-started/configuration/).
 
     ```js wrap
     script({ ..., model: "azure_ai_inference:o3-mini"})
@@ -348,7 +348,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Local Models" icon="laptop">
-    Exécutez vos scripts avec des [modèles Open Source](/genaiscript/getting-started/configuration/), tels que [Phi-3](https://azure.microsoft.com/en-us/blog/introducing-phi-3-redefining-whats-possible-with-slms/), en utilisant [Ollama](https://ollama.com/), [LocalAI](https://localai.io/), ...
+    Exécutez vos scripts avec des [modèles Open Source](../../getting-started/configuration/), tels que [Phi-3](https://azure.microsoft.com/en-us/blog/introducing-phi-3-redefining-whats-possible-with-slms/), en utilisant [Ollama](https://ollama.com/), [LocalAI](https://localai.io/), ...
 
     ```js wrap
     script({ ..., model: "ollama:phi3" })
@@ -364,7 +364,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Containers" icon="seti:docker">
-    Exécutez du code dans des [conteneurs Docker](/genaiscript/reference/scripts/container).
+    Exécutez du code dans des [conteneurs Docker](../../reference/scripts/container/).
 
     ```js wrap
     const c = await host.container({
@@ -375,7 +375,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="LLM Composition" icon="external">
-    [Exécutez des LLMs](/genaiscript/reference/scripts/inline-prompts/) pour construire vos prompts LLM.
+    [Exécutez des LLMs](../../reference/scripts/inline-prompts/) pour construire vos prompts LLM.
 
     ```js wrap
     // summarize each files individually
@@ -393,7 +393,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Generate Images" icon="sun">
-    [Générez des images](/genaiscript/reference/scripts/image-generation) en utilisant OpenAI DALL-E ou autres outils.
+    [Générez des images](../../reference/scripts/image-generation/) en utilisant OpenAI DALL-E ou autres outils.
 
     ```js wrap
     const { image, revisedPrompt } = await generateImage(
@@ -433,7 +433,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Pluggable Secret Scanning" icon="seti:license">
-    Analysez vos discussions pour détecter la présence de secrets en utilisant le [scanning de secrets](/genaiscript/reference/scripts/secret-scanning).
+    Analysez vos discussions pour détecter la présence de secrets en utilisant le [scanning de secrets](../../reference/scripts/secret-scanning/).
 
     ```json title="genaiscript.config.json"
     {
@@ -446,7 +446,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Automate with CLI" icon="github">
-    Automatisez avec le [CLI](/genaiscript/reference/cli), intégrez des rapports à votre pipeline CI/CD.
+    Automatisez avec le [CLI](../../reference/cli/), intégrez des rapports à votre pipeline CI/CD.
 
     ```bash frame="none" wrap
     npx genaiscript run tlaplus-linter "*.tla"
@@ -454,7 +454,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Pull Request Reviews" icon="comment">
-    Intégrez des [vérifications Pull Requests](/genaiscript/reference/cli/run/#pull-requests) via commentaires, revues ou mises à jour de descriptions. Prend en charge GitHub Actions et les pipelines Azure DevOps.
+    Intégrez des [vérifications Pull Requests](../../reference/cli/run/#pull-requests/) via commentaires, revues ou mises à jour de descriptions. Prend en charge GitHub Actions et les pipelines Azure DevOps.
 
     ```bash frame="none" wrap "--pull-request-reviews"
     npx genaiscript ... --pull-request-reviews
@@ -462,7 +462,7 @@ GenAIScript apporte les outils essentiels de prompts pour LLM dans un environnem
   </Card>
 
   <Card title="Tests and Evals" icon="star">
-    Construisez des prompts fiables en utilisant des [tests et évaluations](/genaiscript/reference/scripts/tests) grâce à [promptfoo](https://promptfoo.dev/).
+    Construisez des prompts fiables en utilisant des [tests et évaluations](../../reference/scripts/tests/) grâce à [promptfoo](https://promptfoo.dev/).
 
     ```js wrap
     script({ ..., tests: {

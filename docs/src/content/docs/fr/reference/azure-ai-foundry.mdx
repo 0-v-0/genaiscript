@@ -31,10 +31,10 @@ script({
 
 GenAIScript prend en charge 4 types de déploiements Azure :
 
-* [Azure OpenAI](/genaiscript/configuration/azure-openai)
-* [Azure AI Inference](/genaiscript/configuration/azure-ai-foundry##azure-ai-inference)
-* [Azure OpenAI Serverless](/genaiscript/configuration/azure-ai-foundry/#azure-ai-openai-serverless)
-* [Modèles Serverless Azure AI](/genaiscript/configuration/azure-ai-foundry/#azure_serverless_models)
+* [Azure OpenAI](../../configuration/azure-openai/)
+* [Azure AI Inference](../../configuration/azure-ai-foundry##azure-ai-inference/)
+* [Azure OpenAI Serverless](../../configuration/azure-ai-foundry/#azure-ai-openai-serverless/)
+* [Modèles Serverless Azure AI](../../configuration/azure-ai-foundry/#azure_serverless_models/)
 
 ## Recherche Azure AI
 
@@ -44,8 +44,8 @@ GenAIScript prend en charge 4 types de déploiements Azure :
 const index = retrieval.index("animals", { type: "azure_ai_search" })
 ```
 
-* [Recherche Vectorielle](/genaiscript/reference/scripts/vector-search/#azure-ai-search)
-* [Configuration](/genaiscript/configuration/azure-ai-search)
+* [Recherche Vectorielle](../../reference/scripts/vector-search/#azure-ai-search/)
+* [Configuration](../../configuration/azure-ai-search/)
 
 ## Sécurité de contenu Azure
 
@@ -61,7 +61,7 @@ const res = await safety.detectPromptInjection(
 if (res.attackDetected) throw new Error("Prompt Injection detected")
 ```
 
-* [Configuration](/genaiscript/reference/scripts/content-safety/#azure-ai-content-safety-services)
+* [Configuration](../../reference/scripts/content-safety/#azure-ai-content-safety-services/)
 
 <hr />
 

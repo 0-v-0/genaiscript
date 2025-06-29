@@ -30,7 +30,7 @@ L'objectif est de créer un script qui détecte lorsque le champ `description` d
 
 ## Le script
 
-GenAIScript est conçu pour s'exécuter sur des fichiers et fournit une variable spéciale `env.files` qui contient la liste des fichiers à analyser. Vous pouvez utiliser cette variable pour inclure les fichiers dans le contexte en utilisant la fonction [def](/genaiscript/reference/scripts/context). Nous limitons chaque fichier à 2000 tokens pour éviter d'exploser le contenu sur de gros fichiers.
+GenAIScript est conçu pour s'exécuter sur des fichiers et fournit une variable spéciale `env.files` qui contient la liste des fichiers à analyser. Vous pouvez utiliser cette variable pour inclure les fichiers dans le contexte en utilisant la fonction [def](../../reference/scripts/context/). Nous limitons chaque fichier à 2000 tokens pour éviter d'exploser le contenu sur de gros fichiers.
 
 ```js title="detect-outdated-descriptions.genai.mjs"
 // Define the file to be analyzed
@@ -59,7 +59,7 @@ Une fois que vous avez enregistré ce script dans votre espace de travail, vous 
 
 ## Automatisation
 
-Vous pouvez exécuter automatiquement cet outil sur vos fichiers de documentation pour identifier les descriptions obsolètes en utilisant le [cli](/genaiscript/reference/cli).
+Vous pouvez exécuter automatiquement cet outil sur vos fichiers de documentation pour identifier les descriptions obsolètes en utilisant le [cli](../../reference/cli/).
 
 ```sh
 genaiscript run detect-outdated-descriptions **/*.md

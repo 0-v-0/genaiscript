@@ -15,14 +15,14 @@ Cette page est un tutoriel sur la création d'invite avec GenAIScript. Il est co
 :::tip
 Pour suivre ce tutoriel dans Visual Studio Code,
 
-1. Suivez les étapes dans [installation](/genaiscript/getting-started/installation) et [configuration](/genaiscript/getting-started/configuration) pour configurer votre environnement.
+1. Suivez les étapes dans [installation](../../getting-started/installation/) et [configuration](../../getting-started/configuration/) pour configurer votre environnement.
 
 2. Ouvrez la palette de commandes (Ctrl+Shift+P) et exécutez la commande `GenAIScript: Create GenAIScript Markdown Notebook`.
 :::
 
 ## À propos des carnets GenAIScript Markdown
 
-Le [GenAIScript Markdown Notebook](/genaiscript/reference/scripts/notebook) analyse le document markdown en une vue Carnet et utilise le support de Visual Studio Code pour offrir une expérience d'édition enrichie. Il devrait fonctionner avec tout fichier markdown tant que le bloc de code utilise "\`\`\`".
+Le [GenAIScript Markdown Notebook](../../reference/scripts/notebook/) analyse le document markdown en une vue Carnet et utilise le support de Visual Studio Code pour offrir une expérience d'édition enrichie. Il devrait fonctionner avec tout fichier markdown tant que le bloc de code utilise "\`\`\`".
 
 * Chaque bloc de code **JavaScript** est un GenAIScript autonome qui peut être exécuté individuellement. Les résultats sont attachés à chaque bloc de code et sauvegardés dans le fichier markdown.
 * Ceci est un noyau sans état, donc les variables ne sont pas partagées entre les blocs de code.
@@ -58,7 +58,7 @@ $`Say "hello!" in emojis`
 
 La fonction `$` formate les chaînes et les écrit dans le message utilisateur. Ce message utilisateur est ajouté aux messages du chat et envoyé à l’API LLM. Sous l'extrait, vous pouvez consulter à la fois le message **utilisateur** (généré par notre programme) et la réponse de l’**assistant** (LLM).
 
-Vous pouvez exécuter le bloc de code en cliquant sur le bouton **Exécuter la cellule** en haut à gauche du bloc de code. Par défaut, il utilisera le LLM `openai:gpt-3.5-turbo`. Si vous devez utiliser un modèle différent, mettez à jour le champ `model` dans les métadonnées en tête de document. De nombreuses options sont documentées dans [configuration](/genaiscript/getting-started/configuration).
+Vous pouvez exécuter le bloc de code en cliquant sur le bouton **Exécuter la cellule** en haut à gauche du bloc de code. Par défaut, il utilisera le LLM `openai:gpt-3.5-turbo`. Si vous devez utiliser un modèle différent, mettez à jour le champ `model` dans les métadonnées en tête de document. De nombreuses options sont documentées dans [configuration](../../getting-started/configuration/).
 
 Une fois l’exécution terminée, vous aurez également une entrée **trace** supplémentaire qui vous permet d’examiner les détails internes de l’exécution GenAIScript. Cela est très utile pour diagnostiquer les problèmes avec vos invites. La trace peut être assez volumineuse, elle n’est donc pas sérialisée dans le fichier markdown.
 
@@ -137,7 +137,7 @@ $`Summarize FILE in one short sentence. Respond as plain text.`
   ```
 </details>
 
-Dans GenAIScript, la variable [`env.files`](https://microsoft.github.io/genaiscript/reference/scripts/context/#environment-env) contient la [liste des fichiers en contexte](/genaiscript/reference/scripts/files), qui peut être déterminée par une sélection utilisateur dans l'interface, des arguments CLI, ou préconfigurée comme dans ce script. Vous pouvez modifier les fichiers dans `env.files` en éditant le champ `files` dans les métadonnées en début de document.
+Dans GenAIScript, la variable [`env.files`](https://microsoft.github.io/genaiscript/reference/scripts/context/#environment-env) contient la [liste des fichiers en contexte](../../reference/scripts/files/), qui peut être déterminée par une sélection utilisateur dans l'interface, des arguments CLI, ou préconfigurée comme dans ce script. Vous pouvez modifier les fichiers dans `env.files` en éditant le champ `files` dans les métadonnées en début de document.
 
 ### Filtrage
 

@@ -13,7 +13,7 @@ hero:
 
 ---
 
-Vous pouvez lancer le [cli](/genaiscript/reference/cli) en tant que **serveur Web API** pour exposer les scripts en tant que points de terminaison REST.
+Vous pouvez lancer le [cli](../../reference/cli/) en tant que **serveur Web API** pour exposer les scripts en tant que points de terminaison REST.
 Le serveur est compatible OpenAPI 3.1 et utilise [fastify](https://www.fastify.io/) en interne.
 
 ```bash
@@ -24,11 +24,11 @@ genaiscript webapi
 
 Le serveur Web API expose les scripts en tant que points de terminaison REST. Il utilise le titre, la description, les groupes et les tags pour générer une spécification OpenAPI 3.1 et un serveur avec fastify.
 
-Les paramètres des points de terminaison OpenAPI sont déduits automatiquement à partir des [paramètres du script](/genaiscript/reference/scripts/parameters) et des fichiers.
+Les paramètres des points de terminaison OpenAPI sont déduits automatiquement à partir des [paramètres du script](../../reference/scripts/parameters/) et des fichiers.
 Les paramètres OpenAPI remplissent ensuite l’objet `env.vars` dans le script comme d’habitude.
 
 La sortie du point de terminaison OpenAPI est la sortie du script. C’est généralement le dernier message de l’assistant pour un script qui utilise le contexte de niveau supérieur.
-La sortie du point de terminaison OpenAPI correspond à la sortie du script, typiquement le dernier message de l’assistant ou tout contenu passé à [env.output](/genaiscript/reference/scripts/output-builder).
+La sortie du point de terminaison OpenAPI correspond à la sortie du script, typiquement le dernier message de l’assistant ou tout contenu passé à [env.output](../../reference/scripts/output-builder/).
 
 Voyons un exemple. Voici un script `task.genai.mjs` qui prend en entrée un paramètre `task`, construit une invite, et renvoie la sortie du LLM.
 

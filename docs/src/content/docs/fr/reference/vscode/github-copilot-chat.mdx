@@ -98,7 +98,7 @@ sous
 
 :::note
 **Les modèles GitHub Copilot Chat sont uniquement disponibles dans Visual Studio Code.** Ils ne fonctionneront pas depuis
-les interfaces [cli](/genaiscript/reference/cli) ou [playground](/genaiscript/reference/playground).
+les interfaces [cli](../../../reference/reference/cli/) ou [playground](../../../reference/reference/playground/).
 :::
 
 #### Disponibilité des modèles
@@ -183,7 +183,7 @@ du script sont réintégrés dans l'historique du chat et sont accessibles à to
 * `@genaiscript /run tool` exécutera le script `tool` et réintégrera les résultats dans l'historique du chat.
 * `analyze the results` continuera la conversation avec les résultats du script.
 
-### Script par défaut <a id="copilotchat" href="" />
+### Script par défautLe script suivant peut être utilisé comme modèle de départ pour créer le script par défaut lorsque l'utilisateur ne saisit pas la commande `/run`.
 
 Le script suivant peut être utilisé comme modèle de départ pour créer le script par défaut lorsque l'utilisateur n'utilise pas la commande `/run`.
 
@@ -196,7 +196,7 @@ Les fonctionnalités suivantes ne sont actuellement pas prises en charge dans le
 * Outils (`#tool`)
 * Référence `Workspace`
 
-## Instructions personnalisées `genaiscript` <a href="" id="genaiscript-custom-prompt" />
+## instructions personnalisées `genaiscript`GenAIScript enregistrera automatiquement un fichier instructions.md dans le dossier `.genaiscript/instructions` lorsque vous exécutez un script. Ce fichier contient les instructions utilisées pour générer le script.
 
 GenAIScript sauvegardera automatiquement un fichier instructions.md dans le dossier `.genaiscript/instructions`
 lorsque vous exécutez un script. Ce fichier contient les instructions utilisées pour générer le script.
