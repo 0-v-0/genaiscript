@@ -65,7 +65,3 @@ const chunks = await tokenizers.chunk(env.files[0], {
     lineNumbers: true
 })
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

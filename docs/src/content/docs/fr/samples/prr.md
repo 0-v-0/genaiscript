@@ -208,7 +208,3 @@ Des mesures supplémentaires pour renforcer la sécurité consisteraient à util
 ou à valider le message avec un [service de sécurité du contenu](../../reference/scripts/content-safety/).
 
 Consultez la [Note de transparence](../../reference/transparency-note/) pour plus d’informations sur la sécurité du contenu.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

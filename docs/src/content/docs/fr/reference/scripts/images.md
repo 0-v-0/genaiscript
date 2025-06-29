@@ -119,7 +119,3 @@ L'image résultante sera ensuite redimensionnée pour respecter les contraintes 
 ```js "tiled: true"
 defImages(env.files, { details: "low", tiled: true })
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

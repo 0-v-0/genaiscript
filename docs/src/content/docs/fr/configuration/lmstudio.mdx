@@ -5,10 +5,10 @@ sidebar:
 
 ---
 
-import { FileTree } from "@astrojs/starlight/components"
-import { Steps } from "@astrojs/starlight/components"
-import { Tabs, TabItem } from "@astrojs/starlight/components"
-import { Image } from "astro:assets"
+import { FileTree } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
 import LLMProviderFeatures from "../../../../components/LLMProviderFeatures.astro";
 
 Le fournisseur `lmstudio` se connecte au serveur sans interface [LMStudio](https://lmstudio.ai/) et permet de faire fonctionner des LLM locaux.
@@ -47,8 +47,8 @@ Trouvez l'**identifiant API** du modèle dans la fenêtre des modèles chargés,
 
 ```js '"lmstudio:llama-3.2-1b"'
 script({
-    model: "lmstudio:llama-3.2-1b-instruct",
-})
+  model: "lmstudio:llama-3.2-1b-instruct",
+});
 ```
 
 * GenAIScript utilise la [CLI LMStudio](https://lmstudio.ai/docs/cli)
@@ -91,7 +91,3 @@ JAN_API_BASE=http://localhost:1234/v1
 ```
 
 <LLMProviderFeatures provider="jan" />
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

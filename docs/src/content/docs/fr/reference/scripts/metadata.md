@@ -164,7 +164,3 @@ console.log(info)
     "model": "gpt-4o"
 }
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

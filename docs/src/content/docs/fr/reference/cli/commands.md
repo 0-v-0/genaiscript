@@ -953,7 +953,3 @@ Show model alias mapping
 Options:
   -h, --help  display help for command
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

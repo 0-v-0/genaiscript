@@ -70,7 +70,3 @@ Chaque terme est lié à sa section correspondante dans la documentation pour un
 * **Extension VS Code GenAIScript** : Extension VS Code pour créer, éditer, exécuter et déboguer des scripts GenAIScript.
 * **WarningCode** : Composant pour afficher des avertissements de sécurité et des solutions dans la documentation.
 * **Travail derrière un proxy** : Instructions pour utiliser la CLI dans des environnements avec un proxy HTTP.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

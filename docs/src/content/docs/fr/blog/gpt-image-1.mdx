@@ -26,6 +26,7 @@ excerpt: Our team just launched support for the new OpenAI gpt-image-1 image
   tasks while leveraging advances in image synthesis. Try running the same
   workflows you use for existing models to see how output and prompt handling
   differ with gpt-image-1.
+
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -44,7 +45,11 @@ Pour comparer les performances de ce modèle, voici un petit script qui génère
 
 ```js title="images.genai.mjs" wrap
 const { output } = env;
-for (const model of ["openai:dall-e-2", "openai:dall-e-3", "openai:gpt-image-1"]) {
+for (const model of [
+  "openai:dall-e-2",
+  "openai:dall-e-3",
+  "openai:gpt-image-1",
+]) {
   output.heading(3, `Model: ${model}`);
   const { image, revisedPrompt } = await generateImage(
     `a cute cat. only one. iconic, high details. 8-bit resolution.`,
@@ -75,7 +80,3 @@ Visualize an adorable single feline, lavishly detailed, represented in charming 
 ### Modèle : openai:gpt-image-1
 
 ![image](../../blog/9c8d4a6bd2b023110b8e716ca48acae431401adf1c8d816c9b986abefa6acafe.png)
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

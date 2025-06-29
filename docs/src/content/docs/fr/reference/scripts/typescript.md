@@ -63,7 +63,3 @@ genaiscript scripts compile
 ```
 
 Cependant, à l'exécution, GenAIScript convertit le TypeScript en JavaScript **sans vérification des types** via [tsx](https://tsx.is/usage#no-type-checking).
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

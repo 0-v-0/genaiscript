@@ -2,6 +2,7 @@
 title: Anthropic Bedrock
 sidebar:
   order: 6.1
+
 ---
 
 import { FileTree } from "@astrojs/starlight/components";
@@ -16,9 +17,8 @@ GenAIScript suppose que vous avez configuré les identifiants Amazon Web Service
 d’une manière que le [SDK AWS Node reconnaîtra](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/setting-credentials-node.html).
 
 ```js "anthropic_bedrock:"
-script({ model: "anthropic_bedrock:anthropic.claude-3-sonnet-20240229-v1:0" });
+script({
+  model:
+    "anthropic_bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+});
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

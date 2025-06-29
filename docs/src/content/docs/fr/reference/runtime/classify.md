@@ -125,7 +125,3 @@ Vous pouvez désactiver les `logprobs` en définissant `logprobs: false` dans le
 ## Remerciements
 
 Cette fonction est inspirée de la classification dans [Marvin](https://www.askmarvin.ai/docs/text/classification/).
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

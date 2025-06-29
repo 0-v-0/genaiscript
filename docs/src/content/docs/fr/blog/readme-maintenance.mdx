@@ -27,6 +27,7 @@ excerpt: A strong `README` can define your project's success in the open source
   both current and engaging. Curious about how to run it? The GenAIScript CLI
   makes it seamless. Keep your contributions visible, your documentation sharp,
   and your users informed.
+
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -57,7 +58,9 @@ Ici, nous définissons les métadonnées du script, y compris une description de
 
 ```ts
 def("README", { filename: "README.md" });
-def("FEATURES", { filename: "docs/src/content/docs/index.mdx" });
+def("FEATURES", {
+  filename: "docs/src/content/docs/index.mdx",
+});
 ```
 
 Ces lignes déclarent deux fichiers importants : le `README` lui-même et un fichier `FEATURES` qui contient des informations à importer dans le `README`.
@@ -89,7 +92,3 @@ Cette commande lancera le script et appliquera les améliorations à votre fichi
 ## Conclusion
 
 Un `README` méticuleux est un signe distinctif d'un projet open source bien entretenu. Avec ce GenAIScript, le projet GenAI donne un excellent exemple d'automatisation pour la maintenance de la documentation du projet. Adoptez la puissance de l'automatisation pour garder le tapis d'accueil de votre projet propre et attrayant. Bon codage ! 👨‍💻👩‍💻
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

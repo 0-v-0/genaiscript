@@ -30,6 +30,7 @@ tags:
 excerpt: Configure and run multiple MCP servers in parallel with agent support.
   Use the `mcpAgentServers` for seamless agent integration or streamline
   directly via the `mcpServers` field to fit your automation needs.
+
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -43,10 +44,12 @@ script({
   title: "Wraps the playwright MCP server with an agent.",
   mcpAgentServers: {
     playwright: {
-      description: "An agent that uses playwright to run browser commands.",
+      description:
+        "An agent that uses playwright to run browser commands.",
       command: "npx",
       args: ["--yes", "@playwright/mcp@latest", "--headless"],
-      instructions: "Use the playwright tools as the Browser Automation Tools.",
+      instructions:
+        "Use the playwright tools as the Browser Automation Tools.",
     },
   },
 });
@@ -71,7 +74,3 @@ script({
 
 $`Extract the OpenAI pricing from https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/`;
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

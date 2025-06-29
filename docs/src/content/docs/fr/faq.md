@@ -110,7 +110,3 @@ keywords: AI, script generation, performance, best practices, limitations
 
 * **Existe-t-il une feuille de route pour le développement de GenAIScript ?**\
   Le dépôt GitHub fournit des informations sur les plans de développement futurs.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

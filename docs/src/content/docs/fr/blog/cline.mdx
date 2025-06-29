@@ -24,9 +24,10 @@ excerpt: Documenting code can be tedious but remains critical for maintaining
   codebase. Practical benefits like parallel task execution, cost-efficient
   prompt utilization, and the shareability of workflows make GenAIScript a
   powerful tool for scaling such tasks in development teams.
----
 
 ---
+
+***
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
 
@@ -145,7 +146,8 @@ script({
   parameters: {
     glob: {
       type: "string",
-      description: "Glob pattern for TypeScript files to process",
+      description:
+        "Glob pattern for TypeScript files to process",
       default: "**/*.{ts,tsx}",
     },
     updateExisting: {
@@ -162,16 +164,23 @@ script({
 });
 
 // Find TypeScript files to process
-const files = await workspace.findFiles(env.vars.glob || "**/*.{ts,tsx}", {
-  ignore: ["**/node_modules/**", "**/dist/**", "**/*.d.ts"],
-});
+const files = await workspace.findFiles(
+  env.vars.glob || "**/*.{ts,tsx}",
+  {
+    ignore: ["**/node_modules/**", "**/dist/**", "**/*.d.ts"],
+  },
+);
 
 if (files.length === 0) {
-  env.output.log(`No TypeScript files found matching pattern: ${env.vars.glob || "**/*.{ts,tsx}"}`);
+  env.output.log(
+    `No TypeScript files found matching pattern: ${env.vars.glob || "**/*.{ts,tsx}"}`,
+  );
   cancel("No files to process");
 }
 
-env.output.log(`Found ${files.length} TypeScript files to analyze for missing JSDoc comments.`);
+env.output.log(
+  `Found ${files.length} TypeScript files to analyze for missing JSDoc comments.`,
+);
 
 // Define ast-grep patterns to find declarations without JSDoc
 const astPatterns = [
@@ -303,7 +312,11 @@ for (const file of files) {
     try {
       const targets: Target[] = [];
       // Use ast-grep to find matches
-      const { matches } = await sg.search("ts", file.filename, astPattern.pattern);
+      const { matches } = await sg.search(
+        "ts",
+        file.filename,
+        astPattern.pattern,
+      );
       const edits = sg.changeset();
 
       for (const match of matches) {
@@ -314,7 +327,10 @@ for (const file of files) {
 
       await processTargets(edits, targets);
     } catch (error) {
-      console.error(`Error processing pattern ${astPattern.name}:`, error);
+      console.error(
+        `Error processing pattern ${astPattern.name}:`,
+        error,
+      );
       // Continue with next pattern
     }
   }
@@ -327,7 +343,9 @@ if (allTargets.length === 0) {
   cancel("No work needed");
 }
 
-env.output.log(`Found ${allTargets.length} TypeScript declarations missing JSDoc comments.`);
+env.output.log(
+  `Found ${allTargets.length} TypeScript declarations missing JSDoc comments.`,
+);
 
 if (!env.vars.applyEdits) {
   env.output.heading(2, "Preview Mode");
@@ -336,7 +354,10 @@ if (!env.vars.applyEdits) {
   );
 }
 
-async function processTargets(edits: SgChangeSet, targets: Target[]) {
+async function processTargets(
+  edits: SgChangeSet,
+  targets: Target[],
+) {
   allTargets.push(...targets);
   // Generate JSDoc for each target using inline prompts
   for (const target of targets) {
@@ -358,7 +379,9 @@ Requirements:
     );
 
     // Extract the JSDoc comment from the response
-    const jsdoc = parsers.unfence(jsdocComment.text, "typescript") || jsdocComment.text;
+    const jsdoc =
+      parsers.unfence(jsdocComment.text, "typescript") ||
+      jsdocComment.text;
 
     // Prepend the JSDoc comment to the code
     const newCode = jsdoc + "\n" + codeText;
@@ -385,7 +408,9 @@ if (env.vars.applyEdits) {
   env.output.log(
     `📋 Preview complete. Found ${allTargets.length} declarations that need JSDoc comments.`,
   );
-  env.output.log("To apply these changes, run the script with `applyEdits: true`.");
+  env.output.log(
+    "To apply these changes, run the script with `applyEdits: true`.",
+  );
 }
 ```
 
@@ -400,7 +425,3 @@ npx genaiscript run jsdoc-commentator.genai.mts
 ## Conclusion
 
 Dans cet article, nous avons exploré comment les assistants de codage peuvent nous aider à écrire des workflows GenAIScript plus rapidement et avec moins d’effort. Nous avons utilisé Cline pour générer un script qui ajoute automatiquement des commentaires JSDoc au code TypeScript qui n’en avait pas encore. Nous avons également discuté des avantages d’utiliser GenAIScript plutôt que des assistants de codage en mode agent pour cette tâche.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

@@ -6,6 +6,7 @@ description: |-
   Générez des notes de version complètes en combinant l'historique des commits
   et les différences de code
 keywords: release notes, automation, commit history, code diffs, release management
+
 ---
 
 import { Code } from "@astrojs/starlight/components";
@@ -31,11 +32,17 @@ Improved Release Script: We've fine-tuned our release script to ensure smoother 
 Nous commençons notre script en appelant `git` plusieurs fois pour récupérer le tag de la version précédente, la liste des commits, et le diff depuis ce tag. (Cette astuce a principalement été trouvée lors d'une session GitHub Copilot Chat).
 
 ```js title="git-release-notes.genai.mjs" wrap
-const { stdout: tag } = await host.exec(`git describe --tags --abbrev=0 HEAD^`);
+const { stdout: tag } = await host.exec(
+  `git describe --tags --abbrev=0 HEAD^`,
+);
 
-const { stdout: commits } = await host.exec(`git log HEAD...${tag}`);
+const { stdout: commits } = await host.exec(
+  `git log HEAD...${tag}`,
+);
 
-const { stdout: diff } = await host.exec(`git diff ${tag}..HEAD`);
+const { stdout: diff } = await host.exec(
+  `git diff ${tag}..HEAD`,
+);
 ```
 
 Nous utilisons la fonction `def` avec `maxTokens` pour intégrer ces informations sans dépasser la fenêtre de contenu du modèle (entrée de 32k).
@@ -80,7 +87,3 @@ GenAIScript utilise [release-it](https://github.com/release-it/release-it) pour 
      }
  }
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

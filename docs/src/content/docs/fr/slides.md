@@ -19,7 +19,3 @@ description: Diapositives
 * [pnw-plse-may2024](https://microsoft.github.io/genaiscript/slides/pnw-plse-may2024/)
 * [seattlejs-jan2025](https://microsoft.github.io/genaiscript/slides/seattlejs-jan2025/)
 * [vs-aua](https://microsoft.github.io/genaiscript/slides/vs-aua/)
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

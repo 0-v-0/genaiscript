@@ -38,6 +38,7 @@ excerpt: We've rolled out GenAIScript 2.0, featuring a modular and maintainable
   with the latest structure. This release makes it easier to incorporate
   GenAIScript into diverse workflows, whether through the CLI or embedded in
   broader Node.js solutions.
+
 ---
 
 import { PackageManagers } from "starlight-package-managers";
@@ -84,7 +85,9 @@ Le processus d’initialisation charge les analyseurs globaux et [les aides pour
 import { prompt, runPrompt } from "@genaiscript/runtime";
 
 const { text: recipe } = await prompt`write a recipe`;
-const { text: poem } = await runPrompt((ctx) => ctx.$`write a poem for this recipe: ${recipe}`);
+const { text: poem } = await runPrompt(
+  (ctx) => ctx.$`write a poem for this recipe: ${recipe}`,
+);
 ```
 
 ### Développement unifié : CLI et runtime Node.js
@@ -102,7 +105,3 @@ import { run } from "@genaiscript/api";
 ## Remerciements
 
 Grand merci à [@matthew-podwysocki](https://github.com/matthew-podwysocki) pour avoir investi son temps et ses efforts dans ce projet.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

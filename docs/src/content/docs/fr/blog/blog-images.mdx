@@ -25,6 +25,7 @@ excerpt: Automatically generating blog post cover images may sound mundane, but
   efficiently. The result? Abstract, content-driven images that hint at
   optimization potential. Thought-provoking for content creators considering
   automation workflows.
+
 ---
 
 import { Code } from "@astrojs/starlight/components";
@@ -38,10 +39,10 @@ Nous générons des images de couverture pour le blog, ce qui en soi est complè
 
 La génération d'une image de couverture pour un article de blog se fait en 3 étapes :
 
-- convertir le markdown du blog en une invite d'image
-- générer une image à partir de l'invite d'image
-- générer une description de texte alternatif à partir de l'invite d'image
-- redimensionner, copier l'image et mettre à jour les métadonnées de l'article de blog
+* convertir le markdown du blog en une invite d'image
+* générer une image à partir de l'invite d'image
+* générer une description de texte alternatif à partir de l'invite d'image
+* redimensionner, copier l'image et mettre à jour les métadonnées de l'article de blog
 
 <Code code={code} lang="ts" wrap title="blog-image.genai.mts" />
 
@@ -54,7 +55,3 @@ genaiscript convert blog-image blog/*.md*
 ## Et les images ?
 
 Les images sont quelque peu abstraites, mais elles sont générées à partir du contenu de l'article de blog. L'invite d'image pourrait certainement être améliorée, mais c'est un bon début.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

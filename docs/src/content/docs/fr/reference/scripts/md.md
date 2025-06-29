@@ -49,7 +49,3 @@ Fusionne les valeurs du frontmatter dans le fichier markdown existant. Utilisez 
 ```javascript
 const updated = MD.updateFrontmatter(text, { title: "New Title" })
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

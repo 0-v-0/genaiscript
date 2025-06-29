@@ -9,11 +9,11 @@ sidebar:
 
 ---
 
-import { FileTree } from "@astrojs/starlight/components"
-import { Steps } from "@astrojs/starlight/components"
-import { Tabs, TabItem } from "@astrojs/starlight/components"
-import { Image } from "astro:assets"
-import { YouTube } from "astro-embed"
+import { FileTree } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+import { YouTube } from "astro-embed";
 import LLMProviderFeatures from "../../../../components/LLMProviderFeatures.astro";
 
 import lmSrc from "../../../../assets/vscode-language-models.png";
@@ -29,8 +29,8 @@ et `model-name` est spécifique au fournisseur.
 
 ```js 'model: "openai:gpt-4o"'
 script({
-    model: "openai:gpt-4o",
-})
+  model: "openai:gpt-4o",
+});
 ```
 
 ### Modèles large, small, vision
@@ -40,11 +40,11 @@ Les modèles larges correspondent généralement à la gamme de raisonnement gpt
 Les petits modèles sont dans la gamme gpt-4o-mini d'OpenAI, et sont utiles pour des tâches rapides et simples.
 
 ```js 'model: "small"'
-script({ model: "small" })
+script({ model: "small" });
 ```
 
 ```js 'model: "large"'
-script({ model: "large" })
+script({ model: "large" });
 ```
 
 Les alias de modèles peuvent aussi être remplacés via la [commande cli run](../../reference/cli/run/),
@@ -66,7 +66,7 @@ Vous pouvez aussi configurer les alias par défaut pour un fournisseur LLM donn�
 Les valeurs par défaut sont documentées sur cette page et affichées dans la sortie console.
 
 ```js
-script({ provider: "openai" })
+script({ provider: "openai" });
 ```
 
 ```sh
@@ -86,7 +86,7 @@ GENAISCRIPT_MODEL_TINY=...
 Les alias de modèles sont systématiquement mis en minuscules lors de leur utilisation dans le script.
 
 ```js
-script({ model: "tiny" })
+script({ model: "tiny" });
 ```
 
 ## Fichier `.env` et fichier `.env.genaiscript`
@@ -138,7 +138,6 @@ les fichiers `.env` et `.env.genaiscript` apparaîtront grisés dans Visual Stud
 Vous pouvez spécifier un emplacement personnalisé pour le fichier `.env` via la CLI ou une variable d'environnement.
 
 * GenAIScript charge par défaut les fichiers `.env` suivants dans cet ordre :
-
   * `~/.env.genaiscript`
   * `./.env.genaiscript`
   * `./.env`
@@ -159,8 +158,8 @@ GENAISCRIPT_ENV_FILE=".env.local" npx genaiscript ...
 
 ```json title="~/genaiscript.config.yaml"
 {
-    "$schema": "https://microsoft.github.io/genaiscript/schemas/config.json",
-    "envFile": [".env.local", ".env.another"]
+  "$schema": "https://microsoft.github.io/genaiscript/schemas/config.json",
+  "envFile": [".env.local", ".env.another"]
 }
 ```
 
@@ -182,7 +181,7 @@ OPENAI_API_KEY="value" npx --yes genaiscript run ...
 ```yaml title=".github/workflows/genaiscript.yml"
 run: npx --yes genaiscript run ...
 env:
-    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 ```
 
 ## Commande `configure`
@@ -211,8 +210,8 @@ Il est particulièrement utile pour le débogage lorsque vous souhaitez voir la 
 
 ```js 'model: "echo"'
 script({
-    model: "echo",
-})
+  model: "echo",
+});
 ```
 
 Echo répond avec les messages du chat sous forme markdown et JSON, ce qui peut être utile pour le débogage.
@@ -223,8 +222,8 @@ Le fournisseur `none` empêche l'exécution du LLM. Il est typiquement utilisé 
 
 ```js 'model: "none"'
 script({
-    model: "none",
-})
+  model: "none",
+});
 ```
 
 ## Fournisseur personnalisé (compatible OpenAI)
@@ -244,8 +243,8 @@ Vous pouvez ensuite utiliser ce fournisseur comme n'importe quel autre fournisse
 
 ```js 'model: "ollizard'
 script({
-    model: "ollizard:llama3.2:1b",
-})
+  model: "ollizard:llama3.2:1b",
+});
 ```
 
 ## Variables d'environnement spécifiques au modèle
@@ -279,7 +278,3 @@ Elle affichera les informations de configuration actuelles analysées par GenAIS
 ```sh
 genaiscript info env
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

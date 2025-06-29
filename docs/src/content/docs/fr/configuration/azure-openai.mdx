@@ -2,6 +2,7 @@
 title: Azure OpenAI
 sidebar:
   order: 3
+
 ---
 
 import { FileTree } from "@astrojs/starlight/components";
@@ -79,7 +80,6 @@ pour essayer le service Azure OpenAI.
       })
       ```
     </li>
-
   </ol>
 </Steps>
 
@@ -122,7 +122,6 @@ vous devez fournir l'ID d'abonnement **et vous devez utiliser Microsoft Entra !*
       car le jeton n'a pas la portée adéquate pour interroger la liste des déploiements.
       :::
     </li>
-
   </ol>
 </Steps>
 
@@ -149,12 +148,12 @@ AZURE_OPENAI_API_CREDENTIALS=cli
 
 Les types sont directement mappés aux types d'informations d'identification de [@azure/identity](https://www.npmjs.com/package/@azure/identity) :
 
-- `cli` - `AzureCliCredential`
-- `env` - `EnvironmentCredential`
-- `powershell` - `AzurePowerShellCredential`
-- `devcli` - `AzureDeveloperCliCredential`
-- `workloadidentity` - `WorkloadIdentityCredential`
-- `managedidentity` - `ManagedIdentityCredential`
+* `cli` - `AzureCliCredential`
+* `env` - `EnvironmentCredential`
+* `powershell` - `AzurePowerShellCredential`
+* `devcli` - `AzureDeveloperCliCredential`
+* `workloadidentity` - `WorkloadIdentityCredential`
+* `managedidentity` - `ManagedIdentityCredential`
 
 Réglez `NODE_ENV` sur `development` pour utiliser `DefaultAzureCredential` avec GenAIScript.
 
@@ -171,7 +170,7 @@ AZURE_OPENAI_TOKEN_SCOPES=...
 
 GenAIScript maintient une [version API par défaut](https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation) pour accéder à Azure OpenAI.
 
-- current version: {AZURE_OPENAI_API_VERSION}
+* version actuelle : {AZURE_OPENAI_API_VERSION}
 
 Vous pouvez remplacer cette valeur en utilisant la variable d'environnement `AZURE_OPENAI_API_VERSION`.
 
@@ -205,12 +204,7 @@ AZURE_OPENAI_API_VERSION_GPT-4O=2025-01-01-preview
     <li>
       Le reste des étapes est identique : trouvez le nom du déploiement et utilisez-le dans votre script, `model: "azure:deployment-id"`.
     </li>
-
   </ol>
 </Steps>
 
 <LLMProviderFeatures provider="azure" />
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

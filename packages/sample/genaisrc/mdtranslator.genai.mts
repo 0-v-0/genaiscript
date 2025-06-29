@@ -19,11 +19,6 @@ script({
       default: false,
       description: "Force translation even if the file has already been translated.",
     },
-    aiDisclaimer: {
-      type: "boolean",
-      default: true,
-      description: "Include a disclaimer about AI-generated content.",
-    },
   },
 });
 
@@ -52,21 +47,28 @@ const hasMarker = (str: string): boolean => {
 };
 
 export default async function main() {
-  const { files, dbg, output, vars } = env;
-  const { force, aiDisclaimer } = vars as {
+  const { dbg, output, vars } = env;
+  const dbgc = host.logger(`script:md`);
+  const dbgt = host.logger(`script:tree`);
+  const { force } = vars as {
     to: string;
     force: boolean;
-    aiDisclaimer: boolean;
   };
-
-  if (!files.length) cancel("No files selected.");
 
   const tos = vars.to
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  const dbgc = host.logger(`script:md`);
-  const dbgt = host.logger(`script:tree`);
+  dbg(`tos: %o`, tos);
+  const files = env.files.filter(
+    ({ filename }) => !tos.some((to) => filename.includes(`/${to.toLowerCase()}/`)),
+  );
+  if (!files.length) cancel("No files selected.");
+  dbg(
+    `files: %O`,
+    files.map((f) => f.filename),
+  );
+
   const { visit, parse, stringify, visitParents, SKIP } = await mdast();
 
   const hashNode = (node: Node | string, ancestors?: Node[]) => {
@@ -131,8 +133,6 @@ export default async function main() {
         };
 
         let content = file.content;
-        if (aiDisclaimer)
-          content += `\n\n<hr/>\n\nTranslated using AI. Please verify the content for accuracy.\n\n`;
         dbgc(`md: %s`, content);
 
         // normalize content
@@ -230,8 +230,9 @@ export default async function main() {
         while (
           llmHashTodos.size &&
           llmHashTodos.size < lastLLmHashTodos &&
-          attempts++ < maxPromptPerFile
+          attempts < maxPromptPerFile
         ) {
+          attempts++;
           dbg(`todos: %o`, Array.from(llmHashTodos));
           const contentMix = stringify(translated);
           dbgc(`translatable content: %s`, contentMix);
@@ -247,20 +248,21 @@ export default async function main() {
       Your task is to translate a Markdown (GFM) document to ${lang} (${to}) while preserving the structure and formatting of the original document.
       You will receive the original document as a variable named ${originalRef} and the currently translated document as a variable named ${translatedRef}.
 
-      Each node in the translated document that has not been translated yet will have a unique identifier in the form of \`┌HASH┐\` at the start and \`└HASH┘\` at the end of the node.
-      You should translate the content of each these nodes.
+      Each Markdown AST node in the translated document that has not been translated yet will be enclosed with a unique identifier in the form 
+      of \`┌node_identifier┐\` at the start and \`└node_identifier┘\` at the end of the node.
+      You should translate the content of each these nodes individually.
       Example:
 
       \`\`\`markdown
-      ┌HASH1┐
+      ┌T001┐
       This is the content to be translated.
-      └HASH1┘
+      └T001┘
 
       This is some other content that does not need translation.
 
-      ┌HASH2
+      ┌T002┐
       This is another piece of content to be translated.
-      └HASH2
+      └T002┘
       \`\`\`
 
       ## Output format
@@ -268,17 +270,18 @@ export default async function main() {
       Respond using code regions where the language string is the HASH value
       For example:
       
-      \`\`\`HASH
-      translated content of text enclosed in HASH1 here
+      \`\`\`T001
+      translated content of text enclosed in T001 here (only T001 content!)
       \`\`\`
 
-      \`\`\`HASH2
-      translated content of text enclosed in HASH2 here
+      \`\`\`T002
+      translated content of text enclosed in T002 here (only T002 content!)
       \`\`\`
 
-      \`\`\`HASH3
-      translated content of text enclosed in HASH3 here
+      \`\`\`T003
+      translated content of text enclosed in T003 here (only T003 content!)
       \`\`\`
+      ...
 
       ## Instructions
 
@@ -290,6 +293,8 @@ export default async function main() {
       - Do not translate inline code blocks, code blocks, or any other code-related content.
       - Use ' instead of ’
       - Always make sure that the URLs are not modified by the translation.
+      - Translate each node individually, preserving the original meaning and context.
+      - If you are unsure about the translation, skip the translation.
 
       `.role("system");
             },
@@ -396,7 +401,7 @@ export default async function main() {
             return SKIP;
           } else if (node.type === "mdxjsEsm") {
             // path local imports
-            const rx = /^(import|\})\s*(.*)\s+from\s+\"(\.\.\/.*)";?$/gm;
+            const rx = /^(import|\})\s*(.*)\s+from\s+(?:\"|')(\.\.\/.*)(?:\"|');?$/gm;
             node.value = node.value.replace(rx, (m, k, i, p) => {
               const pp = patchFn(p);
               const r = k === "}" ? `} from "${pp}";` : `import ${i} from "${pp}";`;
@@ -430,31 +435,33 @@ export default async function main() {
           continue;
         }
 
-        // judge quality is good enough
-        const res = await classify(
-          (ctx) => {
-            ctx.$`You are an expert at judging the quality of translations. 
+        if (attempts) {
+          // judge quality is good enough
+          const res = await classify(
+            (ctx) => {
+              ctx.$`You are an expert at judging the quality of translations. 
           Your task is to determine the quality of the translation of a Markdown document from English to ${lang} (${to}).
           The original document is in ${ctx.def("ORIGINAL", content)}, and the translated document is provided as a variable named ${ctx.def("TRANSLATED", contentTranslated)}.`.role(
-              "system",
-            );
-          },
-          {
-            ok: `Translation is faithful to the original document and conveys the same meaning.`,
-            bad: `Translation is of low quality or has a different meaning from the original.`,
-          },
-          {
-            label: `judge translation ${to} ${basename(filename)}`,
-            explanations: true,
-            systemSafety: false,
-          },
-        );
+                "system",
+              );
+            },
+            {
+              ok: `Translation is faithful to the original document and conveys the same meaning.`,
+              bad: `Translation is of low quality or has a different meaning from the original.`,
+            },
+            {
+              label: `judge translation ${to} ${basename(filename)}`,
+              explanations: true,
+              systemSafety: false,
+            },
+          );
 
-        output.resultItem(res.label === "ok", `Translation quality: ${res.label}`);
-        if (res.label !== "ok") {
-          output.fence(res.answer);
-          output.diff(content, contentTranslated);
-          continue;
+          output.resultItem(res.label === "ok", `Translation quality: ${res.label}`);
+          if (res.label !== "ok") {
+            output.fence(res.answer);
+            output.diff(content, contentTranslated);
+            continue;
+          }
         }
 
         // apply translations and save

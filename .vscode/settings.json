@@ -135,6 +135,7 @@
         "huggingface",
         "icontains",
         "importprompt",
+        "jacdac",
         "jaegertracing",
         "Jamba",
         "jsonlinecache",

@@ -21,6 +21,7 @@ excerpt: Enhance your LLM's capabilities with fallback tools. When your chosen
   enabled for recognized models, this feature ensures efficient workflows and
   can be manually configured for broader compatibility. Stay ahead by
   integrating smarter solutions.
+
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -60,11 +61,13 @@ La performance de cette fonctionnalité variera considérablement en fonction du
 Voici un exemple d'un outil qui génère un nombre aléatoire compris entre 0 et 1.
 
 ```js
-defTool("random", "Generate a random number", {}, () => Math.random());
+defTool("random", "Generate a random number", {}, () =>
+  Math.random(),
+);
 $`Generate a random number between 0 and 1.`;
 ```
 
-- trace o1-mini (utilisant les modèles GitHub)
+* trace o1-mini (utilisant les modèles GitHub)
 
 ````txt
 prompting github:openai/o1-mini (~490 tokens)
@@ -76,7 +79,7 @@ prompting github:openai/o1-mini (~532 tokens)
 Your random number between 0 and 1 is **0.7792901036554349**.
 ````
 
-- modèle gemma2 (utilisant Ollama)
+* modèle gemma2 (utilisant Ollama)
 
 ````txt
 prompting ollama:gemma2 (~716 tokens)
@@ -109,7 +112,3 @@ ou en définissant l'option `--fallback-tools` dans la CLI.
 ```sh
 genaiscript run --fallback-tools ...
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

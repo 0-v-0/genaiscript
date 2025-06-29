@@ -54,7 +54,3 @@ const res = parsers.YAML("...")
 ## Schémas
 
 Les schémas JSON définis avec [defSchema](../../../reference/reference/scripts/schemas/) peuvent également être utilisés pour valider les données YAML.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

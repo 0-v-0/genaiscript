@@ -27,6 +27,7 @@ excerpt: Crafting effective release notes can be a time-consuming process, but
   approach prioritizes concise, user-focused summaries while omitting
   unnecessary details, ensuring your users get the key updates without the
   noise.
+
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -50,7 +51,11 @@ Passons en revue le script, étape par étape :
 #### Étape 1 : Initialisation du script
 
 ```javascript
-script({ system: ["system"], temperature: 0.5, model: "openai:gpt-4-turbo" });
+script({
+  system: ["system"],
+  temperature: 0.5,
+  model: "openai:gpt-4-turbo",
+});
 ```
 
 Le script commence par une initialisation via une fonction `script`. Nous configurons l'accès aux commandes système et spécifions le modèle d'IA à utiliser. La température contrôle la créativité de l'IA, 0.5 représentant un choix équilibré.
@@ -68,7 +73,9 @@ Ici, nous utilisons une variable d'environnement pour définir le nom du produit
 ```javascript
 const pkg = await workspace.readJSON("package.json");
 const { version } = pkg;
-const { stdout: tag } = await host.exec("git describe --tags --abbrev=0 HEAD^");
+const { stdout: tag } = await host.exec(
+  "git describe --tags --abbrev=0 HEAD^",
+);
 ```
 
 Nous lisons la version actuelle depuis `package.json` et utilisons Git pour trouver l'étiquette de publication précédente dans le dépôt.
@@ -96,7 +103,9 @@ Ensuite, nous obtenons le différentiel des modifications depuis la dernière ve
 #### Étape 6 : Définir des espaces réservés
 
 ```javascript
-const commitsName = def("COMMITS", commits, { maxTokens: 4000 });
+const commitsName = def("COMMITS", commits, {
+  maxTokens: 4000,
+});
 const diffName = def("DIFF", diff, { maxTokens: 20000 });
 ```
 
@@ -145,7 +154,3 @@ genaiscript run git-release-notes
 N'oubliez pas d'utiliser le nom du fichier script sans l'extension `.genai.mjs` lors de son invocation avec l'interface CLI.
 
 Et voilà ! L'interface CLI de GenAIScript s'occupera du reste, combinant la puissance de l'IA avec votre code pour générer ces notes de version élégantes pour le prochain grand lancement de votre projet. 🌟
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

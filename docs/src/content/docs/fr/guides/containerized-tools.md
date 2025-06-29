@@ -118,7 +118,3 @@ $`Generate a valid C program that prints "Hello, World!"`
   ```
   ````
 </details>
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

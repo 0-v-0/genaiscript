@@ -364,7 +364,7 @@ Certains modèles renvoient leur raisonnement interne à l'intérieur des balise
 Yes
 ```
 
-Le `unthink` function removes the `<think>` tags.
+La fonction `unthink` supprime les balises \`
 
 ```js
 const text = parsers.unthink(res.text)
@@ -372,13 +372,9 @@ const text = parsers.unthink(res.text)
 
 ## Ligne de commande
 
-Utilisez le champ \`vars\` dans la CLI pour remplacer les variables. vars prend une séquence de paires \`clé=valeur\`. [parse](../../../reference/reference/cli/commands#parse/) command from the CLI to try out various parsers.
+Utilisez la commande [parse](../../../reference/reference/cli/commands#parse/) depuis la CLI pour essayer différents analyseurs.
 
 ```sh
 # convert any known data format to JSON
 genaiscript parse data mydata.csv
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

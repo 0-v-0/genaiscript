@@ -2,6 +2,7 @@
 title: Recherche IA Azure
 sidebar:
   order: 3.1
+
 ---
 
 import { FileTree } from "@astrojs/starlight/components";
@@ -15,7 +16,9 @@ il est inclus ici. Il vous permet de faire une [recherche vectorielle](../../ref
 en utilisant [Azure AI Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search).
 
 ```js "azure_search:"
-const index = await retrieval.index("animals", { type: "azure_ai_search" });
+const index = await retrieval.index("animals", {
+  type: "azure_ai_search",
+});
 await index.insertOrUpdate(env.files);
 const docs = await index.search("cat dog");
 ```
@@ -44,7 +47,6 @@ AZURE_AI_SEARCH_ENDPOINT=https://{{service-name}}.search.windows.net/
       Ouvrez l'onglet **Contrôle d'accès (IAM)** et assurez-vous que votre utilisateur
       ou principal de service possède le rôle de **Contributeur au service de recherche**.
     </li>
-
   </ol>
 </Steps>
 
@@ -56,7 +58,3 @@ Le service est configuré via les variables d'environnement `AZURE_AI_SEARCH_END
 AZURE_AI_SEARCH_ENDPOINT=https://{{service-name}}.search.windows.net/
 AZURE_AI_SEARCH_API_KEY=...
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

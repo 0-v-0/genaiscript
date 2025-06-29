@@ -241,7 +241,3 @@ script({
     tools: ["agent_fs"],
 })
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

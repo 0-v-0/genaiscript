@@ -7,6 +7,7 @@ description: Découvrez les défis et les solutions pour localiser la
   rendu riche dans plusieurs langues.
 keywords: localization, MakeCode, translation automation, documentation
   translation, multilingual support
+
 ---
 
 [Microsoft MakeCode](https://makecode.com) est une plateforme web pour créer des expériences d'apprentissage en informatique engageantes. Elle offre un environnement de programmation par blocs qui permet aux élèves de créer des jeux, des animations et des histoires interactives.
@@ -136,10 +137,10 @@ npx genaiscript run translate ... --vars lang=German
 
 Le CLI peut être automatisé en utilisant votre environnement bash/script préféré. Par exemple, avec [zx](https://google.github.io/zx/), nous automatisons pour plusieurs locales :
 
-- traduire la documentation,
-- enregistrer la traduction dans des fichiers,
-- exécuter le compilateur MakeCode pour valider les traductions
-- téléverser/metttre à jour la base de données de traductions
+* traduire la documentation,
+* enregistrer la traduction dans des fichiers,
+* exécuter le compilateur MakeCode pour valider les traductions
+* téléverser/metttre à jour la base de données de traductions
 
 ```js wrap title="ai-translation.mjs"
 const langs = ["French", "German", ...]
@@ -152,7 +153,3 @@ for(const lang of langs) {
     await $`translation upload ...`
 }
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

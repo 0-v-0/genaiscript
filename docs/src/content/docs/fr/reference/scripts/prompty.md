@@ -130,7 +130,3 @@ Champs supplémentaires utilisés par GenAIScript :
 
 * `files` pour spécifier un ou plusieurs fichiers pour peupler `env.files`
 * `tests` pour spécifier un ou plusieurs tests
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

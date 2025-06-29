@@ -5,10 +5,10 @@ sidebar:
 
 ---
 
-import { FileTree } from "@astrojs/starlight/components"
-import { Steps } from "@astrojs/starlight/components"
-import { Tabs, TabItem } from "@astrojs/starlight/components"
-import { Image } from "astro:assets"
+import { FileTree } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
 import LLMProviderFeatures from "../../../../components/LLMProviderFeatures.astro";
 
 Le fournisseur `windows` prend en charge [AI for Windows Apps](https://learn.microsoft.com/en-us/windows/ai/) qui offre des modèles locaux à la pointe de la technologie, avec support matériel NPU.
@@ -32,15 +32,11 @@ Le fournisseur `windows` prend en charge [AI for Windows Apps](https://learn.mic
 
       ```js "windows:"
       script({
-          model: "windows:Phi-4-mini-gpu-int4-rtn-block-32",
-      })
+        model: "windows:Phi-4-mini-gpu-int4-rtn-block-32",
+      });
       ```
     </li>
   </ol>
 </Steps>
 
 Voir le [guide de démarrage rapide de l’Azure AI Toolkit](https://learn.microsoft.com/en-us/windows/ai/toolkit/toolkit-getting-started).
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

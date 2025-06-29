@@ -5,10 +5,10 @@ sidebar:
 
 ---
 
-import { FileTree } from "@astrojs/starlight/components"
-import { Steps } from "@astrojs/starlight/components"
-import { Tabs, TabItem } from "@astrojs/starlight/components"
-import { Image } from "astro:assets"
+import { FileTree } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
 import LLMProviderFeatures from "../../../../components/LLMProviderFeatures.astro";
 
 [Ollama](https://ollama.ai/) est une application de bureau qui vous permet de télécharger et d'exécuter des modèles localement.
@@ -86,9 +86,9 @@ Vous pouvez facilement exécuter Ollama dans un conteneur Docker.
 
 ```json
 {
-    "features": {
-        "docker-in-docker": "latest"
-    }
+  "features": {
+    "docker-in-docker": "latest"
+  }
 }
 ```
 
@@ -109,16 +109,12 @@ Ajoutez ces scripts à votre fichier `package.json` pour faciliter le démarrage
 
 ```json
 {
-    "scripts": {
-        "ollama:start": "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama",
-        "ollama:stop": "docker stop ollama && docker rm ollama"
-    }
+  "scripts": {
+    "ollama:start": "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama",
+    "ollama:stop": "docker stop ollama && docker rm ollama"
+  }
 }
 ```
 :::
 
 <LLMProviderFeatures provider="ollama" />
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

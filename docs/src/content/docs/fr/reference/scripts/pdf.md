@@ -67,7 +67,3 @@ Vous pouvez contrôler la qualité de l'image rendue à l'aide du paramètre `sc
 ## Les fichiers PDF sont complexes
 
 Le format PDF n'a jamais vraiment été conçu pour permettre une extraction de texte propre. La fonction `parsers.PDF` utilise le paquet `pdf-parse` pour extraire le texte des fichiers PDF. Ce paquet n'est pas parfait et peut ne pas réussir à extraire du texte de certains PDF. Si vous avez accès au document original, il est recommandé d'utiliser un format plus adapté au texte tel que Markdown ou un fichier texte brut.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

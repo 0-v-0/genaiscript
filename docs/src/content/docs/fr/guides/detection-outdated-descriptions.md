@@ -66,7 +66,3 @@ genaiscript run detect-outdated-descriptions **/*.md
 ```
 
 Ce script peut être intégré dans votre pipeline CI/CD pour automatiser le processus de détection.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

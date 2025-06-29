@@ -38,7 +38,3 @@ En combinant les deux points ci-dessus, vous pouvez créer une collection de scr
 ## Utilisez le bon LLM ou autre modèle de base pour la tâche
 
 Il existe actuellement de nombreux choix différents de modèles d'IA. Nous expliquons comment connecter plusieurs d'entre eux avec GenAIScript dans [configuration](../../getting-started/configuration/). Ils varient en capacités et en coût, certains étant disponibles en open source et utilisables (avec le bon GPU) gratuitement. Consultez la documentation du LLM ou autre modèle spécifique que vous utilisez pour comprendre comment écrire des invites qui communiquent efficacement la tâche que vous voulez que l'IA accomplisse. Les paramètres varient entre les LLM, par exemple, la taille du contexte d'entrée autorisée, alors assurez-vous que le contenu que vous voulez transmettre au LLM tient dans la taille de sa fenêtre de contexte.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

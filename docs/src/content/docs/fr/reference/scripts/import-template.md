@@ -91,7 +91,3 @@ user:
 ```js title="tool.genai.mjs"
 importTemplate("basic.prompty", { question: "what is the capital of France?" })
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

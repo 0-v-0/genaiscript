@@ -27,7 +27,3 @@ Les [parsers](../../../reference/reference/scripts/parsers/) fournissent égalem
 ```js
 const sheets = await parsers.XLSX(env.files[0])
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

@@ -184,7 +184,3 @@ $`Summarize FILE in one short sentence. Respond as plain text.`
   Markdown is a lightweight markup language for formatting plaintext documents, different from WYSIWYG editors.
   ```
 </details>
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

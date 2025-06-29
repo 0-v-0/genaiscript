@@ -24,7 +24,3 @@ script({
 Vous pouvez attacher jusqu'à 16 paires clé-valeur à un objet. Cela est utile pour stocker des informations supplémentaires sous un format structuré et pour interroger des objets via l'API ou le tableau de bord.
 
 Les clés sont des chaînes de caractères d'une longueur maximale de 64 caractères. Les valeurs sont des chaînes de caractères d'une longueur maximale de 512 caractères.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

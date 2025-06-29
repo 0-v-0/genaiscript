@@ -210,7 +210,3 @@ for (const file of env.files) {
 // summarize all summaries
 $`Summarize FILE.`
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

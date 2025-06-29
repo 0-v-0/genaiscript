@@ -41,7 +41,3 @@ Par défaut, le terminal du serveur GenAIScript est caché après le démarrage 
 ## Diagnostics
 
 Ce drapeau active diverses options de journalisation supplémentaires et comportements pour aider à diagnostiquer les problèmes avec le serveur GenAIScript.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

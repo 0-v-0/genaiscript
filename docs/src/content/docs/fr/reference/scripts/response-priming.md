@@ -79,7 +79,3 @@ En interne, lors de l’invocation du LLM, un message supplémentaire est ajout�
   ]
 }
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

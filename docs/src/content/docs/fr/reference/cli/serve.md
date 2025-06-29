@@ -103,7 +103,3 @@ Principalement compatible avec l’API de complétions de chat d’OpenAI. Le se
 ### `/v1/models`
 
 Renvoie la liste des modèles et alias disponibles sur le serveur.
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

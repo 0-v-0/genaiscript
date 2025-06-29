@@ -42,7 +42,3 @@ script({
 const token = env.secrets.SECRET_TOKEN
 ...
 ```
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.

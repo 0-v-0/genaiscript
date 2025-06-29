@@ -79,7 +79,3 @@ Les `options` sont transmises en interne à l’[invite en ligne](../../../refer
 ## Remerciements
 
 Cette fonction est inspirée de [Marvin](https://www.askmarvin.ai/docs/text/transformation/).
-
-<hr />
-
-Traduit par IA. Veuillez vérifier le contenu pour plus de précision.
