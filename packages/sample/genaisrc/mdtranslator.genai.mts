@@ -409,6 +409,14 @@ export default async function main() {
           continue;
         }
 
+        // validate it stills parses as Markdown
+        try {
+          parse(contentTranslated);
+        } catch (error) {
+          output.error(`Translated content is not valid Markdown`, error);
+          continue;
+        }
+
         // judge quality is good enough
         const res = await classify(
           (ctx) => {
