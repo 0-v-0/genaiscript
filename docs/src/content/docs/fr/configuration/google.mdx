@@ -2,13 +2,12 @@
 title: Google AI
 sidebar:
   order: 10
-
 ---
 
-import { FileTree } from "@astrojs/starlight/components"
-import { Steps } from "@astrojs/starlight/components"
-import { Tabs, TabItem } from "@astrojs/starlight/components"
-import { Image } from "astro:assets"
+import { FileTree } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
 import LLMProviderFeatures from "../../../../components/LLMProviderFeatures.astro";
 
 ## Google AI <a href="" id="google" />
@@ -18,9 +17,9 @@ Le fournisseur `google` vous permet d'utiliser les modèles Google AI. Il vous d
 :::note
 GenAIScript utilise la couche de [compatibilité OpenAI](https://ai.google.dev/gemini-api/docs/openai) de Google AI, donc certaines [limitations](https://ai.google.dev/gemini-api/docs/openai#current-limitations) s'appliquent.
 
-* `seed` n'est pas pris en charge et est ignoré.
-* Les [outils de secours](../../reference/scripts/tools#fallbacktools/) sont activés en utilisant Google pour compléter la couche de compatibilité OpenAI. (Voir [forum](https://discuss.ai.google.dev/t/gemini-openai-compatibility-multiple-functions-support-in-function-calling-error-400/49431)).
-:::
+- `seed` n'est pas pris en charge et est ignoré.
+- Les [outils de secours](../../reference/scripts/tools#fallbacktools/) sont activés en utilisant Google pour compléter la couche de compatibilité OpenAI. (Voir [forum](https://discuss.ai.google.dev/t/gemini-openai-compatibility-multiple-functions-support-in-function-calling-error-400/49431)).
+  :::
 
 <Steps>
   <ol>
@@ -53,6 +52,7 @@ GenAIScript utilise la couche de [compatibilité OpenAI](https://ai.google.dev/g
       script({ model: "google:gemini-1.5-pro-latest" })
       ```
     </li>
+
   </ol>
 </Steps>
 

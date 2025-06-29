@@ -10,14 +10,16 @@ authors: pelikhan
 canonical_url: https://microsoft.github.io/genaiscript/blog/ast-grep-and-transform
 description: Learn how to parse source code using ast-grep and update nodes in the tree.
 cover:
-  alt: The image is an abstract 8-bit style illustration using five colors. It
+  alt:
+    The image is an abstract 8-bit style illustration using five colors. It
     shows a stylized tree with nodes connected in a branching pattern,
     representing an Abstract Syntax Tree (AST) used in code transformation.
     Geometric shapes and lines indicate the ideas of parsing and modifying
     source code. The design is simple and corporate, with no characters or text
     present.
   image: ./ast-grep-and-transform.png
-excerpt: Automating code updates at scale can be tricky, especially when it
+excerpt:
+  Automating code updates at scale can be tricky, especially when it
   comes to maintaining accuracy. Abstract Syntax Trees (AST) offer a powerful
   solution by allowing you to directly manipulate code structures without
   worrying about formatting inconsistencies. With tools like `ast-grep` and
@@ -128,17 +130,21 @@ and pattern syntax and returns a list of matches.
 
 ```ts title="docs.genai.mts" wrap
 // search
-const { matches, replace } = await sg.search("ts", "src/*fib*.ts", {
-  rule: {
-    kind: "function_declaration",
-    not: {
-      precedes: {
-        kind: "comment",
-        stopBy: "neighbor",
+const { matches, replace } = await sg.search(
+  "ts",
+  "src/*fib*.ts",
+  {
+    rule: {
+      kind: "function_declaration",
+      not: {
+        precedes: {
+          kind: "comment",
+          stopBy: "neighbor",
+        },
       },
     },
   },
-});
+);
 ```
 
 ### Editing
@@ -149,7 +155,8 @@ The `sg.changeset` method creates a changeset that can be used to apply a set of
 // transform
 const edits = sg.changeset();
 for (const match of matches) {
-  const { text } = await prompt`Generate new docs for ${match.text()}`;
+  const { text } =
+    await prompt`Generate new docs for ${match.text()}`;
   // replace
   edits.replace(match.comment(), text); // it's somewhat more involved
 }

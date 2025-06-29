@@ -26,7 +26,6 @@ excerpt: GenAIScript redefines how agents interact with users by integrating
   user-agent communication but also emphasizes context-driven interactions for
   more accurate outputs. Check the GitHub link included for real-world
   implementation details.
-
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -50,14 +49,14 @@ Dans cet article, nous allons apprendre à construire un `agent d'interaction ut
 
 ```js wrap
 script({
-    tools: ["agent_user_input"],
-})
+  tools: ["agent_user_input"],
+});
 
 $`
 Imagine a funny question and ask the user to answer it.
 From the answer, generate 3 possible answers and ask the user to select the correct one.
 Ask the user if the answer is correct.
-`
+`;
 ```
 
 Plongeons dans la création d'un "Agent capable de poser des questions à l'utilisateur".
@@ -70,8 +69,8 @@ Le script est écrit en JavaScript. Il commence par déclarer les métadonnées 
 
 ```js title="system.agent_user_input.genai.mjs"
 system({
-    title: "Agent that can ask questions to the user.",
-})
+  title: "Agent that can ask questions to the user.",
+});
 ```
 
 Cette ligne configure le titre de notre système, rendant clair qu'il est destiné à interagir avec l'utilisateur en posant des questions.
@@ -130,12 +129,12 @@ Essayons l'agent avec :
 
 ```js wrap
 script({
-    tools: ["agent_user_input"],
-})
+  tools: ["agent_user_input"],
+});
 
 $`Imagine a funny question and ask the user to answer it.
 From the answer, generate 3 possible answers and ask the user to select the correct one.
-Ask the user if the answer is correct.`
+Ask the user if the answer is correct.`;
 ```
 
 et examinons les résultats...

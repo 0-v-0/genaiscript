@@ -37,7 +37,6 @@ excerpt: >-
   Whether you're summarizing application structure or detailing intricate
   interfaces, the harmony of Markdown and automated corrections streamlines your
   ability to visualize data effectively.
-
 ---
 
 [Les diagrammes Mermaid](https://mermaid.js.org/) sont une méthode populaire pour créer des [diagrammes](../../reference/scripts/diagrams/) en markdown.
@@ -122,8 +121,8 @@ graph TD
 Voici une trace d’un script simple qui génère un diagramme à partir de n’importe quel code.
 
 ```js wrap title="mermaid.genai.mjs"
-def("CODE", env.files)
-$`Generate a class diagram using mermaid of the code symbols in the CODE.`
+def("CODE", env.files);
+$`Generate a class diagram using mermaid of the code symbols in the CODE.`;
 ```
 
 Nous exécutons la [cli](../../reference/cli/) avec le script `mermaid.genai.mjs` et le fichier [runpromptcontext.ts](https://github.com/microsoft/genaiscript/tree/main/packages/core/src/runpromptcontext.ts).

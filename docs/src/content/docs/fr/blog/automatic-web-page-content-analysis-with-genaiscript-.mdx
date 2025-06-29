@@ -23,7 +23,6 @@ excerpt: Automating web page content analysis is simplified with GenAIScript and
   Playwright. From extracting text to analyzing page insights, this method
   eliminates manual effort while streamlining workflows. Explore practical use
   cases for competitive audits and scalable automation in your toolkit.
-
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -37,12 +36,12 @@ Dans cet article de blog, nous allons explorer un exemple pratique montrant comm
 Le fragment suivant offre une méthode concise et efficace pour analyser le contenu d’une page web avec GenAIScript :
 
 ```javascript
-const page = await host.browse("https://bing.com")
-const screenshot = await page.screenshot()
-defImages(screenshot, { maxWidth: 800 })
-const text = parsers.HTMLtoMarkdown(await page.content())
-def("PAGE_TEXT", text)
-$`Analyze the content of the page and provide insights.`
+const page = await host.browse("https://bing.com");
+const screenshot = await page.screenshot();
+defImages(screenshot, { maxWidth: 800 });
+const text = parsers.HTMLtoMarkdown(await page.content());
+def("PAGE_TEXT", text);
+$`Analyze the content of the page and provide insights.`;
 ```
 
 Décomposons ce que fait chaque ligne de ce script :
@@ -50,7 +49,7 @@ Décomposons ce que fait chaque ligne de ce script :
 #### 1. Navigation vers une page web
 
 ```javascript
-const page = await host.browse("https://example.com")
+const page = await host.browse("https://example.com");
 ```
 
 Cette ligne navigue automatiquement vers l’URL spécifiée (`https://example.com`). La fonction `host.browse` est une fonctionnalité puissante de GenAIScript qui initialise une session de navigateur et renvoie un objet page pour d’autres interactions.
@@ -58,7 +57,7 @@ Cette ligne navigue automatiquement vers l’URL spécifiée (`https://example.c
 #### 2. Capture d'écran
 
 ```javascript
-const screenshot = await page.screenshot()
+const screenshot = await page.screenshot();
 ```
 
 Ici, le script prend une capture d’écran de la vue actuelle de la page. Cela est particulièrement utile pour l’archivage ou l’analyse visuelle.
@@ -66,7 +65,7 @@ Ici, le script prend une capture d’écran de la vue actuelle de la page. Cela 
 #### 3. Définition des images pour l'analyse
 
 ```javascript
-defImages(screenshot, { maxWidth: 800 })
+defImages(screenshot, { maxWidth: 800 });
 ```
 
 Après avoir capturé la capture d’écran, cette ligne enregistre l’image pour une analyse ultérieure. `defImages` est une fonction qui rend la capture disponible pour les fonctions analytiques ou IA suivantes dans le script.
@@ -74,7 +73,7 @@ Après avoir capturé la capture d’écran, cette ligne enregistre l’image po
 #### 4. Extraction du contenu textuel
 
 ```javascript
-const text = parsers.HTMLtoMarkdown(await page.content())
+const text = parsers.HTMLtoMarkdown(await page.content());
 ```
 
 Cette commande extrait tout le contenu textuel de la page, ce qui peut être précieux pour des audits de contenu ou des analyses textuelles.
@@ -82,7 +81,7 @@ Cette commande extrait tout le contenu textuel de la page, ce qui peut être pr�
 #### 5. Enregistrement du texte pour une utilisation ultérieure
 
 ```javascript
-def("PAGE_TEXT", text)
+def("PAGE_TEXT", text);
 ```
 
 Le texte extrait est ensuite stocké sous l’identifiant `PAGE_TEXT`, permettant de le référencer dans des parties ultérieures du script ou pour la documentation.
@@ -90,7 +89,7 @@ Le texte extrait est ensuite stocké sous l’identifiant `PAGE_TEXT`, permettan
 #### 6. Analyse du contenu
 
 ```javascript
-$`Analyze the content of the page and provide insights.`
+$`Analyze the content of the page and provide insights.`;
 ```
 
 Enfin, cette ligne représente un appel à une fonction IA ou définie par script qui analyse le contenu capturé et fournit des insights. C’est ici que se révèle la véritable puissance de l’automatisation et de l’intégration IA dans GenAIScript, permettant une analyse détaillée sans intervention manuelle.

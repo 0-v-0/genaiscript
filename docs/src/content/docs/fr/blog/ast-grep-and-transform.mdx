@@ -26,7 +26,6 @@ excerpt: Automating code updates at scale can be tricky, especially when it
   ideal for tasks such as generating or updating function documentation in
   TypeScript projects. Curious how this works? Explore how AST-driven strategies
   can streamline your workflow.
-
 ---
 
 import { Code } from "@astrojs/starlight/components";
@@ -155,13 +154,15 @@ await workspace.writeFiles(edits.commit());
 
 Exemple : Générateur / Mise à jour de documentation <a id="sample" href="" />Vous trouverez une description complète de la création du script générateur/mise à jour de documentation ci-dessous
 dans la [documentation](../../reference/scripts/ast-grep/). Je vous encourage à la lire pour approfondir.Le script `docs` est un générateur/mise à jour de documentation.- utilise ast-grep pour trouver et générer la documentation manquante pour les fonctions TypeScript exportées. Une seconde requête LLM-as-Judge
-  est utilisée pour vérifier que la documentation générée est correcte.
+est utilisée pour vérifier que la documentation générée est correcte.
+
 - si l'option `diff` est sélectionnée, il filtrera les fonctions qui n'intersectent pas avec le
   diff (c'est plutôt naïf mais un bon début...).
 - il peut également être utilisé pour mettre à jour la documentation d'une fonction qui a été modifiée.
 - il fonctionne quel que soit la taille du fichier ou le nombre de fichiers, car la plupart des transformations sont hyper-localisées.```sh title="générer et rafraîchir ma doc STP"
-genaiscript run docs -- --diff
-```
+  genaiscript run docs -- --diff
+
+````
 ---
 
 Vous trouverez ci-dessous une description complète de la création du script de générateur/mise à jour de documentation dans la [documentation](../../reference/scripts/ast-grep/). Je vous encourage à la lire pour approfondir.
@@ -176,18 +177,18 @@ Le script `docs` est un générateur/mise à jour de documentation.
 
 ```sh title="generate and refresh my docs plz"
 genaiscript run docs -- --diff
-```
+````
 
 Voici quelques exemples d’application des scripts (one-shot, sans modification humaine, édition multiple par fichier) :
 
-* * [Code TypeScript](https://github.com/pelikhan/TypeScript/pull/1), j’ai arrêté le script après un moment, il tournait en douceur.
-* * [Code GenAIScript](https://github.com/microsoft/genaiscript/pull/1376/files), cette modification inclut aussi la mise à jour vers GenAIScript lors de la construction de la fonctionnalité.
+- - [Code TypeScript](https://github.com/pelikhan/TypeScript/pull/1), j’ai arrêté le script après un moment, il tournait en douceur.
+- - [Code GenAIScript](https://github.com/microsoft/genaiscript/pull/1376/files), cette modification inclut aussi la mise à jour vers GenAIScript lors de la construction de la fonctionnalité.
 
 Voici, c’est parti :
 
 <Code code={code} lang="ts" wrap title="docs.genai.mts" />
 
-* * [source originale](https://github.com/microsoft/genaiscript/blob/main/genaisrc/docs.genai.mts)
+- - [source originale](https://github.com/microsoft/genaiscript/blob/main/genaisrc/docs.genai.mts)
 
 <hr />
 

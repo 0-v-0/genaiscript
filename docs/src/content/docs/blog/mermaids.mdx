@@ -5,7 +5,8 @@ date: 2025-05-16
 authors:
   - pelikhan
 cover:
-  alt: A minimalist 8-bit style image showing a flowchart and a class diagram side
+  alt:
+    A minimalist 8-bit style image showing a flowchart and a class diagram side
     by side, with bold arrows connecting geometric shapes like squares,
     diamonds, and rounded rectangles in the flowchart, and rectangles connected
     by lines denoting relationships in the class diagram. The background subtly
@@ -37,7 +38,6 @@ excerpt: >-
   Whether you're summarizing application structure or detailing intricate
   interfaces, the harmony of Markdown and automated corrections streamlines your
   ability to visualize data effectively.
-
 ---
 
 [Mermaid diagrams](https://mermaid.js.org/) are a popular way to create [diagrams](/genaiscript/reference/scripts/diagrams) in markdown.
@@ -122,8 +122,8 @@ graph TD
 Here is a trace of a simple script that generates a diagram from any code.
 
 ```js wrap title="mermaid.genai.mjs"
-def("CODE", env.files)
-$`Generate a class diagram using mermaid of the code symbols in the CODE.`
+def("CODE", env.files);
+$`Generate a class diagram using mermaid of the code symbols in the CODE.`;
 ```
 
 We run the [cli](/genaiscript/reference/cli) with the `mermaid.genai.mjs` script and the [runpromptcontext.ts file](https://github.com/microsoft/genaiscript/tree/main/packages/core/src/runpromptcontext.ts).

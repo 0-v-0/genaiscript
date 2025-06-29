@@ -2,13 +2,12 @@
 title: GitHub Models
 sidebar:
   order: 2
-
 ---
 
-import { FileTree } from "@astrojs/starlight/components"
-import { Steps } from "@astrojs/starlight/components"
-import { Tabs, TabItem } from "@astrojs/starlight/components"
-import { Image } from "astro:assets"
+import { FileTree } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
 import LLMProviderFeatures from "../../../../components/LLMProviderFeatures.astro";
 
 Le fournisseur [GitHub Models](https://github.com/marketplace/models), `github`, permet d’exécuter des modèles via le GitHub Marketplace.\
@@ -16,7 +15,7 @@ Ce fournisseur est utile pour le prototypage et est soumis à des [limites de ta
 selon votre abonnement.
 
 ```js "github:"
-script({ model: "github:openai/gpt-4o" })
+script({ model: "github:openai/gpt-4o" });
 ```
 
 ### Configuration de Codespace
@@ -49,6 +48,7 @@ vous pouvez utiliser le token GitHub Actions (`GITHUB_TOKEN`) pour appeler des m
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       ```
     </li>
+
   </ol>
 </Steps>
 
@@ -72,6 +72,7 @@ Si vous n’utilisez pas GitHub Actions ou Codespaces, vous pouvez utiliser votr
       GITHUB_TOKEN=...
       ```
     </li>
+
   </ol>
 </Steps>
 
@@ -98,6 +99,7 @@ Pour configurer un modèle spécifique,
       })
       ```
     </li>
+
   </ol>
 </Steps>
 
@@ -111,8 +113,8 @@ GenAIScript gère cela en interne.
 
 ```js "github:openai/o1-mini"
 script({
-    model: "github:openai/o1-mini",
-})
+  model: "github:openai/o1-mini",
+});
 ```
 
 <LLMProviderFeatures provider="github" />

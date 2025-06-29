@@ -29,7 +29,6 @@ excerpt: Transform your blog workflow with AI-driven narration and
   guide the narration. By integrating functions like runPrompt and speak, you
   can turn written posts into engaging audio content, broadening accessibility
   and reach for your audience.
-
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -46,41 +45,41 @@ Passons en revue le script étape par étape en expliquant ce que fait chaque pa
 
 ```ts
 script({
-    title: "Blog Post Narrator",
-    description: "Creates narrated summaries of blog posts",
-    accept: ".mdx,.md",
-    model: "large",
-    system: ["system.annotations"],
-    files: "docs/src/content/docs/blog/azure-ai-search.mdx",
-    parameters: {
-        force: false,
-    },
-})
+  title: "Blog Post Narrator",
+  description: "Creates narrated summaries of blog posts",
+  accept: ".mdx,.md",
+  model: "large",
+  system: ["system.annotations"],
+  files: "docs/src/content/docs/blog/azure-ai-search.mdx",
+  parameters: {
+    force: false,
+  },
+});
 ```
 
-* définit les métadonnées du script : titre, description, quels types de fichiers il traite (`.mdx`, `.md`), et quel modèle d'IA utiliser.
-* `"files"` pointe vers l'article de blog d'exemple à narrer.
-* `"parameters"` définit les options facultatives du script.
+- définit les métadonnées du script : titre, description, quels types de fichiers il traite (`.mdx`, `.md`), et quel modèle d'IA utiliser.
+- `"files"` pointe vers l'article de blog d'exemple à narrer.
+- `"parameters"` définit les options facultatives du script.
 
 ```ts
-const { force } = env.vars
-const file = env.files[0]
-if (!file) cancel("No file provided")
+const { force } = env.vars;
+const file = env.files[0];
+if (!file) cancel("No file provided");
 ```
 
-* lit les paramètres d'entrée à partir des variables d'environnement et des fichiers.
-* Si aucun fichier n'est fourni, le script s'annule immédiatement.
+- lit les paramètres d'entrée à partir des variables d'environnement et des fichiers.
+- Si aucun fichier n'est fourni, le script s'annule immédiatement.
 
 ```ts
-const targetName = path.basename(path.changeext(file.filename, ".mp3"))
-const target = path.join(`./docs/public/blog`, targetName)
+const targetName = path.basename(path.changeext(file.filename, ".mp3"));
+const target = path.join(`./docs/public/blog`, targetName);
 if (!force && (await workspace.stat(target))) {
-    cancel(`File already exists: ${target}`)
+  cancel(`File already exists: ${target}`);
 }
 ```
 
-* prépare le nom et l'emplacement cible pour le fichier audio `.mp3` de sortie.
-* Si le fichier existe déjà et que `force` n'est pas défini, le script s'annule.
+- prépare le nom et l'emplacement cible pour le fichier audio `.mp3` de sortie.
+- Si le fichier existe déjà et que `force` n'est pas défini, le script s'annule.
 
 ```ts
 const examples = {
@@ -89,7 +88,7 @@ const examples = {
 }
 ```
 
-* prépare divers styles d'échantillons de voix et de narration pour guider le modèle.
+- prépare divers styles d'échantillons de voix et de narration pour guider le modèle.
 
 ```ts
 const {
@@ -142,38 +141,38 @@ AND a voice description for a text-to-speech model AND a voice type.
 )
 ```
 
-* Exécute un prompt alimenté par l'IA pour générer :
-  * Un résumé de l'article de blog
-  * Une description du style de narration
-  * Un type de voix (parmi les voix TTS d'OpenAI)
-* Le prompt détaille toutes les exigences pour le modèle d'IA, y compris les instructions et des exemples de résultats.
+- Exécute un prompt alimenté par l'IA pour générer :
+  - Un résumé de l'article de blog
+  - Une description du style de narration
+  - Un type de voix (parmi les voix TTS d'OpenAI)
+- Le prompt détaille toutes les exigences pour le modèle d'IA, y compris les instructions et des exemples de résultats.
 
 ```ts
 const { filename } = await speak(summary, {
-    model: "openai:gpt-4o-mini-tts", // High quality speech model
-    voice, // Use a natural-sounding voice
-    instructions,
-})
+  model: "openai:gpt-4o-mini-tts", // High quality speech model
+  voice, // Use a natural-sounding voice
+  instructions,
+});
 ```
 
-* Appelle la fonction `speak` pour générer une narration audio du résumé en utilisant le type de voix et le style de narration choisi.
+- Appelle la fonction `speak` pour générer une narration audio du résumé en utilisant le type de voix et le style de narration choisi.
 
 ```ts
-if (!filename) cancel("failed to generate speech")
-console.log(`audio file: ${filename}`)
+if (!filename) cancel("failed to generate speech");
+console.log(`audio file: ${filename}`);
 ```
 
-* Si la génération du fichier audio échoue, le script s'arrête.
-* Sinon, il enregistre le nom du fichier audio généré.
+- Si la génération du fichier audio échoue, le script s'arrête.
+- Sinon, il enregistre le nom du fichier audio généré.
 
 ## Fonctions importées
 
 Ce script utilise des utilitaires de `genaiscript/runtime` :
 
-* `runPrompt` - envoie des prompts au modèle d'IA et retourne des résultats structurés.
-* `speak` - génère une narration audio à partir de texte et d'instructions vocales.
-* `workspace` - gère les opérations sur les fichiers en toute sécurité.
-* `host.exec` - exécute des commandes shell (comme `ffmpeg`) pour traiter des fichiers.
+- `runPrompt` - envoie des prompts au modèle d'IA et retourne des résultats structurés.
+- `speak` - génère une narration audio à partir de texte et d'instructions vocales.
+- `workspace` - gère les opérations sur les fichiers en toute sécurité.
+- `host.exec` - exécute des commandes shell (comme `ffmpeg`) pour traiter des fichiers.
 
 Vous pouvez [consulter la source runtime ici](https://github.com/microsoft/genaiscript/blob/main/packages/cli/src/runtime.ts).
 

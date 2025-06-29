@@ -22,7 +22,6 @@ excerpt: Analyze videos with ease. Traditional LLMs require timestamp-based
   video and audio analysis by enabling automated frame extraction and transcript
   integration. Learn how tools and agents streamline these tasks for your
   scripts in the documentation.
-
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -32,15 +31,15 @@ import BlogNarration from "../../../../components/BlogNarration.astro";
 La dernière version inclut la prise en charge de l'inclusion de vidéos et de transcriptions audio dans vos scripts.
 
 ```js wrap
-const frames = await ffmpeg.extractFrames("demo.mp4", { transcription: true })
-def("DEMO", frames)
+const frames = await ffmpeg.extractFrames("demo.mp4", { transcription: true });
+def("DEMO", frames);
 
-$`Describe what happens in the <DEMO>.`
+$`Describe what happens in the <DEMO>.`;
 ```
 
 Supposons que vous souhaitiez analyser un fichier vidéo. Pour la plupart des LLM qui supportent les images, vous devrez extraire des captures d'écran à des horodatages précis, puis les envoyer sous forme de séquence d'images. Choisir ces horodatages peut être un défi car vous risquez d'épuiser la fenêtre de contexte. GenAIScript fournit des assistants pour résoudre ces tâches fastidieuses liées à l'analyse vidéo avec les LLM.
 
-* consultez la [documentation](../../reference/scripts/videos/).
+- consultez la [documentation](../../reference/scripts/videos/).
 
 ## outils et agents
 
@@ -50,16 +49,16 @@ Par exemple, pour inclure l'outil d'extraction de frames afin que le LLM puisse 
 
 ```js wrap
 script({
-    tools: "video_extract_frames",
-})
+  tools: "video_extract_frames",
+});
 ```
 
 Ou laissez simplement l'agent travailler sur la vidéo pour vous.
 
 ```js wrap
 script({
-    tools: "agent_video",
-})
+  tools: "agent_video",
+});
 ```
 
 <hr />

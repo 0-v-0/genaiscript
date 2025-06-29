@@ -22,10 +22,9 @@ excerpt: The latest GenAIScript update introduces a self-hosted Playground app,
   bridges the CLI and Visual Studio Code tools seamlessly. Additionally, support
   has expanded to include OpenAI's o1 models and DeepSeek V3, empowering users
   with versatile integrations for advanced scripting.
-
 ---
 
-import { Image } from "astro:assets"
+import { Image } from "astro:assets";
 import src from "../../../../assets/playground.png";
 import alt from "../../../../assets/playground.png.txt?raw";
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -47,8 +46,8 @@ GenAIScript prend en charge les différentes variantes des modèles [OpenAI o1](
 o1 est également disponible sur [GitHub Models](https://github.com/marketplace/models/azure-openai/o1/playground) !
 
 ```js
-script({ model: "github:openai/o1" })
-$`Prove that the sum of the angles of a triangle is 180 degrees.`
+script({ model: "github:openai/o1" });
+$`Prove that the sum of the angles of a triangle is 180 degrees.`;
 ```
 
 ## DeepSeek
@@ -56,8 +55,8 @@ $`Prove that the sum of the angles of a triangle is 180 degrees.`
 GenAIScript prend en charge [DeepSeek V3](https://www.deepseek.com/) via leur API OpenAI.
 
 ```js
-script({ model: "deepseek:deepseek-chat" })
-$`Prove that the sum of the angles of a triangle is 180 degrees.`
+script({ model: "deepseek:deepseek-chat" });
+$`Prove that the sum of the angles of a triangle is 180 degrees.`;
 ```
 
 <hr />

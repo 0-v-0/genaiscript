@@ -26,7 +26,6 @@ excerpt: Our team just launched support for the new OpenAI gpt-image-1 image
   tasks while leveraging advances in image synthesis. Try running the same
   workflows you use for existing models to see how output and prompt handling
   differ with gpt-image-1.
-
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -44,24 +43,20 @@ Nous avons ajouté la prise en charge du nouveau modèle de génération d'image
 Pour comparer les performances de ce modèle, voici un petit script qui génère une image de chat pixelisé sur DallE-2/3 et `gpt-image-1`.
 
 ```js title="images.genai.mjs" wrap
-const { output } = env
-for (const model of [
-    "openai:dall-e-2",
-    "openai:dall-e-3",
-    "openai:gpt-image-1",
-]) {
-    output.heading(3, `Model: ${model}`)
-    const { image, revisedPrompt } = await generateImage(
-        `a cute cat. only one. iconic, high details. 8-bit resolution.`,
-        {
-            maxWidth: 400,
-            mime: "image/png",
-            model,
-            size: "square",
-        }
-    )
-    await env.output.image(image.filename)
-    output.fence(revisedPrompt)
+const { output } = env;
+for (const model of ["openai:dall-e-2", "openai:dall-e-3", "openai:gpt-image-1"]) {
+  output.heading(3, `Model: ${model}`);
+  const { image, revisedPrompt } = await generateImage(
+    `a cute cat. only one. iconic, high details. 8-bit resolution.`,
+    {
+      maxWidth: 400,
+      mime: "image/png",
+      model,
+      size: "square",
+    },
+  );
+  await env.output.image(image.filename);
+  output.fence(revisedPrompt);
 }
 ```
 

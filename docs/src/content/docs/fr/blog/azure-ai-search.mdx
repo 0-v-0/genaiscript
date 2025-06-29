@@ -24,7 +24,6 @@ excerpt: Discover how GenAIScript simplifies interaction with Azure AI Search
   Generation (RAG) workflows, leveraging embeddings for similarity searches
   across your data. Learn how to streamline file indexing and query execution
   using straightforward functions and enhance your AI toolset.
-
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -37,12 +36,12 @@ Cela est couramment appelé Generation Augmentée par Récupération (RAG).
 
 ```js wrap '{ type: "azure_ai_search" }'
 // index creation
-const index = retrieval.index("animals", { type: "azure_ai_search" })
+const index = retrieval.index("animals", { type: "azure_ai_search" });
 // indexing
-await index.insertOrUpdate(env.files)
+await index.insertOrUpdate(env.files);
 // search
-const res = await index.search("cat dog")
-def("RAG", res)
+const res = await index.search("cat dog");
+def("RAG", res);
 ```
 
 GenAIScript fournit un moyen simple et efficace d'interagir avec Azure AI Search. Il gère

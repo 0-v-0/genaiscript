@@ -24,10 +24,9 @@ excerpt: Documenting code can be tedious but remains critical for maintaining
   codebase. Practical benefits like parallel task execution, cost-efficient
   prompt utilization, and the shareability of workflows make GenAIScript a
   powerful tool for scaling such tasks in development teams.
-
 ---
 
-***
+---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
 
@@ -54,7 +53,7 @@ Voici un exemple de ce que nous souhaitons accomplir :
 ```ts wrap
 // Before
 function calculateTotal(price: number, tax: number): number {
-    return price + price * tax
+  return price + price * tax;
 }
 
 // After
@@ -65,7 +64,7 @@ function calculateTotal(price: number, tax: number): number {
  * @returns {number} The total amount including tax
  */
 function calculateTotal(price: number, tax: number): number {
-    return price + price * tax
+  return price + price * tax;
 }
 ```
 
@@ -168,17 +167,11 @@ const files = await workspace.findFiles(env.vars.glob || "**/*.{ts,tsx}", {
 });
 
 if (files.length === 0) {
-  env.output.log(
-    `No TypeScript files found matching pattern: ${
-      env.vars.glob || "**/*.{ts,tsx}"
-    }`
-  );
+  env.output.log(`No TypeScript files found matching pattern: ${env.vars.glob || "**/*.{ts,tsx}"}`);
   cancel("No files to process");
 }
 
-env.output.log(
-  `Found ${files.length} TypeScript files to analyze for missing JSDoc comments.`
-);
+env.output.log(`Found ${files.length} TypeScript files to analyze for missing JSDoc comments.`);
 
 // Define ast-grep patterns to find declarations without JSDoc
 const astPatterns = [
@@ -310,11 +303,7 @@ for (const file of files) {
     try {
       const targets: Target[] = [];
       // Use ast-grep to find matches
-      const { matches } = await sg.search(
-        "ts",
-        file.filename,
-        astPattern.pattern
-      );
+      const { matches } = await sg.search("ts", file.filename, astPattern.pattern);
       const edits = sg.changeset();
 
       for (const match of matches) {
@@ -333,19 +322,17 @@ for (const file of files) {
 
 if (allTargets.length === 0) {
   env.output.log(
-    "✅ All TypeScript declarations already have JSDoc comments or no declarations found."
+    "✅ All TypeScript declarations already have JSDoc comments or no declarations found.",
   );
   cancel("No work needed");
 }
 
-env.output.log(
-  `Found ${allTargets.length} TypeScript declarations missing JSDoc comments.`
-);
+env.output.log(`Found ${allTargets.length} TypeScript declarations missing JSDoc comments.`);
 
 if (!env.vars.applyEdits) {
   env.output.heading(2, "Preview Mode");
   env.output.log(
-    "Set `applyEdits: true` to automatically apply the generated JSDoc comments to your source files."
+    "Set `applyEdits: true` to automatically apply the generated JSDoc comments to your source files.",
   );
 }
 
@@ -367,12 +354,11 @@ Requirements:
 - Write clear, concise descriptions
 - Return ONLY the JSDoc comment block, no other text or code`;
       },
-      { model: "large", temperature: 0.1 }
+      { model: "large", temperature: 0.1 },
     );
 
     // Extract the JSDoc comment from the response
-    const jsdoc =
-      parsers.unfence(jsdocComment.text, "typescript") || jsdocComment.text;
+    const jsdoc = parsers.unfence(jsdocComment.text, "typescript") || jsdocComment.text;
 
     // Prepend the JSDoc comment to the code
     const newCode = jsdoc + "\n" + codeText;
@@ -393,17 +379,14 @@ Requirements:
 
 if (env.vars.applyEdits) {
   env.output.log(
-    `✅ Successfully added JSDoc comments to ${allTargets.length} TypeScript declarations.`
+    `✅ Successfully added JSDoc comments to ${allTargets.length} TypeScript declarations.`,
   );
 } else {
   env.output.log(
-    `📋 Preview complete. Found ${allTargets.length} declarations that need JSDoc comments.`
+    `📋 Preview complete. Found ${allTargets.length} declarations that need JSDoc comments.`,
   );
-  env.output.log(
-    "To apply these changes, run the script with `applyEdits: true`."
-  );
+  env.output.log("To apply these changes, run the script with `applyEdits: true`.");
 }
-
 ```
 
 ## Exécution du script

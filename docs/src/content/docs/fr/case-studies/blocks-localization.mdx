@@ -6,10 +6,9 @@ description: Apprenez comment localiser les blocs de programmation MakeCode tout
   en conservant les propriétés des blocs et les noms de variables pour un public
   international.
 keywords: localization, MakeCode, programming blocks, translation, internationalization
-
 ---
 
-import { Code } from "@astrojs/starlight/components"
+import { Code } from "@astrojs/starlight/components";
 import stringsJson from "../../../../../../packages/sample/src/makecode/jacdac-buzzer-strings.json?raw";
 import scriptSource from "../../../../../../packages/sample/src/makecode/makecode-loc.genai.js?raw";
 
@@ -28,7 +27,7 @@ Par exemple, la chaîne pour le [bloc jouer une note du buzzer Jacdac](https://g
 ```json
 {
     ...
-    "modules.BuzzerClient.playTone|block": 
+    "modules.BuzzerClient.playTone|block":
         "play %music tone|at %note|for %duration",
     ...
 }
@@ -55,7 +54,7 @@ $`...
 - Every variable name is prefixed with a '%' or a '$', like %foo or $bar.
 - Do NOT translate variable names.
 ...
-`
+`;
 ```
 
 ## Format de données personnalisé
@@ -65,29 +64,29 @@ Un autre défi avec les traductions est que la chaîne localisée contient souve
 ```js title="block-translator.genai.mjs"
 // register a callback to custom merge files
 defFileMerge((filename, label, before, generated) => {
-    if (!filename.endsWith("-strings.json")) return undefined
+  if (!filename.endsWith("-strings.json")) return undefined;
 
-    // load existing translatins
-    const olds = JSON.parse(before || "{}")
+  // load existing translatins
+  const olds = JSON.parse(before || "{}");
 
-    // parse out key-value lines into a JavaScript record object
-    const news = generated
-        .split(/\n/g)
-        .map(line => /^([^=]+)=(.+)$/.exec(line))
-        .filter(m => !!m)
-        .reduce((o, m) => {
-            const [, key, value] = m
-            // assign
-            o[key] = value
-            return o
-        }, {})
+  // parse out key-value lines into a JavaScript record object
+  const news = generated
+    .split(/\n/g)
+    .map((line) => /^([^=]+)=(.+)$/.exec(line))
+    .filter((m) => !!m)
+    .reduce((o, m) => {
+      const [, key, value] = m;
+      // assign
+      o[key] = value;
+      return o;
+    }, {});
 
-    // merge new translations with olds ones
-    Object.assign(olds, news)
+  // merge new translations with olds ones
+  Object.assign(olds, news);
 
-    // return stringified json
-    return JSON.stringify(olds, null, 2)
-})
+  // return stringified json
+  return JSON.stringify(olds, null, 2);
+});
 ```
 
 ## Paramétrage pour l'automatisation
@@ -95,7 +94,7 @@ defFileMerge((filename, label, before, generated) => {
 Le code de langue `langCode` est récupéré depuis les [variables](../../reference/scripts/variables/) `env.vars` ou par défaut à `de`.
 
 ```js
-const langCode = env.vars.lang || "de"
+const langCode = env.vars.lang || "de";
 ```
 
 Cette technique permet de reconfigurer ces variables depuis la ligne de commande en utilisant l'argument `--vars lang=fr`.

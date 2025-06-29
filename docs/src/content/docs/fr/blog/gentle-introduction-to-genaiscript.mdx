@@ -21,7 +21,6 @@ excerpt: Curious about integrating Large Language Models into your workflows?
   context to leveraging metadata, it provides flexibility to fit your unique
   needs. Learn more about optimizing your interactions with AI tools
   effectively.
-
 ---
 
 import BlogNarration from "../../../../components/BlogNarration.astro";
@@ -41,7 +40,7 @@ Les scripts sont stockés sous forme de fichiers (`genaisrc/*.genai.mjs`), exéc
 Voici un exemple simple pour commencer. Créez un fichier nommé `poem.genai.mjs` dans le dossier `genaisrc` et ajoutez le code suivant :
 
 ```js
-$`Write a one sentence poem.`
+$`Write a one sentence poem.`;
 ```
 
 Lorsqu'il est exécuté, ce script générera l'invite suivante :
@@ -49,17 +48,19 @@ Lorsqu'il est exécuté, ce script générera l'invite suivante :
 <details>
   <summary>👤 Utilisateur</summary>
 
-  ```markdown
-  Write a one sentence poem.
-  ```
+```markdown
+Write a one sentence poem.
+```
+
 </details>
 
 <details open>
   <summary>🤖 Assistant</summary>
 
-  ```markdown
-  Roses bloom, hearts swoon, under the silver moon.
-  ```
+```markdown
+Roses bloom, hearts swoon, under the silver moon.
+```
+
 </details>
 
 ## Ajouter du contexte
@@ -67,9 +68,9 @@ Lorsqu'il est exécuté, ce script générera l'invite suivante :
 GenAIScript peut également utiliser des variables de contexte, vous permettant d'interagir avec des fichiers ou d'autres sources de données. Voyons un exemple où nous définissons une variable de contexte en utilisant `env.files` :
 
 ```js
-def("FILES", env.files)
+def("FILES", env.files);
 $`You are an expert technical writer and proofreader.
-Review the documents in FILES and report the 2 most important issues.`
+Review the documents in FILES and report the 2 most important issues.`;
 ```
 
 Exécutez ce script pour voir le message utilisateur généré et la réponse de l'assistant. La variable de contexte `FILES` contiendra la liste des fichiers dans l'environnement.
@@ -77,26 +78,28 @@ Exécutez ce script pour voir le message utilisateur généré et la réponse de
 <details>
   <summary>👤 Utilisateur</summary>
 
-  ```markdown
-  FILES:
-  file="src/samples/markdown.md"
-  What is Markdown?
-  Markdown is a lightweight markup language that...
+```markdown
+FILES:
+file="src/samples/markdown.md"
+What is Markdown?
+Markdown is a lightweight markup language that...
 
-  You are an expert technical writer and proofreader.
-  Review the documents in FILES and report the 2 most important issues.
-  ```
+You are an expert technical writer and proofreader.
+Review the documents in FILES and report the 2 most important issues.
+```
+
 </details>
 
 <details open>
   <summary>🤖 Assistant</summary>
 
-  ```markdown
-  I reviewed the document in "src/samples/markdown.md"
-  and found the following two important issues:
+```markdown
+I reviewed the document in "src/samples/markdown.md"
+and found the following two important issues:
 
-  1. **Missing Consistency in Heading Styles**: ...
-  ```
+1. **Missing Consistency in Heading Styles**: ...
+```
+
 </details>
 
 ## Métadonnées et configuration du script
@@ -106,20 +109,20 @@ GitHub Models, Ollama et plus encore.
 
 ```js
 script({
-    title: "Technical proofreading",
-    description: "Reviews the text as a tech writer.",
-    model: "openai:gpt-4o",
-    temperature: 0.1,
-})
-def("FILES", env.files)
+  title: "Technical proofreading",
+  description: "Reviews the text as a tech writer.",
+  model: "openai:gpt-4o",
+  temperature: 0.1,
+});
+def("FILES", env.files);
 $`You are an expert technical writer and proofreader.
-Review the documents in FILES and report the 2 most important issues.`
+Review the documents in FILES and report the 2 most important issues.`;
 ```
 
 ## Étapes suivantes
 
-* [Guide de démarrage](https://microsoft.github.io/genaiscript/getting-started/) pour configurer et commencer à utiliser GenAIScript.
-* Explorez des scripts plus avancés en suivant le [guide Prompt As Code](https://microsoft.github.io/genaiscript/guides/prompt-as-code).
+- [Guide de démarrage](https://microsoft.github.io/genaiscript/getting-started/) pour configurer et commencer à utiliser GenAIScript.
+- Explorez des scripts plus avancés en suivant le [guide Prompt As Code](https://microsoft.github.io/genaiscript/guides/prompt-as-code).
 
 Voilà ! Une introduction douce à GenAIScript pour vous lancer dans votre parcours d'ingénierie des invites. Bon scripting ! 💻✨
 

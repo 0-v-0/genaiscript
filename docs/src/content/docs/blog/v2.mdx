@@ -4,18 +4,20 @@ date: 2025-06-26
 authors:
   - mattpodwysocki
   - pelikhan
-  - genaiscript  
+  - genaiscript
 tags:
   - release
   - typescript
   - architecture
   - dev
   - performance
-description: GenAIScript v2.0 introduces a major architectural refactoring with
+description:
+  GenAIScript v2.0 introduces a major architectural refactoring with
   proper TypeScript packages, unified types, pnpm migration, and improved
   developer experience.
 cover:
-  alt: The image shows a network of geometric blocks connected by wires,
+  alt:
+    The image shows a network of geometric blocks connected by wires,
     symbolizing a modular 2D server in retro 8-bit style. One block is marked
     with a "runtime" symbol and another with a "CLI" symbol, each featuring
     plug-in style ports. Flexible wire connections link a Node.js logo to these
@@ -24,7 +26,8 @@ cover:
     colors, maintains flat and iconic visuals, and has a neutral, wordless
     background.
   image: ./v2.png
-excerpt: We've rolled out GenAIScript 2.0, featuring a modular and maintainable
+excerpt:
+  We've rolled out GenAIScript 2.0, featuring a modular and maintainable
   runtime now accessible in any Node.js application, beyond just the CLI. This
   shift involved significant backend refactoring, streamlining the integration
   process for developers and expanding usage possibilities. The new
@@ -34,10 +37,9 @@ excerpt: We've rolled out GenAIScript 2.0, featuring a modular and maintainable
   with the latest structure. This release makes it easier to incorporate
   GenAIScript into diverse workflows, whether through the CLI or embedded in
   broader Node.js solutions.
-
 ---
 
-import { PackageManagers } from "starlight-package-managers"
+import { PackageManagers } from "starlight-package-managers";
 import BlogNarration from "../../../components/BlogNarration.astro";
 
 <BlogNarration />
@@ -81,7 +83,9 @@ The initialization process loads global parsers and [inline prompt helpers](/gen
 import { prompt, runPrompt } from "@genaiscript/runtime";
 
 const { text: recipe } = await prompt`write a recipe`;
-const { text: poem } = await runPrompt((ctx) => ctx.$`write a poem for this recipe: ${recipe}`);
+const { text: poem } = await runPrompt(
+  (ctx) => ctx.$`write a poem for this recipe: ${recipe}`,
+);
 ```
 
 ### Unified Development: CLI and Node.js Runtime

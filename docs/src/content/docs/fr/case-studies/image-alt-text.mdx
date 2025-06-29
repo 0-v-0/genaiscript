@@ -7,11 +7,10 @@ description: Découvrez comment générer automatiquement un texte alternatif
   d'améliorer l'accessibilité et le référencement SEO.
 keywords: alt text automation, image accessibility, SEO optimization, OpenAI
   Vision, Astro integration
-
 ---
 
-import { Image } from "astro:assets"
-import { Code } from "@astrojs/starlight/components"
+import { Image } from "astro:assets";
+import { Code } from "@astrojs/starlight/components";
 import scriptSrc from "../../../../../genaisrc/image-alt-text.genai.mjs?raw";
 import src from "../../../../assets/debugger.png";
 import alt from "../../../../assets/debugger.png.txt?raw";
@@ -37,8 +36,8 @@ Pour résoudre ce problème, nous avons créé un script qui utilise le modèle 
 Pour commencer, nous supposons que le script s'exécute sur un seul fichier image et nous utilisons [defImage](../../reference/scripts/images/) pour l'ajouter au contexte de la requête.
 
 ```js title="image-alt-text.genai.mjs"
-const file = env.files[0]
-defImages(file)
+const file = env.files[0];
+defImages(file);
 ```
 
 Ensuite, nous donnons une tâche au modèle de langage pour générer un bon texte alternatif.
@@ -62,9 +61,9 @@ La documentation GenAIScript utilise Astro, qui permet de créer des pages en [M
 Le code ci-dessous montre comment le texte alternatif généré, stocké dans un fichier texte séparé, est injecté dans le HTML final.
 
 ```mdx
-import { Image } from "astro:assets"
-import src from "../../../assets/debugger.png"
-import alt from "../../../assets/debugger.png.txt?raw"
+import { Image } from "astro:assets";
+import src from "../../../assets/debugger.png";
+import alt from "../../../assets/debugger.png.txt?raw";
 
 <Image src={src} alt={alt} />
 ```
