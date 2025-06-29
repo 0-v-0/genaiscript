@@ -401,7 +401,7 @@ export default async function main() {
             return SKIP;
           } else if (node.type === "mdxjsEsm") {
             // path local imports
-            const rx = /^(import|\})\s*(.*)\s+from\s+(?:\"|')(\.\.\/.*)(?:\"|');?$/gm;
+            const rx = /^(import|\})\s*(.*)\s+from\s+(?:\"|')(\.?\.\/.*)(?:\"|');?$/gm;
             node.value = node.value.replace(rx, (m, k, i, p) => {
               const pp = patchFn(p);
               const r = k === "}" ? `} from "${pp}";` : `import ${i} from "${pp}";`;
