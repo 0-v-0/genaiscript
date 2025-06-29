@@ -44,7 +44,7 @@ if (files.length === 0)
     files = await ..."git status --porcelain"... // details in sources
 ```
 
-### Processing Each File
+### Traitement de chaque fichier
 
 Nous traitons chaque fichier séparément pour ne pas surcharger le contexte de tokens et pour maintenir la concentration de l'IA. Nous pouvons utiliser des [prompts en ligne](/genaiscript/reference/scripts/inline-prompts) pour effectuer des requêtes internes.
 
@@ -75,11 +75,11 @@ const res = await runPrompt(
 
 Nous fournissons un ensemble d'instructions détaillées à l'IA afin qu'elle analyse et commente le code.
 
-### Format, build, lint
+### Formater, construire, analyser
 
 À ce stade, nous avons un code source modifié par un LLM. Nous devons essayer d'utiliser tous les outils disponibles pour valider les modifications. Il est préférable de commencer par les formateurs et les compilateurs, car ils sont déterministes et généralement rapides.
 
-### Judge results with LLM
+### Évaluer les résultats avec LLM
 
 Nous lançons un prompt supplémentaire pour juger le code modifié (`git diff`) et nous assurer que le code n'a pas été modifié.
 

@@ -155,12 +155,12 @@ description: Generate a pull request description
 ...
 ````
 
-## Automate with GitHub Actions
+## Automatiser avec GitHub Actions
 
-En utilisant [GitHub Actions](https://docs.github.com/en/actions)et [Modèles GitHub](https://docs.github.com/en/github-models),
-you can automate the execution of the script. It will run on all modified markdown files outside the `main` branch.
+En utilisant [GitHub Actions](https://docs.github.com/en/actions) et [GitHub Models](https://docs.github.com/en/github-models),
+vous pouvez automatiser l'exécution du script. Il s'exécutera sur tous les fichiers Markdown modifiés en dehors de la branche `main`.
 
-* Add the following workflow in your GitHub repository.
+* Ajoutez le workflow suivant dans votre dépôt GitHub.
 
 ```yaml title=".github/workflows/genai-sc.yml" wrap
 name: genai sc
@@ -213,8 +213,8 @@ Les mesures suivantes sont prises pour garantir la sécurité du contenu génér
   * [system.safety\_jailbreak](/genaiscript/reference/scripts/system#systemsafety_jailbreak)
   * [system.safety\_harmful\_content](/genaiscript/reference/scripts/system#systemsafety_harmful_content)
 
-Additional measures to further enhance safety would be to run [a model with a safety filter](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter?tabs=warning%2Cuser-prompt%2Cpython-new)
-or validate the message with a [content safety service](/genaiscript/reference/scripts/content-safety).
+Des mesures supplémentaires pour renforcer la sécurité consisteraient à utiliser [un modèle avec un filtre de sécurité](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter?tabs=warning%2Cuser-prompt%2Cpython-new)
+ou à valider le message avec un [service de sécurité du contenu](/genaiscript/reference/scripts/content-safety).
 
 Consultez la [Note de transparence](/genaiscript/reference/transparency-note/) pour plus d’informations sur la sécurité du contenu.
 

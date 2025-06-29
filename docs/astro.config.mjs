@@ -21,7 +21,7 @@ export default defineConfig({
       favicon: "/images/favicon.png",
       logo: {
         src: "./src/assets/logo.svg",
-      },
+      },      
       customCss: ["./src/styles/custom.css"],
       defaultLocale: "root",
       locales: {
