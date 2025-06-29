@@ -134,6 +134,10 @@ export default async function main() {
           content += `\n\n<hr/>\n\nTranslated using AI. Please verify the content for accuracy.\n\n`;
         dbgc(`md: %s`, content);
 
+        // normalize content
+        dbgc(`normalizing content`);
+        content = stringify(parse(content));
+
         // parse to tree
         dbgc(`parsing %s`, filename);
         const root = parse(content);
@@ -414,6 +418,7 @@ export default async function main() {
           parse(contentTranslated);
         } catch (error) {
           output.error(`Translated content is not valid Markdown`, error);
+          output.diff(content, contentTranslated);
           continue;
         }
 
@@ -432,7 +437,6 @@ export default async function main() {
           },
           {
             label: `judge translation ${to} ${basename(filename)}`,
-            model: "large",
             explanations: true,
             systemSafety: false,
           },
@@ -441,6 +445,7 @@ export default async function main() {
         output.resultItem(res.label === "ok", `Translation quality: ${res.label}`);
         if (res.label !== "ok") {
           output.fence(res.answer);
+          output.diff(content, contentTranslated);
           continue;
         }
 
