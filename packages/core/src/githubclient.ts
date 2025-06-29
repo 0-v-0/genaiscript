@@ -358,7 +358,7 @@ export function mergeDescription(commentTag: string, body: string, text: string)
  * @returns A formatted string serving as a footer, warning readers about the AI-generated content.
  */
 export function generatedByFooter(script: PromptScript, info: { runUrl?: string }, code?: string) {
-  return `\n\n> AI-generated content by ${link(script.id, info.runUrl)}${code ? ` \`${code}\` ` : ""} may be incorrect. Use reactions to eval.\n\n`;
+  return `\n\n> AI-generated content by ${link(script.id, info.runUrl)}${code ? ` \`${code}\` ` : ""} may be incorrect.\n\n`;
 }
 
 /**
