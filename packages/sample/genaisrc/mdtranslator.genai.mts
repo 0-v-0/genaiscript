@@ -114,7 +114,7 @@ export default async function main() {
         output.itemValue(`translation`, translationFn);
 
         const patchFn = (fn: string) => {
-          if (/^\./.test(fn) && starlight) {
+          if (typeof fn === "string" && /^\./.test(fn) && starlight) {
             // given an local image path fn (like ./image.png) relative to the original file (filename),
             // path it to the translation file (translationFn).
             // Calculate the relative path from the translation file's directory to the original file's directory,
@@ -339,6 +339,10 @@ export default async function main() {
               if (starlight && data?.hero?.image?.file) {
                 data.hero.image.file = patchFn(data.hero.image.file);
                 dbg(`yaml hero image: %s`, data.hero.image.file);
+              }
+              if (starlight && data?.cover?.image) {
+                data.cover.image = patchFn(data.cover.image);
+                dbg(`yaml cover image: %s`, data.cover.image);
               }
               if (typeof data.title === "string") {
                 const nhash = hashNode(data.title);

@@ -1,0 +1,52 @@
+---
+title: Scripts as MCP tools!
+description: Découvrez comment GenAIScript peut désormais faire apparaître
+  n'importe quel script comme un outil MCP.
+date: 2025-03-22
+authors:
+  - pelikhan
+tags:
+  - MCP
+canonical_url: https://microsoft.github.io/genaiscript/blog/scripts-as-mcp-tools
+cover:
+  alt: Imagine an 8-bit style scene showing a futuristic, tech-heavy landscape. In
+    the center, there's a large, geometric server block labeled "GenAIScript MCP
+    Server," connected to two smaller devices tagged as "script A MCP Tool" and
+    "script B MCP Tool." A line connects "GitHub Copilot Chat" to the main
+    server, representing integration. The design is minimalist with only five
+    colors, emitting a corporate, high-tech feeling without any human figures or
+    text.
+  image: ../../blog/scripts-as-mcp-tools.png
+excerpt: The Model Context Protocol (MCP) is reshaping how we approach
+  integration with AI-driven tools. Platforms like GitHub Copilot Chat and
+  Copilot Studio are leading adoption efforts, and GenAIScript is now enabling
+  you to expose scripts as MCP tools, streamlining workflows with smarter
+  decision-making by LLMs. Ready to elevate your development process? Explore
+  the details in the documentation.
+
+---
+
+import BlogNarration from "../../../../components/BlogNarration.astro";
+
+<BlogNarration />
+
+🚀 Le [Protocole de contexte de modèle (MCP)](https://modelcontextprotocol.io/introduction) bouscule le monde de la technologie, et nous sommes ravis d'annoncer que GenAIScript est en première ligne de cette révolution !
+
+Avec l'adoption rapide du MCP, des outils comme GitHub Copilot Chat intègrent déjà le support (disponible dès aujourd'hui en version Insider), et [Copilot Studio](https://www.microsoft.com/en-us/microsoft-copilot/blog/copilot-studio/introducing-model-context-protocol-mcp-in-copilot-studio-simplified-integration-with-ai-apps-and-agents/) a également annoncé leur compatibilité.
+
+Pour suivre ces avancées passionnantes, **[GenAIScript vous permet désormais d'exposer des scripts comme des outils MCP](/genaiscript/reference/scripts/mcp-server)**. Imaginez les possibilités ! Les outils MCP fonctionnent de manière similaire aux outils LLM, où le modèle linguistique (LLM) décide du moment où les appeler, rendant votre processus de développement plus intelligent et plus efficace.
+
+```mermaid
+
+graph TD
+    VS[GitHub Copilot Chat] --> MCPServer[GenAIScript = MCP Server]
+    MCPServer --> MCPTools1[script A = MCP Tool]
+    MCPServer --> MCPTools2[script B = MCP Tool]
+
+```
+
+Plongez dans l'avenir du scripting avec GenAIScript et MCP. Consultez la [documentation](/genaiscript/reference/scripts/mcp-server) pour commencer.
+
+<hr />
+
+Traduit par IA. Veuillez vérifier le contenu pour plus de précision.
