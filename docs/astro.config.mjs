@@ -119,10 +119,10 @@ is at https://microsoft.github.io/genaiscript/reference/scripts.md
             },
           ],
         }),
-        starlightLinksValidator(),
+        starlightLinksValidator({ errorOnRelativeLinks: false, }),
       ],
       components: {
-        Head: "./src/components/Head.astro",
+        Head: "./src/components/Head.astro",        
         Footer: "./src/components/Footer.astro",
       },
       social: [

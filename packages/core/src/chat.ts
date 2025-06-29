@@ -1032,9 +1032,8 @@ async function choicesToLogitBias(
       disableFallback: true,
     })) || {};
   if (!encode && choices.some((c) => typeof c === "string" || typeof c.token === "string")) {
-    logWarn(`unable to compute logit bias, no token encoder found for ${model}`);
-    logVerbose(YAMLStringify({ choices }));
-    trace?.warn(`unable to compute logit bias, no token encoder found for ${model}`);
+    dbg(`unable to compute logit bias, no token encoder found for %s`, model);
+    dbg(`choices: %O`, choices);
     return undefined;
   }
   const logit_bias: Record<number, number> = Object.fromEntries(

@@ -29,19 +29,13 @@ excerpt: Automating code updates at scale can be tricky, especially when it
 
 ---
 
-import { Code } from "@astrojs/starlight/components"
+import { Code } from "@astrojs/starlight/components";
 import code from "../../../../../../packages/sample/genaisrc/docs.genai.mjs?raw";
 import BlogNarration from "../../../../components/BlogNarration.astro";
 
 <BlogNarration />
 
 Page décrivant une stratégie pour construire des scripts GenAI utilisant des arbres de syntaxe abstraite (AST) pour analyser et modifier le code source. Lorsqu’elle est applicable, elle offre une méthode extrêmement flexible et stable pour appliquer des modifications à grande échelle sur le code source. Intéressé ? Allons-y !
-
-:::tip
-Si vous êtes pressé, allez directement à la **dernière génération/saisie de documentation que vous aurez jamais besoin** dans la [section des exemples](#sample).
-
-*: pour TypeScript, peut-être.*
-:::
 
 ## La stratégie de transformation de code basée sur l'AST
 
@@ -55,7 +49,7 @@ mais le nombre de lignes vides ou d’espaces peut varier.
 ```ts title="math.ts"
 /** sums a and b */
 function fn(a: number, b: number): number {
-    return a - b // oops outdated
+  return a - b; // oops outdated
 }
 ```
 
@@ -71,14 +65,14 @@ Ainsi, au lieu de lutter contre les espaces et les sauts de ligne, vous pouvez s
 un nœud `comment`.
 
 ```ts title="docs.genai.mts" wrap
-const node = sg.search("functions without comments")
+const node = sg.search("functions without comments");
 ```
 
 Une fois que vous avez localisé le nœud à mettre à jour, vous pouvez faire toutes les transformations que vous souhaitez, par exemple le remplacer par un autre texte. En termes de script GenAI, cela signifie que vous pouvez construire une invite qui inclut autant de contexte que nécessaire, générer une réponse.
 
 ```ts title="docs.genai.mts" wrap
-$`Update the documentation of the function 'fn' to reflect the new behavior of the function.`
-fence(node.text())
+$`Update the documentation of the function 'fn' to reflect the new behavior of the function.`;
+fence(node.text());
 ```
 
 ```txt
@@ -88,7 +82,7 @@ fence(node.text())
 Une fois que le LLM répond avec le nouveau commentaire, vous pouvez l’insérer comme contenu du nœud dans l’AST.
 
 ```ts title="docs.genai.mts"
-edits.replace(node.comment(), response)
+edits.replace(node.comment(), response);
 ```
 
 ```mermaid
@@ -102,7 +96,7 @@ Voila ! Vous n’avez touché que la partie du fichier que vous vouliez mettre �
 ```ts title="math.ts"
 /** subs a and b */
 function fn(a: number, b: number): number {
-    return a - b
+  return a - b;
 }
 ```
 
@@ -131,16 +125,16 @@ et la syntaxe du modèle, et retourne une liste de correspondances.
 ```ts title="docs.genai.mts" wrap
 // search
 const { matches, replace } = await sg.search("ts", "src/*fib*.ts", {
-    rule: {
-        kind: "function_declaration",
-        not: {
-            precedes: {
-                kind: "comment",
-                stopBy: "neighbor",
-            },
-        },
+  rule: {
+    kind: "function_declaration",
+    not: {
+      precedes: {
+        kind: "comment",
+        stopBy: "neighbor",
+      },
     },
-})
+  },
+});
 ```
 
 ### ### Édition
@@ -149,19 +143,28 @@ La méthode `sg.changeset` crée un ensemble de modifications pouvant être appl
 
 ```ts
 // transform
-const edits = sg.changeset()
+const edits = sg.changeset();
 for (const match of matches) {
-    const { text } = await prompt`Generate new docs for ${match.text()}`
-    // replace
-    edits.replace(match.comment(), text) // it's somewhat more involved
+  const { text } = await prompt`Generate new docs for ${match.text()}`;
+  // replace
+  edits.replace(match.comment(), text); // it's somewhat more involved
 }
 // commit all edits to file
-await workspace.writeFiles(edits.commit())
+await workspace.writeFiles(edits.commit());
 ```
 
-## ## Exemple : Générateur / mise à jour de documentation <a id="sample" />
+Exemple : Générateur / Mise à jour de documentation <a id="sample" href="" />Vous trouverez une description complète de la création du script générateur/mise à jour de documentation ci-dessous
+dans la [documentation](../../reference/scripts/ast-grep/). Je vous encourage à la lire pour approfondir.Le script `docs` est un générateur/mise à jour de documentation.- utilise ast-grep pour trouver et générer la documentation manquante pour les fonctions TypeScript exportées. Une seconde requête LLM-as-Judge
+  est utilisée pour vérifier que la documentation générée est correcte.
+- si l'option `diff` est sélectionnée, il filtrera les fonctions qui n'intersectent pas avec le
+  diff (c'est plutôt naïf mais un bon début...).
+- il peut également être utilisé pour mettre à jour la documentation d'une fonction qui a été modifiée.
+- il fonctionne quel que soit la taille du fichier ou le nombre de fichiers, car la plupart des transformations sont hyper-localisées.```sh title="générer et rafraîchir ma doc STP"
+genaiscript run docs -- --diff
+```
+---
 
-Vous trouverez ci-dessous une description complète de la création du script de générateur/mise à jour de documentation dans la [documentation](/genaiscript/reference/scripts/ast-grep). Je vous encourage à la lire pour approfondir.
+Vous trouverez ci-dessous une description complète de la création du script de générateur/mise à jour de documentation dans la [documentation](../../reference/scripts/ast-grep/). Je vous encourage à la lire pour approfondir.
 
 Le script `docs` est un générateur/mise à jour de documentation.
 

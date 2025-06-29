@@ -47,7 +47,7 @@ $`Analyze the content of the page and provide insights.`
 
 Décomposons ce que fait chaque ligne de ce script :
 
-#### 1. Navigating to a Web Page
+#### 1. Navigation vers une page web
 
 ```javascript
 const page = await host.browse("https://example.com")
@@ -55,7 +55,7 @@ const page = await host.browse("https://example.com")
 
 Cette ligne navigue automatiquement vers l’URL spécifiée (`https://example.com`). La fonction `host.browse` est une fonctionnalité puissante de GenAIScript qui initialise une session de navigateur et renvoie un objet page pour d’autres interactions.
 
-#### 2. Taking a Screenshot
+#### 2. Capture d'écran
 
 ```javascript
 const screenshot = await page.screenshot()
@@ -63,7 +63,7 @@ const screenshot = await page.screenshot()
 
 Ici, le script prend une capture d’écran de la vue actuelle de la page. Cela est particulièrement utile pour l’archivage ou l’analyse visuelle.
 
-#### 3. Defining Images for Analysis
+#### 3. Définition des images pour l'analyse
 
 ```javascript
 defImages(screenshot, { maxWidth: 800 })
@@ -71,7 +71,7 @@ defImages(screenshot, { maxWidth: 800 })
 
 Après avoir capturé la capture d’écran, cette ligne enregistre l’image pour une analyse ultérieure. `defImages` est une fonction qui rend la capture disponible pour les fonctions analytiques ou IA suivantes dans le script.
 
-#### 4. Extracting Text Content
+#### 4. Extraction du contenu textuel
 
 ```javascript
 const text = parsers.HTMLtoMarkdown(await page.content())
@@ -79,7 +79,7 @@ const text = parsers.HTMLtoMarkdown(await page.content())
 
 Cette commande extrait tout le contenu textuel de la page, ce qui peut être précieux pour des audits de contenu ou des analyses textuelles.
 
-#### 5. Storing Text for Further Use
+#### 5. Enregistrement du texte pour une utilisation ultérieure
 
 ```javascript
 def("PAGE_TEXT", text)
@@ -87,7 +87,7 @@ def("PAGE_TEXT", text)
 
 Le texte extrait est ensuite stocké sous l’identifiant `PAGE_TEXT`, permettant de le référencer dans des parties ultérieures du script ou pour la documentation.
 
-#### 6. Analyzing the Content
+#### 6. Analyse du contenu
 
 ```javascript
 $`Analyze the content of the page and provide insights.`

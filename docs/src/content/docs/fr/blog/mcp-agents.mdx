@@ -1,6 +1,6 @@
 ---
-title: MCP Agents
-description: Learn how to scale the number of MCP servers with agents.
+title: Agents MCP
+description: Découvrez comment augmenter le nombre de serveurs MCP avec des agents.
 date: 2025-04-04
 author: pelikhan
 canonical_url: https://microsoft.github.io/genaiscript/blog/mcp-agents
@@ -37,8 +37,7 @@ import BlogNarration from "../../../../components/BlogNarration.astro";
 
 <BlogNarration />
 
-We've added support to configure MCP servers in the script metadata and wrap them with agents.
-As a result, you can now run multiple MCP servers in parallel, each with its own agent.
+Nous avons ajouté la prise en charge de la configuration des serveurs MCP dans les métadonnées des scripts et leur encapsulation avec des agents. Par conséquent, vous pouvez désormais exécuter plusieurs serveurs MCP en parallèle, chacun avec son propre agent.
 
 ```js "mcpAgentServers" wrap
 script({
@@ -58,9 +57,9 @@ script({
 $`Extract the OpenAI pricing from https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/`
 ```
 
-## Just want servers?
+## Vous voulez simplement des serveurs ?
 
-Don't want to go through the agent abstraction? You can also inject the MCP server directly in the prompt using the `mcpServers` field.
+Vous ne voulez pas utiliser l'abstraction des agents ? Vous pouvez également injecter directement le serveur MCP dans l'invite en utilisant le champ `mcpServers`.
 
 ```js title="mcpServers" wrap
 script({

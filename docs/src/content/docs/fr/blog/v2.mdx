@@ -62,7 +62,7 @@ Cette suggestion a permis de traiter une partie importante de la dette technique
 
 ### Introduisant `@genaiscript/runtime`
 
-Le nouveau paquet [@genaiscript/runtime](https://www.npmjs.com/package/@genaiscript/runtime) fournit un [runtime](/genaiscript/reference/runtime) autonome de GenAIScript qui fonctionne indépendamment dans tout environnement Node.js — aucune interface CLI requise.
+Le nouveau paquet [@genaiscript/runtime](https://www.npmjs.com/package/@genaiscript/runtime) fournit un [runtime](../../reference/runtime/) autonome de GenAIScript qui fonctionne indépendamment dans tout environnement Node.js — aucune interface CLI requise.
 
 Autrefois, accéder aux fonctionnalités du runtime signifiait importer une exportation personnalisée `genaiscript/runtime` depuis le paquet `genaiscript`. Désormais, `@genaiscript/runtime` existe en tant que paquet dédié, conçu pour cette tâche, avec une API claire.
 
@@ -77,7 +77,7 @@ import { initialize } from "@genaiscript/runtime";
 await initialize();
 ```
 
-Le processus d’initialisation charge les analyseurs globaux et [les aides pour prompts inline](/genaiscript/reference/scripts/inline-prompts), préparant le runtime à l’exécution des scripts.
+Le processus d’initialisation charge les analyseurs globaux et [les aides pour prompts inline](../../reference/scripts/inline-prompts/), préparant le runtime à l’exécution des scripts.
 
 **Note architecturale importante :** Les fonctions de prompt de niveau supérieur comme `$` et `def` restent exclusives au contexte CLI, car elles dépendent d’une initialisation spécifique au CLI. Lors de l’utilisation directe du runtime, vous travaillerez avec des prompts inline à la place :
 
@@ -94,7 +94,7 @@ Cette évolution architecturale ouvre une nouvelle capacité puissante : vous po
 
 ### Accès API simplifié avec `@genaiscript/api`
 
-Le package [@genaiscript/api](https://www.npmjs.com/package/@genaiscript/api) fournit un moteur léger pour Node.js optimisé pour [l’exécution programmatique](/genaiscript/reference/api) avec un minimum de dépendances en runtime. Ce package se concentre sur la performance et la simplicité, offrant juste ce dont vous avez besoin pour [exécuter](/genaiscript/reference/api) GenAIScript en environnement de production.
+Le package [@genaiscript/api](https://www.npmjs.com/package/@genaiscript/api) fournit un moteur léger pour Node.js optimisé pour [l’exécution programmatique](../../reference/api/) avec un minimum de dépendances en runtime. Ce package se concentre sur la performance et la simplicité, offrant juste ce dont vous avez besoin pour [exécuter](../../reference/api/) GenAIScript en environnement de production.
 
 ```typescript
 import { run } from "@genaiscript/api";

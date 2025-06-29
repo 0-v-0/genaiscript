@@ -1,5 +1,5 @@
 ---
-title: Blog Images
+title: Images du blog
 date: 2025-03-23
 authors: pelikhan
 tags:
@@ -8,7 +8,7 @@ tags:
   - markdown
   - GenAIScript
 canonical_url: https://microsoft.github.io/genaiscript/blog/blog-images
-description: We added images to the blog, this is how we did it.
+description: Nous avons ajouté des images au blog, voici comment nous l'avons fait.
 cover:
   alt: "A retro-style 8-bit illustration features a computer screen with a visible
     code script. Surrounding it are symbolic representations of image
@@ -35,29 +35,26 @@ import BlogNarration from "../../../../components/BlogNarration.astro";
 
 <BlogNarration />
 
-We generate cover images to the blog, this in itself is completely uninteresting... but the script that generated the images
-is worth a look.
+Nous générons des images de couverture pour le blog, ce qui en soi est complètement inintéressant... mais le script qui a généré les images vaut le coup d'œil.
 
-The generation of an blog post cover is done in 3 phases:
+La génération d'une image de couverture pour un article de blog se fait en 3 étapes :
 
-* convert the blog markdown into an image prompt
-* generate an image from the image prompt
-* generate an alt text description from the image prompt
-* resize, copy image and patch the blog post frontmatter
+* convertir le markdown du blog en une invite d'image
+* générer une image à partir de l'invite d'image
+* générer une description de texte alternatif à partir de l'invite d'image
+* redimensionner, copier l'image et mettre à jour les métadonnées de l'article de blog
 
 <Code code={code} lang="ts" wrap title="blog-image.genai.mts" />
 
-Once this script worked for a couple posts,
-use used the `convert` command to generate the images for all the blog posts.
+Une fois que ce script a fonctionné pour quelques articles, nous avons utilisé la commande `convert` pour générer les images pour tous les articles du blog.
 
 ```sh
 genaiscript convert blog-image blog/*.md*
 ```
 
-## What about the images?
+## Et les images ?
 
-The images are somewhat abstract, but they are generated from the blog post content.
-The image prompt could definitely be improved, but it's a good start.
+Les images sont quelque peu abstraites, mais elles sont générées à partir du contenu de l'article de blog. L'invite d'image pourrait certainement être améliorée, mais c'est un bon début.
 
 <hr />
 

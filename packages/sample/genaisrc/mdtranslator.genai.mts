@@ -113,7 +113,7 @@ export default async function main() {
           : path.changeext(filename, `.${to.toLowerCase()}.md`);
         output.itemValue(`translation`, translationFn);
 
-        const patchFn = (fn: string) => {
+        const patchFn = (fn: string, trailingSlash?: boolean) => {
           if (typeof fn === "string" && /^\./.test(fn) && starlight) {
             // given an local image path fn (like ./image.png) relative to the original file (filename),
             // path it to the translation file (translationFn).
@@ -122,7 +122,8 @@ export default async function main() {
             const originalDir = dirname(filename);
             const translationDir = dirname(translationFn);
             const relativeToOriginal = relative(translationDir, originalDir);
-            const r = join(relativeToOriginal, fn);
+            let r = join(relativeToOriginal, fn);
+            if (trailingSlash && !r.endsWith("/")) r += "/";
             dbg(`patching %s -> %s`, fn, r);
             return r;
           }
@@ -157,8 +158,8 @@ export default async function main() {
 
         // apply translations and mark untranslated nodes with id
         let translated = structuredClone(root);
-        visitParents(translated, nodeTypes, (node, ancestors) => {
-          const nhash = hashNode(node, ancestors);
+        visit(translated, nodeTypes, (node) => {
+          const nhash = hashNode(node);
           const translation = translationCache[nhash];
           if (translation) {
             dbg(`translated: %s`, nhash);
@@ -336,7 +337,7 @@ export default async function main() {
         translated = structuredClone(root);
 
         // apply translations
-        visitParents(translated, nodeTypes, (node, ancestors) => {
+        visit(translated, nodeTypes, (node) => {
           if (node.type === "yaml") {
             const data = parsers.YAML(node.value);
             if (data) {
@@ -364,7 +365,7 @@ export default async function main() {
               return SKIP;
             }
           } else {
-            const hash = hashNode(node, ancestors);
+            const hash = hashNode(node);
             const translation = translationCache[hash];
             if (translation) {
               if (node.type === "text") {
@@ -403,6 +404,13 @@ export default async function main() {
               return r;
             });
             return SKIP;
+          }
+        });
+
+        // patch links
+        visit(translated, "link", (node) => {
+          if (/^\/genaiscript\//.test(node.url)) {
+            node.url = patchFn(node.url.replace(/^\/genaiscript\//, "../"), true);
           }
         });
 

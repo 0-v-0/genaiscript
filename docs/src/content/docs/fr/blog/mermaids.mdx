@@ -40,7 +40,7 @@ excerpt: >-
 
 ---
 
-[Les diagrammes Mermaid](https://mermaid.js.org/) sont une méthode populaire pour créer des [diagrammes](/genaiscript/reference/scripts/diagrams) en markdown.
+[Les diagrammes Mermaid](https://mermaid.js.org/) sont une méthode populaire pour créer des [diagrammes](../../reference/scripts/diagrams/) en markdown.
 Ils sont utilisés dans de nombreux projets, [y compris dans GitHub Markdown](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams).
 Étant donné qu'il existe de nombreux exemples de diagrammes mermaid dans la nature,
 
@@ -104,7 +104,7 @@ Dans la plupart des cas, le LLM est capable de corriger l'erreur de syntaxe et d
 
 ## Réparation automatique
 
-Nous avons ajouté un "réparateur" dans l’invite système [system.diagrams](/genaiscript/reference/scripts/system#systemdiagrams).
+Nous avons ajouté un "réparateur" dans l’invite système [system.diagrams](../../reference/scripts/system#systemdiagrams/).
 Le réparateur recherche les blocs de code `mermaid` dans la sortie et tente de les analyser.
 Si le diagramme présente des erreurs d'analyse, le réparateur ajoute un message au chat pour les corriger.
 
@@ -126,7 +126,7 @@ def("CODE", env.files)
 $`Generate a class diagram using mermaid of the code symbols in the CODE.`
 ```
 
-Nous exécutons la [cli](/genaiscript/reference/cli) avec le script `mermaid.genai.mjs` et le fichier [runpromptcontext.ts](https://github.com/microsoft/genaiscript/tree/main/packages/core/src/runpromptcontext.ts).
+Nous exécutons la [cli](../../reference/cli/) avec le script `mermaid.genai.mjs` et le fichier [runpromptcontext.ts](https://github.com/microsoft/genaiscript/tree/main/packages/core/src/runpromptcontext.ts).
 
 ```sh wrap
 genaiscript run mermaid packages/core/src/runpromptcontext.ts

@@ -1,5 +1,5 @@
 ---
-title: Azure AI Search
+title: Recherche IA Azure
 date: 2025-03-17
 authors: pelikhan
 tags:
@@ -7,7 +7,7 @@ tags:
   - search
   - rag
 canonical_url: https://microsoft.github.io/genaiscript/blog/azure-ai-search
-description: Support for Azure AI Search.
+description: Support pour Azure AI Search.
 cover:
   alt: The image shows a cartoon-like computer interface featuring a "retrieval
     index" with a magnifying glass icon and several files, which are illustrated
@@ -31,9 +31,9 @@ import BlogNarration from "../../../../components/BlogNarration.astro";
 
 <BlogNarration />
 
-Le `retrieval` APIs has been extended to support [Recherche Azure AI](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search).
-This allows you to index files using embeddings into a vector database that can be used for similarity search.
-This is commonly referred to as Retrieval Augmented Generation (RAG).
+Les API `retrieval` ont été étendues pour prendre en charge [Azure AI Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search).
+Cela vous permet d'indexer des fichiers à l'aide d'embeddings dans une base de données vectorielle pouvant être utilisée pour la recherche de similarité.
+Cela est couramment appelé Generation Augmentée par Récupération (RAG).
 
 ```js wrap '{ type: "azure_ai_search" }'
 // index creation
@@ -45,12 +45,12 @@ const res = await index.search("cat dog")
 def("RAG", res)
 ```
 
-GenAIScript provides a simple and efficient way to interact with Azure AI Search. It will handle
-chunking, vectorization, and indexing of the files. The `retrieval.index` function creates an index
-with the specified name and type. The `insertOrUpdate` function indexes the files into the database.
-Finally, the `search` function retrieves the files that match the query.
+GenAIScript fournit un moyen simple et efficace d'interagir avec Azure AI Search. Il gère
+le découpage, la vectorisation et l'indexation des fichiers. La fonction `retrieval.index` crée un index
+avec le nom et le type spécifiés. La fonction `insertOrUpdate` indexe les fichiers dans la base de données.
+Enfin, la fonction `search` récupère les fichiers qui correspondent à la requête.
 
-One can also use the command line interface to index files ahead of time.
+Il est également possible d'utiliser l'interface en ligne de commande pour indexer les fichiers à l'avance.
 
 <hr />
 

@@ -31,7 +31,7 @@ import BlogNarration from "../../../../components/BlogNarration.astro";
 
 GenAIScript a ajouté plusieurs fonctionnalités pour sécuriser les outils du protocole Model Context (MCP) et atténuer des attaques spécifiques telles que le rug pull, l’empoisonnement d’outils ou l’injection de prompt.
 
-À partir de la `v1.127`, vous pouvez configurer les options suivantes comme [documenté ici](/genaiscript/reference/scripts/mcp-tools#security) :
+À partir de la `v1.127`, vous pouvez configurer les options suivantes comme [documenté ici](../../reference/scripts/mcp-tools#security/) :
 
 * hachage de la signature des outils pour prévenir les attaques de rug pull, où la liste des outils est modifiée sans que vous le sachiez.
 
@@ -46,7 +46,7 @@ script({
 })
 ```
 
-* détection d’injection de prompt utilisant un [scanner de sécurité du contenu](/genaiscript/reference/scripts/content-safety). Cela analysera à la fois le fichier de définition des outils, pour éviter **l’empoisonnement d’outils**, et chaque sortie d’outil, pour prévenir **l’injection de prompt**.
+* détection d’injection de prompt utilisant un [scanner de sécurité du contenu](../../reference/scripts/content-safety/). Cela analysera à la fois le fichier de définition des outils, pour éviter **l’empoisonnement d’outils**, et chaque sortie d’outil, pour prévenir **l’injection de prompt**.
 
 ```js 'detectPromptInjection: "always"'
 script({

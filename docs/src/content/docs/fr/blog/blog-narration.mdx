@@ -36,13 +36,13 @@ import BlogNarration from "../../../../components/BlogNarration.astro";
 
 <BlogNarration />
 
-Ever wanted an easy way to create a summary and a spoken narration for your blog post?
-This script helps you do that using AI, turning your blog content into both a text summary and a voice audio file.\
-[See the source on GitHub.](https://github.com/microsoft/genaiscript/blob/main/docs/genaisrc/blog-narration.genai.mts)
+Avez-vous déjà souhaité une manière simple de créer un résumé et une narration audio pour votre article de blog ?
+Ce script vous aide à faire cela grâce à l'IA, transformant le contenu de votre blog en un résumé textuel et un fichier audio vocal.\
+[Voir la source sur GitHub.](https://github.com/microsoft/genaiscript/blob/main/docs/genaisrc/blog-narration.genai.mts)
 
-## How the Script Works
+## Comment fonctionne le script
 
-Let's go through the script step by step, explaining what each part does.
+Passons en revue le script étape par étape en expliquant ce que fait chaque partie.
 
 ```ts
 script({
@@ -58,9 +58,9 @@ script({
 })
 ```
 
-* defines the script metadata: title, description, which file types it processes (`.mdx`, `.md`), and which AI model to use.
-* `"files"` points to the sample blog post to be narrated.
-* `"parameters"` set optional script flags.
+* définit les métadonnées du script : titre, description, quels types de fichiers il traite (`.mdx`, `.md`), et quel modèle d'IA utiliser.
+* `"files"` pointe vers l'article de blog d'exemple à narrer.
+* `"parameters"` définit les options facultatives du script.
 
 ```ts
 const { force } = env.vars
@@ -68,8 +68,8 @@ const file = env.files[0]
 if (!file) cancel("No file provided")
 ```
 
-* reads input parameters from environment variables and files.
-* If no file is provided, the script cancels immediately.
+* lit les paramètres d'entrée à partir des variables d'environnement et des fichiers.
+* Si aucun fichier n'est fourni, le script s'annule immédiatement.
 
 ```ts
 const targetName = path.basename(path.changeext(file.filename, ".mp3"))
@@ -79,8 +79,8 @@ if (!force && (await workspace.stat(target))) {
 }
 ```
 
-* prepares the name and target location for the output `.mp3` audio file.
-* If the file already exists and `force` is not set, the script cancels.
+* prépare le nom et l'emplacement cible pour le fichier audio `.mp3` de sortie.
+* Si le fichier existe déjà et que `force` n'est pas défini, le script s'annule.
 
 ```ts
 const examples = {
@@ -89,7 +89,7 @@ const examples = {
 }
 ```
 
-* prepares various sample voice and narration styles as guidance for the model.
+* prépare divers styles d'échantillons de voix et de narration pour guider le modèle.
 
 ```ts
 const {
@@ -142,11 +142,11 @@ AND a voice description for a text-to-speech model AND a voice type.
 )
 ```
 
-* Runs an AI-powered prompt to generate:
-  * A summary of the blog post
-  * A narration style description
-  * A voice type (from OpenAI TTS voices)
-* The prompt details every requirement for the AI model, including instructions and example outputs.
+* Exécute un prompt alimenté par l'IA pour générer :
+  * Un résumé de l'article de blog
+  * Une description du style de narration
+  * Un type de voix (parmi les voix TTS d'OpenAI)
+* Le prompt détaille toutes les exigences pour le modèle d'IA, y compris les instructions et des exemples de résultats.
 
 ```ts
 const { filename } = await speak(summary, {
@@ -156,30 +156,30 @@ const { filename } = await speak(summary, {
 })
 ```
 
-* Calls the `speak` function to generate an audio narration of the summary using the chosen voice type and narration style.
+* Appelle la fonction `speak` pour générer une narration audio du résumé en utilisant le type de voix et le style de narration choisi.
 
 ```ts
 if (!filename) cancel("failed to generate speech")
 console.log(`audio file: ${filename}`)
 ```
 
-* If audio file generation fails, the script stops.
-* Otherwise, logs the output audio file name.
+* Si la génération du fichier audio échoue, le script s'arrête.
+* Sinon, il enregistre le nom du fichier audio généré.
 
-## Imported Functions
+## Fonctions importées
 
-This script uses helpers from `genaiscript/runtime`:
+Ce script utilise des utilitaires de `genaiscript/runtime` :
 
-* `runPrompt` - sends prompts to the AI model and returns structured outputs.
-* `speak` - generates audio narration from text and voice instructions.
-* `workspace` - handles file operations safely.
-* `host.exec` - runs shell commands (like `ffmpeg`) to process files.
+* `runPrompt` - envoie des prompts au modèle d'IA et retourne des résultats structurés.
+* `speak` - génère une narration audio à partir de texte et d'instructions vocales.
+* `workspace` - gère les opérations sur les fichiers en toute sécurité.
+* `host.exec` - exécute des commandes shell (comme `ffmpeg`) pour traiter des fichiers.
 
-You can [browse the runtime source here](https://github.com/microsoft/genaiscript/blob/main/packages/cli/src/runtime.ts).
+Vous pouvez [consulter la source runtime ici](https://github.com/microsoft/genaiscript/blob/main/packages/cli/src/runtime.ts).
 
-## Summary
+## Résumé
 
-This script quickly turns any blog post into a summarized text and voice narration, ready to share as audio or video. Perfect for making your blog more accessible and engaging! 🎤📝
+Ce script transforme rapidement n'importe quel article de blog en un résumé textuel et une narration vocale, prêt à être partagé en tant qu'audio ou vidéo. Parfait pour rendre votre blog plus accessible et engageant ! 🎤📝
 
 <hr />
 
