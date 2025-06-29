@@ -7,15 +7,15 @@
  * PDF processing, and file system operations in the GenAIScript environment.
  */
 import type {
-  ChatGenerationContext,
+  ChatGenerationContextOptions,
   Logprob,
   PromptGenerator,
   PromptGeneratorOptions,
   RunPromptUsage,
   StringLike,
 } from "@genaiscript/core";
+import { resolveChatGenerationContext } from "@genaiscript/core";
 import { uniq } from "es-toolkit";
-import { resolveChatGenerationContext } from "./runtime.js";
 
 /**
  * Options for classifying data using AI models.
@@ -33,11 +33,8 @@ export type ClassifyOptions = {
    * When true, provides explanatory text before the classification result
    */
   explanations?: boolean;
-  /**
-   * Context for running the classification prompt
-   */
-  ctx?: ChatGenerationContext;
-} & Omit<PromptGeneratorOptions, "choices">;
+} & ChatGenerationContextOptions &
+  Omit<PromptGeneratorOptions, "choices">;
 
 /**
  * Classifies input text into predefined categories using AI.

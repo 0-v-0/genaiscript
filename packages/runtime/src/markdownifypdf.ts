@@ -8,12 +8,13 @@
  */
 import type {
   ChatGenerationContext,
+  ChatGenerationContextOptions,
   ParsePDFOptions,
   PromptGenerator,
   PromptGeneratorOptions,
   WorkspaceFile,
 } from "@genaiscript/core";
-import { resolveChatGenerationContext } from "./runtime.js";
+import { resolveChatGenerationContext } from "@genaiscript/core";
 
 /**
  * Converts a PDF file to markdown format with intelligent formatting preservation.
@@ -25,10 +26,9 @@ import { resolveChatGenerationContext } from "./runtime.js";
 export async function markdownifyPdf(
   file: WorkspaceFile,
   options?: PromptGeneratorOptions &
-    ChatGenerationContext &
+    ChatGenerationContextOptions &
     Omit<ParsePDFOptions, "renderAsImage"> & {
       instructions?: string | PromptGenerator;
-      ctx?: ChatGenerationContext;
     },
 ) {
   const generator: ChatGenerationContext = resolveChatGenerationContext(options);

@@ -1926,7 +1926,8 @@ export interface ChatParticipant {
 /**
  * A set of text extracted from the context of the prompt execution
  */
-export interface ExpansionVariables {
+export interface ExpansionVariables
+  extends Required<Pick<ChatGenerationContextOptions, "generator">> {
   /**
    * Directory where the prompt is executed
    */
@@ -1985,11 +1986,6 @@ export interface ExpansionVariables {
    * List of secrets used by the prompt, must be registered in `genaiscript`.
    */
   secrets: Record<string, string>;
-
-  /**
-   * Root prompt generation context
-   */
-  generator: ChatGenerationContext;
 
   /**
    * Output trace builder
@@ -3091,26 +3087,6 @@ export interface YAMLObject {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parse(text: string | WorkspaceFile): any;
-}
-
-export interface Z3Solver {
-  /**
-   * Runs Z3 on a given SMT string
-   * @param smt
-   */
-  run(smt: string): Promise<string>;
-
-  /**
-   * Native underlying Z3 api
-   */
-  api(): any;
-}
-
-export interface Z3SolverHost {
-  /**
-   * Loads the Z3 solver from the host
-   */
-  z3(): Promise<Z3Solver>;
 }
 
 export interface PromptyFrontmatter {
@@ -4938,7 +4914,10 @@ export interface ChatGenerationContext extends ChatTurnGenerationContext {
 }
 
 export interface ChatGenerationContextOptions {
-  ctx?: ChatGenerationContext;
+  /**
+   * Prompt generation context
+   */
+  generator?: ChatGenerationContext;
 }
 
 export interface GenerationOutput {
@@ -6179,7 +6158,6 @@ export interface PromptHost
     UserInterfaceHost,
     LanguageModelHost,
     SgHost,
-    Z3SolverHost,
     ContentSafetyHost {
   /**
    * A fetch wrapper with proxy, retry and timeout handling.
