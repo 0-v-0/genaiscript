@@ -10641,5 +10641,21 @@
   "B50DF87EB03098322510": "Autres changements majeurs",
   "8BE7324D186A8604DF7D": "les options courtes des outils en ligne de commande ont été modifiées afin de permettre la mise à niveau vers la dernière version de la bibliothèque Commander.",
   "93006FD7D4A4220843F9": "GenAIScript bénéficie de l’excellente [intégration Node.JS](https://ast-grep.github.io/reference/api.html#napi),\nqui est disponible via la méthode [`astGrep()`](https://microsoft.github.io/genaiscript/reference/scripts/ast-grep).",
-  "CDCAED6DE7C86BAEE5CD": "Exemple : Générateur / mise à jour de documentation <a id=\"sample\" href=\"\" />"
+  "CDCAED6DE7C86BAEE5CD": "Exemple : Générateur / mise à jour de documentation <a id=\"sample\" href=\"\" />",
+  "E7E6728E863DC5BD6C6C": "Le paquet [@genaiscript/api](https://www.npmjs.com/package/@genaiscript/api/) fournit un exécuteur Node.js léger, optimisé pour l’[exécution programmatique](/genaiscript/reference/api/) avec un minimum de dépendances d’exécution. Ce paquet met l’accent sur la performance et la simplicité, fournissant juste ce dont vous avez besoin pour [exécuter](/genaiscript/reference/api/) GenAIScript dans des environnements de production.",
+  "A1B87E4085F542A9DDAE": "- analyseur mermaid",
+  "B0E2EA959D7DF1205731": "- le parseur ast grep",
+  "51C74EFFF611BD8992FC": "- le solveur Z3",
+  "3A5CC2A4965BB39F57FE": "En savoir plus sur les [plugins du runtime](/genaiscript/reference/runtime/) et leur utilisation.",
+  "913695FC5CC0698E8043": "Autres changements majeurs",
+  "3160F091F6DD0C688901": "plugin-mermaid",
+  "55DB4F583B053AABA30C": "Utilisez le plugin mermaid pour analyser les diagrammes mermaid",
+  "E0F9721F1E8D0D6305E3": "[MermaidJs](https://mermaid.js.org/) est un outil de création de diagrammes populaire qui vous permet de réaliser des schémas à l'aide d'une syntaxe textuelle simple. Le plugin mermaid de GenAIScript permet d'analyser et d'afficher les diagrammes Mermaid au sein de vos applications GenAIScript.",
+  "C954408A69DA36778514": "Le package [@genaiscript/plugin-mermaid](https://www.npmjs.com/package/@genaiscript/plugin-mermaid) prend en charge l'analyse des diagrammes mermaid. Cela peut être utile pour réparer des diagrammes créés par les LLM.",
+  "9D526380A657471E70F6": "Pourquoi ce plugin ?",
+  "A54973B54F0ED9CCC8DD": "La chaîne d'outils mermaid est conçue pour fonctionner dans un environnement navigateur, ce qui nécessite quelques adaptations particulières pour l'utiliser avec Node.JS. De plus, le package [mermaid](https://www.npmjs.com/package/mermaid) est assez volumineux, nous avons donc choisi d'en faire un plugin que vous pouvez installer uniquement si vous en avez besoin.",
+  "FB95BB48216A0896BCFE": "Les outils suivants ont été déplacés dans leurs propres paquets afin de réduire la taille de l’installation par défaut. Une étape d’installation supplémentaire sera nécessaire si vous souhaitez les utiliser.",
+  "9FF565448E0F3AEF5F86": "[@genaiscript/plugin-ast-grep](/genaiscript/reference/scripts/ast-grep/)",
+  "6000A05CDBEFADC314DE": "[@genaiscript/plugin-mermaid](/genaiscript/reference/runtime/plugin-mermaid/)",
+  "50D3065174DBABCB961A": "[@genaiscript/plugin-z3](/genaiscript/reference/scripts/z3/)"
 }
