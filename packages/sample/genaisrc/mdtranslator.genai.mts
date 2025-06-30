@@ -195,6 +195,28 @@ export default async function main() {
               dbg(`yaml node: %s`, nhash);
               const data = parsers.YAML(node.value);
               if (data) {
+                if (starlight) {
+                  if (Array.isArray(data?.hero?.actions)) {
+                    data.hero.actions.forEach((action) => {
+                      if (typeof action.text === "string") {
+                        const nhash = hashNode(action.text);
+                        const tr = translationCache[nhash];
+                        dbg(`yaml hero.action: %s -> %s`, nhash, tr);
+                        if (!tr) action.text = tr;
+                        else {
+                          const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                          llmHashes[llmHash] = nhash;
+                          llmHashTodos.add(llmHash);
+                          action.text = `┌${llmHash}┐${data.title}└${llmHash}┘`;
+                        }
+                      }
+                    });
+                  }
+                  if (data?.cover?.image) {
+                    data.cover.image = patchFn(data.cover.image);
+                    dbg(`yaml cover image: %s`, data.cover.image);
+                  }
+                }
                 if (typeof data.title === "string") {
                   const nhash = hashNode(data.title);
                   const tr = translationCache[nhash];
@@ -348,13 +370,29 @@ export default async function main() {
           if (node.type === "yaml") {
             const data = parsers.YAML(node.value);
             if (data) {
-              if (starlight && data?.hero?.image?.file) {
-                data.hero.image.file = patchFn(data.hero.image.file);
-                dbg(`yaml hero image: %s`, data.hero.image.file);
-              }
-              if (starlight && data?.cover?.image) {
-                data.cover.image = patchFn(data.cover.image);
-                dbg(`yaml cover image: %s`, data.cover.image);
+              if (starlight) {
+                if (data?.hero?.image?.file) {
+                  data.hero.image.file = patchFn(data.hero.image.file);
+                  dbg(`yaml hero image: %s`, data.hero.image.file);
+                }
+                if (Array.isArray(data?.hero?.actions)) {
+                  data.hero.actions.forEach((action) => {
+                    if (typeof action.text === "string") {
+                      const nhash = hashNode(action.text);
+                      const tr = translationCache[nhash];
+                      dbg(`yaml hero.action: %s -> %s`, nhash, tr);
+                      if (tr) action.text = tr;
+                    }
+                    if (action?.image?.file) {
+                      action.image.file = patchFn(action.image.file);
+                      dbg(`yaml hero action image: %s`, action.image.file);
+                    }
+                  });
+                }
+                if (data?.cover?.image) {
+                  data.cover.image = patchFn(data.cover.image);
+                  dbg(`yaml cover image: %s`, data.cover.image);
+                }
               }
               if (typeof data.title === "string") {
                 const nhash = hashNode(data.title);
