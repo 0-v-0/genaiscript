@@ -1,4 +1,5 @@
 {
+  "E34EF9E735FCAFDCCD0A": "Z3",
   "7FF4A579A373349036EF": "Ces aides d’exécution fournissent une interface conviviale autour de l’écosystème [remark](https://github.com/remarkjs/remark), [mdast](https://github.com/syntax-tree/mdast), [unified](https://github.com/syntax-tree/unist) pour analyser et manipuler des documents Markdown.",
   "B97AD2FDFF4E97817CD3": "Pour bénéficier de l’auto-complétion des types, vous devrez installer le paquet `@types/mdast` comme dépendance de développement.",
   "93ECBC1CC890D2DC0948": "Manipulation du Markdown",
