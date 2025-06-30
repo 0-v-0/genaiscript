@@ -28,6 +28,8 @@ const HASH_LENGTH = 20;
 const maxPromptPerFile = 5;
 const nodeTypes = ["text", "paragraph", "heading", "yaml"];
 const starlightDir = "docs/src/content/docs";
+const starlightBase = "genaiscript";
+const startlightBaseRx = new RegExp(`^/${starlightBase}/`);
 const MARKER_START = "┌";
 const MARKER_END = "└";
 type NodeType = Text | Paragraph | Heading | Yaml;
@@ -51,6 +53,7 @@ export default async function main() {
   const { dbg, output, vars } = env;
   const dbgc = host.logger(`script:md`);
   const dbgt = host.logger(`script:tree`);
+  const dbge = host.logger(`script:text`);
   const { force } = vars as {
     to: string;
     force: boolean;
@@ -257,7 +260,7 @@ export default async function main() {
           attempts < maxPromptPerFile
         ) {
           attempts++;
-          dbg(`todos: %o`, Array.from(llmHashTodos));
+          dbge(`todos: %o`, Array.from(llmHashTodos));
           const contentMix = stringify(translated);
           dbgc(`translatable content: %s`, contentMix);
 
@@ -377,6 +380,13 @@ export default async function main() {
                 }
                 if (Array.isArray(data?.hero?.actions)) {
                   data.hero.actions.forEach((action) => {
+                    if (typeof action.link === "string") {
+                      action.link = action.link.replace(
+                        startlightBaseRx,
+                        `/${starlightBase}/${to.toLowerCase()}/`,
+                      );
+                      dbg(`yaml hero action link: %s`, action.link);
+                    }
                     if (typeof action.text === "string") {
                       const nhash = hashNode(action.text);
                       const tr = translationCache[nhash];
@@ -454,8 +464,8 @@ export default async function main() {
 
         // patch links
         visit(translated, "link", (node) => {
-          if (/^\/genaiscript\//.test(node.url)) {
-            node.url = patchFn(node.url.replace(/^\/genaiscript\//, "../"), true);
+          if (startlightBaseRx.test(node.url)) {
+            node.url = patchFn(node.url.replace(startlightBaseRx, "../"), true);
           }
         });
 
