@@ -210,7 +210,7 @@ export default async function main() {
                           const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
                           llmHashes[llmHash] = nhash;
                           llmHashTodos.add(llmHash);
-                          action.text = `┌${llmHash}┐${data.title}└${llmHash}┘`;
+                          action.text = `┌${llmHash}┐${action.text}└${llmHash}┘`;
                         }
                       }
                     });
@@ -218,6 +218,17 @@ export default async function main() {
                   if (data?.cover?.image) {
                     data.cover.image = patchFn(data.cover.image);
                     dbg(`yaml cover image: %s`, data.cover.image);
+                  }
+                }
+                if (typeof data.excerpt === "string") {
+                  const nhash = hashNode(data.excerpt);
+                  const tr = translationCache[nhash];
+                  if (tr) data.excerpt = tr;
+                  else {
+                    const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                    llmHashes[llmHash] = nhash;
+                    llmHashTodos.add(llmHash);
+                    data.excerpt = `┌${llmHash}┐${data.excerpt}└${llmHash}┘`;
                   }
                 }
                 if (typeof data.title === "string") {
@@ -404,6 +415,12 @@ export default async function main() {
                   data.cover.image = patchFn(data.cover.image);
                   dbg(`yaml cover image: %s`, data.cover.image);
                 }
+              }
+              if (typeof data.excerpt === "string") {
+                const nhash = hashNode(data.excerpt);
+                const tr = translationCache[nhash];
+                dbg(`yaml excerpt: %s -> %s`, nhash, tr);
+                if (tr) data.excerpt = tr;
               }
               if (typeof data.title === "string") {
                 const nhash = hashNode(data.title);
