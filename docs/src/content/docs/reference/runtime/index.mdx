@@ -6,7 +6,8 @@ sidebar:
 keywords: runtime, GenAIScript, JavaScript, TypeScript
 hero:
   image:
-    alt: A simple, flat 2D illustration depicts an open package box with basic
+    alt:
+      A simple, flat 2D illustration depicts an open package box with basic
       digital script symbols, small code blocks, and algorithm icons rising from
       it. Stylized arrows represent data flow around the box. The art uses five
       solid corporate colors in an 8-bit, geometric, pixelated style. The image
@@ -52,3 +53,11 @@ The runtime installs global parsers and inline prompt types. However, the global
 - [cast](/genaiscript/reference/runtime/cast), cast any data to structured outputs
 - [classify](/genaiscript/reference/runtime/classify), classify text
 - [makeItBetter](/genaiscript/reference/runtime/make-it-better), tell the LLM to improve its result
+
+## Plugins
+
+The following helpers have been moved into their own packages to reduce the default installation size. They will require an additional installation step if you want to use them.
+
+- [@genaiscript/plugin-ast-grep](/genaiscript/reference/scripts/ast-grep)
+- [@genaiscript/plugin-mermaid](/genaiscript/reference/scripts/mermaid)
+- [@genaiscript/plugin-z3](/genaiscript/reference/scripts/z3)
