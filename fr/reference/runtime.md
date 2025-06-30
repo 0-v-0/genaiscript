@@ -1,0 +1,36 @@
+import { PackageManagers } from "starlight-package-managers";
+
+Le runtime GenAIScript fournit des aides supplémentaires et permet d'utiliser le runtime dans n'importe quelle application Node.JS.
+
+Pour utiliser le runtime, vous devrez installer GenAIScript dans votre projet.
+
+<PackageManagers pkg="@genaiscript/runtime" dev />
+
+## Initialisation
+
+Si vous utilisez GenAIScript sans la CLI ou l'extension Visual Studio Code, vous devez initialiser le runtime avant d'utiliser les types ou fonctions globales.
+
+```js
+import { initialize } from "@genaiscript/runtime";
+
+// runs this before using any global types
+await initialize();
+```
+
+## Importer le runtime
+
+Le runtime est disponible en tant que module. Vous pouvez l'importer avec le code suivant :
+
+```js
+import { cast } from "@genaiscript/runtime";
+```
+
+## Globaux
+
+Le runtime installe des parseurs globaux et des types de prompt en ligne. Cependant, le global `$`, `def`, etc. ne sont pas disponibles, les prompts en ligne le sont.
+
+## Assistants
+
+* [cast](../../../reference/reference/runtime/cast/), convertir n'importe quelle donnée en sorties structurées
+* [classify](../../../reference/reference/runtime/classify/), classifier du texte
+* [makeItBetter](../../../reference/reference/runtime/make-it-better/), demander au LLM d'améliorer son résultat

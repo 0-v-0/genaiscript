@@ -1,0 +1,38 @@
+import { PackageManagers } from "starlight-package-managers";
+
+These runtime helpers provide a friendly wrapper around the [remark](https://github.com/remarkjs/remark), [mdast](https://github.com/syntax-tree/mdast), [unified](https://github.com/syntax-tree/unist)
+ecosystem to parse and manipulate Markdown documents.
+
+In order to get type completion, you will need to install the `@types/mdast` package as a development dependency.
+
+<PackageManagers pkg="@types/mdast" dev />
+
+## Markdown manipulation
+
+- load the parsers
+
+```typescript
+import { mdast } from "@genaiscript/runtime";
+
+const { parse, visit, stringify } = await mdast();
+```
+
+- parsing to mdast tree
+
+```typescript
+const root = parse("# Hello World");
+```
+
+- visiting the tree (see [documentation](https://unifiedjs.com/learn/recipe/tree-traversal/pnp))
+
+```typescript
+const updated = visit(root, `code`, (node) => {
+  ...node
+});
+```
+
+- serializing the tree back to Markdown
+
+```typescript
+const markdown = await stringify(updated);
+```
