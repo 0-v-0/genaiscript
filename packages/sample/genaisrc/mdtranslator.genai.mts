@@ -260,6 +260,7 @@ export default async function main() {
           attempts < maxPromptPerFile
         ) {
           attempts++;
+          output.itemValue(`missing translations`, llmHashTodos.size);
           dbge(`todos: %o`, Array.from(llmHashTodos));
           const contentMix = stringify(translated);
           dbgc(`translatable content: %s`, contentMix);
