@@ -15,6 +15,9 @@ catalogs:
     '@types/debug':
       specifier: ^4.1.12
       version: 4.1.12
+    '@types/mdast':
+      specifier: ^4.0.4
+      version: 4.0.4
     '@types/node':
       specifier: 22.15.28
       version: 22.15.28
@@ -681,7 +684,7 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       '@types/mdast':
-        specifier: ^4.0.4
+        specifier: 'catalog:'
         version: 4.0.4
       debug:
         specifier: 'catalog:'
@@ -1031,9 +1034,15 @@ importers:
       '@tidyjs/tidy':
         specifier: ^2.5.2
         version: 2.5.2
+      '@types/mdast':
+        specifier: 'catalog:'
+        version: 4.0.4
       '@types/node':
         specifier: 'catalog:'
         version: 22.15.28
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.39.3
       p-all:
         specifier: ^5.0.0
         version: 5.0.0

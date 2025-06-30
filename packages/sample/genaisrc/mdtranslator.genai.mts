@@ -5,6 +5,8 @@ import "mdast-util-mdxjs-esm";
 import type { Node, Text, Heading, Paragraph, PhrasingContent, Yaml } from "mdast";
 import { basename, dirname, join, relative } from "path";
 import { URL } from "url";
+import { xor } from "es-toolkit";
+
 script({
   accept: ".md,.mdx",
   files: "src/rag/markdown.md",
@@ -33,12 +35,11 @@ const langs = {
   fr: "French",
 };
 
-const isUri = (str: string): boolean => {
+const isUri = (str: string): URL => {
   try {
-    new URL(str);
-    return true;
+    return new URL(str);
   } catch {
-    return false;
+    return undefined;
   }
 };
 
@@ -433,6 +434,28 @@ export default async function main() {
           output.error(`Translated content is not valid Markdown`, error);
           output.diff(content, contentTranslated);
           continue;
+        }
+
+        // validate all external links
+        // have same domain
+        {
+          const originalLinks = new Set<string>();
+          visit(root, "link", (node) => {
+            if (isUri(node.url)) {
+              originalLinks.add(node.url);
+            }
+          });
+          const translatedLinks = new Set<string>();
+          visit(translated, "link", (node) => {
+            if (isUri(node.url)) {
+              translatedLinks.add(node.url);
+            }
+          });
+          const diffLinks = xor(Array.from(originalLinks), Array.from(translatedLinks));
+          if (diffLinks.length) {
+            output.warn(`some links have changed`);
+            output.fence(diffLinks, "yaml");
+          }
         }
 
         if (attempts) {

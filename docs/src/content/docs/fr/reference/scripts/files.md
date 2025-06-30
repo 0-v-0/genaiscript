@@ -151,7 +151,7 @@ Vous pouvez fournir un [schéma JSON](../../../reference/reference/scripts/schem
 
 ```ts
 const data = await workspace.readJSON("data.json", {
-    schema: { type: "object", properties: { ... },
+    schema: { type: "object", properties: { ... }, },
     throwOnValidationError: true
 })
 ```
@@ -182,7 +182,7 @@ Par défaut, les fichiers sont résolus relativement à la racine de l'espace de
 
 ```ts
 const cur = path.dirname(env.spec.filename)
-const fs = path.join(cur, "myfile.md)
+const fs = path.join(cur, "myfile.md")
 ```
 
 ### motifs glob

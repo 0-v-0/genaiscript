@@ -16,7 +16,7 @@
     "@genaiscript/core": "workspace:*",
     "@inquirer/prompts": "catalog:",
     "@slorber/remark-comment": "^1.0.0",
-    "@types/mdast": "^4.0.4",
+    "@types/mdast": "catalog:",
     "debug": "catalog:",
     "mdast": "^3.0.0",
     "mdast-util-mdxjs-esm": "^2.0.1",
