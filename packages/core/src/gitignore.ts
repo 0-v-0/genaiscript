@@ -8,9 +8,9 @@ import { GENAISCRIPTIGNORE, GIT_IGNORE, GIT_IGNORE_GENAI } from "./constants.js"
 import { host } from "./host.js";
 import { logVerbose } from "./util.js";
 import { genaiscriptDebug } from "./debug.js";
+import { GitIgnorer, WorkspaceFile } from "./types.js";
+import { filenameOrFileToFilename } from "./unwrappers.js";
 const dbg = genaiscriptDebug("files:gitignore");
-
-export type GitIgnorer = (files: string[]) => string[];
 
 /**
  * Creates a function to filter files based on patterns defined in .gitignore files.
@@ -19,15 +19,18 @@ export type GitIgnorer = (files: string[]) => string[];
  *
  * @returns A function that takes a list of files and returns only the files not ignored.
  */
-export async function createGitIgnorer(): Promise<GitIgnorer> {
-  const gitignores = [
-    await tryReadText(GIT_IGNORE),
-    await tryReadText(GIT_IGNORE_GENAI),
-    await tryReadText(GENAISCRIPTIGNORE),
-  ].filter((g) => !!g);
+export async function createGitIgnorer(options?: { extraFiles?: string[] }): Promise<GitIgnorer> {
+  const { extraFiles = [] } = options || {};
+  dbg(`extra .gitignore files: ${extraFiles.join(", ")}`);
+  return await createIgnorer([GIT_IGNORE, GIT_IGNORE_GENAI, GENAISCRIPTIGNORE, ...extraFiles]);
+}
+
+export async function createIgnorer(files: string[]): Promise<GitIgnorer> {
+  const gitignores = (await Promise.all(files.map((f) => tryReadText(f)))).filter(Boolean);
   if (!gitignores.length) {
-    dbg("no gitignore files found");
-    return (f) => f;
+    dbg("no .gitignore files found");
+    dbg(`%O`, files);
+    return (fs) => fs?.map(filenameOrFileToFilename)?.slice(0);
   }
 
   // Create an ignorer instance and add the .gitignore patterns to it
@@ -36,7 +39,8 @@ export async function createGitIgnorer(): Promise<GitIgnorer> {
   for (const gitignore of gitignores) {
     ig.add(gitignore);
   }
-  return (files: readonly string[]) => ig.filter(files);
+  return (files: readonly (string | WorkspaceFile)[]) =>
+    files ? ig.filter(files?.map(filenameOrFileToFilename)) : [];
 }
 
 /**

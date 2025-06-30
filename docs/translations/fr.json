@@ -10631,5 +10631,14 @@
   "4FF9E78DA3AE360923C6": "La fonctionnalité ast-grep est fournie sous forme de plugin, il faut donc l’installer au préalable :",
   "589F24EC0A626804AA4B": "Vous pouvez enregistrer un callback afin de manipuler de façon programmatique les fichiers générés en utilisant [defOutputProcessor](/genaiscript/reference/scripts/custom-output/).",
   "23BFA08C759ACEFEF223": "Prompts système <a href=\"\" id=\"system\" />",
-  "6B591C435FCFFCA052BE": "Vous pouvez enregistrer un callback pour manipuler programmatiquement les fichiers générés\nen utilisant "
+  "6B591C435FCFFCA052BE": "Vous pouvez enregistrer un callback pour manipuler programmatiquement les fichiers générés\nen utilisant ",
+  "A3E216F1EADD52B3177C": "Plugins",
+  "224D5FA93C756576EB3B": "Certaines fonctionnalités majeures ont été déplacées dans des paquets séparés (plugins) afin de réduire l'empreinte de l'installation par défaut.",
+  "FB6CD29AEB3CC58F4555": "`@genaiscript/plugin-mermaid` - analyseur mermaid",
+  "20FCB8D0B018E0F82808": "`@genaiscript/plugin-ast-grep` - le parseur ast grep",
+  "3B4742E4AADDE4A30156": "`@genaiscript/plugin-z3` - le solveur Z3",
+  "B50DF87EB03098322510": "Autres changements majeurs",
+  "8BE7324D186A8604DF7D": "les options courtes des outils en ligne de commande ont été modifiées afin de permettre la mise à niveau vers la dernière version de la bibliothèque Commander.",
+  "93006FD7D4A4220843F9": "GenAIScript bénéficie de l’excellente [intégration Node.JS](https://ast-grep.github.io/reference/api.html#napi),\nqui est disponible via la méthode [`astGrep()`](https://microsoft.github.io/genaiscript/reference/scripts/ast-grep).",
+  "CDCAED6DE7C86BAEE5CD": "Exemple : Générateur / mise à jour de documentation <a id=\"sample\" href=\"\" />"
 }

@@ -2505,6 +2505,8 @@ export interface EncodeIDsOptions {
   close?: string;
 }
 
+export type GitIgnorer = (files: readonly (string | WorkspaceFile)[]) => string[];
+
 export interface Parsers {
   /**
    * Parses text as a JSON5 payload
@@ -2764,9 +2766,15 @@ export interface Parsers {
   prompty(file: WorkspaceFile): Promise<PromptyDocument>;
 
   /**
-   * Computes the levenshtein distance between two strings or workspace files.
+   * Computes the Levenshtein distance between two strings or workspace files.
    */
   levenshtein(a: string | WorkspaceFile, b: string | WorkspaceFile): Promise<number>;
+
+  /**
+   * Create a file filter using the `.gitignore` format from the given filenames.
+   * @param filenames
+   */
+  ignore(...filenames: string[]): Promise<GitIgnorer>;
 }
 
 export interface YAMLObject {

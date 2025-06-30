@@ -61,9 +61,10 @@ export default async function main() {
     .map((s) => s.trim())
     .filter(Boolean);
   dbg(`tos: %o`, tos);
-  const files = env.files.filter(
-    ({ filename }) => !tos.some((to) => filename.includes(`/${to.toLowerCase()}/`)),
-  );
+  const ignorer = await parsers.ignore(".mdtranslatorignore");
+  const files = env.files
+    .filter((f) => ignorer([f]).length)
+    .filter(({ filename }) => !tos.some((to) => filename.includes(`/${to.toLowerCase()}/`)));
   if (!files.length) cancel("No files selected.");
   dbg(
     `files: %O`,

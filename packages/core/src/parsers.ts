@@ -36,6 +36,7 @@ import { diffCreatePatch } from "./diff.js";
 import { promptyParse } from "./prompty.js";
 import type { Parsers, WorkspaceFile } from "./types.js";
 import { levenshteinDistance } from "./levenshtein.js";
+import { createIgnorer } from "./gitignore.js";
 
 /**
  * Asynchronously creates a set of parsers for handling various file formats, data operations,
@@ -161,7 +162,8 @@ export function createParsers(): Parsers {
       await resolveFileContent(file);
       return promptyParse(file.filename, file.content);
     },
-    levenshtein: async (a, b) =>
-      await levenshteinDistance(filenameOrFileToContent(a), filenameOrFileToContent(b)),
+    levenshtein: (a, b) =>
+      levenshteinDistance(filenameOrFileToContent(a), filenameOrFileToContent(b)),
+    ignore: async (...files) => createIgnorer(files),
   });
 }
