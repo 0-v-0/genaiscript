@@ -3742,6 +3742,13 @@ export interface GitHub {
   resolveAssetUrl(url: string): Promise<string | undefined>;
 
   /**
+   * Executes a GraphQL query against the GitHub API. By default, injects the `owner`, `repo`, `ref` variables.
+   * @param query
+   * @param variables
+   */
+  graphql<T = any>(query: string, variables?: Record<string, any>): Promise<T>;
+
+  /**
    * Gets the underlying Octokit client
    */
   api(): Promise<any>;

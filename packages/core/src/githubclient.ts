@@ -1208,6 +1208,23 @@ export class GitHubClient implements GitHub {
     return res;
   }
 
+  async graphql<T = any>(query: string, variables?: Record<string, any>): Promise<T> {
+    const { client, owner, repo, ref } = await this.api();
+    dbg(`gql query: ${query.slice(0, 100)}...`);
+
+    // Automatically inject current repository context if requested
+    const finalVariables = deleteUndefinedValues({
+      owner,
+      repo,
+      ref,
+      ...(variables || {}),
+    });
+    dbg(`gql variables: %O`, finalVariables);
+    const result = await client.graphql<T>(query, finalVariables);
+    dbg(`gql success`);
+    return result;
+  }
+
   async workflowRun(runId: number | string): Promise<GitHubWorkflowRun> {
     const { client, owner, repo } = await this.api();
     dbg(`retrieving workflow run details for run ID: ${runId}`);
