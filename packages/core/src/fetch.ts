@@ -182,8 +182,8 @@ export async function createFetch(
       const msg = prettyStrings(
         `retry #${attempt + 1} in ${prettyDuration(delay)}`,
         retryAfterInfo,
-        `max delay: ${prettyDuration(maxDelay)}s`,
-        `retry delay: ${prettyDuration(retryDelay)}s`,
+        `max delay: ${prettyDuration(maxDelay)}`,
+        `retry delay: ${prettyDuration(retryDelay)}`,
         message,
         status,
       );
