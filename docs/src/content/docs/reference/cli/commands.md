@@ -97,7 +97,8 @@ Options:
   --fail-on-errors                         fails on detected annotation error
   --retry <number>                         number of retries (default: "10")
   --retry-delay <number>                   minimum delay between retries (default: "1000")
-  --max-delay <number>                     maximum delay between retries (default: "10000")
+  --max-delay <number>                     maximum delay between retries (default: "60000")
+  --max-retry-after <number>               maximum retry-after delay in milliseconds before giving up (default: "300000")
   -l, --label <string>                     label for the run
   -t, --temperature <number>               temperature for the run
   --top-p <number>                         top-p for the run
