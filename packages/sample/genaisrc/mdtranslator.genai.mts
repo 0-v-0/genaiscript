@@ -118,7 +118,7 @@ export default async function main() {
         const translationFn = starlight
           ? filename.replace(starlightDir, join(starlightDir, to.toLowerCase()))
           : path.changeext(filename, `.${to.toLowerCase()}.md`);
-        output.itemValue(`translation`, translationFn);
+        dbg(`translation %s`, translationFn);
 
         const patchFn = (fn: string, trailingSlash?: boolean) => {
           if (typeof fn === "string" && /^\./.test(fn) && starlight) {
@@ -531,7 +531,7 @@ export default async function main() {
             (ctx) => {
               ctx.$`You are an expert at judging the quality of translations. 
           Your task is to determine the quality of the translation of a Markdown document from English to ${lang} (${to}).
-          The original document is in ${ctx.def("ORIGINAL", content)}, and the translated document is provided as a variable named ${ctx.def("TRANSLATED", contentTranslated)}.`.role(
+          The original document is in ${ctx.def("ORIGINAL", content)}, and the translated document is provided in ${ctx.def("TRANSLATED", contentTranslated, { lineNumbers: true })} (line numbers were added).`.role(
                 "system",
               );
             },
@@ -542,6 +542,7 @@ export default async function main() {
             {
               label: `judge translation ${to} ${basename(filename)}`,
               explanations: true,
+              system: ["system,annotations"],
               systemSafety: false,
             },
           );
