@@ -6,7 +6,7 @@
     "compile": "node ../cli/dist/src/index.js scripts compile",
     "test": "node ../cli/dist/src/index.js run poem-js-module"
   },
-  "version": "2.2.3",
+  "version": "2.2.4",
   "dependencies": {
     "ini": "^5.0.0"
   }
