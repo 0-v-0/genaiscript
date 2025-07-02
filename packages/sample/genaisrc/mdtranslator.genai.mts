@@ -77,7 +77,7 @@ export default async function main() {
     files.map((f) => f.filename),
   );
 
-  const { visit, parse, stringify, visitParents, SKIP } = await mdast();
+  const { visit, parse, stringify, SKIP } = await mdast();
 
   const hashNode = (node: Node | string) => {
     if (typeof node === "object") {
