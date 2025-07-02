@@ -568,6 +568,8 @@ Options:
                                  on the network
   --cors <string>                Enable CORS and sets the allowed origin. Use
                                  '*' to allow any origin.
+  --chat                         Enable OpenAI compatible chat completion routes
+                                 (/v1/chat/completions)
   --dispatch-progress            Dispatch progress events to all clients
   --github-copilot-chat-client   Allow github_copilot_chat provider to connect
                                  to connected Visual Studio Code
