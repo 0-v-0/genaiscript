@@ -209,7 +209,8 @@ export async function cli() {
     .option("--max-delay <number>", "maximum delay between retries", String(OPENAI_MAX_RETRY_DELAY))
     .option(
       "--max-retry-after <number>",
-      "maximum retry-after delay in milliseconds before giving up", String(OPENAI_MAX_RETRY_AFTER_DEFAULT)
+      "maximum retry-after delay in milliseconds before giving up",
+      String(OPENAI_MAX_RETRY_AFTER_DEFAULT),
     )
     .option("-l, --label <string>", "label for the run")
     .option("-t, --temperature <number>", "temperature for the run")
@@ -447,6 +448,7 @@ export async function cli() {
       "--cors <string>",
       "Enable CORS and sets the allowed origin. Use '*' to allow any origin.",
     )
+    .option("--chat", "Enable OpenAI compatible chat completion routes (/v1/chat/completions)")
     .option("--dispatch-progress", "Dispatch progress events to all clients")
     .option(
       "--github-copilot-chat-client",
