@@ -24,8 +24,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm install:playwright
-      - name: build all
-        run: pnpm build
+      - run: pnpm build
+      - run: pnpm build # build twice until fix make test:fix part of the build
       - name: no jekyll
         run: touch docs/dist/.nojekyll
       - name: Deploy 🚀
