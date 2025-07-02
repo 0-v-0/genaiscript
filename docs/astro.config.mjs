@@ -139,6 +139,7 @@ is at https://microsoft.github.io/genaiscript/reference/scripts.md
         Head: "./src/components/Head.astro",
         PageTitle: "./src/components/PageTitle.astro",
         Footer: "./src/components/Footer.astro",
+        Hero: "./src/components/Hero.astro",
       },
       social: [
         {
