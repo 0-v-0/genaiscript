@@ -78,6 +78,7 @@ import { DockerManager } from "./docker.js";
 import { BrowserManager } from "./playwright.js";
 import { uniq } from "es-toolkit";
 import { shellConfirm, shellInput, shellSelect } from "./input.js";
+import { areModelsSame } from "@genaiscript/core";
 const dbg = genaiscriptDebug("nodehost");
 
 type Mutable<T> = {
@@ -249,7 +250,7 @@ export class NodeHost extends EventTarget implements RuntimeHost {
         trace?.error(`${provider}: ${errorMessage(error)}`, error);
         return { ok, status, error };
       }
-      if (models.find(({ id }) => id === model)) {
+      if (models.find((other) => areModelsSame(other.id, model))) {
         dbg(`found model ${model} in provider ${provider}, skip pull`);
         this.pulledModels.push(modelId);
         return { ok: true };

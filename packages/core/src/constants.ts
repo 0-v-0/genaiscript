@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import CONFIGURATION_DATA from "./llmsdata.js";
+import type { LanguageModelPricing, LanguageModelProviderInformation } from "./llmsdata.js";
 import type { FenceFormat } from "./types.js";
 
 export const CHANGE = "change";
@@ -235,54 +236,12 @@ export const DOCS_WEB_SEARCH_BING_SEARCH_URL =
 export const DOCS_WEB_SEARCH_TAVILY_URL =
   "https://microsoft.github.io/genaiscript/reference/scripts/web-search/#tavily";
 
-export const MODEL_PROVIDERS = Object.freeze<
-  {
-    id: string;
-    detail: string;
-    url?: string;
-    seed?: boolean;
-    logitBias?: boolean;
-    tools?: boolean;
-    logprobs?: boolean;
-    topLogprobs?: boolean;
-    topP?: boolean;
-    toolChoice?: boolean;
-    prediction?: boolean;
-    bearerToken?: boolean;
-    listModels?: boolean;
-    transcribe?: boolean;
-    speech?: boolean;
-    tokenless?: boolean;
-    hidden?: boolean;
-    imageGeneration?: boolean;
-    singleModel?: boolean;
-    metadata?: boolean;
-    responseType?: "json" | "json_object" | "json_schema";
-    reasoningEfforts?: Record<string, number>;
-    aliases?: Record<string, string>;
-    models?: Record<string, { tools?: boolean }>;
-    env?: Record<
-      string,
-      {
-        description?: string;
-        secret?: boolean;
-        required?: boolean;
-        format?: string;
-        enum?: string[];
-      }
-    >;
-  }[]
->(CONFIGURATION_DATA.providers);
-export const MODEL_PRICINGS = Object.freeze<
-  Record<
-    string,
-    {
-      price_per_million_input_tokens: number;
-      price_per_million_output_tokens: number;
-      input_cache_token_rebate?: number;
-    }
-  >
->(CONFIGURATION_DATA.pricings);
+export const MODEL_PROVIDERS = Object.freeze<LanguageModelProviderInformation[]>(
+  CONFIGURATION_DATA.providers,
+);
+export const MODEL_PRICINGS = Object.freeze<Record<string, LanguageModelPricing>>(
+  CONFIGURATION_DATA.pricings,
+);
 
 export const NEW_SCRIPT_TEMPLATE = `$\`Write a short poem in code.\`
 `;
