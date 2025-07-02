@@ -3001,7 +3001,22 @@ export interface HTMLObject {
 export interface GitCommit {
   sha: string;
   date: string;
+  author: string;
   message: string;
+  files: string[]
+}
+
+export interface GitLogOptions {
+  base?: string;
+  head?: string;
+  count?: number;
+  merges?: boolean;
+  author?: string;
+  until?: string;
+  after?: string;
+  excludedGrep?: string | RegExp;
+  paths?: ElementOrArray<string>;
+  excludedPaths?: ElementOrArray<string>;
 }
 
 export interface Git {
@@ -3110,18 +3125,7 @@ export interface Git {
   /**
    * Lists the commits in the git repository
    */
-  log(options?: {
-    base?: string;
-    head?: string;
-    count?: number;
-    merges?: boolean;
-    author?: string;
-    until?: string;
-    after?: string;
-    excludedGrep?: string | RegExp;
-    paths?: ElementOrArray<string>;
-    excludedPaths?: ElementOrArray<string>;
-  }): Promise<GitCommit[]>;
+  log(options?: GitLogOptions): Promise<GitCommit[]>;
 
   /**
    * Run git blame on a file, line
@@ -3129,6 +3133,12 @@ export interface Git {
    * @param line
    */
   blame(filename: string, line: number): Promise<string>;
+
+  /**
+   * Returns a list of files that have changed in the git repository
+   * @param options
+   */
+  changedFiles(options?: GitLogOptions & { readText?: string }): Promise<WorkspaceFile[]>;
 
   /**
    * Create a shallow git clone
