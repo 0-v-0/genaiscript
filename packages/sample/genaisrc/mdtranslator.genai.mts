@@ -76,7 +76,7 @@ export default async function main() {
 
   const { visit, parse, stringify, visitParents, SKIP } = await mdast();
 
-  const hashNode = (node: Node | string, ancestors?: Node[]) => {
+  const hashNode = (node: Node | string) => {
     if (typeof node === "object") {
       node = structuredClone(node);
       visit(node, (node) => delete node.position);

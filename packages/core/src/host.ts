@@ -310,6 +310,7 @@ export function setRuntimeHost(h: RuntimeHost) {
 }
 
 export function checkRuntimeHost() {
+  dbg(`check runtime host %O`, runtimeHost);
   if (!runtimeHost) {
     dbg(`attempt to access uninitialized runtime host`);
     throw new Error(

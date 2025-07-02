@@ -79,7 +79,7 @@ import { BrowserManager } from "./playwright.js";
 import { uniq } from "es-toolkit";
 import { shellConfirm, shellInput, shellSelect } from "./input.js";
 import { areModelsSame } from "@genaiscript/core";
-const dbg = genaiscriptDebug("nodehost");
+const dbg = genaiscriptDebug("host:node");
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
@@ -286,6 +286,7 @@ export class NodeHost extends EventTarget implements RuntimeHost {
   }
 
   static async install(dotEnvPaths?: ElementOrArray<string>, hostConfig?: HostConfiguration) {
+    dbg(`installing %o`, dotEnvPaths);
     const h = new NodeHost(dotEnvPaths ? arrayify(dotEnvPaths) : undefined);
     setRuntimeHost(h);
     if (hostConfig) h.updateHostConfig(hostConfig);
