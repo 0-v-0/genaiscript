@@ -3,14 +3,15 @@
 
 import { describe, test, assert, beforeEach } from "vitest";
 import { astGrep } from "../src/astgrep.js";
-import { TestHost, WorkspaceFile } from "@genaiscript/core";
+import { WorkspaceFile } from "@genaiscript/core";
 import { dedent } from "@genaiscript/core";
 import { Sg } from "../src/types.js";
+import { initialize } from "@genaiscript/runtime";
 
 describe("astgrep", () => {
-  let sg: Sg
+  let sg: Sg;
   beforeEach(async () => {
-    TestHost.install();
+    await initialize({ test: true });
     sg = await astGrep();
   });
 

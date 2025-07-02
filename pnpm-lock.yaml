@@ -634,6 +634,9 @@ importers:
       '@genaiscript/core':
         specifier: workspace:*
         version: link:../core
+      '@genaiscript/runtime':
+        specifier: workspace:*
+        version: link:../runtime
       es-toolkit:
         specifier: 'catalog:'
         version: 1.39.3
@@ -677,6 +680,9 @@ importers:
       '@genaiscript/core':
         specifier: workspace:*
         version: link:../core
+      '@genaiscript/runtime':
+        specifier: workspace:*
+        version: link:../runtime
       '@inquirer/prompts':
         specifier: 'catalog:'
         version: 7.5.3(@types/node@22.15.28)
@@ -768,6 +774,9 @@ importers:
       '@genaiscript/core':
         specifier: workspace:*
         version: link:../core
+      '@genaiscript/runtime':
+        specifier: workspace:*
+        version: link:../runtime
       dompurify:
         specifier: ^3.2.6
         version: 3.2.6

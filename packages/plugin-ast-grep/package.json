@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "@genaiscript/core": "workspace:*",
+    "@genaiscript/runtime": "workspace:*",
     "@ast-grep/napi": "^0.38.6",
     "@ast-grep/lang-c": "^0.0.2",
     "@ast-grep/lang-cpp": "^0.0.2",

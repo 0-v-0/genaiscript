@@ -23,7 +23,8 @@ import {
   XMLObject,
   MDObject,
   ModelConnectionOptions,
-  runtimeHost
+  runtimeHost,
+  TestHost,
 } from "@genaiscript/core";
 import type {
   ElementOrArray,
@@ -139,16 +140,24 @@ export async function initialize(
   options?: {
     dotEnvPaths?: ElementOrArray<string>;
     hostConfig?: HostConfiguration;
+    /**
+     * Load unit test host
+     */
+    test?: boolean;
   } & ModelConnectionOptions,
 ): Promise<void> {
-  if (runtimeHost) throw new Error("Runtime already configured. Call `config` only once.");
-
   setQuiet(true);
-  const { dotEnvPaths, hostConfig, ...rest } = options || {};
-  dbg(`config %o`, dotEnvPaths);
-  dbg(`hostConfig %O`, hostConfig);
+  const { dotEnvPaths, hostConfig, test, ...rest } = options || {};
   installGlobals();
-  await NodeHost.install(dotEnvPaths, hostConfig);
+  if (test) {
+    dbg(`test host install`);
+    await TestHost.install();
+  } else {
+    if (runtimeHost) throw new Error("Runtime already configured. Call `initialize` only once.");
+    dbg(`config %o`, dotEnvPaths);
+    dbg(`host config %O`, hostConfig);
+    await NodeHost.install(dotEnvPaths, hostConfig);
+  }
   const prj = await buildProject();
   const runId = generateId();
   const runDir = getRunDir("runtime", runId);

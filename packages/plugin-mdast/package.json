@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "@genaiscript/core": "workspace:*",
+    "@genaiscript/runtime": "workspace:*",
     "@inquirer/prompts": "catalog:",
     "@slorber/remark-comment": "^1.0.0",
     "@types/mdast": "catalog:",
