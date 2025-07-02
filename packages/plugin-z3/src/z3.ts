@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CancellationOptions, checkCancelled, genaiscriptDebug, logWarn } from "@genaiscript/core";
+import {
+  CancellationOptions,
+  checkCancelled,
+  checkRuntimeHost,
+  genaiscriptDebug,
+  logWarn,
+} from "@genaiscript/core";
 
 const dbg = genaiscriptDebug("z3");
 
@@ -39,6 +45,7 @@ async function importZ3(): Promise<ReturnType<(typeof import("z3-solver"))["init
  */
 export async function z3(options?: CancellationOptions): Promise<Z3Solver> {
   const { cancellationToken } = options || {};
+  checkRuntimeHost();
   const z3p = await (_z3 || (_z3 = importZ3()));
   checkCancelled(cancellationToken);
   if (!z3p) {

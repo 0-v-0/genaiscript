@@ -3,6 +3,7 @@
 import {
   CancelError,
   checkCancelled,
+  checkRuntimeHost,
   diffFindChunk,
   diffResolve,
   errorMessage,
@@ -330,6 +331,7 @@ async function loadDynamicLanguage(langName: string) {
 
 export async function astGrep(options?: CancellationOptions): Promise<Sg> {
   const { cancellationToken } = options || {};
+  checkRuntimeHost();
   return Object.freeze<Sg>({
     changeset: astGrepCreateChangeSet,
     search: (lang, glob, matcher, sgOptions) =>

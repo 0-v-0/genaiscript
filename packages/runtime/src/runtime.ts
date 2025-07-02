@@ -6,7 +6,7 @@
  * This module provides core functionality for text classification, data transformation,
  * PDF processing, and file system operations in the GenAIScript environment.
  */
-import type {
+import {
   Ffmpeg,
   Git,
   GitHub,
@@ -23,6 +23,7 @@ import type {
   XMLObject,
   MDObject,
   ModelConnectionOptions,
+  runtimeHost
 } from "@genaiscript/core";
 import type {
   ElementOrArray,
@@ -130,8 +131,6 @@ declare global {
   ): Promise<{ image: WorkspaceFile; revisedPrompt?: string }>;
 }
 
-let _nodeHost: NodeHost | undefined;
-
 /**
  * Configure the default GenAIScript runtime environment.
  * Installs the global helpers and configure host and env.
@@ -142,7 +141,7 @@ export async function initialize(
     hostConfig?: HostConfiguration;
   } & ModelConnectionOptions,
 ): Promise<void> {
-  if (_nodeHost) throw new Error("Runtime already configured. Call `config` only once.");
+  if (runtimeHost) throw new Error("Runtime already configured. Call `config` only once.");
 
   setQuiet(true);
   const { dotEnvPaths, hostConfig, ...rest } = options || {};
