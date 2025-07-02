@@ -41,6 +41,7 @@ import type {
   VectorSearchOptions,
 } from "./types.js";
 import { genaiscriptDebug } from "./debug.js";
+import { resolveGlobal } from "./global.js";
 const dbg = genaiscriptDebug("host");
 
 export class LogEvent extends Event {
@@ -309,13 +310,11 @@ export function setRuntimeHost(h: RuntimeHost) {
   runtimeHost = h;
 }
 
-export function checkRuntimeHost() {
-  dbg(`check runtime host %O`, runtimeHost);
-  if (!runtimeHost) {
+export function checkRuntime(): void {
+  if (typeof resolveGlobal().env === "undefined") {
     dbg(`attempt to access uninitialized runtime host`);
     throw new Error(
       "Runtime not initialized, https://microsoft.github.io/genaiscript/reference/runtime/.",
     );
   }
-  return runtimeHost;
 }

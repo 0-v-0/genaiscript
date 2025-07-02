@@ -12,7 +12,6 @@ import {
   genaiscriptDebug,
   normalizeInt,
   createCancellationController,
-  checkRuntimeHost,
 } from "@genaiscript/core";
 import { runScriptInternal } from "@genaiscript/api";
 
@@ -43,7 +42,6 @@ export async function runScriptWithExitCode(
 ) {
   dbg(`run %s`, scriptId);
   await ensureDotGenaiscriptPath();
-  await checkRuntimeHost();
   const canceller = createCancellationController();
   const cancellationToken = canceller.token;
   const runRetry = Math.max(1, normalizeInt(options.runRetry) || 1);

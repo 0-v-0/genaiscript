@@ -1,6 +1,6 @@
 import type { Root } from "mdast";
 import {
-  checkRuntimeHost,
+  checkRuntime,
   filenameOrFileToContent,
   genaiscriptDebug,
   WorkspaceFile,
@@ -9,7 +9,7 @@ import type { Processor } from "unified";
 const dbg = genaiscriptDebug("mdast");
 
 export async function mdast() {
-  checkRuntimeHost();
+  checkRuntime();
 
   dbg(`loading plugins`);
   const { unified } = await import("unified");
