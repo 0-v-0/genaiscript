@@ -166,3 +166,7 @@ To ensure the quality of the translations, we implement a few strategies:
 ## Commit and push the changes
 
 Once the translations have passed all the checks, the script commits the changes to the repository and pushes them to the remote branch... and voilà! The translations are now available in the documentation.
+
+## What's next?
+
+In the next week, we will refactor this script into a custom action so that it can be reused by other projects.
