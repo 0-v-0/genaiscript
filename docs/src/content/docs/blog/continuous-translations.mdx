@@ -1,6 +1,7 @@
 ---
 title: Continuous Markdown Translations
-description: A walkthrough the script that translates the GenAIScript documentation into multiple languages.
+description: A walkthrough the script that translates the GenAIScript
+  documentation into multiple languages.
 date: 2025-07-02
 authors: pelikhan
 tags:
@@ -8,6 +9,45 @@ tags:
   - CI/CD
   - Translations
 canonical_url: https://microsoft.github.io/genaiscript/blog/continuous-translations/
+cover:
+  alt: A visually bold, 8-bit style flowchart uses five simple colors to
+    illustrate the journey of a Markdown document through multiple stages. It
+    starts with the document turning into a blocky tree, then color-coded chunks
+    are extracted. Placeholder tags are inserted before the process flows into a
+    cloud icon (representing AI or cloud processing). Chunks reappear, now
+    altered, and are put back into the document. The final output moves towards
+    a stylized French flag. Icons like a disk for caching, a code block symbol,
+    and a checkmark for quality control punctuate the diagram. There is no text
+    or people; process steps are linked by basic geometric shapes and arrows.
+  image: ./continuous-translations.png
+excerpt: >-
+  GenAIScript documentation is now accessible in French, thanks to a continuous
+  translation workflow integrated with GitHub Actions. As documentation changes,
+  translations are updated automatically, reducing manual effort and ensuring
+  consistency across languages.
+
+
+  The translation system parses Markdown files into an Abstract Syntax Tree
+  (AST), breaks content into translatable text chunks, and attaches unique
+  identifiers for each segment. Only those new or modified segments are sent for
+  translation by a large language model. This selective approach avoids
+  unnecessary retranslation, supports idempotency, and allows granular updates
+  without risking document drift.
+
+
+  Translations are then evaluated for markdown validity and URL consistency, and
+  undergo an automated quality check using the same LLM. Validated segments are
+  saved in a cache, so future translation runs can instantly reuse existing work
+  and focus only on true differences. Once all checks pass, the automated
+  workflow commits and pushes the new translations back to the repository, with
+  no developer intervention required.
+
+
+  The process is robust, extensible to other languages, and leverages
+  open-source plugins for Markdown AST manipulation. Teams benefit from
+  localized, up-to-date documentation with minimal friction, driven entirely by
+  automation and modern AI tooling.
+
 ---
 
 You may have noticed that the GenAIScript documentation is now available in **French** (try the upper-right language dropdown).
