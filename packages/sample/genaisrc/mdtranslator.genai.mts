@@ -2,10 +2,12 @@ import { hash } from "crypto";
 import { classify } from "@genaiscript/runtime";
 import { mdast } from "@genaiscript/plugin-mdast";
 import "mdast-util-mdxjs-esm";
+import "mdast-util-mdx-jsx";
 import type { Node, Text, Heading, Paragraph, PhrasingContent, Yaml } from "mdast";
 import { basename, dirname, join, relative } from "path";
 import { URL } from "url";
 import { xor } from "es-toolkit";
+import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 
 script({
   accept: ".md,.mdx",
@@ -54,6 +56,7 @@ export default async function main() {
   const dbgc = host.logger(`script:md`);
   const dbgt = host.logger(`script:tree`);
   const dbge = host.logger(`script:text`);
+  const dbgm = host.logger(`script:mdx`);
   const { force } = vars as {
     to: string;
     force: boolean;
@@ -150,8 +153,8 @@ export default async function main() {
         dbgt(`original %O`, root.children);
         // collect original nodes nodes
         const nodes: Record<string, NodeType> = {};
-        visitParents(root, nodeTypes, (node, ancestors) => {
-          const hash = hashNode(node, ancestors);
+        visit(root, nodeTypes, (node) => {
+          const hash = hashNode(node);
           dbg(`node: %s -> %s`, node.type, hash);
           nodes[hash] = node as NodeType;
         });
@@ -258,6 +261,29 @@ export default async function main() {
               }
             } else {
               dbg(`untranslated node type: %s`, node.type);
+            }
+          }
+        });
+
+        // patch images and esm imports
+        visit(translated, ["mdxJsxFlowElement"], (node) => {
+          const flow = node as MdxJsxFlowElement;
+          for (const attribute of flow.attributes || []) {
+            if (attribute.type === "mdxJsxAttribute" && attribute.name === "title") {
+              // collect title attributes
+              dbgm(`attribute title: %s`, attribute.value);
+              let title = attribute.value;
+              const nhash = hashNode(title);
+              const tr = translationCache[nhash];
+              if (tr) title = tr;
+              else {
+                const llmHash = `T${Object.keys(llmHashes).length.toString().padStart(3, "0")}`;
+                llmHashes[llmHash] = nhash;
+                llmHashTodos.add(llmHash);
+                title = `┌${llmHash}┐${title}└${llmHash}┘`;
+              }
+              attribute.value = title;
+              return SKIP;
             }
           }
         });
@@ -477,6 +503,20 @@ export default async function main() {
               return r;
             });
             return SKIP;
+          }
+        });
+
+        visit(translated, ["mdxJsxFlowElement"], (node) => {
+          const flow = node as MdxJsxFlowElement;
+          for (const attribute of flow.attributes || []) {
+            if (attribute.type === "mdxJsxAttribute" && attribute.name === "title") {
+              const hash = hashNode(attribute.value);
+              const tr = translationCache[hash];
+              if (tr) {
+                dbg(`translate title: %s -> %s`, hash, tr);
+                attribute.value = tr;
+              }
+            }
           }
         });
 

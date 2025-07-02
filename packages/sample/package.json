@@ -11,17 +11,15 @@
     "test:scripts": "node ../cli/dist/src/index.js test --remove-out -r"
   },
   "dependencies": {
-    "@genaiscript/runtime": "workspace:*",
+    "@genaiscript/plugin-ast-grep": "workspace:*",
     "@genaiscript/plugin-mdast": "workspace:*",
     "@genaiscript/plugin-mermaid": "workspace:*",
     "@genaiscript/plugin-z3": "workspace:*",
-    "@genaiscript/plugin-ast-grep": "workspace:*",
+    "@genaiscript/runtime": "workspace:*",
     "ini": "^5.0.0",
-    "mdast-util-mdxjs-esm": "^2.0.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/mdast": "catalog:",
     "@agentic/calculator": "v7.5.3",
     "@agentic/core": "v7.5.3",
     "@agentic/weather": "v7.5.3",
@@ -36,8 +34,11 @@
     "@langchain/langgraph": "^0.2.57",
     "@modelcontextprotocol/sdk": "^1.13.1",
     "@tidyjs/tidy": "^2.5.2",
+    "@types/mdast": "catalog:",
     "@types/node": "catalog:",
     "es-toolkit": "catalog:",
+    "mdast-util-mdx-jsx": "^3.2.0",
+    "mdast-util-mdxjs-esm": "^2.0.1",
     "p-all": "^5.0.0",
     "vitest": "catalog:",
     "zod": "^3.25.67",
