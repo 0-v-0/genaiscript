@@ -305,8 +305,8 @@ export default async function main() {
           // run prompt to generate translations
           const { fences, error } = await runPrompt(
             async (ctx) => {
-              const originalRef = ctx.def("ORIGINAL", file.content);
-              const translatedRef = ctx.def("TRANSLATED", contentMix);
+              const originalRef = ctx.def("ORIGINAL", file.content, { lineNumbers: false });
+              const translatedRef = ctx.def("TRANSLATED", contentMix, { lineNumbers: false });
               ctx.$`You are an expert at translating technical documentation into ${lang} (${to}).
       
       ## Task
@@ -582,7 +582,7 @@ export default async function main() {
             {
               label: `judge translation ${to} ${basename(filename)}`,
               explanations: true,
-              system: ["system,annotations"],
+              system: ["system.annotations"],
               systemSafety: false,
             },
           );

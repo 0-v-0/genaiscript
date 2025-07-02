@@ -1,0 +1,85 @@
+---
+title: Traductions Markdown Continues
+description: Un aperçu du script qui traduit la documentation GenAIScript dans
+  plusieurs langues.
+date: 2025-07-02
+authors: pelikhan
+draft: true
+tags:
+  - Continuous AI
+  - CI/CD
+  - Translations
+canonical_url: https://microsoft.github.io/genaiscript/blog/continuous-translations/
+
+---
+
+Vous avez peut-être remarqué que la documentation de GenAIScript est désormais disponible en **français** (essayez le menu déroulant de langue en haut à droite).
+
+Les traductions ne sont pas un effort ponctuel ; elles sont mises à jour **en continu** à mesure que la documentation évolue, grâce à GitHub Actions. Cela signifie que chaque fois que du nouveau contenu est ajouté ou que du contenu existant est modifié,
+les traductions sont automatiquement mises à jour pour refléter ces changements.
+
+Dans cet article, nous allons passer en revue certains aspects intéressants du script et son fonctionnement.
+
+## Le défi de la traduction de la documentation
+
+L'objectif de ce défi est de maintenir une documentation localisée, et d'automatiser le processus grâce à GenAIScript, GitHub Actions et GitHub Models.
+Pour réussir, nous avons besoin :
+
+* d'un modèle capable de produire des traductions de haute qualité (les LLMs comme `gpt-4o` et supérieurs sont devenus assez efficaces pour cela),
+* d'une stratégie itérative pour traduire partiellement les parties modifiées d'un fichier markdown. Nous ne pouvons pas simplement traduire tout un fichier car les traductions changeraient à chaque itération.
+* d'idempotence : si les traductions sont déjà disponibles, les résultats doivent être mis en cache et le script ne doit effectuer aucune action.
+* d'une exécution automatique via une GitHub Action et de l'utilisation de GitHub Models pour l'inférence.
+
+C'est parti ! Si vous souhaitez consulter le code, [voici le script](https://github.com/microsoft/genaiscript/blob/dev/packages/sample/genaisrc/mdtranslator.genai.mts).
+
+## Traductions Markdown Itératives
+
+Comme GenAIScript utilise le markdown pour la documentation, nous allons nous concentrer exclusivement sur ce format de fichier. GenAIScript utilise aussi [Astro Starlight](https://starlight.astro.build/) qui ajoute des métadonnées bien connues dans le frontmatter comme `title` ou `description`.
+
+L'idée principale derrière les scripts de traduction est la suivante :
+
+* analyser le document markdown en un AST (Abstract Syntax Tree)
+* parcourir l'arbre et collecter tous les blocs de texte traduisibles (attention particulière aux paragraphes)
+* remplacer tous les blocs traduisibles par un placeholder, par exemple `[T001]bla bla bla...[T002]`, et demander au LLM de traduire chaque bloc
+* analyser la réponse du LLM, extraire chaque traduction de bloc, et revisiter l'arbre pour appliquer les traductions
+* sauvegarder les traductions dans un cache afin de les réutiliser lors d'une prochaine exécution
+
+### Outils AST pour Markdown
+
+La communauté web a développé de nombreux outils pour analyser et manipuler des documents markdown.
+GenAIScript propose un plugin opinioné, [@genaiscript/plugin-mdast](https://www.npmjs.com/package/@genaiscript/plugin-mdast), qui fournit les fonctionnalités principales sans se soucier de la configuration.
+
+* charger le plugin
+
+```ts
+import { mdast } from "@genaiscript/plugin-mdast";
+
+const { visit, parse, stringify, SKIP } = await mdast();
+```
+
+* analyser le fichier markdown
+
+```ts
+const root = parse(file);
+```
+
+* parcourir l'arbre et collecter les blocs
+
+```ts
+const nodes: Record<string, NodeType> = {};
+visit(root, ["text", "paragraph"], (node) => {
+  const hash = hashNode(node);
+  dbg(`node: %s -> %s`, node.type, hash);
+  nodes[hash] = node as NodeType;
+});
+```
+
+* convertir l'arbre à nouveau en markdown
+
+```ts
+const markdown = stringify(root);
+```
+
+Avec ces opérations primitives, nous pouvons créer un script capable d'analyser, d'extraire les tâches de traduction, de traduire, d'appliquer la traduction puis de convertir de nouveau en markdown.
+
+## Évaluer la qualité de la traduction
