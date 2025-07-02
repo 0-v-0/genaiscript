@@ -30,7 +30,7 @@ import { lookupMime } from "../../core/src/mime";
 import { VscodeMultiSelect } from "@vscode-elements/elements/dist/vscode-multi-select/vscode-multi-select";
 import MarkdownPreviewTabs from "./MarkdownPreviewTabs";
 import { TreeItem, VscodeTree } from "@vscode-elements/elements/dist/vscode-tree/vscode-tree";
-import CONFIGURATION from "../../core/src/llms.json";
+import CONFIGURATION from "../../core/src/llmsdata";
 import { MODEL_PROVIDER_GITHUB_COPILOT_CHAT } from "../../core/src/constants";
 import { apiKey, hosted, viewMode } from "./configuration";
 import { JSONBooleanOptionsGroup, JSONSchemaObjectForm } from "./JSONSchema";
@@ -46,6 +46,12 @@ import { ImportedFile } from "./types";
 import { ProjectView } from "./ProjectView";
 import { prettyBytes } from "../../core/src/pretty";
 import { RunResultSelector } from "./Runs";
+import {
+  JSONSchemaBoolean,
+  JSONSchemaObject,
+  JSONSchemaSimpleType,
+  PromptScript,
+} from "../../core/src/types";
 
 function useSyncProjectScript() {
   const { scriptid, setScriptid } = useScriptId();
