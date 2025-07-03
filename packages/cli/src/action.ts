@@ -253,9 +253,10 @@ export async function actionConfigure(
     for (const [key, value] of Object.entries(provider.env)) {
       inputs[key.toLowerCase()] = deleteUndefinedValues({
         description:
-          value.description || provider.url || `Configuration for ${provider.id} provider.`,
+          value.description ||
+          provider.url ||
+          `Configuration for ${provider.id} provider (\`${value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`}\`)`,
         required: false,
-        default: value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`,
       }) satisfies GitHubActionFieldType;
     }
   }
