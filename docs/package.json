@@ -2,7 +2,7 @@
   "name": "docs",
   "type": "module",
   "private": true,
-  "version": "2.2.4",
+  "version": "2.2.5",
   "license": "MIT",
   "scripts": {
     "install:playwright": " pnpm exec playwright install --with-deps chromium",
