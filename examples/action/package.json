@@ -13,7 +13,7 @@
     "lint": "npx --yes prettier --write genaisrc/",
     "fix": "genaiscript scripts fix",
     "typecheck": "genaiscript scripts compile",
-    "configure": "genaiscript configure action action-poem --interactive",
+    "configure": "genaiscript configure action action-poem",
     "test": "echo 'No tests defined.'",
     "dev": "genaiscript run action-poem",
     "start": "genaiscript run action-poem --github-workspace --no-run-trace --no-output-trace",

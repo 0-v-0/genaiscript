@@ -27,6 +27,7 @@ import {
   runtimeHost,
   templateIdFromFileName,
   titleize,
+  toStringList,
   tryReadText,
   tryStat,
   writeText,
@@ -206,12 +207,7 @@ export async function actionConfigure(
     required: [],
   };
   const providers = MODEL_PROVIDERS.filter(({ id }) =>
-    [
-      MODEL_PROVIDER_GITHUB,
-      MODEL_PROVIDER_OPENAI,
-      MODEL_PROVIDER_AZURE_OPENAI,
-      MODEL_PROVIDER_AZURE_AI_INFERENCE,
-    ].includes(id),
+    [MODEL_PROVIDER_GITHUB, MODEL_PROVIDER_OPENAI, MODEL_PROVIDER_AZURE_OPENAI].includes(id),
   ).filter(({ env }) => env);
   const inputs: Record<string, GitHubActionFieldType> = deleteUndefinedValues({
     ...Object.fromEntries(
@@ -241,10 +237,9 @@ export async function actionConfigure(
     github_issue:
       issue || pullRequest
         ? {
-            description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments (https://microsoft.github.io/genaiscript/reference/scripts/github/).`,
-            default: issue
-              ? "${{ github.event.issue.number }}"
-              : "${{ github.event.pull_request.number }}",
+            description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments (https://microsoft.github.io/genaiscript/reference/scripts/github/) (\`${
+              issue ? "${{ github.event.issue.number }}" : "${{ github.event.pull_request.number }}"
+            }\`)`,
             required: false,
           }
         : undefined,
@@ -252,10 +247,10 @@ export async function actionConfigure(
   for (const provider of providers) {
     for (const [key, value] of Object.entries(provider.env)) {
       inputs[key.toLowerCase()] = deleteUndefinedValues({
-        description:
-          value.description ||
-          provider.url ||
-          `Configuration for ${provider.id} provider (\`${value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`}\`)`,
+        description: toStringList(
+          value.description || provider.url || `Configuration for ${provider.id} provider`,
+          `${value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`}`,
+        ),
         required: false,
       }) satisfies GitHubActionFieldType;
     }
