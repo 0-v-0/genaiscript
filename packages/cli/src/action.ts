@@ -453,18 +453,6 @@ To run the action locally in Docker (build it first), use:
 npm run docker:start
 \`\`\`
 
-To run the action using [act](https://nektosact.com/), first install the act CLI:
-
-\`\`\`bash
-npm run act:install
-\`\`\`
-
-Then, you can run the action with:
-
-\`\`\`bash
-npm run act
-\`\`\`
-
 ## Upgrade
 
 The GenAIScript version is pinned in the \`package.json\` file. To upgrade it, run:
@@ -633,14 +621,10 @@ jobs:
             upgrade: "npx -y npm-check-updates -u && npm install && npm run fix",
             "docker:build": `docker build -t ${owner}-${repo} .`,
             "docker:start": `docker run -e GITHUB_TOKEN ${owner}-${repo}`,
-            "act:install": "gh extension install https://github.com/nektos/gh-act",
-            act: "gh act",
             lint: `npx --yes prettier --write genaisrc/`,
             fix: "genaiscript scripts fix",
             typecheck: `genaiscript scripts compile`,
-            configure: [`genaiscript configure action`, scriptId, `--interactive`]
-              .filter(Boolean)
-              .join(" "),
+            configure: [`genaiscript configure action`, scriptId].filter(Boolean).join(" "),
             test: "echo 'No tests defined.'",
             dev: args.join(" "),
             start: [...args, "--github-workspace", "--no-run-trace", "--no-output-trace"].join(" "),

@@ -10,8 +10,6 @@
     "upgrade": "npx -y npm-check-updates -u && npm install && npm run fix",
     "docker:build": "docker build -t microsoft-genaiscript .",
     "docker:start": "docker run -e GITHUB_TOKEN microsoft-genaiscript",
-    "act:install": "gh extension install https://github.com/nektos/gh-act",
-    "act": "gh act",
     "lint": "npx --yes prettier --write genaisrc/",
     "fix": "genaiscript scripts fix",
     "typecheck": "genaiscript scripts compile",
