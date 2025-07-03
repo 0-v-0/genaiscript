@@ -10865,5 +10865,19 @@
   "573C96C2536BD96F5895": "Utilise `classify` de GenAIScript Runtime pour demander à l'IA si la traduction est suffisamment fidèle.",
   "3E0C1C1C2C1F5E45B93D": "Écrit le Markdown traduit et met à jour le cache pour les prochaines exécutions.",
   "71BD3D7E0C4430D6F5A7": "blog-image.genai.mts",
-  "FC749B34BCF8518CAB90": "docs.genai.mts"
+  "FC749B34BCF8518CAB90": "docs.genai.mts",
+  "D6612EC15ACD4B47BEA2": "st.genai.mts",
+  "5F4EF24F72B2615031EB": "iat.genai.mts",
+  "3345A7ACC8EBA8F381C4": "gcm.genai.mts",
+  "33A691A1630EAC31D57F": "gai.genai.mts",
+  "0BF35F17E69FF012F570": "gai.yml",
+  "C4E69747503C3C1703D0": "diagramme.genai.mts",
+  "19A348448F355F4398D9": "cmt.genai.mts",
+  "F779AE8D415D8C480A14": "Grumpy Dev",
+  "9760D666E90238853B23": "video-alt-text.genai.mjs",
+  "66703A955709E4CFFA95": "tavily.mts",
+  "DF610E64DDBB0210E496": "document-augmentor.genai.mts",
+  "55AE78EF9242D909BE2E": "math-agent.genai.mjs",
+  "0DC4CAA04261979D5A88": "slides.genai.mjs",
+  "B53C2CA0D151B07D4BDF": "pdfocr.genai.mts"
 }
