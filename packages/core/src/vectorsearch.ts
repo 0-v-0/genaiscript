@@ -26,6 +26,8 @@ import type {
   WorkspaceFileIndex,
   WorkspaceFileWithScore,
 } from "./types.js";
+import { genaiscriptDebug } from "./debug.js";
+const dbg = genaiscriptDebug("vector");
 
 interface EmbeddingsResponse {
   /**
@@ -126,6 +128,7 @@ export async function vectorCreateIndex(
   assert(!!indexName);
   options = options || {};
   const { type = "local", embeddingsModel, cancellationToken, trace } = options || {};
+  dbg(`create index %s %s %s`, indexName, type, embeddingsModel);
 
   let factory: WorkspaceFileIndexCreator;
   if (type === "azure_ai_search") factory = azureAISearchIndex;
@@ -154,13 +157,18 @@ export async function vectorCreateIndex(
   checkCancelled(cancellationToken);
 
   if (!options.vectorSize) {
+    dbg(`sniffing vector size for %s`, indexName);
     const sniff = await cachedEmbedder(
+      
       `Lorem ipsum dolor sit amet, consectetur adipiscing elit
 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       configuration,
       options,
     );
-    options.vectorSize = sniff.data[0].length;
+    const vectorSize = sniff.data?.[0]?.length;
+    dbg(`sniffed vector size: %o`, sniff.data);
+    if (isNaN(vectorSize)) throw new Error("embeddings: unable to determine vector size");
+      options.vectorSize = vectorSize;
   }
 
   return await factory(indexName, configuration, cachedEmbedder, options);

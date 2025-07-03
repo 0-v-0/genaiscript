@@ -292,6 +292,7 @@ export default {
         vision: "openai/gpt-4.1",
         reasoning: "openai/o3",
         reasoning_small: "openai/o3-mini",
+        embeddings: "openai/text-embedding-3-small",
       },
       models: {
         "o1-preview": {

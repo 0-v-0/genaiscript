@@ -221,7 +221,7 @@ export const OPENROUTER_API_CHAT_URL = "https://openrouter.ai/api/v1/chat/comple
 export const OPENROUTER_SITE_URL_HEADER = "HTTP-Referer";
 export const OPENROUTER_SITE_NAME_HEADER = "X-Title";
 
-export const GITHUB_MODELS_BASE = "https://models.github.ai/inference/chat/completions";
+export const GITHUB_MODELS_BASE = "https://models.github.ai/inference";
 
 export const DOCS_CONFIGURATION_URL =
   "https://microsoft.github.io/genaiscript/getting-started/configuration/";
