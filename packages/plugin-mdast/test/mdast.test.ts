@@ -85,7 +85,7 @@ describe("mdast", () => {
       const input = "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("# H1");
       expect(output).toContain("## H2");
       expect(output).toContain("### H3");
@@ -99,7 +99,7 @@ describe("mdast", () => {
       const input = "**bold text** and *italic text* and ~~strikethrough~~";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("**bold text**");
       expect(output).toContain("*italic text*");
       expect(output).toContain("~~strikethrough~~");
@@ -110,7 +110,7 @@ describe("mdast", () => {
       const input = "- Item 1\n- Item 2\n  - Nested item\n- Item 3";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("* Item 1");
       expect(output).toContain("* Item 2");
       expect(output).toContain("* Nested item");
@@ -122,7 +122,7 @@ describe("mdast", () => {
       const input = "1. First item\n2. Second item\n   1. Nested item\n3. Third item";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("1. First item");
       expect(output).toContain("2. Second item");
       expect(output).toContain("1. Nested item");
@@ -131,10 +131,11 @@ describe("mdast", () => {
 
     test("parse and stringify links", async () => {
       const api = await mdast();
-      const input = "[Link text](https://example.com) and [Reference link][ref]\n\n[ref]: https://reference.com";
+      const input =
+        "[Link text](https://example.com) and [Reference link][ref]\n\n[ref]: https://reference.com";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("[Link text](https://example.com)");
       expect(output).toContain("[Reference link][ref]");
       expect(output).toContain("[ref]: https://reference.com");
@@ -145,7 +146,7 @@ describe("mdast", () => {
       const input = "![Alt text](image.jpg) and ![Reference image][img]\n\n[img]: reference.jpg";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("![Alt text](image.jpg)");
       expect(output).toContain("![Reference image][img]");
       expect(output).toContain("[img]: reference.jpg");
@@ -156,7 +157,7 @@ describe("mdast", () => {
       const input = "Here is some `inline code` in a sentence.";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("`inline code`");
     });
 
@@ -165,7 +166,7 @@ describe("mdast", () => {
       const input = "```javascript\nconst x = 1;\nconsole.log(x);\n```";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("```javascript");
       expect(output).toContain("const x = 1;");
       expect(output).toContain("console.log(x);");
@@ -177,7 +178,7 @@ describe("mdast", () => {
       const input = "> This is a blockquote\n> with multiple lines\n>\n> And another paragraph";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("> This is a blockquote");
       expect(output).toContain("> with multiple lines");
       expect(output).toContain("> And another paragraph");
@@ -188,7 +189,7 @@ describe("mdast", () => {
       const input = "Before\n\n---\n\nAfter";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("Before");
       expect(output).toContain("***");
       expect(output).toContain("After");
@@ -196,10 +197,11 @@ describe("mdast", () => {
 
     test("parse and stringify tables", async () => {
       const api = await mdast();
-      const input = "| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |\n| Cell 3   | Cell 4   |";
+      const input =
+        "| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |\n| Cell 3   | Cell 4   |";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("Header 1");
       expect(output).toContain("Header 2");
       expect(output).toContain("Cell 1");
@@ -213,7 +215,7 @@ describe("mdast", () => {
       const input = "Line 1  \nLine 2\n\nParagraph 2";
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("Line 1");
       expect(output).toContain("Line 2");
       expect(output).toContain("Paragraph 2");
@@ -243,7 +245,7 @@ def hello():
 
       const ast = api.parse(input);
       const output = api.stringify(ast);
-      
+
       expect(output).toContain("# Main Title");
       expect(output).toContain("**bold**");
       expect(output).toContain("*italic*");
@@ -261,10 +263,10 @@ def hello():
       const api = await mdast();
       const input = "# Heading\n\n[Incomplete link\n\n```\nUnclosed code block";
       const ast = api.parse(input);
-      
+
       expect(ast.type).toBe("root");
       expect(Array.isArray(ast.children)).toBe(true);
-      
+
       const output = api.stringify(ast);
       expect(output).toContain("Heading");
     });
@@ -274,11 +276,11 @@ def hello():
       const input = "# Title\n\n**Bold** text with [link](url)\n\n- List item";
       const ast = api.parse(input);
       const nodeTypes: string[] = [];
-      
+
       api.visit(ast, (node: any) => {
         if (node.type) nodeTypes.push(node.type);
       });
-      
+
       expect(nodeTypes).toContain("root");
       expect(nodeTypes).toContain("heading");
       expect(nodeTypes).toContain("paragraph");
@@ -293,19 +295,347 @@ def hello():
       const api = await mdast();
       const input = "# Title\n\n**Bold text**";
       const ast = api.parse(input);
-      const visits: Array<{type: string, parentTypes: string[]}> = [];
-      
+      const visits: Array<{ type: string; parentTypes: string[] }> = [];
+
       api.visitParents(ast, (node: any, parents: any[]) => {
         visits.push({
           type: node.type,
-          parentTypes: parents.map(p => p.type)
+          parentTypes: parents.map((p) => p.type),
         });
       });
-      
-      const strongVisit = visits.find(v => v.type === "strong");
+
+      const strongVisit = visits.find((v) => v.type === "strong");
       expect(strongVisit).toBeDefined();
       expect(strongVisit?.parentTypes).toContain("paragraph");
       expect(strongVisit?.parentTypes).toContain("root");
+    });
+  });
+
+  describe("MDX syntax features", () => {
+    test("parse and stringify JSX components", async () => {
+      const api = await mdast({ mdx: true });
+      const input = `# Title
+
+<Button>Click me</Button>
+
+<Card title="Hello">
+  Content here
+</Card>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("# Title");
+      expect(output).toContain("<Button>Click me</Button>");
+      expect(output).toContain('<Card title="Hello">');
+      expect(output).toContain("Content here");
+      expect(output).toContain("</Card>");
+    });
+
+    test("parse and stringify self-closing JSX components", async () => {
+      const api = await mdast();
+      const input = `<Image src="image.jpg" alt="Description" />
+
+<br />
+
+<Hr className="my-4" />`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain('<Image src="image.jpg" alt="Description" />');
+      expect(output).toContain("<br />");
+      expect(output).toContain('<Hr className="my-4" />');
+    });
+
+    test("parse and stringify JSX expressions", async () => {
+      const api = await mdast({ mdx: true });
+      const input = `# Dynamic Content
+
+Today is {new Date().toLocaleDateString()}
+
+The answer is {2 + 2}
+
+<div>
+  {items.map(item => <span key={item.id}>{item.name}</span>)}
+</div>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("# Dynamic Content");
+      expect(output).toContain("{new Date().toLocaleDateString()}");
+      expect(output).toContain("{2 + 2}");
+      expect(output).toContain("{items.map(item => <span key={item.id}>{item.name}</span>)}");
+    });
+
+    test("parse and stringify JSX with props", async () => {
+      const api = await mdast();
+      const input = `<Alert type="warning" dismissible={true} onClose={handleClose}>
+  This is a warning message
+</Alert>
+
+<Table 
+  data={tableData} 
+  columns={["Name", "Age", "City"]}
+  sortable
+/>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain('<Alert type="warning" dismissible={true} onClose={handleClose}>');
+      expect(output).toContain("This is a warning message");
+      expect(output).toContain("</Alert>");
+      expect(output).toContain("<Table");
+      expect(output).toContain("data={tableData}");
+      expect(output).toContain('columns={["Name", "Age", "City"]}');
+      expect(output).toContain("sortable");
+      expect(output).toContain("/>");
+    });
+
+    test("parse and stringify nested JSX components", async () => {
+      const api = await mdast({ mdx: true });
+      const input = `<Layout>
+  <Header>
+    <Navigation />
+  </Header>
+  <Main>
+    <Section>
+      <Article>
+        # Article Title
+        
+        This is regular markdown content inside JSX.
+        
+        <Callout type="info">
+          **Important note** with *emphasis*.
+        </Callout>
+      </Article>
+    </Section>
+  </Main>
+</Layout>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("<Layout>");
+      expect(output).toContain("<Header>");
+      expect(output).toContain("<Navigation />");
+      expect(output).toContain("# Article Title");
+      expect(output).toContain("This is regular markdown content inside JSX.");
+      expect(output).toContain('<Callout type="info">');
+      expect(output).toContain("**Important note**");
+      expect(output).toContain("*emphasis*");
+      expect(output).toContain("</Callout>");
+      expect(output).toContain("</Layout>");
+    });
+
+    test("parse and stringify MDX imports and exports", async () => {
+      const api = await mdast({ mdx: true });
+      const input = `import { Button } from './components/Button'
+import Chart from './Chart.jsx'
+
+export const title = "My Document"
+export { metadata } from './metadata'
+
+# {title}
+
+<Button>Click me</Button>
+
+<Chart data={chartData} />`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("import { Button } from './components/Button'");
+      expect(output).toContain("import Chart from './Chart.jsx'");
+      expect(output).toContain('export const title = "My Document"');
+      expect(output).toContain("export { metadata } from './metadata'");
+      expect(output).toContain("# {title}");
+      expect(output).toContain("<Button>Click me</Button>");
+      expect(output).toContain("<Chart data={chartData} />");
+    });
+
+    test("parse and stringify JSX with markdown content", async () => {
+      const api = await mdast();
+      const input = `<div className="content">
+
+# Heading inside JSX
+
+This is **bold** and *italic* text.
+
+- List item 1
+- List item 2
+
+\`\`\`javascript
+const code = "inside JSX";
+\`\`\`
+
+> Blockquote inside JSX
+
+</div>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain('<div className="content">');
+      expect(output).toContain("# Heading inside JSX");
+      expect(output).toContain("**bold**");
+      expect(output).toContain("*italic*");
+      expect(output).toContain("* List item 1");
+      expect(output).toContain("* List item 2");
+      expect(output).toContain("```javascript");
+      expect(output).toContain('const code = "inside JSX";');
+      expect(output).toContain("> Blockquote inside JSX");
+      expect(output).toContain("</div>");
+    });
+
+    test("parse and stringify complex MDX expressions", async () => {
+      const api = await mdast({ mdx: true });
+      const input = `# Data Visualization
+
+Current count: {count}
+
+<div>
+  {users.length > 0 ? (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>
+          {user.name} - {user.email}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>No users found</p>
+  )}
+</div>
+
+{/* This is a JSX comment */}
+
+<CustomComponent 
+  prop1={complexObject.property}
+  prop2={functionCall()}
+  prop3={condition ? "value1" : "value2"}
+/>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("# Data Visualization");
+      expect(output).toContain("Current count: {count}");
+      expect(output).toContain("{users.length > 0 ? (");
+      expect(output).toContain("{users.map(user => (");
+      expect(output).toContain("{user.name} - {user.email}");
+      expect(output).toContain(") : (");
+      expect(output).toContain("<p>No users found</p>");
+      expect(output).toContain("{/* This is a JSX comment */}");
+      expect(output).toContain("prop1={complexObject.property}");
+      expect(output).toContain("prop2={functionCall()}");
+      expect(output).toContain('prop3={condition ? "value1" : "value2"}');
+    });
+
+    test("parse and stringify MDX with HTML attributes", async () => {
+      const api = await mdast({ mdx: true });
+      const input = `<div 
+  id="main-content" 
+  className="container mx-auto" 
+  style={{backgroundColor: 'red', padding: '20px'}}
+  data-testid="content"
+  onClick={handleClick}
+>
+  # Content with HTML attributes
+  
+  <span style={{color: 'blue', fontSize: '18px'}}>Styled text</span>
+</div>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("<div");
+      expect(output).toContain('id="main-content"');
+      expect(output).toContain('className="container mx-auto"');
+      expect(output).toContain("style={{backgroundColor: 'red', padding: '20px'}}");
+      expect(output).toContain('data-testid="content"');
+      expect(output).toContain("{handleClick}");
+      expect(output).toContain("# Content with HTML attributes");
+      expect(output).toContain("style={{color: 'blue', fontSize: '18px'}}");
+      expect(output).toContain("Styled text");
+    });
+
+    test("parse and stringify mixed markdown and MDX content", async () => {
+      const api = await mdast({ mdx: true });
+      const input = `# Main Title
+
+Regular markdown paragraph with **bold** text.
+
+<Alert type="info">
+  This is an info alert with [a link](https://example.com).
+</Alert>
+
+## Code Examples
+
+Here's some regular markdown code:
+
+\`\`\`javascript
+const regular = "markdown";
+\`\`\`
+
+And here's a JSX code block:
+
+<CodeBlock language="jsx">
+  {\`
+    const Component = () => {
+      return <div>Hello World</div>;
+    };
+  \`}
+</CodeBlock>
+
+| Regular | Markdown | Table |
+|---------|----------|-------|
+| Cell 1  | Cell 2   | Cell 3|
+
+<Table>
+  <thead>
+    <tr>
+      <th>JSX</th>
+      <th>Table</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cell A</td>
+      <td>Cell B</td>
+    </tr>
+  </tbody>
+</Table>`;
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("# Main Title");
+      expect(output).toContain("**bold**");
+      expect(output).toContain('<Alert type="info">');
+      expect(output).toContain("[a link](https://example.com)");
+      expect(output).toContain("## Code Examples");
+      expect(output).toContain("```javascript");
+      expect(output).toContain('<CodeBlock language="jsx">');
+      expect(output).toContain("Regular | Markdown | Table");
+      expect(output).toContain("Cell 1  | Cell 2   | Cell 3");
+      expect(output).toContain("<Table>");
+      expect(output).toContain("<thead>");
+      expect(output).toContain("<th>JSX</th>");
+      expect(output).toContain("<td>Cell A</td>");
+    });
+
+    test("visit traverses MDX AST nodes", async () => {
+      const api = await mdast();
+      const input = `# Title
+
+<Component prop={value}>
+  Content with {expression}
+</Component>`;
+      const ast = api.parse(input);
+      const nodeTypes: string[] = [];
+
+      api.visit(ast, (node: any) => {
+        if (node.type) nodeTypes.push(node.type);
+      });
+
+      expect(nodeTypes).toContain("root");
+      expect(nodeTypes).toContain("heading");
+      expect(nodeTypes).toContain("text");
+      // MDX-specific nodes might include mdxJsxFlowElement, mdxJsxTextElement, etc.
+      // The exact node types depend on the MDX parser implementation
     });
   });
 });

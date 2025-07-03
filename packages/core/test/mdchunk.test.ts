@@ -156,7 +156,7 @@ There are many variations of passages of Lorem Ipsum available, but the majority
       const result = await chunkMarkdown(markdown, estimateTokens, {
         maxTokens,
       });
-      //console.log(`${maxTokens} => ${result.length}`)
+      // console.log(`${maxTokens} => ${result.length}`)
       assert.strictEqual(result.map((r) => r.content).join("\n"), markdown);
     }
   });
@@ -178,7 +178,7 @@ There are many variations of passages of Lorem Ipsum available, but the majority
   }
 
   test(`word: chunks markdown from docx`, async () => {
-    const { file } = await DOCXTryParse("../../packages/sample/src/rag/Document.docx", {
+    const { file } = await DOCXTryParse("../../samples/sample/src/rag/Document.docx", {
       format: "markdown",
     });
     const markdown = file.content;

@@ -2,7 +2,7 @@ import { describe, test, assert, beforeEach } from "vitest";
 import { $ } from "zx";
 import { join } from "node:path";
 
-const cli = join("..", "cli", "dist", "src", "index.js");
+const cli = join("..", "..", "packages", "cli", "dist", "src", "index.js");
 
 describe("init", async () => {
   await import("zx/globals");

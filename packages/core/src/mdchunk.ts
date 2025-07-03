@@ -42,7 +42,7 @@ export async function chunkMarkdown(
       current = null;
       return;
     }
-    const match = /^(\#{1,6})\s+(.*)/.exec(line);
+    const match = /^(#{1,6})\s+(.*)/.exec(line);
     if (match) {
       if (current) sections.push(current);
       current = {
@@ -121,7 +121,7 @@ export async function chunkMarkdown(
       }) satisfies TextChunk,
   );
 
-  function sectionTokenCount(section: { lines: string[] }, tokenCount: (txt: string) => number) {
+  function sectionTokenCount(section: { lines: string[] }, tokenCount: (txt: string) => number): number {
     return section.lines.reduce((acc, line) => acc + tokenCount(line), 0);
   }
 

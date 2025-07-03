@@ -8,7 +8,7 @@ import { readFile } from "fs/promises";
 import { resolve } from "path";
 import { TestHost } from "../src/testhost.js";
 import { writeFile } from "fs/promises";
-import { Parsers } from "../src/types.js";
+import type { Parsers } from "../src/types.js";
 
 describe("parsers", async () => {
   let parsers: Parsers;
@@ -46,14 +46,14 @@ describe("parsers", async () => {
 
   test("PDF", async () => {
     const result = await parsers.PDF({
-      filename: "../sample/src/rag/loremipsum.pdf",
+      filename: "../../samples/sample/src/rag/loremipsum.pdf",
     });
     assert(result.file.content.includes("Lorem"));
   });
 
   test("prompty", async () => {
     const result = await parsers.prompty({
-      filename: "../sample/src/chat.prompty",
+      filename: "../../samples/sample/src/chat.prompty",
     });
     assert(result);
     assert(result.messages.length === 2);
@@ -61,7 +61,7 @@ describe("parsers", async () => {
 
   test("PDF-image", async () => {
     const result = await parsers.PDF(
-      { filename: "../sample/src/rag/loremipsum.pdf" },
+      { filename: "../../samples/sample/src/rag/loremipsum.pdf" },
       { renderAsImage: true },
     );
     let i = 1;
@@ -74,7 +74,7 @@ describe("parsers", async () => {
   test("DOCX - markdown", async () => {
     const result = await parsers.DOCX(
       {
-        filename: "../sample/src/rag/Document.docx",
+        filename: "../../samples/sample/src/rag/Document.docx",
       },
       { format: "markdown" },
     );
@@ -83,7 +83,7 @@ describe("parsers", async () => {
   test("DOCX - html", async () => {
     const result = await parsers.DOCX(
       {
-        filename: "../sample/src/rag/Document.docx",
+        filename: "../../samples/sample/src/rag/Document.docx",
       },
       { format: "html" },
     );
@@ -92,7 +92,7 @@ describe("parsers", async () => {
   test("DOCX - text", async () => {
     const result = await parsers.DOCX(
       {
-        filename: "../sample/src/rag/Document.docx",
+        filename: "../../samples/sample/src/rag/Document.docx",
       },
       { format: "text" },
     );
