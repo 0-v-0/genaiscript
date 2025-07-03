@@ -10769,7 +10769,7 @@
   "085B21910BEE0C142621": "d'une stratégie itérative pour traduire partiellement les parties modifiées d'un fichier markdown. Nous ne pouvons pas simplement traduire tout un fichier car les traductions changeraient à chaque itération.",
   "0CAA889BA6DECD352880": "d'idempotence : si les traductions sont déjà disponibles, les résultats doivent être mis en cache et le script ne doit effectuer aucune action.",
   "81B8AF81A780858D541D": "d'une exécution automatique via une GitHub Action et de l'utilisation de GitHub Models pour l'inférence.",
-  "C9ADDA544F238A41353C": "C'est parti ! Si vous souhaitez consulter le code, [voici le script](https://github.com/microsoft/genaiscript/blob/dev/packages/sample/genaisrc/mdtranslator.genai.mts).",
+  "C9ADDA544F238A41353C": "C'est parti ! Si vous souhaitez consulter le code, [voici le script](https://github.com/microsoft/genaiscript/blob/dev/samples/sample/genaisrc/mdtranslator.genai.mts).",
   "E65FD079EB16AEFD7A9B": "Traductions Markdown Itératives",
   "519F409F6DB7DE35339E": "Comme GenAIScript utilise le markdown pour la documentation, nous allons nous concentrer exclusivement sur ce format de fichier. GenAIScript utilise aussi [Astro Starlight](https://starlight.astro.build/) qui ajoute des métadonnées bien connues dans le frontmatter comme `title` ou `description`.",
   "0D0B1C60BA8DC0878C0B": "L'idée principale derrière les scripts de traduction est la suivante :",

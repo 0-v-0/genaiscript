@@ -14,7 +14,7 @@ script({
             keywords: "robot",
         },
         {
-            files: "https://raw.githubusercontent.com/microsoft/genaiscript/refs/heads/main/packages/sample/src/robots.jpg",
+            files: "https://raw.githubusercontent.com/microsoft/genaiscript/refs/heads/main/samples/sample/src/robots.jpg",
             keywords: "robot",
         },
     ],

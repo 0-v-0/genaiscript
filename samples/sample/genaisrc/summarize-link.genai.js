@@ -5,9 +5,9 @@ script({
     group: "hello world",
     system: ["system", "system.files"],
     temperature: 0,
-    files: "https://raw.githubusercontent.com/microsoft/genaiscript/main/packages/sample/src/rag/markdown.md",
+    files: "https://raw.githubusercontent.com/microsoft/genaiscript/main/samples/sample/src/rag/markdown.md",
     tests: {
-        files: "https://raw.githubusercontent.com/microsoft/genaiscript/main/packages/sample/src/rag/markdown.md",
+        files: "https://raw.githubusercontent.com/microsoft/genaiscript/main/samples/sample/src/rag/markdown.md",
         keywords: "markdown",
     },
 })

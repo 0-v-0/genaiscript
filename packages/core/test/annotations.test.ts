@@ -40,7 +40,7 @@ describe("annotations", () => {
 
   test("github:suggestions", () => {
     const output = `
-::warning file=packages/sample/src/fib.ts,line=1,endLine=4,code=unimplemented_function::The fibonacci function is unimplemented and currently always returns 0.::function fibonacci(n: number): number { if (n <= 1) return n; return fibonacci(n - 1) + fibonacci(n - 2); }
+::warning file=samples/sample/src/fib.ts,line=1,endLine=4,code=unimplemented_function::The fibonacci function is unimplemented and currently always returns 0.::function fibonacci(n: number): number { if (n <= 1) return n; return fibonacci(n - 1) + fibonacci(n - 2); }
 `;
     const diags = parseAnnotations(output);
     assert.strictEqual(diags.length, 1);
