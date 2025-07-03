@@ -400,7 +400,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ${owner}/${repo}@main
+      - uses: actions/cache@v4
+        with:
+          path: .genaiscript/cache/**
+          key: genaiscript-\${{ github.run_id }}
+          restore-keys: genaiscript-
+      - uses: ${owner}/${repo}@v0 # update to the major version you want to use
         with:
 ${Object.entries(inputs || {})
   .filter(([, value]) => value.required)
@@ -623,7 +628,7 @@ jobs:
             configure: [`genaiscript configure action`, scriptId].filter(Boolean).join(" "),
             test: "echo 'No tests defined.'",
             dev: args.join(" "),
-            start: [...args, "--github-workspace", "--no-run-trace", "--no-output-trace"].join(" "),
+            start: [...args, "--github-workspace", "--no-run-trace", "--no-output-trace", "--out-output", "$GITHUB_STEP_SUMMARY"].join(" "),
             release: "sh release.sh",
           },
         }),

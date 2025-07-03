@@ -50,7 +50,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: microsoft/genaiscript@main
+      - uses: actions/cache@v4
+        with:
+          path: .genaiscript/cache/**
+          key: genaiscript-${{ github.run_id }}
+          restore-keys: genaiscript-
+      - uses: microsoft/genaiscript@v0 # update to the major version you want to use
         with:
 
 ```
