@@ -9,7 +9,6 @@ import {
   GENAI_SRC,
   GitHubClient,
   MODEL_PROVIDERS,
-  MODEL_PROVIDER_AZURE_AI_INFERENCE,
   MODEL_PROVIDER_AZURE_OPENAI,
   MODEL_PROVIDER_GITHUB,
   MODEL_PROVIDER_OPENAI,
@@ -404,7 +403,8 @@ jobs:
         with:
           path: .genaiscript/cache/**
           key: genaiscript-\${{ github.run_id }}
-          restore-keys: genaiscript-
+          restore-keys: |
+            genaiscript-
       - uses: ${owner}/${repo}@v0 # update to the major version you want to use
         with:
 ${Object.entries(inputs || {})
