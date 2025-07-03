@@ -54,7 +54,8 @@ jobs:
         with:
           path: .genaiscript/cache/**
           key: genaiscript-${{ github.run_id }}
-          restore-keys: genaiscript-
+          restore-keys: |
+            genaiscript-
       - uses: microsoft/genaiscript@v0 # update to the major version you want to use
         with:
 

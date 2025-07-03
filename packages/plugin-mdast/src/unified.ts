@@ -7,6 +7,17 @@ import { checkRuntime, filenameOrFileToContent, genaiscriptDebug } from "@genais
 import type { Processor } from "unified";
 const dbg = genaiscriptDebug("mdast");
 
+export interface MdAstOptions {
+  /**
+   * GitHub Flavored Markdown (GFM) support. Default is true.
+   */
+  gfm?: boolean;
+  /**
+   * MDX support. Default is false.
+   */
+  mdx?: boolean;
+}
+
 export async function mdast() {
   checkRuntime();
 
@@ -25,39 +36,37 @@ export async function mdast() {
   const { visitParents } = await import("unist-util-visit-parents");
   await import("mdast-util-mdxjs-esm");
 
-  function mdastParse(file: string | WorkspaceFile): Root {
+  function mdastParse(file: string | WorkspaceFile, options?: MdAstOptions): Root {
     const content = filenameOrFileToContent(file);
     if (!content) return { type: "root", children: [] };
 
     dbg(`parse`);
 
+    const mdx = typeof file === "object" && /\.mdx?$/i.test(file.filename);
     const processor = unified().use(parse);
-    usePlugins(processor);
+    usePlugins(processor, { mdx, ...(options || {}) });
     const ast = processor.parse(content);
     return ast;
   }
 
-  function mdastStringify(root: Root): string {
+  function mdastStringify(root: Root, options?: MdAstOptions): string {
     if (!root) return "";
 
     dbg(`stringify`);
     const processor = unified();
-    usePlugins(processor);
+    usePlugins(processor, options || {});
     const ast = processor.use(stringify).stringify(root);
     return ast;
   }
 
-  function usePlugins(processor: Processor<Root>) {
-    return processor
-      .use(frontmatter)
-      .use(gfm)
-      .use(github)
-      .use(directive)
-      .use(math)
-      .use(mdx)
-      .use(comments, {
-        emit: true, // Emit comments as HTML
-      });
+  function usePlugins(processor: Processor<Root>, options: MdAstOptions): Processor<Root> {
+    const p: Processor<Root> = processor.use(frontmatter);
+    if (options.gfm !== false) p.use(gfm).use(github).use(directive).use(math);
+    if (options.mdx) p.use(mdx);
+    p.use(comments, {
+      emit: true, // Emit comments as HTML
+    });
+    return p;
   }
 
   return Object.freeze({
