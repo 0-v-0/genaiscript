@@ -259,10 +259,11 @@ export async function runScriptInternal(
           ignoreInner: true,
         });
   if (outTrace && !/^false$/i.test(outTrace)) await setupTraceWriting(trace, " trace", outTrace);
-  if (outOutput && !/^false$/i.test(outOutput))
+  if (outOutput && !/^false$/i.test(outOutput)) {
     await setupTraceWriting(runOutputTrace, " output", outOutput, {
       ignoreInner: true,
     });
+  }
 
   const toolFiles: string[] = [];
   const resourceScript = await tryResolveScript(scriptId, {
@@ -278,12 +279,13 @@ export async function runScriptInternal(
   const prj = await buildProject({
     toolFiles,
   });
-  if (jsSource)
+  if (jsSource) {
     prj.scripts.push({
       id: scriptId,
       ...parsePromptScriptMeta(jsSource),
       jsSource,
     });
+  }
   const script = prj.scripts.find(
     (t) =>
       t.id === scriptId ||
@@ -540,7 +542,7 @@ export async function runScriptInternal(
 
   if (outAnnotations && result.annotations?.length) {
     if (isJSONLFilename(outAnnotations)) await appendJSONL(outAnnotations, result.annotations);
-    else
+    else {
       await writeText(
         outAnnotations,
         CSV_REGEX.test(outAnnotations)
@@ -551,12 +553,15 @@ export async function runScriptInternal(
               ? await convertDiagnosticsToSARIF(script, result.annotations)
               : JSON.stringify(result.annotations, null, 2),
       );
+    }
   }
-  if (outChangelogs && result.changelogs?.length)
+  if (outChangelogs && result.changelogs?.length) {
     await writeText(outChangelogs, result.changelogs.join("\n"));
-  if (outData && result.frames?.length)
+  }
+  if (outData && result.frames?.length) {
     if (isJSONLFilename(outData)) await appendJSONL(outData, result.frames);
     else await writeText(outData, JSON.stringify(result.frames, null, 2));
+  }
 
   await writeFileEdits(result.fileEdits, { applyEdits, trace });
 
@@ -606,26 +611,29 @@ export async function runScriptInternal(
     );
   }
   if (sariff) await writeText(sariff, await convertDiagnosticsToSARIF(script, result.annotations));
-  if (changelogf && result.changelogs?.length)
+  if (changelogf && result.changelogs?.length) {
     await writeText(changelogf, result.changelogs.join("\n"));
+  }
   for (const [filename, edits] of Object.entries(result.fileEdits || {})) {
     const rel = relative(process.cwd(), filename);
     const isAbsolutePath = resolve(rel) === rel;
     if (!isAbsolutePath) await writeText(join(runDir, CLI_RUN_FILES_FOLDER, rel), edits.after);
   }
 
-  if (options.json && result !== undefined)
+  if (options.json && result !== undefined) {
     // needs to go to process.stdout
     stdout.write(JSON.stringify(result, null, 2));
+  }
 
   let _ghInfo: GithubConnectionInfo = undefined;
   const resolveGitHubInfo = async () => {
-    if (!_ghInfo)
+    if (!_ghInfo) {
       _ghInfo = await githubParseEnv(process.env, {
         resolveToken: true,
         resolveIssue: true,
         resolveCommit: true,
       });
+    }
     return _ghInfo;
   };
   let adoInfo: AzureDevOpsEnv = undefined;
@@ -726,10 +734,11 @@ export async function runScriptInternal(
     const ghInfo = await resolveGitHubInfo();
     if (ghInfo.repository && ghInfo.issue) {
       if (!ghInfo.commitSha) dbg(`no commit sha found, skipping pull request reviews`);
-      else
+      else {
         await githubCreatePullRequestReviews(script, ghInfo, result.annotations, {
           cancellationToken,
         });
+      }
     }
   }
 
@@ -745,8 +754,9 @@ export async function runScriptInternal(
     return fail(msg, RUNTIME_ERROR_CODE);
   }
 
-  if (failOnErrors && result.annotations?.some((a) => a.severity === "error"))
+  if (failOnErrors && result.annotations?.some((a) => a.severity === "error")) {
     return fail("error annotations found", ANNOTATION_ERROR_CODE);
+  }
 
   return { exitCode: 0, result };
 }
@@ -759,7 +769,7 @@ async function aggregateResults(
 ) {
   const statsDir = await createStatsDir();
   const statsFile = host.path.join(statsDir, "runs.csv");
-  if (!(await tryStat(statsFile)))
+  if (!(await tryStat(statsFile))) {
     await writeFile(
       statsFile,
       [
@@ -774,6 +784,7 @@ async function aggregateResults(
       ].join(",") + "\n",
       { encoding: "utf-8" },
     );
+  }
   const acc = stats.accumulatedUsage();
   await appendFile(
     statsFile,

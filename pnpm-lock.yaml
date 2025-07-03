@@ -138,6 +138,9 @@ importers:
         specifier: 'catalog:'
         version: 8.6.1
     devDependencies:
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../tools/eslint-plugin-genaiscript
       prettier:
         specifier: 'catalog:'
         version: 3.6.2
@@ -160,9 +163,9 @@ importers:
         specifier: 'catalog:'
         version: 2.8.1
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -184,9 +187,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
@@ -260,9 +260,9 @@ importers:
         specifier: ^8.18.3
         version: 8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -293,9 +293,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.0.1
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
@@ -528,9 +525,9 @@ importers:
         specifier: ^3.24.6
         version: 3.24.6(zod@3.25.71)
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -594,9 +591,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
@@ -616,12 +610,6 @@ importers:
       xlsx:
         specifier: https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz
         version: https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz
-
-  packages/modulesample:
-    dependencies:
-      ini:
-        specifier: ^5.0.0
-        version: 5.0.0
 
   packages/plugin-ast-grep:
     dependencies:
@@ -647,9 +635,9 @@ importers:
         specifier: 'catalog:'
         version: 1.39.6
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -674,9 +662,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
@@ -741,9 +726,9 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -793,9 +778,9 @@ importers:
         specifier: ^11.7.0
         version: 11.7.0
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -823,9 +808,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
@@ -842,9 +824,9 @@ importers:
         specifier: ^4.15.2
         version: 4.15.2
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -869,9 +851,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
@@ -912,9 +891,9 @@ importers:
         specifier: 'catalog:'
         version: 3.25.71
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/debug':
         specifier: 'catalog:'
         version: 4.1.12
@@ -945,128 +924,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
-
-  packages/runtime-sample:
-    dependencies:
-      '@genaiscript/plugin-mdast':
-        specifier: workspace:*
-        version: link:../plugin-mdast
-      '@genaiscript/runtime':
-        specifier: workspace:*
-        version: link:../runtime
-    devDependencies:
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.15.28
-      p-all:
-        specifier: ^5.0.0
-        version: 5.0.0
-      vitest:
-        specifier: 'catalog:'
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.71
-      zod-to-json-schema:
-        specifier: ^3.24.6
-        version: 3.24.6(zod@3.25.71)
-      zx:
-        specifier: 'catalog:'
-        version: 8.6.1
-
-  packages/sample:
-    dependencies:
-      '@genaiscript/plugin-ast-grep':
-        specifier: workspace:*
-        version: link:../plugin-ast-grep
-      '@genaiscript/plugin-mdast':
-        specifier: workspace:*
-        version: link:../plugin-mdast
-      '@genaiscript/plugin-mermaid':
-        specifier: workspace:*
-        version: link:../plugin-mermaid
-      '@genaiscript/plugin-z3':
-        specifier: workspace:*
-        version: link:../plugin-z3
-      '@genaiscript/runtime':
-        specifier: workspace:*
-        version: link:../runtime
-      ini:
-        specifier: ^5.0.0
-        version: 5.0.0
-      uuid:
-        specifier: ^11.1.0
-        version: 11.1.0
-    devDependencies:
-      '@ast-grep/lang-c':
-        specifier: ^0.0.2
-        version: 0.0.2
-      '@ast-grep/lang-cpp':
-        specifier: ^0.0.2
-        version: 0.0.2
-      '@ast-grep/lang-csharp':
-        specifier: ^0.0.2
-        version: 0.0.2
-      '@ast-grep/lang-python':
-        specifier: ^0.0.2
-        version: 0.0.2
-      '@azure/identity':
-        specifier: ^4.10.2
-        version: 4.10.2
-      '@azure/storage-blob':
-        specifier: ^12.27.0
-        version: 12.27.0
-      '@genaiscript/api':
-        specifier: workspace:*
-        version: link:../api
-      '@langchain/core':
-        specifier: ^0.3.61
-        version: 0.3.61(openai@5.8.2(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.71))
-      '@langchain/langgraph':
-        specifier: ^0.2.74
-        version: 0.2.74(@langchain/core@0.3.61(openai@5.8.2(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.71)))(react@19.1.0)(zod-to-json-schema@3.24.6(zod@3.25.71))
-      '@modelcontextprotocol/sdk':
-        specifier: ^1.13.3
-        version: 1.13.3
-      '@tidyjs/tidy':
-        specifier: ^2.5.2
-        version: 2.5.2
-      '@types/mdast':
-        specifier: 'catalog:'
-        version: 4.0.4
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.15.28
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.39.6
-      mdast-util-mdx-jsx:
-        specifier: ^3.2.0
-        version: 3.2.0
-      mdast-util-mdxjs-esm:
-        specifier: ^2.0.1
-        version: 2.0.1
-      p-all:
-        specifier: ^5.0.0
-        version: 5.0.0
-      vitest:
-        specifier: 'catalog:'
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.71
-      zod-to-json-schema:
-        specifier: ^3.24.6
-        version: 3.24.6(zod@3.25.71)
-      zx:
-        specifier: 'catalog:'
-        version: 8.6.1
 
   packages/vscode:
     dependencies:
@@ -1086,9 +946,9 @@ importers:
         specifier: 0.0.3
         version: 0.0.3
     devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/markdown-it':
         specifier: ^14.1.2
         version: 14.1.2
@@ -1125,9 +985,9 @@ importers:
       '@daiji256/rehype-mathml':
         specifier: ^1.2.1
         version: 1.2.1
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.30.1
+      '@genaiscript/eslint-plugin-genaiscript':
+        specifier: workspace:*
+        version: link:../../tools/eslint-plugin-genaiscript
       '@types/marked':
         specifier: ^6.0.0
         version: 6.0.0
@@ -1173,6 +1033,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^5.2.0
         version: 5.2.0(eslint@9.30.1)
+      globals:
+        specifier: ^16.3.0
+        version: 16.3.0
       html-escaper:
         specifier: 3.0.3
         version: 3.0.3
@@ -1230,9 +1093,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
       victory:
         specifier: ^37.3.6
         version: 37.3.6(react@19.1.0)
@@ -1242,6 +1102,192 @@ importers:
       yaml:
         specifier: ^2.8.0
         version: 2.8.0
+
+  samples/modulesample:
+    dependencies:
+      ini:
+        specifier: ^5.0.0
+        version: 5.0.0
+
+  samples/runtime-sample:
+    dependencies:
+      '@genaiscript/plugin-mdast':
+        specifier: workspace:*
+        version: link:../../packages/plugin-mdast
+      '@genaiscript/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.15.28
+      p-all:
+        specifier: ^5.0.0
+        version: 5.0.0
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.71
+      zod-to-json-schema:
+        specifier: ^3.24.6
+        version: 3.24.6(zod@3.25.71)
+      zx:
+        specifier: 'catalog:'
+        version: 8.6.1
+
+  samples/sample:
+    dependencies:
+      '@genaiscript/plugin-ast-grep':
+        specifier: workspace:*
+        version: link:../../packages/plugin-ast-grep
+      '@genaiscript/plugin-mdast':
+        specifier: workspace:*
+        version: link:../../packages/plugin-mdast
+      '@genaiscript/plugin-mermaid':
+        specifier: workspace:*
+        version: link:../../packages/plugin-mermaid
+      '@genaiscript/plugin-z3':
+        specifier: workspace:*
+        version: link:../../packages/plugin-z3
+      '@genaiscript/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      ini:
+        specifier: ^5.0.0
+        version: 5.0.0
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
+    devDependencies:
+      '@ast-grep/lang-c':
+        specifier: ^0.0.2
+        version: 0.0.2
+      '@ast-grep/lang-cpp':
+        specifier: ^0.0.2
+        version: 0.0.2
+      '@ast-grep/lang-csharp':
+        specifier: ^0.0.2
+        version: 0.0.2
+      '@ast-grep/lang-python':
+        specifier: ^0.0.2
+        version: 0.0.2
+      '@azure/identity':
+        specifier: ^4.10.2
+        version: 4.10.2
+      '@azure/storage-blob':
+        specifier: ^12.27.0
+        version: 12.27.0
+      '@genaiscript/api':
+        specifier: workspace:*
+        version: link:../../packages/api
+      '@langchain/core':
+        specifier: ^0.3.61
+        version: 0.3.61(openai@5.8.2(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.71))
+      '@langchain/langgraph':
+        specifier: ^0.2.74
+        version: 0.2.74(@langchain/core@0.3.61(openai@5.8.2(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.71)))(react@19.1.0)(zod-to-json-schema@3.24.6(zod@3.25.71))
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.13.3
+        version: 1.13.3
+      '@tidyjs/tidy':
+        specifier: ^2.5.2
+        version: 2.5.2
+      '@types/mdast':
+        specifier: 'catalog:'
+        version: 4.0.4
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.15.28
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.39.6
+      mdast-util-mdx-jsx:
+        specifier: ^3.2.0
+        version: 3.2.0
+      mdast-util-mdxjs-esm:
+        specifier: ^2.0.1
+        version: 2.0.1
+      p-all:
+        specifier: ^5.0.0
+        version: 5.0.0
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.71
+      zod-to-json-schema:
+        specifier: ^3.24.6
+        version: 3.24.6(zod@3.25.71)
+      zx:
+        specifier: 'catalog:'
+        version: 8.6.1
+
+  tools/eslint-plugin-genaiscript:
+    dependencies:
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.30.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.35.1
+        version: 8.35.1(@typescript-eslint/parser@8.35.1(eslint@9.30.1)(typescript@5.8.3))(eslint@9.30.1)(typescript@5.8.3)
+      '@typescript-eslint/parser':
+        specifier: ^8.35.1
+        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+      eslint:
+        specifier: 'catalog:'
+        version: 9.30.1
+      eslint-config-prettier:
+        specifier: ^10.1.5
+        version: 10.1.5(eslint@9.30.1)
+      eslint-plugin-n:
+        specifier: ^17.20.0
+        version: 17.20.0(eslint@9.30.1)(typescript@5.8.3)
+      eslint-plugin-promise:
+        specifier: ^7.2.1
+        version: 7.2.1(eslint@9.30.1)
+      tslib:
+        specifier: 'catalog:'
+        version: 2.8.1
+      typescript:
+        specifier: 'catalog:'
+        version: 5.8.3
+      typescript-eslint:
+        specifier: 'catalog:'
+        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+    devDependencies:
+      '@types/eslint':
+        specifier: ^9.6.0
+        version: 9.6.1
+      '@types/eslint-config-prettier':
+        specifier: ^6.11.3
+        version: 6.11.3
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.15.28
+      '@typescript-eslint/rule-tester':
+        specifier: ^8.35.1
+        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+      '@typescript-eslint/utils':
+        specifier: ^8.35.1
+        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+      '@vitest/coverage-istanbul':
+        specifier: 'catalog:'
+        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0))
+      prettier:
+        specifier: 'catalog:'
+        version: 3.6.2
+      rimraf:
+        specifier: 'catalog:'
+        version: 6.0.1
+      tshy:
+        specifier: 'catalog:'
+        version: 3.0.2
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.28)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(tsx@4.20.3)(yaml@2.8.0)
 
 packages:
 
@@ -3510,6 +3556,12 @@ packages:
   '@types/dockerode@3.3.42':
     resolution: {integrity: sha512-U1jqHMShibMEWHdxYhj3rCMNCiLx5f35i4e3CEUuW+JSSszc/tVqc6WCAPdhwBymG5R/vgbcceagK0St7Cq6Eg==}
 
+  '@types/eslint-config-prettier@6.11.3':
+    resolution: {integrity: sha512-3wXCiM8croUnhg9LdtZUJQwNcQYGWxxdOWDjPe1ykCqJFPVpzAKfs/2dgSoCtAvdPeaponcWPI7mPcGGp9dkKQ==}
+
+  '@types/eslint@9.6.1':
+    resolution: {integrity: sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==}
+
   '@types/estree-jsx@1.0.5':
     resolution: {integrity: sha512-52CcUVNFyfb1A2ALocQw/Dd1BQFNmSdkuC3BkZ6iqhdMfQz7JWOFRuJFloOzjk+6WijU56m9oKXFAXc7o3Towg==}
 
@@ -3703,6 +3755,12 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       typescript: '>=4.8.4 <5.9.0'
+
+  '@typescript-eslint/rule-tester@8.35.1':
+    resolution: {integrity: sha512-r1tvINTfn4zmSg3cD9VVKB5dbQv6bVATlZNXsqv152pe9MIJsOQ82XBvfHh/khxC7wCasKcwjUkFfHYUqYvCsg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
 
   '@typescript-eslint/scope-manager@8.35.1':
     resolution: {integrity: sha512-s/Bpd4i7ht2934nG+UoSPlYXd08KYz3bmjLEb7Ye1UVob0d1ENiT3lY8bsCmik4RqfSbPw9xJJHbugpPpP5JUg==}
@@ -4918,6 +4976,10 @@ packages:
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
 
+  enhanced-resolve@5.18.2:
+    resolution: {integrity: sha512-6Jw4sE1maoRJo3q8MsSIn2onJFbLTOjY9hlx4DZXmOKvLRd1Ok2kXmAGXaafL2+ijsJZ1ClYbl/pmqr9+k4iUQ==}
+    engines: {node: '>=10.13.0'}
+
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
@@ -5016,11 +5078,41 @@ packages:
     engines: {node: '>=6.0'}
     hasBin: true
 
+  eslint-compat-utils@0.5.1:
+    resolution: {integrity: sha512-3z3vFexKIEnjHE3zCMRo6fn/e44U7T1khUjg+Hp0ZQMCigh28rALD0nPFBcGZuiLC5rLZa2ubQHDRln09JfU2Q==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      eslint: '>=6.0.0'
+
+  eslint-config-prettier@10.1.5:
+    resolution: {integrity: sha512-zc1UmCpNltmVY34vuLRV61r1K27sWuX39E+uyUnY8xS2Bex88VV9cugG+UZbRSRGtGyFboj+D8JODyme1plMpw==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
+
+  eslint-plugin-es-x@7.8.0:
+    resolution: {integrity: sha512-7Ds8+wAAoV3T+LAKeu39Y5BzXCrGKrcISfgKEqTS4BDN8SFEDQd0S43jiQ8vIa3wUKD07qitZdfzlenSi8/0qQ==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      eslint: '>=8'
+
   eslint-plugin-jsx-a11y@6.10.2:
     resolution: {integrity: sha512-scB3nz4WmG75pV8+3eRUQOHZlNSUhFNq37xnpgRkCCELU3XMvXAxLk1eqWWyE22Ki4Q01Fnsw9BA3cJHDPgn2Q==}
     engines: {node: '>=4.0'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
+
+  eslint-plugin-n@17.20.0:
+    resolution: {integrity: sha512-IRSoatgB/NQJZG5EeTbv/iAx1byOGdbbyhQrNvWdCfTnmPxUT0ao9/eGOeG7ljD8wJBsxwE8f6tES5Db0FRKEw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: '>=8.23.0'
+
+  eslint-plugin-promise@7.2.1:
+    resolution: {integrity: sha512-SWKjd+EuvWkYaS+uN2csvj0KoP43YTu7+phKQ5v+xw6+A0gutVX2yqCeCkC3uLCJFiPfR2dD8Es5L7yUsmvEaA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
 
   eslint-plugin-react-hooks@5.2.0:
     resolution: {integrity: sha512-+f15FfK64YQwZdJNELETdn5ibXEUQmW1DZL6KXhNnc2heoy/sg9VJJeT7n8TlMWouzWqSWavFkIhHyIbIAEapg==}
@@ -5449,6 +5541,10 @@ packages:
 
   globals@15.15.0:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
+    engines: {node: '>=18'}
+
+  globals@16.3.0:
+    resolution: {integrity: sha512-bqWEnJ1Nt3neqx2q5SFfGS8r/ahumIakg3HcwtNlrVlwXIeNumWn/c7Pn/wKzGhf6SaW6H6uWXLqC30STCMchQ==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -8001,6 +8097,10 @@ packages:
     resolution: {integrity: sha512-5wMfcIJ9N45EO4HwgpYpsJGXVCtMiEYastQkmyc3D2Jz4w+CJ9Up8WmoOGreguFInxhcchB1atIll20ZCbOf+w==}
     engines: {node: '>= 18.0.0'}
 
+  tapable@2.2.2:
+    resolution: {integrity: sha512-Re10+NauLTMCudc7T5WLFLAwDhQ0JWdrMK+9B2M8zR5hRExKmsRDCBA7/aV/pNJFltmBFO5BAMlQFi/vq3nKOg==}
+    engines: {node: '>=6'}
+
   tar-fs@2.1.3:
     resolution: {integrity: sha512-090nwYJDmlhwFwEW3QQl+vaNnxsO2yVsd45eTKRBzSzu+hlb1w2K9inVq5b0ngXuLVqQ4ApvsUHHnu/zQNkWAg==}
 
@@ -8149,6 +8249,11 @@ packages:
     engines: {node: '>=18.12'}
     peerDependencies:
       typescript: '>=4.8.4'
+
+  ts-declaration-location@1.0.7:
+    resolution: {integrity: sha512-EDyGAwH1gO0Ausm9gV6T2nUvBgXT5kGoCMJPllOaooZ+4VvJiKBdZE7wK18N1deEowhcUptS+5GXZK8U/fvpwA==}
+    peerDependencies:
+      typescript: '>=4.0.0'
 
   ts-dedent@2.2.0:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
@@ -12434,6 +12539,13 @@ snapshots:
       '@types/node': 22.15.28
       '@types/ssh2': 1.15.5
 
+  '@types/eslint-config-prettier@6.11.3': {}
+
+  '@types/eslint@9.6.1':
+    dependencies:
+      '@types/estree': 1.0.8
+      '@types/json-schema': 7.0.15
+
   '@types/estree-jsx@1.0.5':
     dependencies:
       '@types/estree': 1.0.8
@@ -12452,7 +12564,7 @@ snapshots:
 
   '@types/fontkit@2.0.8':
     dependencies:
-      '@types/node': 24.0.10
+      '@types/node': 22.15.28
 
   '@types/geojson@7946.0.16': {}
 
@@ -12535,6 +12647,7 @@ snapshots:
   '@types/node@24.0.10':
     dependencies:
       undici-types: 7.8.0
+    optional: true
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -12567,7 +12680,7 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 22.15.28
 
   '@types/semver@7.7.0': {}
 
@@ -12639,6 +12752,20 @@ snapshots:
       typescript: 5.8.3
     transitivePeerDependencies:
       - supports-color
+
+  '@typescript-eslint/rule-tester@8.35.1(eslint@9.30.1)(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/parser': 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+      '@typescript-eslint/typescript-estree': 8.35.1(typescript@5.8.3)
+      '@typescript-eslint/utils': 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+      ajv: 6.12.6
+      eslint: 9.30.1
+      json-stable-stringify-without-jsonify: 1.0.1
+      lodash.merge: 4.6.2
+      semver: 7.7.2
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   '@typescript-eslint/scope-manager@8.35.1':
     dependencies:
@@ -14103,6 +14230,11 @@ snapshots:
     dependencies:
       once: 1.4.0
 
+  enhanced-resolve@5.18.2:
+    dependencies:
+      graceful-fs: 4.2.11
+      tapable: 2.2.2
+
   entities@4.5.0: {}
 
   entities@6.0.1: {}
@@ -14296,6 +14428,22 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
+  eslint-compat-utils@0.5.1(eslint@9.30.1):
+    dependencies:
+      eslint: 9.30.1
+      semver: 7.7.2
+
+  eslint-config-prettier@10.1.5(eslint@9.30.1):
+    dependencies:
+      eslint: 9.30.1
+
+  eslint-plugin-es-x@7.8.0(eslint@9.30.1):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.30.1)
+      '@eslint-community/regexpp': 4.12.1
+      eslint: 9.30.1
+      eslint-compat-utils: 0.5.1(eslint@9.30.1)
+
   eslint-plugin-jsx-a11y@6.10.2(eslint@9.30.1):
     dependencies:
       aria-query: 5.3.2
@@ -14314,6 +14462,28 @@ snapshots:
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
+
+  eslint-plugin-n@17.20.0(eslint@9.30.1)(typescript@5.8.3):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.30.1)
+      '@typescript-eslint/utils': 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+      enhanced-resolve: 5.18.2
+      eslint: 9.30.1
+      eslint-plugin-es-x: 7.8.0(eslint@9.30.1)
+      get-tsconfig: 4.10.1
+      globals: 15.15.0
+      ignore: 5.3.2
+      minimatch: 9.0.5
+      semver: 7.7.2
+      ts-declaration-location: 1.0.7(typescript@5.8.3)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  eslint-plugin-promise@7.2.1(eslint@9.30.1):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.30.1)
+      eslint: 9.30.1
 
   eslint-plugin-react-hooks@5.2.0(eslint@9.30.1):
     dependencies:
@@ -14884,6 +15054,8 @@ snapshots:
   globals@14.0.0: {}
 
   globals@15.15.0: {}
+
+  globals@16.3.0: {}
 
   globalthis@1.0.4:
     dependencies:
@@ -18314,6 +18486,8 @@ snapshots:
     dependencies:
       cheerio: 1.1.0
 
+  tapable@2.2.2: {}
+
   tar-fs@2.1.3:
     dependencies:
       chownr: 1.1.4
@@ -18448,6 +18622,11 @@ snapshots:
 
   ts-api-utils@2.1.0(typescript@5.8.3):
     dependencies:
+      typescript: 5.8.3
+
+  ts-declaration-location@1.0.7(typescript@5.8.3):
+    dependencies:
+      picomatch: 4.0.2
       typescript: 5.8.3
 
   ts-dedent@2.2.0: {}
@@ -18645,7 +18824,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.8.0: {}
+  undici-types@7.8.0:
+    optional: true
 
   undici@5.29.0:
     dependencies:

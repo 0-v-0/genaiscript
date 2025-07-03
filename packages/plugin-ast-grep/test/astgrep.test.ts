@@ -5,7 +5,7 @@ import { describe, test, assert, beforeEach } from "vitest";
 import { astGrep } from "../src/astgrep.js";
 import { WorkspaceFile } from "@genaiscript/core";
 import { dedent } from "@genaiscript/core";
-import { Sg } from "../src/types.js";
+import type { Sg } from "../src/types.js";
 import { initialize } from "@genaiscript/runtime";
 
 describe("astgrep", () => {

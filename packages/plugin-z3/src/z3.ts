@@ -1,13 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  CancellationOptions,
-  checkCancelled,
-  checkRuntime,
-  genaiscriptDebug,
-  logWarn,
-} from "@genaiscript/core";
+import type { CancellationOptions } from "@genaiscript/core";
+import { checkCancelled, checkRuntime, genaiscriptDebug, logWarn } from "@genaiscript/core";
 
 const dbg = genaiscriptDebug("z3");
 
