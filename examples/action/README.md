@@ -6,14 +6,14 @@
 
 - `files`: Files to process, separated by semi columns (;). 
 - `debug`: Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).
-- `openai_api_key`: OpenAI API key, ${{ secrets.OPENAI_API_KEY }}
-- `openai_api_base`: OpenAI API base URL, ${{ env.OPENAI_API_BASE }}
-- `azure_openai_api_endpoint`: Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint., ${{ env.AZURE_OPENAI_API_ENDPOINT }}
-- `azure_openai_api_key`: Azure OpenAI API key. **You do NOT need this if you are using Microsoft Entra ID., ${{ secrets.AZURE_OPENAI_API_KEY }}
-- `azure_openai_subscription_id`: Azure OpenAI subscription ID to list available deployments (Microsoft Entra only)., ${{ env.AZURE_OPENAI_SUBSCRIPTION_ID }}
-- `azure_openai_api_version`: Azure OpenAI API version., ${{ env.AZURE_OPENAI_API_VERSION }}
-- `azure_openai_api_credentials`: Azure OpenAI API credentials type. Leave as 'default' unless you have a special Azure setup., ${{ env.AZURE_OPENAI_API_CREDENTIALS }}
-- `github_token`: GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions)., ${{ secrets.GITHUB_TOKEN }}
+- `openai_api_key`: OpenAI API key, `${{ secrets.OPENAI_API_KEY }}`
+- `openai_api_base`: OpenAI API base URL, `${{ env.OPENAI_API_BASE }}`
+- `azure_openai_api_endpoint`: Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint., `${{ env.AZURE_OPENAI_API_ENDPOINT }}`
+- `azure_openai_api_key`: Azure OpenAI API key. **You do NOT need this if you are using Microsoft Entra ID., `${{ secrets.AZURE_OPENAI_API_KEY }}`
+- `azure_openai_subscription_id`: Azure OpenAI subscription ID to list available deployments (Microsoft Entra only)., `${{ env.AZURE_OPENAI_SUBSCRIPTION_ID }}`
+- `azure_openai_api_version`: Azure OpenAI API version., `${{ env.AZURE_OPENAI_API_VERSION }}`
+- `azure_openai_api_credentials`: Azure OpenAI API credentials type. Leave as 'default' unless you have a special Azure setup., `${{ env.AZURE_OPENAI_API_CREDENTIALS }}`
+- `github_token`: GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions)., `${{ secrets.GITHUB_TOKEN }}`
 
 ## Outputs
 

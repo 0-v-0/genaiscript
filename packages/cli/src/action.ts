@@ -249,7 +249,7 @@ export async function actionConfigure(
       inputs[key.toLowerCase()] = deleteUndefinedValues({
         description: toStringList(
           value.description || provider.url || `Configuration for ${provider.id} provider`,
-          `${value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`}`,
+          `\`${value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`}\``,
         ),
         required: false,
       }) satisfies GitHubActionFieldType;
