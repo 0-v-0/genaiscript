@@ -1,5 +1,5 @@
 ---
-applyTo: '**/*.genai.js,**/*.genai.ts,**/*.genai.mjs,**/*.genai.mts'
+applyTo: '**/*.genai.*'
 ---
 ## GenAIScript Code Generation Instructions
 
