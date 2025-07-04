@@ -291,12 +291,18 @@ export async function githubUpdatePullRequestDescription(
       "X-GitHub-Api-Version": GITHUB_API_VERSION,
     },
   });
+  dbg(`pr get: %d, %s`, resGet.status, resGet.statusText);
+  if (!resGet.ok) {
+    logError(`pull request fetch failed, ${resGet.statusText}`);
+    return { updated: false, statusText: resGet.statusText };
+  }
   const resGetJson = (await resGet.json()) as {
     body: string;
     html_url: string;
   };
+  dbg(`pr html url: %s`, resGetJson.html_url);
   const body = mergeDescription(commentTag, resGetJson.body, text);
-  dbg(`merging pull request description`);
+  dbg(`merging pull request description: %s`, body);
   const res = await fetch(url, {
     method: "PATCH",
     headers: {
