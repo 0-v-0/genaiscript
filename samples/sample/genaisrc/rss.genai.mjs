@@ -4,7 +4,7 @@ script({
 });
 
 // channel / item[] / title, description
-const { rss } = XML.parse(await (await fetch("https://dev.to/feed")).text());
+const { rss } = await XML.parse(await (await fetch("https://dev.to/feed")).text());
 
 defData(
   "ARTICLES",

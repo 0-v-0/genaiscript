@@ -1,4 +1,4 @@
-import { astGrep} from "@genaiscript/plugin-ast-grep";
+import { astGrep, type SgNode } from "@genaiscript/plugin-ast-grep";
 
 script({ model: "none" });
 const dbg = host.logger("stackgraph");

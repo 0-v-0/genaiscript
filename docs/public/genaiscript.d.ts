@@ -47,7 +47,7 @@
 
 /**
  * A color and icon to associate with the script.
- * @see https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#branding
+ * @see https://actions-cool.github.io/github-action-branding/
  */
  interface PromptBranding {
   /**
@@ -69,7 +69,7 @@
       | "gray-dark";
     /**
      * Name of the Feather icon to use.
-     * @see https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#brandingicon
+     * @see https://actions-cool.github.io/github-action-branding/
      */
     icon?: string;
   };

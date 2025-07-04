@@ -1,11 +1,12 @@
 import { RootSchema } from "@modelcontextprotocol/sdk/types.js";
+import { astGrep } from "@genaiscript/plugin-ast-grep";
 
 script({
   model: "echo",
   tests: {},
   group: "commit",
 });
-const sg = await host.astGrep();
+const sg = await astGrep();
 const { matches } = await sg.search("ts", "src/*.ts", "console.log($META)");
 if (matches.length < 2) throw new Error("No matches src/*.ts found");
 for (const match of matches) {

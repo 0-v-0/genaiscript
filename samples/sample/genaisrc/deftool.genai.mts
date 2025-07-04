@@ -1,5 +1,3 @@
-import { calculator } from "@agentic/calculator";
-
 // usual
 defTool("foo", "bar", {}, () => "");
 // Tool callback
@@ -16,5 +14,3 @@ defTool({
     args: ["-y", "@modelcontextprotocol/server-memory"],
   },
 });
-// agentic
-defTool(calculator as any);

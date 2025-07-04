@@ -7,7 +7,7 @@
     "test": "node ../../packages/cli/dist/src/index.js run poem-js-module"
   },
   "version": "2.2.5",
-  "dependencies": {
+  "devDependencies": {
     "ini": "^5.0.0"
   }
 }
