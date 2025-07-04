@@ -6,7 +6,7 @@
  * This module provides core functionality for text classification, data transformation,
  * PDF processing, and file system operations in the GenAIScript environment.
  */
-import {
+import type {
   Ffmpeg,
   Git,
   GitHub,
@@ -23,9 +23,8 @@ import {
   XMLObject,
   MDObject,
   ModelConnectionOptions,
-  runtimeHost,
-  TestHost,
 } from "@genaiscript/core";
+import { runtimeHost, TestHost } from "@genaiscript/core";
 import type {
   ElementOrArray,
   ExpansionVariables,

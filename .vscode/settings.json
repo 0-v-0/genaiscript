@@ -171,6 +171,7 @@
         "localai",
         "logissue",
         "logit",
+        "logprob",
         "Logprob",
         "logprobs",
         "loremipsum",

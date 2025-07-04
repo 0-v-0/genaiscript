@@ -18,7 +18,7 @@ export function makeItBetter(
     repeat?: number;
     instructions?: string;
   },
-) {
+): void {
   const ctx = resolveChatGenerationContext(options);
   const { repeat = 1, instructions = "Make it better!" } = options || {};
 
