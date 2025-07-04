@@ -12,6 +12,7 @@ import {
   MODEL_PROVIDER_AZURE_OPENAI,
   MODEL_PROVIDER_GITHUB,
   MODEL_PROVIDER_OPENAI,
+  MODEL_PROVIDER_AZURE_AI_INFERENCE,
   YAMLStringify,
   YAMLTryParse,
   createScript as coreCreateScript,
@@ -206,7 +207,12 @@ export async function actionConfigure(
     required: [],
   };
   const providers = MODEL_PROVIDERS.filter(({ id }) =>
-    [MODEL_PROVIDER_GITHUB, MODEL_PROVIDER_OPENAI, MODEL_PROVIDER_AZURE_OPENAI].includes(id),
+    [
+      MODEL_PROVIDER_GITHUB,
+      MODEL_PROVIDER_OPENAI,
+      MODEL_PROVIDER_AZURE_OPENAI,
+      MODEL_PROVIDER_AZURE_AI_INFERENCE,
+    ].includes(id),
   ).filter(({ env }) => env);
   const inputs: Record<string, GitHubActionFieldType> = deleteUndefinedValues({
     ...Object.fromEntries(
@@ -236,20 +242,15 @@ export async function actionConfigure(
     github_issue:
       issue || pullRequest
         ? {
-            description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments (https://microsoft.github.io/genaiscript/reference/scripts/github/) (\`${
-              issue ? "${{ github.event.issue.number }}" : "${{ github.event.pull_request.number }}"
-            }\`)`,
+            description: `GitHub ${issue ? "issue" : "pull request"} number to use when generating comments (https://microsoft.github.io/genaiscript/reference/scripts/github/)`,
             required: false,
           }
         : undefined,
   });
-  for (const provider of providers) {
-    for (const [key, value] of Object.entries(provider.env)) {
+  for (const pro of providers) {
+    for (const [key, value] of Object.entries(pro.env)) {
       inputs[key.toLowerCase()] = deleteUndefinedValues({
-        description: toStringList(
-          value.description || provider.url || `Configuration for ${provider.id} provider`,
-          `\`${value.secret ? `\${{ secrets.${key} }}` : `\${{ env.${key} }}`}\``,
-        ),
+        description: value.description || pro.url || `Configuration for ${pro.id} provider`,
         required: false,
       }) satisfies GitHubActionFieldType;
     }
@@ -290,12 +291,12 @@ export async function actionConfigure(
     action.outputs = outputs;
     action.branding = branding;
     await writeText(actionYmlFilename, YAMLStringify(action));
-  } else
+  } else {
     await writeFile(
       "action.yml",
       YAMLStringify(
         deleteEmptyValues({
-          name: repo,
+          name: titleize(repo),
           author: pkg?.author,
           description: script.title || pkg?.description,
           inputs,
@@ -308,6 +309,7 @@ export async function actionConfigure(
         }),
       ),
     );
+  }
 
   await writeFile(
     "Dockerfile",
@@ -346,12 +348,12 @@ ${script.description || ""}
 
 ## Inputs
 
+|name|description|required|default|
+|----|-----------|--------|-------|
 ${Object.entries(inputs || {})
   .map(
     ([key, value]) =>
-      `- \`${key}\`: ${value.description}${
-        value.required ? " (required)" : ""
-      }${value.default ? ` (default: \`${value.default}\`)` : ""}`,
+      `| \`${key}\` | ${value.description || ""} | ${value.required ? "true" : "false"} | ${value.default || ""} |`,
   )
   .join("\n")}
 
@@ -359,8 +361,11 @@ ${
   outputs
     ? `## Outputs
 
+|name|description|
+|----|-----------|
+
 ${Object.entries(outputs)
-  .map(([key, value]) => `- \`${key}\`: ${value.description || ""}`)
+  .map(([key, value]) => `| \`${key}\` | ${value.description || ""} |`)
   .join("\n")}
 `
     : ""
@@ -373,7 +378,7 @@ Add the following to your step in your workflow file:
 uses: ${owner}/${repo}@main
 with:
 ${Object.entries(inputs || {})
-  .filter(([, value]) => value.required)
+  .filter(([key, value]) => value.required || key === "github_token")
   .map(([key]) => `  ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`)
   .join("\n")}
 \`\`\`
@@ -408,7 +413,7 @@ jobs:
       - uses: ${owner}/${repo}@v0 # update to the major version you want to use
         with:
 ${Object.entries(inputs || {})
-  .filter(([, value]) => value.required)
+  .filter(([key, value]) => value.required || key === "github_token")
   .map(
     ([key]) =>
       `          ${key}: \${{ ${key === "github_token" ? "secrets.GITHUB_TOKEN" : "..."} }}`,
@@ -524,11 +529,9 @@ set -e  # exit immediately if a command exits with a non-zero status
 # make sure there's no other changes
 git pull
 
-# re-generate action.yml
-npm run configure
+# genaiscript build
+npm run typecheck
 
-# Lint and build
-npm run lint
 # Step 0: ensure we're in sync
 if [ "$(git status --porcelain)" ]; then
   echo "❌ Pending changes detected. Commit or stash them first."
@@ -571,6 +574,9 @@ on:
 permissions:
   contents: read
   models: read
+concurrency:
+    group: \${{ github.workflow }}-\${{ github.ref }}
+    cancel-in-progress: true
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -628,7 +634,14 @@ jobs:
             configure: [`genaiscript configure action`, scriptId].filter(Boolean).join(" "),
             test: "echo 'No tests defined.'",
             dev: args.join(" "),
-            start: [...args, "--github-workspace", "--no-run-trace", "--no-output-trace", "--out-output", "$GITHUB_STEP_SUMMARY"].join(" "),
+            start: [
+              ...args,
+              "--github-workspace",
+              "--no-run-trace",
+              "--no-output-trace",
+              "--out-output",
+              "$GITHUB_STEP_SUMMARY",
+            ].join(" "),
             release: "sh release.sh",
           },
         }),

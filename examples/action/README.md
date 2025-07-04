@@ -4,20 +4,29 @@
 
 ## Inputs
 
-- `files`: Files to process, separated by semi columns (;). 
-- `debug`: Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).
-- `openai_api_key`: OpenAI API key, `${{ secrets.OPENAI_API_KEY }}`
-- `openai_api_base`: OpenAI API base URL, `${{ env.OPENAI_API_BASE }}`
-- `azure_openai_api_endpoint`: Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint., `${{ env.AZURE_OPENAI_API_ENDPOINT }}`
-- `azure_openai_api_key`: Azure OpenAI API key. **You do NOT need this if you are using Microsoft Entra ID., `${{ secrets.AZURE_OPENAI_API_KEY }}`
-- `azure_openai_subscription_id`: Azure OpenAI subscription ID to list available deployments (Microsoft Entra only)., `${{ env.AZURE_OPENAI_SUBSCRIPTION_ID }}`
-- `azure_openai_api_version`: Azure OpenAI API version., `${{ env.AZURE_OPENAI_API_VERSION }}`
-- `azure_openai_api_credentials`: Azure OpenAI API credentials type. Leave as 'default' unless you have a special Azure setup., `${{ env.AZURE_OPENAI_API_CREDENTIALS }}`
-- `github_token`: GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions)., `${{ secrets.GITHUB_TOKEN }}`
+|name|description|required|default|
+|----|-----------|--------|-------|
+| `files` | Files to process, separated by semi columns (;).  | false |  |
+| `debug` | Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/). | false |  |
+| `openai_api_key` | OpenAI API key | false |  |
+| `openai_api_base` | OpenAI API base URL | false |  |
+| `azure_openai_api_endpoint` | Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint. | false |  |
+| `azure_openai_api_key` | Azure OpenAI API key. **You do NOT need this if you are using Microsoft Entra ID. | false |  |
+| `azure_openai_subscription_id` | Azure OpenAI subscription ID to list available deployments (Microsoft Entra only). | false |  |
+| `azure_openai_api_version` | Azure OpenAI API version. | false |  |
+| `azure_openai_api_credentials` | Azure OpenAI API credentials type. Leave as 'default' unless you have a special Azure setup. | false |  |
+| `azure_ai_inference_api_key` | Azure AI Inference key | false |  |
+| `azure_ai_inference_api_endpoint` | Azure Serverless OpenAI endpoint | false |  |
+| `azure_ai_inference_api_version` | Azure Serverless OpenAI API version | false |  |
+| `azure_ai_inference_api_credentials` | Azure Serverless OpenAI API credentials type | false |  |
+| `github_token` | GitHub token with `models: read` permission at least (https://microsoft.github.io/genaiscript/reference/github-actions/#github-models-permissions). | false |  |
 
 ## Outputs
 
-- `text`: The generated text output.
+|name|description|
+|----|-----------|
+
+| `text` | The generated text output. |
 
 ## Usage
 
@@ -26,7 +35,7 @@ Add the following to your step in your workflow file:
 ```yaml
 uses: microsoft/genaiscript@main
 with:
-
+  github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Example
@@ -58,7 +67,7 @@ jobs:
             genaiscript-
       - uses: microsoft/genaiscript@v0 # update to the major version you want to use
         with:
-
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Development
