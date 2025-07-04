@@ -5,8 +5,6 @@ import type { Root } from "mdast";
 import type { WorkspaceFile } from "@genaiscript/core";
 import { checkRuntime, filenameOrFileToContent, genaiscriptDebug } from "@genaiscript/core";
 import type { Processor } from "unified";
-import type { visit as Visit } from "unist-util-visit";
-import type { visitParents as VisitParents } from "unist-util-visit-parents";
 const dbg = genaiscriptDebug("mdast");
 
 export interface MdAstOptions {
@@ -36,19 +34,8 @@ export interface MdAstOptions {
   mdx?: boolean;
 }
 
-export type MdAstVisit = typeof Visit;
-
-export type MdAstVisitParents = typeof VisitParents;
-
-export async function mdast(options?: MdAstOptions): Promise<{
-  parse: (file: string | WorkspaceFile) => Root;
-  stringify: (root: Root) => string;
-  visit: MdAstVisit;
-  visitParents: MdAstVisitParents;
-  CONTINUE: boolean;
-  EXIT: boolean;
-  SKIP: string;
-}> {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
+export async function mdast(options?: MdAstOptions) {
   checkRuntime();
   const _options: MdAstOptions = structuredClone(options || {});
   dbg(`mdast: %o`, _options);
