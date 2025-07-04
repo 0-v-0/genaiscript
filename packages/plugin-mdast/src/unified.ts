@@ -5,6 +5,8 @@ import type { Root } from "mdast";
 import type { WorkspaceFile } from "@genaiscript/core";
 import { checkRuntime, filenameOrFileToContent, genaiscriptDebug } from "@genaiscript/core";
 import type { Processor } from "unified";
+import type { visit as Visit } from "unist-util-visit";
+import type { visitParents as VisitParents } from "unist-util-visit-parents";
 const dbg = genaiscriptDebug("mdast");
 
 export interface MdAstOptions {
@@ -34,11 +36,22 @@ export interface MdAstOptions {
   mdx?: boolean;
 }
 
-export async function mdast(options?: MdAstOptions) {
-  checkRuntime();
+export type MdAstVisit = typeof Visit;
 
+export type MdAstVisitParents = typeof VisitParents;
+
+export async function mdast(options?: MdAstOptions): Promise<{
+  parse: (file: string | WorkspaceFile) => Root;
+  stringify: (root: Root) => string;
+  visit: MdAstVisit;
+  visitParents: MdAstVisitParents;
+  CONTINUE: boolean;
+  EXIT: boolean;
+  SKIP: string;
+}> {
+  checkRuntime();
   const _options: MdAstOptions = structuredClone(options || {});
-  dbg(`loading plugins`);
+  dbg(`mdast: %o`, _options);
   const { unified } = await import("unified");
   const { default: parse } = await import("remark-parse");
   const { default: directive } = await import("remark-directive");
@@ -53,7 +66,7 @@ export async function mdast(options?: MdAstOptions) {
   const { visitParents } = await import("unist-util-visit-parents");
   await import("mdast-util-mdxjs-esm");
 
-  function mdastParse(file: string | WorkspaceFile): Root {
+  const mdastParse = (file: string | WorkspaceFile): Root => {
     const content = filenameOrFileToContent(file);
     if (!content) return { type: "root", children: [] };
 
@@ -63,9 +76,9 @@ export async function mdast(options?: MdAstOptions) {
     usePlugins(processor);
     const ast = processor.parse(content);
     return ast;
-  }
+  };
 
-  function mdastStringify(root: Root): string {
+  const mdastStringify = (root: Root): string => {
     if (!root) return "";
 
     dbg(`stringify`);
@@ -73,21 +86,7 @@ export async function mdast(options?: MdAstOptions) {
     usePlugins(processor);
     const ast = processor.use(stringify).stringify(root);
     return ast;
-  }
-
-  function usePlugins(processor: Processor<Root>): Processor<Root> {
-    const p: Processor<Root> = processor.use(frontmatter);
-    if (_options.gfm !== false) p.use(gfm);
-    if (_options.github !== false) p.use(github);
-    if (_options.directive !== false) p.use(directive);
-    if (_options.math !== false) p.use(math);
-    // no comments in MDX files
-    p.use(comments, {
-      emit: true, // Emit comments as HTML
-    });
-    if (_options.mdx) p.use(mdx);
-    return p;
-  }
+  };
 
   return Object.freeze({
     parse: mdastParse,
@@ -98,4 +97,17 @@ export async function mdast(options?: MdAstOptions) {
     EXIT,
     SKIP,
   });
+
+  function usePlugins(p: Processor<Root>): void {
+    p.use(frontmatter);
+    if (_options.gfm !== false) p.use(gfm);
+    if (_options.github !== false) p.use(github);
+    if (_options.directive !== false) p.use(directive);
+    if (_options.math !== false) p.use(math);
+    // no comments in MDX files
+    p.use(comments, {
+      emit: true, // Emit comments as HTML
+    });
+    if (_options.mdx) p.use(mdx);
+  }
 }

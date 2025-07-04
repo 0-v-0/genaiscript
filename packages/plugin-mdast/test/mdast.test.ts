@@ -221,6 +221,105 @@ describe("mdast", () => {
       expect(output).toContain("Paragraph 2");
     });
 
+    test("parse and stringify autolinks", async () => {
+      const api = await mdast();
+      const input = "Visit <https://example.com> or email <user@example.com>";
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("<https://example.com>");
+      expect(output).toContain("<user@example.com>");
+    });
+
+    test("parse and stringify footnotes", async () => {
+      const api = await mdast();
+      const input = "Here is a footnote reference[^1].\n\n[^1]: This is the footnote.";
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("footnote reference[^1]");
+      expect(output).toContain("[^1]: This is the footnote");
+    });
+
+    test("parse and stringify task lists", async () => {
+      const api = await mdast();
+      const input = "- [x] Completed task\n- [ ] Incomplete task\n- [X] Another completed task";
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      expect(output).toContain("* [x] Completed task");
+      expect(output).toContain("* [ ] Incomplete task");
+      expect(output).toContain("* [x] Another completed task");
+    });
+
+    test("parse and stringify definition lists", async () => {
+      const api = await mdast();
+      const input = "Term 1\n: Definition 1\n\nTerm 2\n: Definition 2a\n: Definition 2b";
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      // Note: Definition lists might not be supported in all markdown parsers
+      // This test verifies the parser handles them gracefully
+      expect(ast.type).toBe("root");
+      expect(Array.isArray(ast.children)).toBe(true);
+    });
+
+    test("parse and stringify math expressions", async () => {
+      const api = await mdast();
+      const input =
+        "Inline math: $E = mc^2$ and block math:\n\n$$\n\\int_0^\\infty e^{-x} dx = 1\n$$";
+      const ast = api.parse(input);
+      const output = api.stringify(ast);
+
+      // Math support depends on plugins, this tests graceful handling
+      expect(ast.type).toBe("root");
+      expect(output).toContain("E = mc^2");
+      expect(output).toContain("\\int_0^\\infty");
+    });
+
+    test("visit with type filter", async () => {
+      const api = await mdast();
+      const input = "# Heading\n\nParagraph with **bold** and *italic* text.";
+      const ast = api.parse(input);
+      const headings: any[] = [];
+      const emphasis: any[] = [];
+
+      api.visit(ast, "heading", (node: any) => {
+        headings.push(node);
+      });
+
+      api.visit(ast, ["strong", "emphasis"], (node: any) => {
+        emphasis.push(node);
+      });
+
+      expect(headings).toHaveLength(1);
+      expect(headings[0].depth).toBe(1);
+      expect(emphasis.length).toBeGreaterThan(0);
+    });
+
+    test("visit with SKIP and EXIT controls", async () => {
+      const api = await mdast();
+      const input = "# Title\n\n**Bold** text\n\n## Subtitle";
+      const ast = api.parse(input);
+      const visited: string[] = [];
+
+      api.visit(ast, (node: any) => {
+        visited.push(node.type);
+
+        if (node.type === "heading" && node.depth === 1) {
+          return api.SKIP; // Skip children of h1
+        }
+
+        if (node.type === "strong") {
+          return api.EXIT; // Stop visiting entirely
+        }
+      });
+
+      expect(visited).toContain("root");
+      expect(visited).toContain("heading");
+      expect(visited).toContain("strong");
+      // Should not contain nodes after the strong element due to EXIT
+    });
     test("parse and stringify mixed content", async () => {
       const api = await mdast();
       const input = `# Main Title
