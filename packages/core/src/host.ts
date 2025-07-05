@@ -1,22 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CancellationOptions, CancellationToken } from "./cancellation.js";
-import { LanguageModel } from "./chat.js";
-import { Progress } from "./progress.js";
-import { MarkdownTrace, TraceOptions } from "./trace.js";
-import {
+import type { CancellationOptions, CancellationToken } from "./cancellation.js";
+import type { LanguageModel } from "./chat.js";
+import type { Progress } from "./progress.js";
+import type { MarkdownTrace, TraceOptions } from "./trace.js";
+import type {
   AzureCredentialsType,
   LanguageModelConfiguration,
   LogLevel,
   Project,
   ResponseStatus,
 } from "./server/messages.js";
-import { HostConfiguration } from "./hostconfiguration.js";
+import type { HostConfiguration } from "./hostconfiguration.js";
 import { LOG } from "./constants.js";
 import type { TokenCredential } from "@azure/identity";
-import { McpClientManager } from "./mcpclient.js";
-import { ResourceManager } from "./mcpresource.js";
+import type { McpClientManager } from "./mcpclient.js";
+import type { ResourceManager } from "./mcpresource.js";
 import type {
   BrowserPage,
   BrowseSessionOptions,
@@ -139,7 +139,7 @@ export type ModelConfigurations = {
 } & Record<string, ModelConfiguration>;
 
 export interface Host {
-  userState: Record<string, any>;
+  userState: Record<string, unknown>;
   server: ServerManager;
   path: Path;
 

@@ -45,7 +45,7 @@ export function createCache<K, V>(
   const type = options?.type || "fs";
   const key = `cache:${type}:${name}`;
   const userState = options?.userState || host.userState;
-  if (userState[key]) return userState[key]; // Return if exists
+  if (userState[key]) return userState[key] as WorkspaceFileCache<K, V>; // Return if exists
   if (options?.lookupOnly) return undefined;
 
   dbg(`creating ${name} ${type}`);

@@ -5,9 +5,10 @@ import debug from "debug";
 const dbg = debug("genaiscript:modelalias");
 import { parseKeyValuePair } from "./fence.js";
 import { runtimeHost } from "./host.js";
-import { PromptScriptRunOptions } from "./server/messages.js";
+import type { PromptScriptRunOptions } from "./server/messages.js";
 import { providerFeatures } from "./features.js";
 import type { PromptScript } from "./types.js";
+import { LARGE_MODEL_ID, SMALL_MODEL_ID, VISION_MODEL_ID } from "./constants.js";
 
 /**
  * Configures model provider aliases based on the given provider ID and source type.
@@ -49,9 +50,9 @@ export function applyModelOptions(
 ) {
   dbg(`apply model options from ${source}`, options);
   if (options.provider) applyModelProviderAliases(options.provider, source);
-  if (options.model) runtimeHost.setModelAlias(source, "large", options.model);
-  if (options.smallModel) runtimeHost.setModelAlias(source, "small", options.smallModel);
-  if (options.visionModel) runtimeHost.setModelAlias(source, "vision", options.visionModel);
+  if (options.model) runtimeHost.setModelAlias(source, LARGE_MODEL_ID, options.model);
+  if (options.smallModel) runtimeHost.setModelAlias(source, SMALL_MODEL_ID, options.smallModel);
+  if (options.visionModel) runtimeHost.setModelAlias(source, VISION_MODEL_ID, options.visionModel);
   for (const kv of options.modelAlias || []) {
     const aliases = parseKeyValuePair(kv);
     for (const [key, value] of Object.entries(aliases))

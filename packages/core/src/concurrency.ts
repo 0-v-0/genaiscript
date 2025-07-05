@@ -19,7 +19,7 @@ export type ConcurrentLimitFunction = LimitFunction;
  */
 export function concurrentLimit(id: string, concurrency: number): ConcurrentLimitFunction {
   concurrency = Math.max(1, normalizeInt(concurrency));
-  let limit = runtimeHost.userState["limit:" + id];
+  let limit = runtimeHost.userState["limit:" + id] as LimitFunction;
   if (!limit) {
     limit = pLimit(concurrency);
     runtimeHost.userState["limit:" + id] = limit;

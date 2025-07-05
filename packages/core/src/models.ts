@@ -6,14 +6,15 @@ const dbg = debug("genaiscript:models");
 
 import { uniq } from "es-toolkit";
 import { errorMessage } from "./error.js";
-import { host, ModelConfiguration, runtimeHost } from "./host.js";
-import { MarkdownTrace, TraceOptions } from "./trace.js";
+import type { ModelConfiguration } from "./host.js";
+import { runtimeHost } from "./host.js";
+import type { MarkdownTrace, TraceOptions } from "./trace.js";
 import { arrayify } from "./cleaners.js";
 import { toStringList } from "./util.js";
-import { CancellationOptions } from "./cancellation.js";
-import { LanguageModelConfiguration } from "./server/messages.js";
+import type { CancellationOptions } from "./cancellation.js";
+import type { LanguageModelConfiguration } from "./server/messages.js";
 import { roundWithPrecision } from "./precision.js";
-import { ChatCompletionReasoningEffort } from "./chattypes.js";
+import type { ChatCompletionReasoningEffort } from "./chattypes.js";
 import type { ModelConnectionOptions, ModelOptions } from "./types.js";
 import { MODEL_PROVIDERS } from "./constants.js";
 
@@ -287,7 +288,7 @@ export async function resolveModelConnectionInfo(
   }> => {
     try {
       dbg(`resolving ${model}`);
-      const configuration = await host.getLanguageModelConfiguration(model, {
+      const configuration = await runtimeHost.getLanguageModelConfiguration(model, {
         token: resolveOptions.withToken,
         cancellationToken,
         trace,
