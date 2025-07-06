@@ -10,6 +10,7 @@
 |----|-----------|--------|-------|
 | `files` | Files to process, separated by semi columns (;).  | false |  |
 | `debug` | Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/). | false |  |
+| `model_alias` | A YAML-like list of model aliases and model id: `translation: github:openai/gpt-4o` | false |  |
 | `openai_api_key` | OpenAI API key | false |  |
 | `openai_api_base` | OpenAI API base URL | false |  |
 | `azure_openai_api_endpoint` | Azure OpenAI endpoint. In the Azure Portal, open your Azure OpenAI resource, Keys and Endpoints, copy Endpoint. | false |  |
