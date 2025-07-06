@@ -3003,7 +3003,7 @@
   date: string;
   author: string;
   message: string;
-  files: string[]
+  files: string[];
 }
 
  interface GitLogOptions {
@@ -3395,6 +3395,16 @@
   closed_at?: string;
 }
 
+ type GitHubReactionType =
+  | "eyes"
+  | "hooray"
+  | "heart"
+  | "rocket"
+  | "confused"
+  | "laugh"
+  | "+1"
+  | "-1";
+
  interface GitHubRef {
   ref: string;
   url: string;
@@ -3411,6 +3421,13 @@
   hooray: number;
   eyes: number;
   rocket: number;
+}
+
+ interface GitHubReaction {
+  id: number;
+  user: GitHubUser;
+  content: GitHubReactionType;
+  created_at: string;
 }
 
  interface GitHubComment {
@@ -3656,6 +3673,12 @@
     body: string,
     options?: GitHubAIDisclaimerOptions,
   ): Promise<GitHubComment>;
+
+  createReaction(
+    type: "issue" | "issueComment" | "pullRequestReviewComment",
+    id: number | string,
+    reaction: GitHubReactionType,
+  ): Promise<GitHubReaction>;
 
   /**
    * Lists pull requests for a given repository

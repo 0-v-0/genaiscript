@@ -33,9 +33,10 @@ import { fetch } from "./fetch.js";
 import { resolveBufferLike } from "./bufferlike.js";
 import { fileTypeFromBuffer } from "./filetype.js";
 import { createHash } from "node:crypto";
-import { CancellationOptions, checkCancelled } from "./cancellation.js";
+import type { CancellationOptions } from "./cancellation.js";
+import { checkCancelled } from "./cancellation.js";
 import { diagnosticToGitHubMarkdown } from "./annotations.js";
-import { TraceOptions } from "./trace.js";
+import type { TraceOptions } from "./trace.js";
 import { unzip } from "./zip.js";
 import { uriRedact, uriTryParse } from "./url.js";
 import { dedent } from "./indent.js";
@@ -54,6 +55,8 @@ import type {
   GitHubOptions,
   GitHubPaginationOptions,
   GitHubPullRequest,
+  GitHubReaction,
+  GitHubReactionType,
   GitHubRef,
   GitHubRelease,
   GitHubWorkflow,
@@ -1059,10 +1062,10 @@ export class GitHubClient implements GitHub {
   async getIssue(issue_number?: number | string): Promise<GitHubIssue> {
     issue_number = normalizeInt(issue_number);
     const { client, owner, repo } = await this.api();
-    dbg(`retrieving issue details for issue number: ${issue_number}`);
     if (isNaN(issue_number)) {
       issue_number = (await this._connection).issue;
     }
+    dbg(`retrieving issue details for issue number: ${issue_number}`);
     if (isNaN(issue_number)) {
       return undefined;
     }
@@ -1072,6 +1075,54 @@ export class GitHubClient implements GitHub {
       issue_number,
     });
     return data;
+  }
+
+  async createReaction(
+    type: "issue" | "issueComment" | "pullRequestReviewComment",
+    id: number | string,
+    reaction: GitHubReactionType,
+  ): Promise<GitHubReaction | undefined> {
+    // eslint-disable-next-line no-param-reassign
+    id = normalizeInt(id);
+    const { client, owner, repo } = await this.api();
+    // eslint-disable-next-line no-param-reassign
+    if (isNaN(id) && type === "issue") id = (await this._connection).issue;
+    dbg(`updating reaction for ${type} ${id}`);
+    if (isNaN(id)) return undefined;
+    switch (type) {
+      case "issue": {
+        dbg(`adding reaction to issue %s`, id);
+        const { data } = await client.rest.reactions.createForIssue({
+          owner,
+          repo,
+          issue_number: id,
+          content: reaction,
+        });
+        return data;
+      }
+      case "issueComment": {
+        dbg(`adding reaction to issue comment %s`, id);
+        const { data } = await client.rest.reactions.createForIssueComment({
+          owner,
+          repo,
+          comment_id: id,
+          content: reaction,
+        });
+        return data;
+      }
+      case "pullRequestReviewComment": {
+        dbg(`adding reaction to pull request review comment %s`, id);
+        const { data } = await client.rest.reactions.createForPullRequestReviewComment({
+          owner,
+          repo,
+          comment_id: id,
+          content: reaction,
+        });
+        return data;
+      }
+      default:
+        throw new Error(`Unsupported reaction type: ${type}`);
+    }
   }
 
   async updateIssue(
