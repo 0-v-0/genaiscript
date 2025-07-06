@@ -2,7 +2,8 @@
 title: GitHub Copilot Chat
 sidebar:
   order: 3
-description: Integrate with GitHub Copilot Chat to run scripts through a chat
+description:
+  Integrate with GitHub Copilot Chat to run scripts through a chat
   participant and custom prompts in Visual Studio Code. Learn how to execute
   scripts, select models, leverage context, and enable more efficient
   AI-assisted coding workflows using chat-based interfaces.
@@ -14,7 +15,8 @@ keywords:
   - chat participants
 hero:
   image:
-    alt: A small, flat, abstract image uses five solid colors and geometric 8-bit
+    alt:
+      A small, flat, abstract image uses five solid colors and geometric 8-bit
       shapes to depict a chat bubble, a sheet of code with bracket symbols, an
       AI chip, and a diagram block connected by thin lines. The icons are
       arranged without backgrounds or text, all in a simple corporate style,
@@ -29,6 +31,7 @@ import scriptSource from "../../../../../../samples/sample/genaisrc/samples/copi
 import src from "../../../../assets/chat-participant.png";
 import alt from "../../../../assets/chat-participant.png.txt?raw";
 import { Steps } from "@astrojs/starlight/components";
+import instructions from "../../../../../../.genaiscript/instructions/genaiscript.instructions.md?raw";
 
 GenAIScript integrates with [GitHub Copilot Chat](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat)
 by providing a **chat participant** that allows you to run scripts in the context of a chat conversation,
@@ -150,7 +153,10 @@ script({
     "python_code_interpreter_run",
   ],
 });
-def("DATA", env.files.map(({ filename }) => filename).join("\n"));
+def(
+  "DATA",
+  env.files.map(({ filename }) => filename).join("\n"),
+);
 def("QUESTION", env.vars.question);
 
 $`Run python code to answer the data analyst question 
@@ -189,7 +195,12 @@ of the script are placed back into the chat history and are available to any cop
 
 The following script can used as a starter template to create the default script when the user does not use the `/run` command.
 
-<Code code={scriptSource} wrap={true} lang="ts" title="genaisrc/copilotchat.genai.mts" />
+<Code
+  code={scriptSource}
+  wrap={true}
+  lang="ts"
+  title="genaisrc/copilotchat.genai.mts"
+/>
 
 ### Unsupported features
 
@@ -202,6 +213,13 @@ The following features are currently not supported in the chat participant:
 
 GenAIScript will automatically save an instructions.md file in the `.genaiscript/instructions` folder
 when you run a script. This file contains the instructions used to generate the script.
+
+<Code
+  code={instructions}
+  wrap={true}
+  lang="md"
+  title=".genaiscript/instructions/genaiscript.instructions.md"
+/>
 
 ### Augmented chat sessions
 
