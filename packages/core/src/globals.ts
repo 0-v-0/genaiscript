@@ -9,7 +9,7 @@ import { CSVParse, dataToMarkdownTable, CSVStringify, CSVChunk } from "./csv.js"
 import { INIParse, INIStringify } from "./ini.js";
 import { XMLParse } from "./xml.js";
 import { frontmatterTryParse, splitMarkdown, updateFrontmatter } from "./frontmatter.js";
-import { JSONLStringify, JSONLTryParse } from "./jsonl.js";
+import { createJSONL } from "./jsonl.js";
 import { HTMLTablesToJSON, HTMLToMarkdown, HTMLToText } from "./html.js";
 import { CancelError } from "./error.js";
 import { GitHubClient } from "./githubclient.js";
@@ -108,11 +108,7 @@ export function installGlobals() {
   });
 
   // Freeze JSONL utilities
-  glb.JSONL = Object.freeze<JSONLObject>({
-    parse: JSONLTryParse, // Parse JSONL string to objects
-    stringify: JSONLStringify, // Convert objects to JSONL string
-  });
-
+  glb.JSONL = createJSONL();
   glb.JSON5 = Object.freeze<JSON5Object>({
     parse: JSON5TryParse,
     stringify: JSON5Stringify,

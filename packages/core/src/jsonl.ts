@@ -4,6 +4,8 @@
 import { host } from "./host.js";
 import { JSON5TryParse } from "./json5.js";
 import { concatBuffers } from "./util.js";
+import type { JSONLObject } from "./types.js";
+import { arrayify } from "./cleaners.js";
 
 function tryReadFile(fn: string) {
   return host.readFile(fn).then<Uint8Array>(
@@ -95,12 +97,21 @@ export async function writeJSONL(fn: string, objs: any[]) {
  * @param objs - The objects to be appended to the file.
  * @param meta - Optional metadata to include in each appended object under the `__meta` key.
  */
-export async function appendJSONL<T>(name: string, objs: T[], meta?: any) {
+export async function appendJSONL(name: string, objs: object | object[], meta?: any) {
+  const row = arrayify(objs);
   if (meta)
     await writeJSONLCore(
       name,
-      objs.map((obj) => ({ ...obj, __meta: meta })),
+      row.map((obj) => ({ ...obj, __meta: meta })),
       true,
     );
-  else await writeJSONLCore(name, objs, true);
+  else await writeJSONLCore(name, row, true);
+}
+
+export function createJSONL() {
+  return Object.freeze({
+    parse: JSONLTryParse,
+    stringify: JSONLStringify,
+    append: appendJSONL,
+  } as JSONLObject);
 }

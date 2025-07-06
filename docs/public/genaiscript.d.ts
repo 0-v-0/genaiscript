@@ -3850,7 +3850,14 @@
    * Converts objects to JSONL format
    * @param objs
    */
-  stringify(objs: any[]): string;
+  stringify(objs: unknown[]): string;
+
+  /**
+   * Appends an object to a JSONL file
+   * @param filename
+   * @param obj
+   */
+  append(name: string, objs: ElementOrArray<unknown>, meta?: any): Promise<void>;
 }
 
  interface INIObject {
