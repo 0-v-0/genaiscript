@@ -3,7 +3,7 @@
 
 /**
  * GenAIScript Ambient Type Definition File
- * @version 2.2.8
+ * @version 2.2.9
  */
  type OptionsOrString<TOptions extends string> = (string & {}) | TOptions;
 
