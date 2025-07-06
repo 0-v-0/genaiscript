@@ -34,9 +34,8 @@ export function YAMLTryParse<T = unknown>(
   options?: { ignoreLiterals?: boolean },
 ): T {
   const { ignoreLiterals } = options || {};
-  text = filenameOrFileToContent(text);
   try {
-    const res = parse(text);
+    const res = parse(filenameOrFileToContent(text));
     // Check if parsed result is a primitive and ignoreLiterals is true
     if (ignoreLiterals && ["number", "boolean", "string"].includes(typeof res)) return defaultValue;
     return res ?? defaultValue;

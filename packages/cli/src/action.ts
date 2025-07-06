@@ -239,6 +239,11 @@ export async function actionConfigure(
         "Enable debug logging (https://microsoft.github.io/genaiscript/reference/scripts/logging/).",
       required: false,
     },
+    model_alias: {
+      description:
+        "A YAML-like list of model aliases and model id: `translation: github:openai/gpt-4o`",
+      required: false,
+    },
     github_issue:
       issue || pullRequest
         ? {

@@ -55,7 +55,7 @@ import {
 } from "./constants.js";
 import { runtimeHost } from "./host.js";
 import { parseModelIdentifier } from "./models.js";
-import {
+import type {
   AzureCredentialsType,
   LanguageModelConfiguration,
   OpenAIAPIType,
@@ -63,9 +63,11 @@ import {
 import { arrayify } from "./cleaners.js";
 import { URL } from "node:url";
 import { uriTryParse } from "./url.js";
-import { TraceOptions } from "./trace.js";
-import { CancellationOptions } from "./cancellation.js";
+import type { TraceOptions } from "./trace.js";
+import type { CancellationOptions } from "./cancellation.js";
 import { genaiscriptDebug } from "./debug.js";
+import { YAMLTryParse } from "./yaml.js";
+import { INITryParse } from "./ini.js";
 const dbg = genaiscriptDebug("config:env");
 
 /**
@@ -145,17 +147,27 @@ export async function parseDefaultsFromEnv(env: Record<string, string>) {
   }
 
   const rx =
-    /^GENAISCRIPT(_DEFAULT)?_((?<id>[A-Z0-9_-]+)_MODEL|(INPUT_)?MODEL_(?<id2>[A-Z0-9_-]+))$/i;
+    /^(GENAISCRIPT(_DEFAULT)?_(?<id>[A-Z0-9_-]+)_MODEL|(INPUT_)?MODEL_(?<id2>[A-Z0-9_-]+))$/i;
   for (const kv of Object.entries(env)) {
     const [k, v] = kv;
     const m = rx.exec(k);
     if (!m) {
       continue;
     }
-    const id = m.groups.id || m.groups.id2;
-    dbg(`found ${k} = ${v}`);
-    runtimeHost.setModelAlias("env", id, v);
+    const id = (m.groups.id || m.groups.id2).toLowerCase();
+    dbg(`found ${id} = ${v}`);
+    if (id === "alias") {
+      // special handling for alias, try to parse as YAML, INI
+      const aliases = YAMLTryParse(v.trim());
+      dbg(`parsed aliases: ${JSON.stringify(aliases)}`);
+      if (aliases && typeof aliases === "object") {
+        for (const [alias, model] of Object.entries(aliases)) {
+          if (typeof model === "string") runtimeHost.setModelAlias("env", alias, model);
+        }
+      }
+    } else runtimeHost.setModelAlias("env", id, v);
   }
+
   const t = normalizeFloat(env.GENAISCRIPT_DEFAULT_TEMPERATURE);
   if (!isNaN(t)) {
     dbg(`parsed GENAISCRIPT_DEFAULT_TEMPERATURE = ${t}`);
@@ -188,7 +200,7 @@ export async function parseTokenFromEnv(
   const { provider, model, tag } = parseModelIdentifier(
     modelId ?? runtimeHost.modelAliases.large.model,
   );
-  dbg(`parsing token for '%s:%s:%s'`, provider, model, tag);
+  dbg(`parsing token for '%s:%s:%s'`, provider, model, tag || "");
   const TOKEN_SUFFIX = ["_API_KEY", "_API_TOKEN", "_TOKEN", "_KEY"];
   const BASE_SUFFIX = ["_API_BASE", "_API_ENDPOINT", "_BASE", "_ENDPOINT"];
 
@@ -296,8 +308,6 @@ export async function parseTokenFromEnv(
     if (!token && !base) {
       return undefined;
     }
-    //if (!token)
-    //    throw new Error("AZURE_OPENAI_API_KEY or AZURE_API_KEY missing")
     if (token === PLACEHOLDER_API_KEY) {
       throw new Error("AZURE_OPENAI_API_KEY not configured");
     }
@@ -823,15 +833,16 @@ export async function parseTokenFromEnv(
     };
   }
 
-  return undefined;
   dbg(`no matching provider found, returning undefined`);
+  return undefined;
 
   function cleanAzureBase(b: string) {
     if (!b) {
       return b;
     }
-    b = trimTrailingSlash(b.replace(/\/openai\/deployments.*$/, "")) + `/openai/deployments`;
-    return b;
+    const res =
+      trimTrailingSlash(b.replace(/\/openai\/deployments.*$/, "")) + `/openai/deployments`;
+    return res;
   }
 
   function parseAzureVersionFromUrl(url: string) {
@@ -848,10 +859,10 @@ export async function parseTokenFromEnv(
     if (!b) {
       return b;
     }
-    b = trimTrailingSlash(b);
-    if (!/\/v1$/.test(b)) {
-      b += "/v1";
+    let res = trimTrailingSlash(b);
+    if (!/\/v1$/.test(res)) {
+      res += "/v1";
     }
-    return b;
+    return res;
   }
 }
