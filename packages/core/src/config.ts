@@ -13,9 +13,9 @@ import {
 } from "./constants.js";
 import { join, resolve } from "node:path";
 import { validateJSONWithSchema } from "./schema.js";
-import { HostConfiguration } from "./hostconfiguration.js";
+import type { HostConfiguration } from "./hostconfiguration.js";
 import { structuralMerge } from "./merge.js";
-import {
+import type {
   LanguageModelConfiguration,
   ResolvedLanguageModelConfiguration,
 } from "./server/messages.js";
@@ -24,7 +24,7 @@ import { arrayify, deleteEmptyValues } from "./cleaners.js";
 import { errorMessage } from "./error.js";
 import schema from "./configschema.js";
 import defaultConfig from "./configjson.js";
-import { CancellationOptions } from "./cancellation.js";
+import type { CancellationOptions } from "./cancellation.js";
 import { host } from "./host.js";
 import { uniq } from "es-toolkit";
 import { expandHomeDir, tryReadText, tryStat } from "./fs.js";
@@ -53,7 +53,8 @@ async function resolveGlobalConfiguration(
   dotEnvPaths: string[],
   hostConfig: HostConfiguration,
 ): Promise<HostConfiguration> {
-  const dirs = [homedir(), "."];
+  const dirs = [homedir()];
+  if (!hostConfig.ignoreCurrentWorkspace) dirs.push(".");
   const exts = ["yml", "yaml", "json"];
 
   dbg("starting to resolve global configuration");
