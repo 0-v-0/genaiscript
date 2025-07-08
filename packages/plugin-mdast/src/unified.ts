@@ -6,6 +6,7 @@ import type { WorkspaceFile } from "@genaiscript/core";
 import { checkRuntime, filenameOrFileToContent, genaiscriptDebug } from "@genaiscript/core";
 import type { Processor } from "unified";
 import remarkGitHubAlerts from "./remarkalerts.js";
+import type { GitHubAlertMarker } from "./remarkalerts.js";
 const dbg = genaiscriptDebug("mdast");
 
 export interface MdAstOptions {
@@ -74,13 +75,16 @@ export async function mdast(options?: MdAstOptions) {
     dbg(`stringify`);
     const processor = unified();
     usePlugins(processor, "stringify");
-    const result = processor.use(stringify).stringify(root);
-    
-    // Post-process to unescape GitHub alert syntax
-    // TODO better
-    const unescapedResult = String(result).replace(/^> \\(\[!(?:NOTE|TIP|IMPORTANT|WARNING|CAUTION)\])/gm, '> $1');
-    
-    return unescapedResult;
+    processor.use(stringify, {
+      handlers: {
+        githubAlertMarker(node: GitHubAlertMarker) {
+          return node.value;
+        },
+      },
+    } as any);
+
+    const result = processor.stringify(root);
+    return String(result);
   };
 
   return Object.freeze({

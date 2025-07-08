@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import type { Plugin } from "unified";
-import type { Root, Paragraph, Text, Blockquote, Data } from "mdast";
+import type { Node, Root, Paragraph, Text, Blockquote, Data } from "mdast";
 import { visit } from "unist-util-visit";
 import { genaiscriptDebug } from "@genaiscript/core";
 const dbg = genaiscriptDebug("mdast:gh-alerts");
@@ -26,6 +26,12 @@ export interface GitHubAlertNodeData extends Data {
  * Extended blockquote interface with GitHub alert data
  */
 export interface GitHubAlertBlockquote extends Blockquote {
+  data?: GitHubAlertNodeData;
+}
+
+export interface GitHubAlertMarker extends Node {
+  type: "githubAlertMarker";
+  value: string;
   data?: GitHubAlertNodeData;
 }
 
@@ -102,19 +108,19 @@ const remarkGitHubAlerts: Plugin<[RemarkGitHubAlertsOptions?], Root> = (options 
       const remainingContent = originalText.substring(alertSyntax.length);
 
       // Create new text nodes - always preserve syntax
-      const newNodes: Text[] = [];
+      const newNodes: (GitHubAlertMarker | Text)[] = [];
 
       // Keep the alert syntax as a separate text node
       newNodes.push({
-        type: "text",
+        type: "githubAlertMarker",
         value: alertSyntax,
         data: {
           githubAlert: {
             type: alertType,
             role: "syntax",
           },
-        } as GitHubAlertNodeData,
-      });
+        },
+      } satisfies GitHubAlertMarker);
 
       // Add the content as a separate text node
       if (remainingContent) {
@@ -134,7 +140,7 @@ const remarkGitHubAlerts: Plugin<[RemarkGitHubAlertsOptions?], Root> = (options 
       const remainingChildren = paragraph.children.slice(1);
 
       // Update the paragraph with the new structure
-      paragraph.children = [...newNodes, ...remainingChildren];
+      paragraph.children = [...newNodes, ...remainingChildren] as any;
 
       // Add metadata to the blockquote node
       const nodeData = node.data || ({} as GitHubAlertNodeData);

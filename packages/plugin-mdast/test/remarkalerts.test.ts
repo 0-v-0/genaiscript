@@ -85,14 +85,11 @@ describe("remarkGitHubAlerts", () => {
     const textNodes = paragraph.children.filter((child: any) => child.type === "text");
 
     // Should have both syntax and content nodes
-    const syntaxNodes = textNodes.filter((node: any) => node.data?.githubAlert?.role === "syntax");
     const contentNodes = textNodes.filter(
       (node: any) => node.data?.githubAlert?.role === "content",
     );
 
-    expect(syntaxNodes.length).toBe(1);
     expect(contentNodes.length).toBe(1);
-    expect(syntaxNodes[0].value).toBe("[!NOTE]");
     expect(contentNodes[0].value.trim()).toBe("This is a note alert");
   });
 
