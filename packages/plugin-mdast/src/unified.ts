@@ -5,6 +5,7 @@ import type { Root } from "mdast";
 import type { WorkspaceFile } from "@genaiscript/core";
 import { checkRuntime, filenameOrFileToContent, genaiscriptDebug } from "@genaiscript/core";
 import type { Processor } from "unified";
+import remarkGitHubAlerts from "./remarkalerts.js";
 const dbg = genaiscriptDebug("mdast");
 
 export interface MdAstOptions {
@@ -41,6 +42,7 @@ export async function mdast(options?: MdAstOptions) {
   dbg(`mdast: %o`, _options);
   const { unified } = await import("unified");
   const { default: parse } = await import("remark-parse");
+  const { inspect } = await import("unist-util-inspect");
   const { default: directive } = await import("remark-directive");
   const { default: gfm } = await import("remark-gfm");
   const { default: github } = await import("remark-github");
@@ -53,16 +55,17 @@ export async function mdast(options?: MdAstOptions) {
   const { visitParents } = await import("unist-util-visit-parents");
   await import("mdast-util-mdxjs-esm");
 
-  const mdastParse = (file: string | WorkspaceFile): Root => {
+  const mdastParse = async (file: string | WorkspaceFile): Promise<Root> => {
     const content = filenameOrFileToContent(file);
     if (!content) return { type: "root", children: [] };
 
     dbg(`parse`);
 
     const processor = unified().use(parse);
-    usePlugins(processor);
+    usePlugins(processor, "parse");
     const ast = processor.parse(content);
-    return ast;
+    const processed = await processor.run(ast);
+    return processed as Root;
   };
 
   const mdastStringify = (root: Root): string => {
@@ -70,9 +73,14 @@ export async function mdast(options?: MdAstOptions) {
 
     dbg(`stringify`);
     const processor = unified();
-    usePlugins(processor);
-    const ast = processor.use(stringify).stringify(root);
-    return ast;
+    usePlugins(processor, "stringify");
+    const result = processor.use(stringify).stringify(root);
+    
+    // Post-process to unescape GitHub alert syntax
+    // TODO better
+    const unescapedResult = String(result).replace(/^> \\(\[!(?:NOTE|TIP|IMPORTANT|WARNING|CAUTION)\])/gm, '> $1');
+    
+    return unescapedResult;
   };
 
   return Object.freeze({
@@ -80,15 +88,21 @@ export async function mdast(options?: MdAstOptions) {
     stringify: mdastStringify,
     visit,
     visitParents,
+    inspect,
     CONTINUE,
     EXIT,
     SKIP,
   });
 
-  function usePlugins(p: Processor<Root>): void {
+  function usePlugins(p: Processor<Root>, phase: "parse" | "stringify"): void {
     p.use(frontmatter);
-    if (_options.gfm !== false) p.use(gfm);
-    if (_options.github !== false) p.use(github);
+    if (_options.gfm !== false) {
+      p.use(remarkGitHubAlerts);
+      p.use(gfm);
+    }
+    if (_options.github !== false && phase === "stringify") {
+      p.use(github);
+    }
     if (_options.directive !== false) p.use(directive);
     if (_options.math !== false) p.use(math);
     // no comments in MDX files
