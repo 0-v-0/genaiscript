@@ -16,11 +16,6 @@ export interface MdAstOptions {
   gfm?: boolean;
 
   /**
-   * GitHub short links. Default is true.
-   */
-  github?: boolean;
-
-  /**
    * Generic directive support. Default is true.
    */
   directive?: boolean;
@@ -46,7 +41,6 @@ export async function mdast(options?: MdAstOptions) {
   const { inspect } = await import("unist-util-inspect");
   const { default: directive } = await import("remark-directive");
   const { default: gfm } = await import("remark-gfm");
-  const { default: github } = await import("remark-github");
   const { default: frontmatter } = await import("remark-frontmatter");
   const { default: math } = await import("remark-math");
   const { default: mdx } = await import("remark-mdx");
@@ -103,9 +97,6 @@ export async function mdast(options?: MdAstOptions) {
     if (_options.gfm !== false) {
       p.use(remarkGitHubAlerts);
       p.use(gfm);
-    }
-    if (_options.github !== false && phase === "stringify") {
-      p.use(github);
     }
     if (_options.directive !== false) p.use(directive);
     if (_options.math !== false) p.use(math);
